@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Ruby | The Conscientious Programmer]]></title>
-  <link href="http://FranklinChen.github.io/ConscientiousProgrammer/blog/categories/ruby/atom.xml" rel="self"/>
-  <link href="http://FranklinChen.github.io/ConscientiousProgrammer/"/>
-  <updated>2013-06-24T14:23:07-04:00</updated>
-  <id>http://FranklinChen.github.io/ConscientiousProgrammer/</id>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2013-06-24T16:55:58-04:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
     <email><![CDATA[franklinchen@franklinchen.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Introducing this new programming blog]]></title>
-    <link href="http://FranklinChen.github.io/ConscientiousProgrammer/blog/2013/06/24/introducing-this-new-programming-blog/"/>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/"/>
     <updated>2013-06-24T09:40:00-04:00</updated>
-    <id>http://FranklinChen.github.io/ConscientiousProgrammer/blog/2013/06/24/introducing-this-new-programming-blog</id>
+    <id>http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog</id>
     <content type="html"><![CDATA[<p>Hi. My name is Franklin Chen. I already have a <a href="http://franklinchen.com/">personal Web site and blog</a>.</p>
 
 <p>But I decided it was time to start a separate blog to devoted entirely to computer programming (and anything related to it). The problem with the all-in-one personal blog was that I ended up never really working up a momentum to post the kinds of articles I wanted to write about programming.</p>
