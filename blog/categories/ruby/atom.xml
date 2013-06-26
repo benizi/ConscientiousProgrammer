@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-06-24T16:55:58-04:00</updated>
+  <updated>2013-06-26T13:54:23-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -20,7 +20,9 @@
     <id>http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog</id>
     <content type="html"><![CDATA[<p>Hi. My name is Franklin Chen. I already have a <a href="http://franklinchen.com/">personal Web site and blog</a>.</p>
 
-<p>But I decided it was time to start a separate blog to devoted entirely to computer programming (and anything related to it). The problem with the all-in-one personal blog was that I ended up never really working up a momentum to post the kinds of articles I wanted to write about programming.</p>
+<p>But I ended up only writing <a href="http://franklinchen.com/blog/categories/programming/">a little bit about programming on that blog</a>.</p>
+
+<p>So I decided it was time to start a separate blog to devoted entirely to computer programming. The problem with the all-in-one personal blog was that I ended up never really working up a momentum to post the kinds of articles I wanted to write about programming.</p>
 
 <h2>Why &ldquo;The Conscientious Programmer&rdquo;?</h2>
 
@@ -34,7 +36,48 @@
 
 <p><blockquote><p>I am a conscientious computer programmer, committed to designing, building, and testing correct, efficient, documented, maintainable software that meets users' real needs.</p></blockquote></p>
 
-<p>My material will come from my own experiences (successes and failures, past and present) as well as from those of others. Let&rsquo;s start immediately with my personal experience from just the past couple of days!</p>
+<p>My material will come from my own experiences (successes and failures, past and present) as well as from those of others. See the <a href="/about/">About page</a> for more sound bites about what this blog will be about.</p>
+
+<p>Let&rsquo;s start immediately with my personal experience from just the past couple of days!</p>
+
+<h2>Future topics</h2>
+
+<p>But first, here is a little sample of topics I will write about in the future:</p>
+
+<ul>
+<li>positive and negative experiences with statically typed languages</li>
+<li>positive and negative experiences with dynamically typed languages</li>
+<li>the good and bad of the polyglot programming world</li>
+<li>what is object-oriented programming anyway?</li>
+<li>what is functional programming anyway?</li>
+<li>Agile notions</li>
+<li>test-driven development, behavior-driven development, other testing topics</li>
+<li>static analysis</li>
+<li>code performance</li>
+<li>human performance</li>
+<li>controversies over the adjective &ldquo;pragmatic&rdquo;</li>
+<li>how much theory should one know or use?</li>
+<li>how to teach</li>
+<li>how to learn</li>
+<li>how to focus and not be a dilettante</li>
+<li>how to spread ideas</li>
+<li>is syntax important?</li>
+<li>are macros a good idea?</li>
+<li>are unsound type systems justified?</li>
+<li>what is a type system anyway or what should it be?</li>
+<li>monads</li>
+<li>editors and IDEs</li>
+<li>are software patterns a mistake in disguise?</li>
+<li>software evolution and maintenance</li>
+<li>planning for the future vs. getting it done today</li>
+<li>role of emotion in decision making</li>
+<li>what is &ldquo;community&rdquo;?</li>
+<li>politics of open source vs. free software</li>
+<li>open standards</li>
+<li>questions of diversity in our profession</li>
+<li>education</li>
+</ul>
+
 
 <h2>The dilemmas I encountered when deciding to create this blog</h2>
 
