@@ -14,7 +14,9 @@ categories:
 ---
 Hi. My name is Franklin Chen. I already have a [personal Web site and blog](http://franklinchen.com/).
 
-But I decided it was time to start a separate blog to devoted entirely to computer programming (and anything related to it). The problem with the all-in-one personal blog was that I ended up never really working up a momentum to post the kinds of articles I wanted to write about programming.
+But I ended up only writing [a little bit about programming on that blog](http://franklinchen.com/blog/categories/programming/).
+
+So I decided it was time to start a separate blog to devoted entirely to computer programming. The problem with the all-in-one personal blog was that I ended up never really working up a momentum to post the kinds of articles I wanted to write about programming.
 
 ## Why "The Conscientious Programmer"?
 
@@ -30,7 +32,45 @@ However, since a sound bite is required in some circumstances, here's what I cur
 I am a conscientious computer programmer, committed to designing, building, and testing correct, efficient, documented, maintainable software that meets users' real needs.
 {% endblockquote %}
 
-My material will come from my own experiences (successes and failures, past and present) as well as from those of others. Let's start immediately with my personal experience from just the past couple of days!
+My material will come from my own experiences (successes and failures, past and present) as well as from those of others. See the [About page](/about/) for more sound bites about what this blog will be about.
+
+Let's start immediately with my personal experience from just the past couple of days!
+
+## Future topics
+
+But first, here is a little sample of topics I will write about in the future:
+
+- positive and negative experiences with statically typed languages
+- positive and negative experiences with dynamically typed languages
+- the good and bad of the polyglot programming world
+- what is object-oriented programming anyway?
+- what is functional programming anyway?
+- Agile notions
+- test-driven development, behavior-driven development, other testing topics
+- static analysis
+- code performance
+- human performance
+- controversies over the adjective "pragmatic"
+- how much theory should one know or use?
+- how to teach
+- how to learn
+- how to focus and not be a dilettante
+- how to spread ideas
+- is syntax important?
+- are macros a good idea?
+- are unsound type systems justified?
+- what is a type system anyway or what should it be?
+- monads
+- editors and IDEs
+- are software patterns a mistake in disguise?
+- software evolution and maintenance
+- planning for the future vs. getting it done today
+- role of emotion in decision making
+- what is "community"?
+- politics of open source vs. free software
+- open standards
+- questions of diversity in our profession
+- education
 
 ## The dilemmas I encountered when deciding to create this blog
 
