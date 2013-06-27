@@ -8,6 +8,8 @@ categories:
 - error handling
 - end user
 - Android
+- human-centered design
+- UX
 ---
 I have a [Samsung Galaxy S II smartphone](http://franklinchen.com/blog/2012/03/22/paradox-i-will-observe-the-national-day-of-unplugging-but-just-bought-my-first-smartphone-this-week/). I recently encountered a problem: auto-updating of apps failed with this terrible error message:
 
@@ -61,3 +63,9 @@ And what's with the default concurrent downloads of many updates at the same tim
 We programmers clearly are not conscientious enough about error handling and reporting. I believe that today, more than ever, we have a responsibility to *handle failure gracefully* in software. I believe that failure should even be considered to be the *default* expectation, rather than success, in order to create reliable software. As [Dick Wall said at the recent 2013 Pittsburgh TechFest](http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/), it's not enough to design and code and test primarily for the "happy path".
 
 There are ways to do error handling better, but they require serious thinking up front. This is a large topic we will be exploring in depth on this blog.
+
+### (Update of 2013-06-27)
+
+By sheer coincidence, a great [interview on *human-centered design*](http://programming.oreilly.com/2013/06/human-centered-design-may-be-what-makes-your-app-stand-out.html) arrived in my RSS feed. Check it out.
+
+I will be the first to admit that I don't know much about UX or human-centered design. I just have some intuitions as an end user. I think we developers should learn more about this stuff in a more formal, serious way. And it's just a matter of thinking about the ultimate end user. Even if we are not programming for the ultimate end user, we are at least programming for other programmers. If we are writing an API, the principles that guide human behavior must still be valid, even if programmers are an unusual subset of human beings! We write code *not* primarily for computers but for other human beings (including our future selves).
