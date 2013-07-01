@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Scala | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-06-30T22:55:36-04:00</updated>
+  <updated>2013-07-01T00:03:26-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Why I hate calling myself "pragmatic" but do]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/"/>
+    <updated>2013-06-30T23:34:00-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do</id>
+    <content type="html"><![CDATA[<p>I wrote a <a href="http://franklinchen.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/">post on my personal blog about my being a &ldquo;pragmatist&rdquo;</a>.</p>
+
+<p>I mention it here because few words are as controversial, I think, in the programming community, as &ldquo;pragmatic&rdquo;. I wanted to be on record as identifying myself as &ldquo;pragmatic&rdquo; despite the negative connotations, because the entire mindset of this new programming blog is pragmatic.</p>
+
+<p>For example, I will soon write about the realities of programming language choice, including why I used Java, despite its deficiencies, for a decade, and why it is not going away, and why I currently am an advocate of <em>Scala, one of the most ambitiously pragmatic languages</em> to have come along in my lifetime.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pittsburgh Java User Group: Building and Evolving a Java API]]></title>
