@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: nil | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/nil/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2013-07-01T20:37:24-04:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
+  <author>
+    <name><![CDATA[Franklin Chen]]></name>
+    <email><![CDATA[franklinchen@franklinchen.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[nil, non-determinism, exceptions: a journey in debugging the software that generates my blog]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/"/>
+    <updated>2013-06-29T18:15:00-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions</id>
+    <content type="html"><![CDATA[<p>I mentioned in my <a href="/blog/2013/06/24/introducing-this-new-programming-blog/">initial post for this blog</a> that I have had some problems with the software I use to generate my personal blog, <a href="http://octopress.org/">Octopress</a>, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.</p>
+
+<p>Here I report on how I figured out the problem and begin a conversation about the nature of error handling and API design.</p>
+
+<!--more-->
+
+
+<h2>A disclaimer</h2>
+
+<p>I want to emphasize that although I will be critiquing some code, I do not mean to imply that I am a perfect programmer or that this software is of really poor quality. I have written software in the past that has crapped out with <code>null</code> or <code>nil</code> errors. In addition, the fact that I basically trust and use this software to drive my blogs is a reflection of the fact that it mostly works. Almost all software that has been written, is being written now, and will be written in the future has bugs. Every day we all trust and use software that we know has bugs. And this blogging platform I use is the product of many, many volunteers who contribute to the world through open source through the goodness of their hearts. I happily use this software, warts and all, and am grateful to everyone who works to maintain and improve it!</p>
+
+<h2>Blog generation</h2>
+
+<p>The problem arose when I tried to generate <a href="http://franklinchen.com/">my personal blog</a>. I got a <a href="http://franklinchen.com/blog/2012/09/06/my-pittsburgh-ruby-talk-nil/"><code>nil</code></a> failure.</p>
+
+<p>Here&rsquo;s the error message (I have omitted the 46-line stack trace):</p>
+
+<p>``` console</p>
+
+<pre><code>  Generating... Liquid Exception: undefined method `sub' for nil:NilClass in atom.xml
+</code></pre>
+
+<p>```</p>
+
+<p>This is, unfortunately, an example of an error message that is next to useless, and should <em>never</em> appear. I have stated that <a href="/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/">we as programmers should not generate useless end user error messages</a>, and of course, in context, I am an end user of the blog generating software I use.</p>
+
+<h2>Debugging and finding the root cause</h2>
+
+<p>Thanks to all the Ruby libraries being open source and installed on my machine, by using the stack trace and <code>debugger</code>, I figured out the immediate cause of the stray <code>nil</code>.</p>
+
+<p>It turns out that Octopress uses Jekyll, which uses <a href="https://github.com/tmm1/pygments.rb">pygments.rb</a> to do HTML highlighting of code blocks. (I use Octopress precisely because of its built-in support for code block highlighting.)</p>
+
+<p>The bug is that the code in Jekyll that does syntax highlighting using Pygments makes an assumption that the return value of <code>Pygments.highlight()</code> is never <code>nil</code>:</p>
+
+<p>``` ruby</p>
+
+<pre><code>          @renderer ||= Class.new(Redcarpet::Render::HTML) do
+            def block_code(code, lang)
+              lang = lang &amp;&amp; lang.split.first || "text"
+              output = add_code_tags(
+                Pygments.highlight(code, :lexer =&gt; lang, :options =&gt; { :encoding =&gt; 'utf-8' }),
+                lang
+              )
+            end
+
+            def add_code_tags(code, lang)
+              code = code.sub(/&lt;pre&gt;/,'&lt;pre&gt;&lt;code class="' + lang + '"&gt;')
+              code = code.sub(/&lt;\/pre&gt;/,"&lt;/code&gt;&lt;/pre&gt;")
+            end
+          end
+</code></pre>
+
+<p>```</p>
+
+<p>Well, it <em>can</em> be <code>nil</code> and was for me, and therefore <code>add_code_tags</code> was calling <code>code.sub()</code> with <code>code</code> being <code>nil</code>.</p>
+
+<p>The bug exists in all the more recent versions of pygments.rb, including 0.4.2 (which is used for my personal blog) and 0.3.7 (which is used for this blog) and the latest released version, 0.5.1. The bug was actually reported by someone two weeks ago, and I added extra commentary, but <a href="https://github.com/tmm1/pygments.rb/issues/78">it has not yet been fixed</a>, so I plan to contribute a fix and submit a pull request.</p>
+
+<h2>Whose responsibility to check for <code>nil</code>?</h2>
+
+<p>Whenever there is an error, one has to ask whose responsibility it was to</p>
+
+<ul>
+<li>detect the error</li>
+<li>handle the error</li>
+</ul>
+
+
+<p>I think it is poor practice to engage in random and spotty &ldquo;defensive programming&rdquo; that checks for <code>nil</code> here and there, willy-nilly, just to avoid a big program crash. There should be clearly delineated boundaries of error handling.</p>
+
+<p>In this case, it is surprising that a syntax highlighter for some text could return <code>nil</code>. One would think that if a syntax highlighter got confused, it could return the text verbatim, for example, without any special formatting. (By the way, don&rsquo;t get me started on the abominable use of HTML string hacking in this code instead of, say, building a proper HTML AST; I&rsquo;ll write about that topic later.)</p>
+
+<h2>Documentation of API</h2>
+
+<p>Unfortunately, the documentation of the Pygments API was incomplete in <code>lib/pygments/popen.rb</code>, where <code>highlight</code> is defined:</p>
+
+<p>``` ruby</p>
+
+<pre><code># Public: Highlight code.
+#
+# Takes a first-position argument of the code to be highlighted, and a
+# second-position hash of various arguments specifiying highlighting properties.
+def highlight(code, opts={})
+  # If the caller didn't give us any code, we have nothing to do,
+  # so return right away.
+  return code if code.nil? || code.empty?
+
+  # Callers pass along options in the hash
+  opts[:options] ||= {}
+
+  # Default to utf-8 for the output encoding, if not given.
+  opts[:options][:outencoding] ||= 'utf-8'
+
+  # Get back the string from mentos and force encoding if we can
+  str = mentos(:highlight, nil, opts, code)
+  str.force_encoding(opts[:options][:outencoding]) if str.respond_to?(:force_encoding)
+  str
+end
+</code></pre>
+
+<p>```</p>
+
+<h2>A problem with dynamically typed language culture</h2>
+
+<p>The documentation doesn&rsquo;t actually fully specify what the arguments can be, and does not specify what the result should be either! This is a glaring drawback of most code that I have seen in dynamically typed languages such as Ruby. People don&rsquo;t document exactly what can come in or out. A newcomer to a code base (such as me in this situation) cannot just read off the types and know immediately what is going on and what has been promised and what is delivered by a function. As a result, the code reader has to play compiler and read a lot more code to try to figure out what is going on.</p>
+
+<p><em>In principle</em>, someone writing code in a dynamically typed language could provide very helpful comments that amount to informal type annotations, but in practice people do not. I have found in my two decades of programming that human psychology trumps theoretical possibility any day. If something is optional, people won&rsquo;t do it, unless there is a very strong de facto community standard. (It turns out, for example, that what I really admire about the Ruby community is that for some reason, there is a very strong de facto community standard of doing at least some <em>unit testing</em> as part of the whole development process. I find this sadly missing in some statically typed language communities.)</p>
+
+<p>In code in a statically typed language such as OCaml (or Haskell or Scala), I would expect to see:</p>
+
+<p><code>ocaml
+let highlight (code : string) (opts : my_map) : string = //...
+</code></p>
+
+<p>and expect that the return value should be a <code>String</code>, or</p>
+
+<p><code>ocaml
+let highlight (code : string) (opts : my_map) : string option = //...
+</code></p>
+
+<p>to indicate that the return value could be either <code>Some(formatted_code)</code> or <code>None</code>.</p>
+
+<h2><code>nil</code> all over the place</h2>
+
+<p>Reading the Ruby code, I saw that the situation is even more complex than I thought:</p>
+
+<p>``` ruby</p>
+
+<pre><code>  # If the caller didn't give us any code, we have nothing to do,
+  # so return right away.
+  return code if code.nil? || code.empty?
+</code></pre>
+
+<p>```</p>
+
+<p>Wow: <code>code</code> can be <code>nil</code>, in which case <code>nil</code> is returned.</p>
+
+<p><em>All code that can return <code>nil</code> should document this fact so that the caller knows what to do.</em> Ideally, the writer of pygments.rb should have documented this fact, and then the writer of Jekyll would in turn have added <code>nil</code> checking in its rendering code.</p>
+
+<p>Furthermore, it turns out that <code>mentos()</code> can return <code>nil</code> on a non-<code>nil</code> code string! This was a surprise to me.</p>
+
+<h2><code>nil</code> is not even the real problem here: non-determinism is</h2>
+
+<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work!</p>
+
+<p>``` ruby</p>
+
+<pre><code># Our 'rpc'-ish request to mentos. Requires a method name, and then optional
+# args, kwargs, code.
+def mentos(method, args=[], kwargs={}, original_code=nil)
+  # Open the pipe if necessary
+  start unless alive?
+
+  begin
+    # Timeout requests that take too long.
+    timeout_time = 8
+
+    Timeout::timeout(timeout_time) do
+      # ...[I omitted some code]
+    end
+  rescue Timeout::Error
+    # If we timeout, we need to clear out the pipe and start over.
+    @log.error "[#{Time.now.iso8601}] Timeout on a mentos #{method} call"
+    stop "Timeout on mentos #{method} call."
+  end
+
+rescue Errno::EPIPE, EOFError
+stop "EPIPE"
+raise MentosError, "EPIPE"
+end
+</code></pre>
+
+<p>```</p>
+
+<p>It turns out that fundamental problem is not <code>nil</code> so much as <em>non-determinism</em>: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for <code>nil</code> to end up being returned. This non-determinism is worse than <code>nil</code>. I think that in a situation like this, an <em>exception</em> is called for. <code>highlight()</code> should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return <code>nil</code> (or if using a statically typed language, a <code>None</code>).</p>
+
+<p>I was also disappointed that logging was used in this code, indicating that it was known that bad things could happen, but the logged information was not used in generating a useful exception.</p>
+
+<p>Amusingly, upon discovering the logging code, I used it, setting the magic environment variable <code>MENTOS_LOG</code> (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:</p>
+
+<p>``` console</p>
+
+<h1>Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483</h1>
+
+<p>I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.
+I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:19-04:00] Out header: {&ldquo;method&rdquo;:&ldquo;highlight&rdquo;,&ldquo;args&rdquo;:null,&ldquo;kwargs&rdquo;:{&ldquo;lexer&rdquo;:&ldquo;console&rdquo;,&ldquo;options&rdquo;:{&ldquo;encoding&rdquo;:&ldquo;utf-8&rdquo;,&ldquo;outencoding&rdquo;:&ldquo;utf-8&rdquo;},&ldquo;fd&rdquo;:10,&ldquo;id&rdquo;:&ldquo;TVQSJNBV&rdquo;,&ldquo;bytes&rdquo;:147}}
+E, [2013-06-29 10:26 #13799] ERROR &mdash; : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call
+I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.
+I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting
+```</p>
+
+<h2>Testing</h2>
+
+<p>It turns out that there <em>is</em> a place where the intended behavior is in a sense documented: the unit tests in <code>test_pygments.rb</code>:</p>
+
+<p>``` ruby
+  def test_returns_nil_on_timeout</p>
+
+<pre><code>large_code = REDIS_CODE * 300
+code = P.highlight(large_code) # a 30 mb highlight request will timeout
+assert_equal nil, code
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be <code>nil</code>!</p>
+
+<p>OK, fair enough: assuming that the Jekyll authors knew of this intention, then it was Jekyll&rsquo;s responsibility to test for <code>nil</code> in the call to <code>Pygments.highlight()</code>.</p>
+
+<p>The test is not very satisfactory because it artificially tries to generate a timeout. Instead, one could do some mocking or refactoring of <code>mentos()</code>.</p>
+
+<h2><code>nil</code> is still not OK; but are exceptions OK?</h2>
+
+<p>So everything is OK, now that we can take <code>nil</code> to mean a timeout, right? No, actually, <code>highlight()</code> can still return a <code>nil</code> just because <code>code</code> was <code>nil</code>. It is bad to bin random different failure modes into one return value. Personally, I would choose to enforce that the input <code>code</code> is never <code>nil</code> and that the output is never <code>nil</code>, and that an exception is raised if there is a timeout.</p>
+
+<p>An alternative is to not use an exception, but use a union success/failure type instead. This is the route that <a href="http://blog.stackmob.com/2013/03/why-we-avoid-throwing-exceptions-at-stackmob/">StackMob uses for its Scala code</a>. Other Scala developers such as <a href="http://blog.jessitron.com/2013/06/whats-dirtier-than-comments-exceptions.html">Jessica Kerr have been arguing against the use of exceptions also</a>.</p>
+
+<p>Google&rsquo;s systems-level statically typed language <a href="http://golang.org/">Go</a> deliberately <a href="http://golang.org/doc/faq#exceptions">does not even have exceptions</a>, and therefore mandates a style of error handling that involves <a href="http://golang.org/doc/articles/error_handling.html">returning a success and failure everywhere</a>.</p>
+
+<p>I think there are situations for exceptions and situations for reifying errors as ordinary values in a success/failure object. I will explore this topic further in this blog. Note that even in the Haskell community, there is continued debate over how to handle errors; a famous post compares <a href="http://blog.ezyang.com/2011/08/8-ways-to-report-errors-in-haskell-revisited/">eight different ways to handle errors in Haskell</a>. There is no consensus because there are a lot of tradeoffs involved when it comes to error handling.</p>
+
+<h2>My fix</h2>
+
+<p>For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked <code>8</code> to <code>80</code> to avoid a timeout!</p>
+
+<h2>Conclusion</h2>
+
+<p>I&rsquo;ve used my recent frustration at being unable to publish my personal blog as a vehicle to begin a conversation about error handling and the issues of API design and documentation in the face of errors. I hope you enjoyed the ride.</p>
+]]></content>
+  </entry>
+  
+</feed>
