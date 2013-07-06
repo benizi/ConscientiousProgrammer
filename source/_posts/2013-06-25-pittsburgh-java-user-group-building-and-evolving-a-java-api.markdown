@@ -158,3 +158,7 @@ Eric Stein gave an excellent talk about API design, both from the broadest persp
 ## Addendum: my involvement with Java
 
 I had a chance to review some of my feelings I have had about programming in Java myself. I've been a member of PittJUG for well over a decade now. I first signed up on the PittJUG mailing list in June 1999. I have not always been a regular attendee of the meetings: after some initial years of interest, I stopped attending for some years, and became regular again in 2009. So I've been around Java since it was a very young language, and all the while knowing of all the problems with the language. So why did I chose it as my main programming language a decade ago, and why have I stuck with it for so long, until last last year, when [I decided to write no *new* Java code, and move on to Scala](http://franklinchen.com/blog/2013/01/11/2013-is-my-year-of-scala/)? I will explain my decision-making in a forthcoming blog post.
+
+## (Update of 2013-07-05)
+
+An interesting [presentation on APIs in the enterprise](http://www.infoq.com/presentations/enterprise-api) came my way.
