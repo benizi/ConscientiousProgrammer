@@ -4,7 +4,7 @@
   <title><![CDATA[Category: types | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/types/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-07-07T13:53:59-04:00</updated>
+  <updated>2013-07-13T13:19:16-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -164,6 +164,10 @@
 <h2>Addendum: my involvement with Java</h2>
 
 <p>I had a chance to review some of my feelings I have had about programming in Java myself. I&rsquo;ve been a member of PittJUG for well over a decade now. I first signed up on the PittJUG mailing list in June 1999. I have not always been a regular attendee of the meetings: after some initial years of interest, I stopped attending for some years, and became regular again in 2009. So I&rsquo;ve been around Java since it was a very young language, and all the while knowing of all the problems with the language. So why did I chose it as my main programming language a decade ago, and why have I stuck with it for so long, until last last year, when <a href="http://franklinchen.com/blog/2013/01/11/2013-is-my-year-of-scala/">I decided to write no <em>new</em> Java code, and move on to Scala</a>? I will explain my decision-making in a forthcoming blog post.</p>
+
+<h2>(Update of 2013-07-05)</h2>
+
+<p>An interesting <a href="http://www.infoq.com/presentations/enterprise-api">presentation on APIs in the enterprise</a> came my way.</p>
 ]]></content>
   </entry>
   

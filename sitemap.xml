@@ -4,52 +4,64 @@
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/
         </loc>
-        <lastmod>2013-07-02T18:41:23-04:00</lastmod>
+        <lastmod>2013-07-10T11:33:04-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/
         </loc>
-        <lastmod>2013-07-02T18:41:24-04:00</lastmod>
+        <lastmod>2013-07-13T00:24:31-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/
         </loc>
-        <lastmod>2013-07-07T13:49:13-04:00</lastmod>
+        <lastmod>2013-07-10T11:33:29-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/
         </loc>
-        <lastmod>2013-07-02T18:41:24-04:00</lastmod>
+        <lastmod>2013-07-10T11:33:09-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/
         </loc>
-        <lastmod>2013-07-02T18:41:25-04:00</lastmod>
+        <lastmod>2013-07-10T11:33:27-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/
         </loc>
-        <lastmod>2013-07-02T18:41:25-04:00</lastmod>
+        <lastmod>2013-07-10T11:33:22-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/
+        </loc>
+        <lastmod>2013-07-13T12:44:00-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/
+        </loc>
+        <lastmod>2013-07-13T13:16:06-04:00</lastmod>
     </url>
     <url>
         <loc>http://ConscientiousProgrammer.com/about/</loc>
-        <lastmod>2013-07-02T18:41:23-04:00</lastmod>
+        <lastmod>2013-07-10T11:33:04-04:00</lastmod>
     </url>
     <url>
         <loc>http://ConscientiousProgrammer.com/blog/archives/</loc>
-        <lastmod>2013-07-07T13:49:13-04:00</lastmod>
+        <lastmod>2013-07-13T13:16:06-04:00</lastmod>
     </url>
     <url>
         <loc>http://ConscientiousProgrammer.com/</loc>
-        <lastmod>2013-07-07T13:49:13-04:00</lastmod>
+        <lastmod>2013-07-13T13:16:06-04:00</lastmod>
     </url>
     <url>
         <loc>http://ConscientiousProgrammer.com/robots.txt</loc>
-        <lastmod>2013-07-02T18:41:20-04:00</lastmod>
+        <lastmod>2013-07-10T11:32:46-04:00</lastmod>
     </url>
 </urlset>

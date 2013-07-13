@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-07-07T13:53:59-04:00</updated>
+  <updated>2013-07-13T13:19:16-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,250 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/"/>
+    <updated>2013-07-11T20:53:00-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/pittsburgh-ruby">Pittsburgh Ruby meetup</a> held a <a href="http://www.meetup.com/pittsburgh-ruby/events/120200102">lightning talks session</a>.</p>
+
+<p>Originally, I was not going to present anything, since I did not feel that I had anything exciting to quickly share (I have not been doing much Ruby programming lately at all other than <a href="/blog/2013/06/29/nil-non-determinism-exceptions">debugging my Octopress-generated blog</a>), and don&rsquo;t like talking just to talk.</p>
+
+<p>But at the very last minute, just half an hour before the meeting, I noticed some developments in the world of <a href="http://rspec.info/">RSpec</a> announced on Twitter, and I got excited enough that I decided to talk about <a href="https://github.com/jimweirich/rspec-given"><code>rspec-given</code></a>, which was just released at version 3.0.0.</p>
+
+<!--more-->
+
+
+<h2>Colin, on <code>rvm_recommended_ruby</code></h2>
+
+<p>Colin briefly talked about how he likes to automate things, and therefore, in the context of using <a href="https://rvm.io/">RVM</a>, created <a href="https://github.com/wayneeseguin/rvm/pull/1074"><code>rvm_recommended_ruby</code></a>.</p>
+
+<h2>Jon, on business logic in pure Ruby</h2>
+
+<p>Jon gave a short summary of his <a href="http://jonathandean.com/2013/07/business-logic-in-pure-ruby/">blog post</a> on not putting all business logic into Rails models, but instead, decoupling from <code>ActiveRecord</code> and Rails altogether. This is a theme that has risen a lot in recent years in the Rails community.</p>
+
+<h2>Carol, on how to use IRC to get help</h2>
+
+<p>Carol talked about how to use IRC to get help when working on projects.</p>
+
+<h2>Me, on <code>rspec-given</code></h2>
+
+<p>I talked about cool features in <a href="https://github.com/jimweirich/rspec-given"><code>rspec-given</code></a>.</p>
+
+<p><code>rspec-given</code> has actually been around for a while, but I had not used in the past. I plan to use it in the future.</p>
+
+<p>It provides <code>Given</code>, <code>When</code>, <code>Then</code>, and <code>And</code> for writing specifications.</p>
+
+<p>Also, now there is <code>Invariant</code>, which I think is a great addition to <code>RSpec</code>, enabling an easy way to check invariants as part of every example.</p>
+
+<p>Finally, I love the new natural assertions, the ability to write stuff like</p>
+
+<p><code>ruby
+Then { stack.top == :second_item }
+</code></p>
+
+<p>instead of</p>
+
+<p><code>ruby
+Then { expect(stack.top).to eq(:second_item) }
+</code></p>
+
+<p>while <code>RSpec</code> automatically generates useful messages on failure.</p>
+
+<h2>Colin again, on Vagrant</h2>
+
+<p>Since all the lightning talks were done in less than half an hour, Carol called for more volunteers to talk about something. Colin ended up impromptu talking about his use of <a href="http://www.vagrantup.com/">Vagrant</a> to create development environments.</p>
+
+<p>There was particular interest in how to share files with the host file system. Vagrant makes this easy.</p>
+
+<p>Vagrant is great. Use it.</p>
+
+<h2>Ruby meets Python</h2>
+
+<p>Carol reminded everyone that coming up is a Ruby/Python joint social.</p>
+
+<h2>Conclusion</h2>
+
+<p>A relatively short Pittsburgh Ruby meetup, and with a smaller crowd than some others in the past, but a fun and instructive one.</p>
+
+<p>Don&rsquo;t forget, <a href="http://steelcityruby.org/">Steel City Ruby Conference 2013</a> is in a month! I&rsquo;m <a href="http://franklinchen.com/blog/2012/08/07/the-first-steel-city-ruby-conference-an-amazing-experience/">excited to attend again</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh JavaScript meetup: functional programming]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"/>
+    <updated>2013-07-10T22:37:00-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a>" title="Pittsburgh JavaScript" ></p>
+
+<p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
+
+<p>I&rsquo;d met Richard earlier, a month ago at <a href="http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/">Pittsburgh TechFest</a>. He does not claim to be an expert at functional programming, but is enthusiastic about concepts and techniques that he can and does apply to improving software quality in many dimensions. Since I have been a functional programming enthusiast and practitioner for twenty years, I had these goals in attending his presentations:</p>
+
+<ul>
+<li>evaluate what Richard and others have done with, and think is important about,  functional programming</li>
+<li>offer a few corrections, elaborations, suggestions as appropriate for the situation</li>
+<li>gather information on how I may be able to effectively explain functional programming to those who are new to it</li>
+</ul>
+
+
+<!--more-->
+
+
+<h2>History of the Pittsbugh JavaScript meetup group</h2>
+
+<p>Two years ago, in 2011, I had attended the <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers">first incarnation of the group</a> faithfully, attending several months of meetings before it disbanded when the founder left Pittsburgh. I learned quite a bit from those meetings.</p>
+
+<p>Two years is a long time in the world of JavaScript. Looking back at <a href="http://franklinchen.com/blog/2011/09/27/when-jquery-attacks/">one of my blog posts reporting on the old JavaScript meetup group</a>, I am amused by how anachronistic that feels to me today, as in my mention of <a href="http://sproutcore.com/">Sproutcore</a>, which I never hear about any more.</p>
+
+<h2>Up front: my take on the secret of JavaScript</h2>
+
+<p>Here are some observations (not novel) I have about JavaScript, to set the stage for further discussion:</p>
+
+<ul>
+<li>JavaScript is full of horrible, disgusting Bad Parts.</li>
+<li>JavaScript has only one shiny Good Part: it has first-class functions.</li>
+<li>People manage to get a lot of amazingly cool and important stuff done using JavaScript, so take it seriously.</li>
+</ul>
+
+
+<h2>Comments on Richard&rsquo;s presentation</h2>
+
+<h3>Immutability and &ldquo;functional languages&rdquo;</h3>
+
+<p>Richard talked about <a href="http://en.wikipedia.org/wiki/Immutable_object">immutability</a> as being part of what &ldquo;functional programming&rdquo; is about.</p>
+
+<p>Yes, it is, and in addition, common best practices in many programming languages these days argue for favoring immutability. I want to emphasize that you don&rsquo;t have to go full-blown into a specialized &ldquo;functional language&rdquo; in order to take advantage of immutability as desired: for example, this tip has long since been known as at least a &ldquo;design pattern&rdquo; in the <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">Java world</a>, in the <a href="http://www.harukizaemon.com/blog/2010/03/01/functional-programming-in-object-oriented-languages/">Ruby world</a>, and basically everywhere else.</p>
+
+<p>Richard suggested that &ldquo;functional languages&rdquo; don&rsquo;t allow mutation. By my definition, this is <em>not</em> actually true.  I didn&rsquo;t raise an objection during the talk because I didn&rsquo;t want to sidetrack it, but here I have space to elaborate a little. I would argue (but that would have to be another blog post) that the cleanest, most intuitive and novice-accessible &ldquo;functional languages&rdquo;) are those in the <a href="http://en.wikipedia.org/wiki/ML_%28programming_language%29">ML</a> family originally developed in the 1970s and lives on today&rsquo;s popular, industrial-strength dialects of <a href="http://en.wikipedia.org/wiki/Standard_ML">Standard ML</a>, <a href="http://ocaml.org/">OCaml</a>, and <a href="http://fsharp.org/">F#</a>.</p>
+
+<p><em>ML fully supports mutation</em>, through <a href="http://en.wikibooks.org/wiki/Standard_ML_Programming/Types#References">reference cells</a>.</p>
+
+<p>Personally, because of notions like this, I&rsquo;ve been thinking that maybe it would be best if we all stopped using the term &ldquo;functional language&rdquo;, because it has sadly become misleading and ambiguous. In particular, people instantly think &ldquo;Haskell&rdquo; when they use the word &ldquo;functional language&rdquo;, when in fact Haskell is a very unusual, unique language (and ecosystem) among languages that one could call &ldquo;functional&rdquo;.</p>
+
+<h3>Expressions, functions, evaluation, and values</h3>
+
+<p>As Richard put it, &ldquo;favor expressions evaluating to a value&rdquo;. The focus of functional programming is on <em>returning</em> a value, from an expression that includes function calls, rather than munging some mutable global state, or modifying state through a reference passed into a function as a parameter.</p>
+
+<h3>Recursion vs. looping?</h3>
+
+<p>Richard noted that one characteristic of functional programming is the use of recursion instead of looping. He gave examples of writing tail-recursive functions.</p>
+
+<p>One nitpick (which again, I did not bring up during the talk): recursion and looping (as in through &ldquo;normal&rdquo; constructs such as <code>while</code> and <code>for</code>) are <em>not</em> actually opposed. I will write a blog post later about why conventional looping is best thought of as a derived construct built on top of recursion, and why it might be best to consider conventional looping to be a historical accident and mistake (but a very useful invention given the historical circumstances).</p>
+
+<h4>Efficiency of recursion?</h4>
+
+<p>Also, people brought up the topic of efficiency. I have learned over the years that for many people, the word &ldquo;recursion&rdquo; seems to immediately trigger the word &ldquo;efficiency&rdquo;. Richard did a great job in mentioning that <a href="http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls">EMCAScript 6 is going to have proper tail calls (also called tail call optimization)</a>, which will make tail recursion equivalent to ordinary looping in terms of space usage. This is <em>hugely important</em> news, of course. This mandate shows how serious JavaScript is about embracing functional programming.</p>
+
+<h4>Recursion for parallelism</h4>
+
+<p>But beyond the issue tail recursion, I felt I had to point out that recursive algorithms can offer actual <em>speedup</em>. The classic examples, of course, are the <a href="http://www.cs.cmu.edu/~scandal/nesl/alg-sequence.html#quicksort">parallel speedups of divide-and-conquer algorithms such as quicksort that use recursion</a>. If you expressed the algorithms by removing the recursion (with a hand-rolled stack as often taught in courses), you would destroy the inherent parallelism. So in the world of parallelism, you want your code to stay naturally recursive! As <a href="http://adambom.github.io/parallel.js/">parallel computing comes to JavaScript</a>, keep this in mind!</p>
+
+<h3>Higher-order functions, first-class functions</h3>
+
+<p>Richard: &ldquo;A function is an object&rdquo;.</p>
+
+<p>It&rsquo;s really as simple as that. Functions can be created, stored, passed around. Functions can return other functions.</p>
+
+<p>It&rsquo;s amazing, but I claim that this is JavaScript&rsquo;s one Good Part, its killer feature that surprisingly many languages don&rsquo;t have. And it&rsquo;s the one feature that is used <em>all the time</em>, not just in esoteric code. From the very beginning, JavaScript had first-class functions, to support callbacks for client code in Web browsers. and <a href="http://nodejs.org/">Node</a> server-side code is nothing if not a whole bunch of <code>function (...)</code>. Without closures and first-class functions, JavaScript would have been completely useless. Thank goodness <a href="http://brendaneich.com/2008/04/popularity/">Brendan Eich was inspired by the Scheme functional language</a>.</p>
+
+<h4>No methods!</h4>
+
+<p>JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented &ldquo;interference&rdquo; from the conventional class-based object-oriented world, which is mostly based not on functions, but on <a href="https://en.wikipedia.org/wiki/Method_%28computer_programming%29">methods</a> that interference with functions because they are meant to <em>replace</em> functions (since according to &ldquo;pure&rdquo; object-oriented thinking, functions are evil and computation should involve method calls on objects). <em>JavaScript does not (really) have methods</em>; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use <a href="http://emberjs.com">Ember</a>, the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of <code>function</code>s: <code>valueWillChange</code> and <code>valudDidChange</code> are just functions. They are not special things, &ldquo;methods&rdquo;.</p>
+
+<p>``` javascript
+App.PersonView = Ember.View.extend({
+  valueWillChange: function (obj, keyName, value) {</p>
+
+<pre><code>this.changingFrom = value;
+</code></pre>
+
+<p>  }.observesBefore(&lsquo;content.value&rsquo;),
+  valueDidChange: function(obj, keyName, value) {</p>
+
+<pre><code>  // only run if updating a value already in the DOM
+  if(this.get('state') === 'inDOM') {
+      var color = value &gt; this.changingFrom ? 'green' : 'red';
+      // logic
+  }
+</code></pre>
+
+<p>  }.observes(&lsquo;content.value&rsquo;)
+});
+```</p>
+
+<h3>Examples</h3>
+
+<p>Richard gave some standard examples of using higher-order functions such as <code>map</code> and <code>filter</code> and <code>foreach</code> as provided in various popular JavaScript libraries such as <a href="http://underscorejs.org/">Underscore</a>.</p>
+
+<p>As a matter of style, he recommended against long, obscure one-liners that involve chaining. I agree. For readability and testability of pipelines, I have found that it is good to break things up into intermediate steps. (Just <a href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">recently</a>, Tim Lesher also recommended against stupidity masking as excessive cleverness in his Python lightning talk about functional programming with <code>itertools</code>.)</p>
+
+<h3>Monads?!</h3>
+
+<p>Regrettably, Richard brought up the term <a href="http://en.wikipedia.org/wiki/Monad_%28functional_programming%29">&ldquo;monads&rdquo;</a>. I&rsquo;m close to thinking that this word should be <a href="http://fsharpforfunandprofit.com/posts/why-i-wont-be-writing-a-monad-tutorial/">banned</a>, because too many confusions about them have ruined the word. I have yet decided what the best alternative phrase might be. Maybe something like &ldquo;computational context&rdquo;?</p>
+
+<p>Ironically, Richard admitted he was going to abuse the word, and for the sake of example, he said, he was going to say that &ldquo;jQuery is a monad&rdquo;. I didn&rsquo;t want to derail his talk, and since he admitted the abuse, I decided there would be a better time to address this topic.</p>
+
+<p>It was interesting to me, however, that he gathered that the interesting thing about jQuery, and why he wanted to call it a monad, was the chaining of calls in jQuery. I need to think of a good way to deal with this intuition when I get around to explaining monads.</p>
+
+<h3>Partial application and currying</h3>
+
+<p>Richard explained both partial application and currying, then he wondered when one would in practice write a curried function.</p>
+
+<p>I said (but not very convincingly, I think) that you would write a curried function if you knew you would otherwise have to manually do a bunch of partial application. I have to confess that was a weak answer. I think the practical situation in JavaScript is that full-scale up-front currying is not useful.</p>
+
+<h3>Libraries</h3>
+
+<p>Richard recommended checking out the following libraries, especially Lo-Dash, which he judges to be faster than Underscore:</p>
+
+<ul>
+<li><a href="http://underscorejs.org/">Underscore</a></li>
+<li><a href="http://lodash.com/">Lo-Dash</a></li>
+<li><a href="http://osteele.com/sources/javascript/functional/">Functional JavaScript</a></li>
+</ul>
+
+
+<h2>Questions and answers</h2>
+
+<p>There were many interesting questions raised after the presentation.</p>
+
+<h3>Introducing functional programming into a team environment</h3>
+
+<p>Someone asked Richard a good question about whether it&rsquo;s appropriate to, say, start using Underscore at work and expecting other team members to learn how to use it. Is it fair to expect others to learn a new way of doing things that might seem weird?</p>
+
+<p>My point of view is that there&rsquo;s nothing specific about functional programming when it comes to questions like this. The same question comes up when evaluating a particular programming language or a particular MVC framework or a particular version control system, and the answer involve considering all the different realities of who is comfortable with what, whether it is worth learning something new, what the advantages and disadvantages are, how much the decision will affect delivery of business value.</p>
+
+<h3>Growing parameter list for a function vs. passing in a big object</h3>
+
+<p>One concern brought up is that if you&rsquo;re programming in a functional style, you can end up being faced with ever-growing parameter lists for a function to pass in everything that it needs. One solution is to create a big object to stick everything into it that might be needed (for example, a configuration object instead of separate flag parameters). Is this overkill?</p>
+
+<p>Also, <a href="http://tonylukasavage.com/">Tony Lukasavage</a> emphasized that his concern was in the context of the need to evolve an existing API without breaking customers' client code that uses it.</p>
+
+<p>My first note would be that API design is tricky and checking out <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">some resources on API design</a> is very helpful.</p>
+
+<p>Regarding parameter lists, Richard noted that you might have a design problem if you have a function that needs to know about so many things it depends on. You may want to refactor the function (of course, in the context of evolving a mature API that customers depend on, it may be too late, unfortunately) and the data structures passed in. For example, if you have a number of functions that all take as parameters a <code>firstName</code> and <code>lastName</code>, then maybe you want a single <code>name</code> parameter instead.</p>
+
+<p>I suggested also that if certain flags are not always needed, then instead of a huge configuration object, how about simply having separate but related functions (in a language supporting overloading, you could provide overloaded functions, although the topic of overloading is another large one to discuss later), each of which takes only the flags the client cares about. Of course, as some people pointed out, then you might end up with annoyingly long and specific function names.</p>
+
+<p>Nobody said designing an API is easy.</p>
+
+<h3>Do I actually do functional programming?</h3>
+
+<p>One question I got, since before the meetup, I had indicated having experience with functional programming, was basically, do I actually use it in JavaScript and elsewhere. The answer is, yes. As I&rsquo;ve mentioned, you don&rsquo;t have use a special language in order to program in this way, although it&rsquo;s much easier and more efficient to use a language that is tailored to support it. Most of the code I&rsquo;ve written in the past fifteen years has attempted to be primarily functional in style, whatever language I&rsquo;m using for work (mostly Java, Perl, Python, and recently Scala). I don&rsquo;t do this out of some kind of ideology, but because it works well in getting stuff done. Before adopting a primarily functional style of programming, I spent years working in traditional imperative and object-oriented styles, and empirically, that was less pleasant.</p>
+
+<h4>Do I do functional programming in JavaScript?</h4>
+
+<p>I have not actually done any JavaScript programming for work since doing some UI prototyping two years ago. I don&rsquo;t know when I&rsquo;ll return to doing front end work, but meanwhile, I am interested in doing some Web browser stuff for personal projects, so I try to keep up to date on developments in the JavaScript world.</p>
+
+<p>One thing that has been interesting that I need to check out is the rise of <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">functional reactive programming (FRP)</a> libraries for JavaScript, such as <a href="https://github.com/raimohanska/bacon.js">Bacon.js</a>. FRP was originally invented in the 1990s by Conal Elliott in the context of Haskell, but almost twenty years later, has finally spread well beyond that now to mainstream visibility and use. For example, Microsoft has thrown its weight behind <a href="http://rx.codeplex.com/">Reactive Extensions (Rx)</a>, which started out in the .NET world, but Microsoft then ported it to JavaScript, C/C++, Python, and Ruby.</p>
+
+<h2>Conclusion</h2>
+
+<p>I was happy to see interest in functional programming in the local JavaScript community. Richard gave an introductory talk on it that I thought was very useful as a starting point for those who are new to it. I made note of some omissions or inaccuracies in order to improve my thinking about how I can contribute in the future to improving people&rsquo;s understanding and application of functional programming principles.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[nil, non-determinism, exceptions: a journey in debugging the software that generates my blog]]></title>
@@ -401,6 +645,10 @@ assert_equal nil, code
 <h2>Addendum: my involvement with Java</h2>
 
 <p>I had a chance to review some of my feelings I have had about programming in Java myself. I&rsquo;ve been a member of PittJUG for well over a decade now. I first signed up on the PittJUG mailing list in June 1999. I have not always been a regular attendee of the meetings: after some initial years of interest, I stopped attending for some years, and became regular again in 2009. So I&rsquo;ve been around Java since it was a very young language, and all the while knowing of all the problems with the language. So why did I chose it as my main programming language a decade ago, and why have I stuck with it for so long, until last last year, when <a href="http://franklinchen.com/blog/2013/01/11/2013-is-my-year-of-scala/">I decided to write no <em>new</em> Java code, and move on to Scala</a>? I will explain my decision-making in a forthcoming blog post.</p>
+
+<h2>(Update of 2013-07-05)</h2>
+
+<p>An interesting <a href="http://www.infoq.com/presentations/enterprise-api">presentation on APIs in the enterprise</a> came my way.</p>
 ]]></content>
   </entry>
   

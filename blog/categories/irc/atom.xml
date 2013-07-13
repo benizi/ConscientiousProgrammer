@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: IRC | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/irc/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2013-07-13T13:19:16-04:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
+  <author>
+    <name><![CDATA[Franklin Chen]]></name>
+    <email><![CDATA[franklinchen@franklinchen.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/"/>
+    <updated>2013-07-11T20:53:00-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/pittsburgh-ruby">Pittsburgh Ruby meetup</a> held a <a href="http://www.meetup.com/pittsburgh-ruby/events/120200102">lightning talks session</a>.</p>
+
+<p>Originally, I was not going to present anything, since I did not feel that I had anything exciting to quickly share (I have not been doing much Ruby programming lately at all other than <a href="/blog/2013/06/29/nil-non-determinism-exceptions">debugging my Octopress-generated blog</a>), and don&rsquo;t like talking just to talk.</p>
+
+<p>But at the very last minute, just half an hour before the meeting, I noticed some developments in the world of <a href="http://rspec.info/">RSpec</a> announced on Twitter, and I got excited enough that I decided to talk about <a href="https://github.com/jimweirich/rspec-given"><code>rspec-given</code></a>, which was just released at version 3.0.0.</p>
+
+<!--more-->
+
+
+<h2>Colin, on <code>rvm_recommended_ruby</code></h2>
+
+<p>Colin briefly talked about how he likes to automate things, and therefore, in the context of using <a href="https://rvm.io/">RVM</a>, created <a href="https://github.com/wayneeseguin/rvm/pull/1074"><code>rvm_recommended_ruby</code></a>.</p>
+
+<h2>Jon, on business logic in pure Ruby</h2>
+
+<p>Jon gave a short summary of his <a href="http://jonathandean.com/2013/07/business-logic-in-pure-ruby/">blog post</a> on not putting all business logic into Rails models, but instead, decoupling from <code>ActiveRecord</code> and Rails altogether. This is a theme that has risen a lot in recent years in the Rails community.</p>
+
+<h2>Carol, on how to use IRC to get help</h2>
+
+<p>Carol talked about how to use IRC to get help when working on projects.</p>
+
+<h2>Me, on <code>rspec-given</code></h2>
+
+<p>I talked about cool features in <a href="https://github.com/jimweirich/rspec-given"><code>rspec-given</code></a>.</p>
+
+<p><code>rspec-given</code> has actually been around for a while, but I had not used in the past. I plan to use it in the future.</p>
+
+<p>It provides <code>Given</code>, <code>When</code>, <code>Then</code>, and <code>And</code> for writing specifications.</p>
+
+<p>Also, now there is <code>Invariant</code>, which I think is a great addition to <code>RSpec</code>, enabling an easy way to check invariants as part of every example.</p>
+
+<p>Finally, I love the new natural assertions, the ability to write stuff like</p>
+
+<p><code>ruby
+Then { stack.top == :second_item }
+</code></p>
+
+<p>instead of</p>
+
+<p><code>ruby
+Then { expect(stack.top).to eq(:second_item) }
+</code></p>
+
+<p>while <code>RSpec</code> automatically generates useful messages on failure.</p>
+
+<h2>Colin again, on Vagrant</h2>
+
+<p>Since all the lightning talks were done in less than half an hour, Carol called for more volunteers to talk about something. Colin ended up impromptu talking about his use of <a href="http://www.vagrantup.com/">Vagrant</a> to create development environments.</p>
+
+<p>There was particular interest in how to share files with the host file system. Vagrant makes this easy.</p>
+
+<p>Vagrant is great. Use it.</p>
+
+<h2>Ruby meets Python</h2>
+
+<p>Carol reminded everyone that coming up is a Ruby/Python joint social.</p>
+
+<h2>Conclusion</h2>
+
+<p>A relatively short Pittsburgh Ruby meetup, and with a smaller crowd than some others in the past, but a fun and instructive one.</p>
+
+<p>Don&rsquo;t forget, <a href="http://steelcityruby.org/">Steel City Ruby Conference 2013</a> is in a month! I&rsquo;m <a href="http://franklinchen.com/blog/2012/08/07/the-first-steel-city-ruby-conference-an-amazing-experience/">excited to attend again</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

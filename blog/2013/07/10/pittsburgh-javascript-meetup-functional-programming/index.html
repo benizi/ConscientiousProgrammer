@@ -1,0 +1,484 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Pittsburgh JavaScript meetup: functional programming - The Conscientious Programmer</title>
+  <meta name="author" content="Franklin Chen">
+
+  
+  <meta name="description" content="Because the topic of the featured presentation by Richard Ashkettle was functional programming, I made sure to attend my first meeting of the newly &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41982602-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Conscientious Programmer</a></h1>
+  
+    <h2>Humbly exploring what it means to do the right thing.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ConscientiousProgrammer.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Pittsburgh JavaScript Meetup: Functional Programming</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-10T22:37:00-04:00" pubdate data-updated="true">Jul 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg" title="Pittsburgh JavaScript" ></p>
+
+<p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
+
+<p>I&rsquo;d met Richard earlier, a month ago at <a href="http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/">Pittsburgh TechFest</a>. He does not claim to be an expert at functional programming, but is enthusiastic about concepts and techniques that he can and does apply to improving software quality in many dimensions. Since I have been a functional programming enthusiast and practitioner for twenty years, I had these goals in attending his presentations:</p>
+
+<ul>
+<li>evaluate what Richard and others have done with, and think is important about,  functional programming</li>
+<li>offer a few corrections, elaborations, suggestions as appropriate for the situation</li>
+<li>gather information on how I may be able to effectively explain functional programming to those who are new to it</li>
+</ul>
+
+
+<!--more-->
+
+
+<h2>History of the Pittsbugh JavaScript meetup group</h2>
+
+<p>Two years ago, in 2011, I had attended the <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers">first incarnation of the group</a> faithfully, attending several months of meetings before it disbanded when the founder left Pittsburgh. I learned quite a bit from those meetings.</p>
+
+<p>Two years is a long time in the world of JavaScript. Looking back at <a href="http://franklinchen.com/blog/2011/09/27/when-jquery-attacks/">one of my blog posts reporting on the old JavaScript meetup group</a>, I am amused by how anachronistic that feels to me today, as in my mention of <a href="http://sproutcore.com/">Sproutcore</a>, which I never hear about any more.</p>
+
+<h2>Up front: my take on the secret of JavaScript</h2>
+
+<p>Here are some observations (not novel) I have about JavaScript, to set the stage for further discussion:</p>
+
+<ul>
+<li>JavaScript is full of horrible, disgusting Bad Parts.</li>
+<li>JavaScript has only one shiny Good Part: it has first-class functions.</li>
+<li>People manage to get a lot of amazingly cool and important stuff done using JavaScript, so take it seriously.</li>
+</ul>
+
+
+<h2>Comments on Richard&rsquo;s presentation</h2>
+
+<h3>Immutability and &ldquo;functional languages&rdquo;</h3>
+
+<p>Richard talked about <a href="http://en.wikipedia.org/wiki/Immutable_object">immutability</a> as being part of what &ldquo;functional programming&rdquo; is about.</p>
+
+<p>Yes, it is, and in addition, common best practices in many programming languages these days argue for favoring immutability. I want to emphasize that you don&rsquo;t have to go full-blown into a specialized &ldquo;functional language&rdquo; in order to take advantage of immutability as desired: for example, this tip has long since been known as at least a &ldquo;design pattern&rdquo; in the <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">Java world</a>, in the <a href="http://www.harukizaemon.com/blog/2010/03/01/functional-programming-in-object-oriented-languages/">Ruby world</a>, and basically everywhere else.</p>
+
+<p>Richard suggested that &ldquo;functional languages&rdquo; don&rsquo;t allow mutation. By my definition, this is <em>not</em> actually true.  I didn&rsquo;t raise an objection during the talk because I didn&rsquo;t want to sidetrack it, but here I have space to elaborate a little. I would argue (but that would have to be another blog post) that the cleanest, most intuitive and novice-accessible &ldquo;functional languages&rdquo;) are those in the <a href="http://en.wikipedia.org/wiki/ML_%28programming_language%29">ML</a> family originally developed in the 1970s and lives on today&rsquo;s popular, industrial-strength dialects of <a href="http://en.wikipedia.org/wiki/Standard_ML">Standard ML</a>, <a href="http://ocaml.org/">OCaml</a>, and <a href="http://fsharp.org/">F#</a>.</p>
+
+<p><em>ML fully supports mutation</em>, through <a href="http://en.wikibooks.org/wiki/Standard_ML_Programming/Types#References">reference cells</a>.</p>
+
+<p>Personally, because of notions like this, I&rsquo;ve been thinking that maybe it would be best if we all stopped using the term &ldquo;functional language&rdquo;, because it has sadly become misleading and ambiguous. In particular, people instantly think &ldquo;Haskell&rdquo; when they use the word &ldquo;functional language&rdquo;, when in fact Haskell is a very unusual, unique language (and ecosystem) among languages that one could call &ldquo;functional&rdquo;.</p>
+
+<h3>Expressions, functions, evaluation, and values</h3>
+
+<p>As Richard put it, &ldquo;favor expressions evaluating to a value&rdquo;. The focus of functional programming is on <em>returning</em> a value, from an expression that includes function calls, rather than munging some mutable global state, or modifying state through a reference passed into a function as a parameter.</p>
+
+<h3>Recursion vs. looping?</h3>
+
+<p>Richard noted that one characteristic of functional programming is the use of recursion instead of looping. He gave examples of writing tail-recursive functions.</p>
+
+<p>One nitpick (which again, I did not bring up during the talk): recursion and looping (as in through &ldquo;normal&rdquo; constructs such as <code>while</code> and <code>for</code>) are <em>not</em> actually opposed. I will write a blog post later about why conventional looping is best thought of as a derived construct built on top of recursion, and why it might be best to consider conventional looping to be a historical accident and mistake (but a very useful invention given the historical circumstances).</p>
+
+<h4>Efficiency of recursion?</h4>
+
+<p>Also, people brought up the topic of efficiency. I have learned over the years that for many people, the word &ldquo;recursion&rdquo; seems to immediately trigger the word &ldquo;efficiency&rdquo;. Richard did a great job in mentioning that <a href="http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls">EMCAScript 6 is going to have proper tail calls (also called tail call optimization)</a>, which will make tail recursion equivalent to ordinary looping in terms of space usage. This is <em>hugely important</em> news, of course. This mandate shows how serious JavaScript is about embracing functional programming.</p>
+
+<h4>Recursion for parallelism</h4>
+
+<p>But beyond the issue tail recursion, I felt I had to point out that recursive algorithms can offer actual <em>speedup</em>. The classic examples, of course, are the <a href="http://www.cs.cmu.edu/~scandal/nesl/alg-sequence.html#quicksort">parallel speedups of divide-and-conquer algorithms such as quicksort that use recursion</a>. If you expressed the algorithms by removing the recursion (with a hand-rolled stack as often taught in courses), you would destroy the inherent parallelism. So in the world of parallelism, you want your code to stay naturally recursive! As <a href="http://adambom.github.io/parallel.js/">parallel computing comes to JavaScript</a>, keep this in mind!</p>
+
+<h3>Higher-order functions, first-class functions</h3>
+
+<p>Richard: &ldquo;A function is an object&rdquo;.</p>
+
+<p>It&rsquo;s really as simple as that. Functions can be created, stored, passed around. Functions can return other functions.</p>
+
+<p>It&rsquo;s amazing, but I claim that this is JavaScript&rsquo;s one Good Part, its killer feature that surprisingly many languages don&rsquo;t have. And it&rsquo;s the one feature that is used <em>all the time</em>, not just in esoteric code. From the very beginning, JavaScript had first-class functions, to support callbacks for client code in Web browsers. and <a href="http://nodejs.org/">Node</a> server-side code is nothing if not a whole bunch of <code>function (...)</code>. Without closures and first-class functions, JavaScript would have been completely useless. Thank goodness <a href="http://brendaneich.com/2008/04/popularity/">Brendan Eich was inspired by the Scheme functional language</a>.</p>
+
+<h4>No methods!</h4>
+
+<p>JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented &ldquo;interference&rdquo; from the conventional class-based object-oriented world, which is mostly based not on functions, but on <a href="https://en.wikipedia.org/wiki/Method_%28computer_programming%29">methods</a> that interference with functions because they are meant to <em>replace</em> functions (since according to &ldquo;pure&rdquo; object-oriented thinking, functions are evil and computation should involve method calls on objects). <em>JavaScript does not (really) have methods</em>; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use <a href="http://emberjs.com">Ember</a>, the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of <code>function</code>s: <code>valueWillChange</code> and <code>valudDidChange</code> are just functions. They are not special things, &ldquo;methods&rdquo;.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">App</span><span class="p">.</span><span class="nx">PersonView</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">valueWillChange</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">keyName</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">changingFrom</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}.</span><span class="nx">observesBefore</span><span class="p">(</span><span class="s1">&#39;content.value&#39;</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">valueDidChange</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">keyName</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// only run if updating a value already in the DOM</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;inDOM&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="kd">var</span> <span class="nx">color</span> <span class="o">=</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">changingFrom</span> <span class="o">?</span> <span class="s1">&#39;green&#39;</span> <span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
+</span><span class='line'>          <span class="c1">// logic</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}.</span><span class="nx">observes</span><span class="p">(</span><span class="s1">&#39;content.value&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Examples</h3>
+
+<p>Richard gave some standard examples of using higher-order functions such as <code>map</code> and <code>filter</code> and <code>foreach</code> as provided in various popular JavaScript libraries such as <a href="http://underscorejs.org/">Underscore</a>.</p>
+
+<p>As a matter of style, he recommended against long, obscure one-liners that involve chaining. I agree. For readability and testability of pipelines, I have found that it is good to break things up into intermediate steps. (Just <a href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">recently</a>, Tim Lesher also recommended against stupidity masking as excessive cleverness in his Python lightning talk about functional programming with <code>itertools</code>.)</p>
+
+<h3>Monads?!</h3>
+
+<p>Regrettably, Richard brought up the term <a href="http://en.wikipedia.org/wiki/Monad_%28functional_programming%29">&ldquo;monads&rdquo;</a>. I&rsquo;m close to thinking that this word should be <a href="http://fsharpforfunandprofit.com/posts/why-i-wont-be-writing-a-monad-tutorial/">banned</a>, because too many confusions about them have ruined the word. I have yet decided what the best alternative phrase might be. Maybe something like &ldquo;computational context&rdquo;?</p>
+
+<p>Ironically, Richard admitted he was going to abuse the word, and for the sake of example, he said, he was going to say that &ldquo;jQuery is a monad&rdquo;. I didn&rsquo;t want to derail his talk, and since he admitted the abuse, I decided there would be a better time to address this topic.</p>
+
+<p>It was interesting to me, however, that he gathered that the interesting thing about jQuery, and why he wanted to call it a monad, was the chaining of calls in jQuery. I need to think of a good way to deal with this intuition when I get around to explaining monads.</p>
+
+<h3>Partial application and currying</h3>
+
+<p>Richard explained both partial application and currying, then he wondered when one would in practice write a curried function.</p>
+
+<p>I said (but not very convincingly, I think) that you would write a curried function if you knew you would otherwise have to manually do a bunch of partial application. I have to confess that was a weak answer. I think the practical situation in JavaScript is that full-scale up-front currying is not useful.</p>
+
+<h3>Libraries</h3>
+
+<p>Richard recommended checking out the following libraries, especially Lo-Dash, which he judges to be faster than Underscore:</p>
+
+<ul>
+<li><a href="http://underscorejs.org/">Underscore</a></li>
+<li><a href="http://lodash.com/">Lo-Dash</a></li>
+<li><a href="http://osteele.com/sources/javascript/functional/">Functional JavaScript</a></li>
+</ul>
+
+
+<h2>Questions and answers</h2>
+
+<p>There were many interesting questions raised after the presentation.</p>
+
+<h3>Introducing functional programming into a team environment</h3>
+
+<p>Someone asked Richard a good question about whether it&rsquo;s appropriate to, say, start using Underscore at work and expecting other team members to learn how to use it. Is it fair to expect others to learn a new way of doing things that might seem weird?</p>
+
+<p>My point of view is that there&rsquo;s nothing specific about functional programming when it comes to questions like this. The same question comes up when evaluating a particular programming language or a particular MVC framework or a particular version control system, and the answer involve considering all the different realities of who is comfortable with what, whether it is worth learning something new, what the advantages and disadvantages are, how much the decision will affect delivery of business value.</p>
+
+<h3>Growing parameter list for a function vs. passing in a big object</h3>
+
+<p>One concern brought up is that if you&rsquo;re programming in a functional style, you can end up being faced with ever-growing parameter lists for a function to pass in everything that it needs. One solution is to create a big object to stick everything into it that might be needed (for example, a configuration object instead of separate flag parameters). Is this overkill?</p>
+
+<p>Also, <a href="http://tonylukasavage.com/">Tony Lukasavage</a> emphasized that his concern was in the context of the need to evolve an existing API without breaking customers&#8217; client code that uses it.</p>
+
+<p>My first note would be that API design is tricky and checking out <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">some resources on API design</a> is very helpful.</p>
+
+<p>Regarding parameter lists, Richard noted that you might have a design problem if you have a function that needs to know about so many things it depends on. You may want to refactor the function (of course, in the context of evolving a mature API that customers depend on, it may be too late, unfortunately) and the data structures passed in. For example, if you have a number of functions that all take as parameters a <code>firstName</code> and <code>lastName</code>, then maybe you want a single <code>name</code> parameter instead.</p>
+
+<p>I suggested also that if certain flags are not always needed, then instead of a huge configuration object, how about simply having separate but related functions (in a language supporting overloading, you could provide overloaded functions, although the topic of overloading is another large one to discuss later), each of which takes only the flags the client cares about. Of course, as some people pointed out, then you might end up with annoyingly long and specific function names.</p>
+
+<p>Nobody said designing an API is easy.</p>
+
+<h3>Do I actually do functional programming?</h3>
+
+<p>One question I got, since before the meetup, I had indicated having experience with functional programming, was basically, do I actually use it in JavaScript and elsewhere. The answer is, yes. As I&rsquo;ve mentioned, you don&rsquo;t have use a special language in order to program in this way, although it&rsquo;s much easier and more efficient to use a language that is tailored to support it. Most of the code I&rsquo;ve written in the past fifteen years has attempted to be primarily functional in style, whatever language I&rsquo;m using for work (mostly Java, Perl, Python, and recently Scala). I don&rsquo;t do this out of some kind of ideology, but because it works well in getting stuff done. Before adopting a primarily functional style of programming, I spent years working in traditional imperative and object-oriented styles, and empirically, that was less pleasant.</p>
+
+<h4>Do I do functional programming in JavaScript?</h4>
+
+<p>I have not actually done any JavaScript programming for work since doing some UI prototyping two years ago. I don&rsquo;t know when I&rsquo;ll return to doing front end work, but meanwhile, I am interested in doing some Web browser stuff for personal projects, so I try to keep up to date on developments in the JavaScript world.</p>
+
+<p>One thing that has been interesting that I need to check out is the rise of <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">functional reactive programming (FRP)</a> libraries for JavaScript, such as <a href="https://github.com/raimohanska/bacon.js">Bacon.js</a>. FRP was originally invented in the 1990s by Conal Elliott in the context of Haskell, but almost twenty years later, has finally spread well beyond that now to mainstream visibility and use. For example, Microsoft has thrown its weight behind <a href="http://rx.codeplex.com/">Reactive Extensions (Rx)</a>, which started out in the .NET world, but Microsoft then ported it to JavaScript, C/C++, Python, and Ruby.</p>
+
+<h2>Conclusion</h2>
+
+<p>I was happy to see interest in functional programming in the local JavaScript community. Richard gave an introductory talk on it that I thought was very useful as a starting point for those who are new to it. I made note of some omissions or inaccuracies in order to improve my thinking about how I can contribute in the future to improving people&rsquo;s understanding and application of functional programming principles.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-10T22:37:00-04:00" pubdate data-updated="true">Jul 10<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/dot-net/'>.NET</a>, <a class='category' href='/blog/categories/f-number/'>F#</a>, <a class='category' href='/blog/categories/haskell/'>Haskell</a>, <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/ml/'>ML</a>, <a class='category' href='/blog/categories/mvc/'>MVC</a>, <a class='category' href='/blog/categories/ocaml/'>OCaml</a>, <a class='category' href='/blog/categories/perl/'>Perl</a>, <a class='category' href='/blog/categories/pittsburgh/'>Pittsburgh</a>, <a class='category' href='/blog/categories/pittsburgh-techfest/'>Pittsburgh TechFest</a>, <a class='category' href='/blog/categories/python/'>Python</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>, <a class='category' href='/blog/categories/rx/'>Rx</a>, <a class='category' href='/blog/categories/scala/'>Scala</a>, <a class='category' href='/blog/categories/scheme/'>Scheme</a>, <a class='category' href='/blog/categories/standard-ml/'>Standard ML</a>, <a class='category' href='/blog/categories/first-class/'>first-class</a>, <a class='category' href='/blog/categories/functional-language/'>functional language</a>, <a class='category' href='/blog/categories/functional-programming/'>functional programming</a>, <a class='category' href='/blog/categories/functional-reactive-programming/'>functional reactive programming</a>, <a class='category' href='/blog/categories/higher-order/'>higher-order</a>, <a class='category' href='/blog/categories/immutable/'>immutable</a>, <a class='category' href='/blog/categories/jquery/'>jQuery</a>, <a class='category' href='/blog/categories/monads/'>monads</a>, <a class='category' href='/blog/categories/parallelism/'>parallelism</a>, <a class='category' href='/blog/categories/recursion/'>recursion</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/" title="Previous Post: Why I hate calling myself "pragmatic" but do">&laquo; Why I hate calling myself "pragmatic" but do</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/" title="Next Post: Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant">Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/">Pittsburgh Ruby Lightning Talk Night: RVM, Business Logic With Rails, IRC, Rspec-given, Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/">Pittsburgh JavaScript Meetup: Functional Programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/">Why I Hate Calling Myself "Pragmatic" but Do</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/29/nil-non-determinism-exceptions/">Nil, Non-determinism, Exceptions: A Journey in Debugging the Software That Generates My Blog</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/">We Should Not Create This Kind of Terrible Error Message for the End User</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'FranklinChen',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/100967806642012078047?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - <a href="http://franklinchen.com/">Franklin Chen</a> -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'franklinchen';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/';
+        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
