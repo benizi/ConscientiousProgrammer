@@ -21,6 +21,7 @@ categories:
 - error messages
 - error handling
 - test-driven development
+- immutable
 ---
 The topic for the featured presentation at the [Pittsburgh Java User Group](http://java.net/projects/pittjug/) (PittJUG) was "Building and Evolving a Java API", presented by Eric Stein of [Fulminatus Consulting](http://www.fulminatus.com/). I was excited to attend because API design is difficult but important, and today more than ever, because of the trend toward integrating many services to build an application, and toward providing such services (both externally and internally).
 
