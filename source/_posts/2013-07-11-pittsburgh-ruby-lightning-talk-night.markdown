@@ -13,12 +13,13 @@ categories:
 - Vagrant
 - Python
 - Steel City Ruby
+- Jim Weirich
 ---
 The [Pittsburgh Ruby meetup](http://www.meetup.com/pittsburgh-ruby) held a [lightning talks session](http://www.meetup.com/pittsburgh-ruby/events/120200102).
 
 Originally, I was not going to present anything, since I did not feel that I had anything exciting to quickly share (I have not been doing much Ruby programming lately at all other than [debugging my Octopress-generated blog](/blog/2013/06/29/nil-non-determinism-exceptions)), and don't like talking just to talk.
 
-But at the very last minute, just half an hour before the meeting, I noticed some developments in the world of [RSpec](http://rspec.info/) announced on Twitter, and I got excited enough that I decided to talk about [`rspec-given`](https://github.com/jimweirich/rspec-given), which was just released at version 3.0.0.
+But at the very last minute, just half an hour before the meeting, I noticed some developments in the world of [RSpec](http://rspec.info/) announced on Twitter by Jim Weirich, and I got excited enough that I decided to talk about his [`rspec-given`](https://github.com/jimweirich/rspec-given), which was just released at version 3.0.0.
 
 <!--more-->
 
