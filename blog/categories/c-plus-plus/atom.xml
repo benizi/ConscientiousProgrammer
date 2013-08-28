@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-08-28T02:16:38-04:00</updated>
+  <updated>2013-08-28T12:44:10-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -20,7 +20,7 @@
     <id>http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing</id>
     <content type="html"><![CDATA[<p>It&rsquo;s been a long time since I went to an <a href="http://openhack.github.io/pittsburgh/">OpenHack Pittsburgh</a> meeting. The last time was <a href="http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/">five months ago</a>. On June 24, there was an <a href="http://www.meetup.com/pittsburgh-ruby/events/120200292/">OpenHack Pittsburgh</a> held at <a href="http://www.4moms.com/">4moms</a>, but I really needed to stay home and take it easy that evening, because of my busy schedule later in the week, including attending a <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">PittJUG meeting</a> and preparing a <a href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">Pittsburgh Python talk</a>.</p>
 
-<p>This August meeting of OpenHack Pittsburgh was held at <a href="http://www.modcloth.com/">ModCloth</a>, which I had never been to. It&rsquo;s in Crafton, which is a place I&rsquo;ve never been before, nearly half an hour drive from Pittsburgh. Because of worries about driving there near rush hour after work, I probably would not have signed up to attend had it not been for <a href="http://justinxreese.com/">Justin</a>, the organizer of OpenHack Pittsburgh.</p>
+<p><a href="http://www.meetup.com/pittsburgh-ruby/events/120201842/">This August meeting of OpenHack Pittsburgh</a> was held at <a href="http://www.modcloth.com/">ModCloth</a>, which I had never been to. It&rsquo;s in Crafton, which is a place I&rsquo;ve never been before, nearly half an hour drive from Pittsburgh. Because of worries about driving there near rush hour after work, I probably would not have signed up to attend had it not been for <a href="http://justinxreese.com/">Justin</a>, the organizer of OpenHack Pittsburgh.</p>
 
 <p>What happened was that he asked for feedback about who was planning to work on what, and said he planned to learn some <a href="http://elixir-lang.org/">Elixir</a>, a fairly new programming language built on top of the <a href="http://www.erlang.org/">Erlang</a> runtime. Since this language had been on my list of things to look into, I decided that learning loves company, so I proposed to learn some Elixir in a test-driven way!</p>
 
@@ -33,7 +33,7 @@
 
 <h2>How to learn a programming language</h2>
 
-<p>I have written code in probably around fifty (50) programming languages. I&rsquo;m not kidding, and I&rsquo;m not proud, but this is simply a fact of my having done programming since 1982, twenty-one years ago. Let&rsquo;s face it: languages come and go. I have personally sat at an IBM <a href="http://en.wikipedia.org/wiki/Keypunch">keypunch</a> machine punching out cards for my COBOL and Fortran code.</p>
+<p>I have written code in probably around fifty (50) programming languages. I&rsquo;m not kidding, and I&rsquo;m not proud, but this is simply a fact of my having done programming since 1982, thirty-one (31!!) years ago. Let&rsquo;s face it: languages come and go. I have personally sat at an IBM <a href="http://en.wikipedia.org/wiki/Keypunch">keypunch</a> machine punching out cards for my COBOL and Fortran code.</p>
 
 <p>As with human languages, the fact is that to be truly productive in a language requires much more than learning some syntax and semantics. It requires actually writing and running and fixing code, and in the context of a realistic project.</p>
 
