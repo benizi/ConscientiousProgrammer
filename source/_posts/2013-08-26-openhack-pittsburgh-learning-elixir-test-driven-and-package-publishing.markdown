@@ -29,7 +29,7 @@ categories:
 ---
 It's been a long time since I went to an [OpenHack Pittsburgh](http://openhack.github.io/pittsburgh/) meeting. The last time was [five months ago](http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/). On June 24, there was an [OpenHack Pittsburgh](http://www.meetup.com/pittsburgh-ruby/events/120200292/) held at [4moms](http://www.4moms.com/), but I really needed to stay home and take it easy that evening, because of my busy schedule later in the week, including attending a [PittJUG meeting](/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/) and preparing a [Pittsburgh Python talk](/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/).
 
-This August meeting of OpenHack Pittsburgh was held at [ModCloth](http://www.modcloth.com/), which I had never been to. It's in Crafton, which is a place I've never been before, nearly half an hour drive from Pittsburgh. Because of worries about driving there near rush hour after work, I probably would not have signed up to attend had it not been for [Justin](http://justinxreese.com/), the organizer of OpenHack Pittsburgh.
+[This August meeting of OpenHack Pittsburgh](http://www.meetup.com/pittsburgh-ruby/events/120201842/) was held at [ModCloth](http://www.modcloth.com/), which I had never been to. It's in Crafton, which is a place I've never been before, nearly half an hour drive from Pittsburgh. Because of worries about driving there near rush hour after work, I probably would not have signed up to attend had it not been for [Justin](http://justinxreese.com/), the organizer of OpenHack Pittsburgh.
 
 What happened was that he asked for feedback about who was planning to work on what, and said he planned to learn some [Elixir](http://elixir-lang.org/), a fairly new programming language built on top of the [Erlang](http://www.erlang.org/) runtime. Since this language had been on my list of things to look into, I decided that learning loves company, so I proposed to learn some Elixir in a test-driven way!
 
@@ -41,7 +41,7 @@ What does that mean?
 
 ## How to learn a programming language
 
-I have written code in probably around fifty (50) programming languages. I'm not kidding, and I'm not proud, but this is simply a fact of my having done programming since 1982, twenty-one years ago. Let's face it: languages come and go. I have personally sat at an IBM [keypunch](http://en.wikipedia.org/wiki/Keypunch) machine punching out cards for my COBOL and Fortran code.
+I have written code in probably around fifty (50) programming languages. I'm not kidding, and I'm not proud, but this is simply a fact of my having done programming since 1982, thirty-one (31!!) years ago. Let's face it: languages come and go. I have personally sat at an IBM [keypunch](http://en.wikipedia.org/wiki/Keypunch) machine punching out cards for my COBOL and Fortran code.
 
 As with human languages, the fact is that to be truly productive in a language requires much more than learning some syntax and semantics. It requires actually writing and running and fixing code, and in the context of a realistic project.
 
