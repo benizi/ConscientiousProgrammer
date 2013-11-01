@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nil | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/nil/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-10-10T03:03:47-04:00</updated>
+  <updated>2013-11-01T01:53:35-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,56 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Surprised by the Go programming language's treatment of nil]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/"/>
+    <updated>2013-10-31T23:38:00-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://golang.org/doc/gopher/frontpage.png">http://golang.org/doc/gopher/frontpage.png</a>" title="Go" ></p>
+
+<p>So I happened to see an <a href="http://tip.golang.org/doc/go1.2">announcement of Go version 1.2</a>. I saw something that disturbed me, having to do with <code>nil</code>, a <a href="/blog/2013/06/29/nil-non-determinism-exceptions/">&ldquo;favorite&rdquo; topic of mine</a>.</p>
+
+<!--more-->
+
+
+<h2>What I know about Go</h2>
+
+<p>I don&rsquo;t currently use the <a href="http://golang.org/">Go programming language</a>, although there actually is a local Pittsburgh Go programming meetup group, the <a href="http://www.meetup.com/Go-Steel-Programmers/">Go Steel Programmers</a>, whose meetings I have never attended.</p>
+
+<p>Some months ago I did, out of curiosity (and respect for any new language that I hear about people actually using to get stuff done), work through the <a href="http://tour.golang.org/">tour of Go</a> tutorial, to learn about the Go language. I installed packages on my machine, and wrote some compiling and running programs. I know just enough that I could code in Go for some project if I wanted to.</p>
+
+<h2><code>nil</code></h2>
+
+<p>What caught my eye in the Go 1.2 announcement was a <a href="http://docs.google.com/document/d/14DgGJKGQeBTNJDXo3YxnlSwv7ouRqvj7BMmZw17vWV0/pub">note about changes in the semantics regarding <code>nil</code></a>.</p>
+
+<p>For the record, I don&rsquo;t believe any new programming languages should be invented that have the <code>nil</code> construct, <a href="http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare">Hoare&rsquo;s &ldquo;billion dollar&rdquo; mistake</a>. I&rsquo;ve already <a href="http://franklinchen.com/blog/2012/09/06/my-pittsburgh-ruby-talk-nil/">previously given a talk</a> about why, so I won&rsquo;t repeat the arguments here.</p>
+
+<p>But I think Russ Cox&rsquo;s note about <code>nil</code> checks speaks for itself.</p>
+
+<p>It said that Go 1.2 tightens things up so that various uses (directly or indirectly) of <code>nil</code> will cause a <em>runtime panic rather than silently producing an unusable pointer</em>.</p>
+
+<p>Read that again: until Go 1.2, you could get <em>silent</em> bad behavior, an <em>unusable</em> pointer. This from a language that purports to be &ldquo;statically typed&rdquo;, improve on C, and provide <a href="http://golang.org/doc/faq#unions"><em>memory safety guarantees</em></a>.</p>
+
+<p>Before Go 1.2, a chain of code involving a <code>nil</code> could result in behavior of which <a href="http://swtch.com/~rsc/">Russ Cox</a> wrote:</p>
+
+<p><blockquote><p>The current behavior is at best merely historical accident; it was definitely not thought through or discussed.</p></blockquote></p>
+
+<p>There is also a note about a particular special case:</p>
+
+<p><blockquote><p>(it seemed like a good idea at a time)</p></blockquote></p>
+
+<p>You can read the <a href="http://docs.google.com/document/d/14DgGJKGQeBTNJDXo3YxnlSwv7ouRqvj7BMmZw17vWV0/pub">whole document about <code>nil</code></a> yourself. You will find that it is still not a formal spec, but more a rationale of various special cases and possible implementation details.</p>
+
+<h2>C culture</h2>
+
+<p>Go arose from C culture. It was invented by those in C culture who wanted an improvement over the known problems of C. Unfortunately, I perceive it as today&rsquo;s C, in the same way that the C invented in the 1970s was born with the problems that one could have avoided already at that very time.</p>
+
+<h2>Conclusion</h2>
+
+<p>The Go language continues to evolve, which is good, but I was surprised that the full ramifications of something as dangerous as rampant <code>nil</code> were not thought about up front.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[nil, non-determinism, exceptions: a journey in debugging the software that generates my blog]]></title>
