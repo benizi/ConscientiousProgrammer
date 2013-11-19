@@ -84,10 +84,10 @@ It's 2013, not 1993, so it is hard to convince me to invest any time at all in l
 - C/C++: [googletest](https://code.google.com/p/googletest/)
 - Clojure: [Midje](https://github.com/marick/Midje)
 - Haskell: [HSpec](http://hspec.github.io/) and [QuickCheck](http://www.haskell.org/haskellwiki/Introduction_to_QuickCheck2)
-- Java or Scala: [Specs2](http://etorreborre.github.io/specs2/) and [ScalaCheck](https://github.com/rickynils/scalacheck)
+- Java or Scala: [Specs2](http://specs2.org/) and [ScalaCheck](http://www.scalacheck.org/)
 - JavaScript: [Jasmine](http://pivotal.github.io/jasmine/)
 - Perl: [Test::More](http://search.cpan.org/~mschwern/Test-Simple-0.98/lib/Test/More.pm)
-- Python: [pytest](http://pytest.org/latest/)
+- Python: [pytest](http://pytest.org/)
 - Ruby: [RSpec](http://rspec.info/)
 - Racket: [RackUnit](http://docs.racket-lang.org/rackunit/)
 
