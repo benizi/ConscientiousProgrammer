@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Pittsburgh | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/pittsburgh/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-11-01T01:53:35-04:00</updated>
+  <updated>2013-11-19T23:32:32-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -80,10 +80,10 @@
 <li>C/C++: <a href="https://code.google.com/p/googletest/">googletest</a></li>
 <li>Clojure: <a href="https://github.com/marick/Midje">Midje</a></li>
 <li>Haskell: <a href="http://hspec.github.io/">HSpec</a> and <a href="http://www.haskell.org/haskellwiki/Introduction_to_QuickCheck2">QuickCheck</a></li>
-<li>Java or Scala: <a href="http://etorreborre.github.io/specs2/">Specs2</a> and <a href="https://github.com/rickynils/scalacheck">ScalaCheck</a></li>
+<li>Java or Scala: <a href="http://specs2.org/">Specs2</a> and <a href="http://www.scalacheck.org/">ScalaCheck</a></li>
 <li>JavaScript: <a href="http://pivotal.github.io/jasmine/">Jasmine</a></li>
 <li>Perl: <a href="http://search.cpan.org/~mschwern/Test-Simple-0.98/lib/Test/More.pm">Test::More</a></li>
-<li>Python: <a href="http://pytest.org/latest/">pytest</a></li>
+<li>Python: <a href="http://pytest.org/">pytest</a></li>
 <li>Ruby: <a href="http://rspec.info/">RSpec</a></li>
 <li>Racket: <a href="http://docs.racket-lang.org/rackunit/">RackUnit</a></li>
 </ul>
