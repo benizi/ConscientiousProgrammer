@@ -151,7 +151,7 @@ Furthermore, it turns out that `mentos()` can return `nil` on a non-`nil` code s
 
 ## `nil` is not even the real problem here: non-determinism is
 
-`mentos()` is not very well documented. Until I read this code, I didn't realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work!
+`mentos()` is not very well documented. Until I read this code, I didn't realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In `lib/pygments/popen.rb`:
 
 ``` ruby
     # Our 'rpc'-ish request to mentos. Requires a method name, and then optional
@@ -225,6 +225,12 @@ I think there are situations for exceptions and situations for reifying errors a
 ## My fix
 
 For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked `8` to `80` to avoid a timeout!
+
+### (Update of 2013-12-18)
+
+The `pygments.rb` library [has finally been updated with a `MENTOS_TIMEOUT` environment variable](https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999).
+
+This is obviously a short-term hack, and I don't see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the `pygments.rb` team, I have no right to complain!
 
 ## Conclusion
 
