@@ -4,7 +4,7 @@
   <title><![CDATA[Category: object-oriented | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/object-oriented/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-12-24T13:19:26-05:00</updated>
+  <updated>2013-12-24T18:46:09-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -18,7 +18,7 @@
     <link href="http://ConscientiousProgrammer.com/blog/2013/12/23/tostring-considered-harmful-part-1/"/>
     <updated>2013-12-23T23:54:00-05:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/12/23/tostring-considered-harmful-part-1</id>
-    <content type="html"><![CDATA[<p>It is easy to rant about the problems or unexpected subtleties involving the use <a href="http://en.wikipedia.org/wiki/String_%28computer_science%29">strings</a> in programming languages. This post, however, is not so much a rant about strings as about design and meaning, with <code>toString</code> only as an obvious example.</p>
+    <content type="html"><![CDATA[<p>It is easy to rant about the problems or unexpected subtleties involving the use of <a href="http://en.wikipedia.org/wiki/String_%28computer_science%29">strings</a> in programming languages. This post, however, is not so much a rant about strings as about design and meaning, with <code>toString</code> only as an obvious example.</p>
 
 <p>I&rsquo;ll describe a pitfall that came up in my code, and a solution, and make observations about how different programming languages address or avoid this problem.</p>
 
