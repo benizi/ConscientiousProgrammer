@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nil | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/nil/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-12-24T12:09:21-05:00</updated>
+  <updated>2013-12-24T12:28:20-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -18,7 +18,7 @@
     <link href="http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/"/>
     <updated>2013-10-31T23:38:00-04:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil</id>
-    <content type="html"><![CDATA[<p>{% img <a href="http://golang.org/doc/gopher/frontpage.png">http://golang.org/doc/gopher/frontpage.png</a> Go %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://golang.org/doc/gopher/frontpage.png">http://golang.org/doc/gopher/frontpage.png</a>" title="Go" ></p>
 
 <p>So I happened to see an <a href="http://tip.golang.org/doc/go1.2">announcement of Go version 1.2</a>. I saw something that disturbed me, having to do with <code>nil</code>, a <a href="/blog/2013/06/29/nil-non-determinism-exceptions/">&ldquo;favorite&rdquo; topic of mine</a>.</p>
 
@@ -45,15 +45,11 @@
 
 <p>Before Go 1.2, a chain of code involving a <code>nil</code> could result in behavior of which <a href="http://swtch.com/~rsc/">Russ Cox</a> wrote:</p>
 
-<p>{% blockquote %}
-The current behavior is at best merely historical accident; it was definitely not thought through or discussed.
-{% endblockquote %}</p>
+<p><blockquote><p>The current behavior is at best merely historical accident; it was definitely not thought through or discussed.</p></blockquote></p>
 
 <p>There is also a note about a particular special case:</p>
 
-<p>{% blockquote %}
-(it seemed like a good idea at a time)
-{% endblockquote %}</p>
+<p><blockquote><p>(it seemed like a good idea at a time)</p></blockquote></p>
 
 <p>You can read the <a href="http://docs.google.com/document/d/14DgGJKGQeBTNJDXo3YxnlSwv7ouRqvj7BMmZw17vWV0/pub">whole document about <code>nil</code></a> yourself. You will find that it is still not a formal spec, but more a rationale of various special cases and possible implementation details.</p>
 

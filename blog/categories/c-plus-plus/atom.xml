@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-12-24T12:09:21-05:00</updated>
+  <updated>2013-12-24T12:28:20-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -104,11 +104,7 @@ getUrl(makeUrl(id))
 
 <p>Furthermore, in the case of an ID not found, the URL constructed is <code>http://service.com?id=None</code>. How many of you have seen applications or Web sites or emails in which something was clearly missing and the text contained either an empty space or the string &ldquo;null&rdquo; or &ldquo;nullvalue&rdquo; such as</p>
 
-<p>{% blockquote %}
-Dear NULL,</p>
-
-<p>You ordered NULL items.
-{% endblockquote %}</p>
+<p><blockquote><p>Dear NULL,</p></p><p><p>You ordered NULL items.</p></blockquote></p>
 
 <p>Yup, you guessed it: someone wrote crappy code like what I just showed you, and frightening thing is, <em>it could have been me</em> and <em>it could have been you</em>.</p>
 
@@ -290,7 +286,7 @@ id match {
 
 <p>What does that mean?</p>
 
-<p>{% img <a href="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg">http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg</a> Franklin working on laptop %}</p>
+<p><img class="<a" src="href="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg">http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg</a>" title="Franklin working on laptop" ></p>
 
 <!--more-->
 

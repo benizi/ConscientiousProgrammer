@@ -275,7 +275,7 @@
 
 <h2><code>nil</code> is not even the real problem here: non-determinism is</h2>
 
-<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work!</p>
+<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -384,6 +384,12 @@
 
 <p>For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked <code>8</code> to <code>80</code> to avoid a timeout!</p>
 
+<h3>(Update of 2013-12-18)</h3>
+
+<p>The <code>pygments.rb</code> library <a href="https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999">has finally been updated with a <code>MENTOS_TIMEOUT</code> environment variable</a>.</p>
+
+<p>This is obviously a short-term hack, and I don&rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the <code>pygments.rb</code> team, I have no right to complain!</p>
+
 <h2>Conclusion</h2>
 
 <p>I&rsquo;ve used my recent frustration at being unable to publish my personal blog as a vehicle to begin a conversation about error handling and the issues of API design and documentation in the face of errors. I hope you enjoyed the ride.</p>
@@ -460,6 +466,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/23/tostring-considered-harmful-part-1/">toString Considered Harmful, Part 1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/">Surprised by the Go Programming Language's Treatment of Nil</a>
       </li>
     
@@ -473,10 +483,6 @@
     
       <li class="post">
         <a href="/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/">Pittsburgh JavaScript Meetup: Functional Programming</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/">Why I Hate Calling Myself "Pragmatic" but Do</a>
       </li>
     
   </ul>

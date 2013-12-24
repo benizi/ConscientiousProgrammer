@@ -4,7 +4,7 @@
   <title><![CDATA[The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-11-19T23:32:32-05:00</updated>
+  <updated>2013-12-24T12:28:20-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,324 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[toString Considered Harmful, Part 1]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/23/tostring-considered-harmful-part-1/"/>
+    <updated>2013-12-23T23:54:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/23/tostring-considered-harmful-part-1</id>
+    <content type="html"><![CDATA[<p>It is easy to rant about the problems or unexpected subtleties involving the use <a href="http://en.wikipedia.org/wiki/String_%28computer_science%29">strings</a> in programming languages. This post, however, is not so much a rant about strings as about design and meaning, with <code>toString</code> only as an obvious example.</p>
+
+<p>I&rsquo;ll describe a pitfall that came up in my code, and a solution, and make observations about how different programming languages address or avoid this problem.</p>
+
+<p>This is part one of a series.</p>
+
+<!--more-->
+
+
+<h2>A bug when evolving my code</h2>
+
+<p>My example code is in Scala, but the problem illustrated actually extends to many (most?) other currently popular object-oriented languages as well, including Java (which Scala inherited <code>Object.toString</code> from), C# (<code>Object.ToString</code> stolen from Java), Ruby (<code>Object#to_s</code>), Python (<code>str</code>, which uses <code>object.__str__</code> in case of an object). (Later in the post, I discuss languages without this specific feature.)</p>
+
+<h3>First working code</h3>
+
+<p>Here&rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">Example</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">type</span> <span class="kt">Id</span> <span class="o">=</span> <span class="nc">Int</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/**</span>
+</span><span class='line'><span class="cm">    @param name User name to look up</span>
+</span><span class='line'><span class="cm">    @return ID of user</span>
+</span><span class='line'><span class="cm">    */</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">findId</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Id</span> <span class="o">=</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;name&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="mi">42</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>      <span class="mi">0</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">makeUrl</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Id</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">s</span><span class="s">&quot;http://service.com?id=$id&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/** Simulate making the Web request. */</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">getUrl</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="n">println</span><span class="o">(</span><span class="n">url</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="n">findId</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">getUrl</span><span class="o">(</span><span class="n">makeUrl</span><span class="o">(</span><span class="n">id</span><span class="o">))</span>
+</span><span class='line'>    <span class="c1">// output: http://service.com?id=42</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.</p>
+
+<p>If you don&rsquo;t know Scala, just note that <code>s"...$id"</code> is just Scala&rsquo;s string interpolation syntax that behind the scenes calls <code>id.toString</code>.</p>
+
+<h3>Non-working code</h3>
+
+<p>It turned out that finding an ID could fail, so I changed <code>findId</code> to return the type <code>Option[Id]</code> instead of <code>Id</code>. To get the code to compile, I had to change the type of the parameter to <code>makeUrl</code> also:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="cm">/**</span>
+</span><span class='line'><span class="cm">    @param name User name to look up</span>
+</span><span class='line'><span class="cm">    @return Some(ID of user) if found, else None</span>
+</span><span class='line'><span class="cm">    */</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">findId</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Id</span><span class="o">]</span> <span class="k">=</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;name&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nc">Some</span><span class="o">(</span><span class="mi">42</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nc">None</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Oops, now this has an unintended bug!</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">makeUrl</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Id</span><span class="o">])</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">s</span><span class="s">&quot;http://service.com?id=$id&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: <code>http://service.com?id=Some(42)</code> was being requested.</p>
+
+<p>Furthermore, in the case of an ID not found, the URL constructed is <code>http://service.com?id=None</code>. How many of you have seen applications or Web sites or emails in which something was clearly missing and the text contained either an empty space or the string &ldquo;null&rdquo; or &ldquo;nullvalue&rdquo; such as</p>
+
+<blockquote><p>Dear NULL,</p><p>You ordered NULL items.</p></blockquote>
+
+
+<p>Yup, you guessed it: someone wrote crappy code like what I just showed you, and frightening thing is, <em>it could have been me</em> and <em>it could have been you</em>.</p>
+
+<h4>What&rsquo;s the big deal?</h4>
+
+<p>You might think, &ldquo;Big deal, you changed your code, ran your test, and immediately found the bug, so what&rsquo;s the problem?&rdquo;</p>
+
+<p>The problem is that I have higher standards than that. I don&rsquo;t want to rely on my tests to find my bugs. In fact, the test that went over the Web to do stuff was an <em>integration test</em>, not a <em>unit test</em>. The bug only manifested itself when the actual Web request failed. And as we see in real life, many apps are not sufficiently tested to root out all possible accidental string generations.</p>
+
+<p>So although I caught the bug quickly, I caught it far less quickly than I wanted. I didn&rsquo;t want to even construct an obviously garbage URL like <code>http://service.com?id=Some(42)</code> at all. I prefer to have the type checker catch stupid design-level bugs up front. So I was furious at myself that I wrote code that the compiler was perfectly happy with but was obviously wrong. I had gotten lazy in more ways than one, and had been punished accordingly.</p>
+
+<h2>A symptom of bad design</h2>
+
+<p>There were a couple of things wrong with my original code that made it not evolve well.</p>
+
+<h3>Don&rsquo;t use <code>toString</code></h3>
+
+<p>First, by using string interpolation at all, I was relying on the implicit <code>toString</code> method of all objects. String interpolation is an admittedly very convenient feature that I use extensively, but now I consider it rather dangerous.</p>
+
+<p>But even if I hadn&rsquo;t used string interpolation, I would have had to build up strings myself anyway, and would have called <code>toString</code> <em>explicitly</em>, and I would have had the same problem: changing the type of something from <code>Id</code> to <code>Option[Id]</code> does not get rid of <code>toString</code>. In fact, in object-oriented languages where <code>toString</code> is defined way up at the top, <em>everything</em> has <code>toString</code>, whether you like it or not! The best you can do is override <code>toString</code>. (Actually, Scala &ldquo;helpfully&rdquo; generates a nice <code>toString</code> override for you when you use case classes, hence the output of <code>Some(42)</code>.)</p>
+
+<p>I consider this <em>global infection</em> a flaw in object-oriented languages that impose a set of methods on all objects whether you want them or not. <code>toString</code> is hardly the worst offending method, actually, but I&rsquo;ll save my complaints about others for later.</p>
+
+<p>First step in cleaning up the code: make <code>toString</code> explicit:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="cm">/** Only ever use a String to create a URL. */</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">makeUrl</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">s</span><span class="s">&quot;http://service.com?id=$id&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="n">findId</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">getUrl</span><span class="o">(</span><span class="n">makeUrl</span><span class="o">(</span><span class="n">id</span><span class="o">.</span><span class="n">toString</span><span class="o">))</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(Later in the post, I will discuss alternatives to this explicit <code>toString</code>.)</p>
+
+<h3>Primitive obsession</h3>
+
+<p>Another design smell was that of using</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">type</span> <span class="kt">Id</span> <span class="o">=</span> <span class="nc">Int</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>in the first place. This is a well-known lazy practice called <a href="http://c2.com/cgi/wiki?PrimitiveObsession">primitive obsession</a>. I know better than that.</p>
+
+<p>The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/**</span>
+</span><span class='line'><span class="cm">    @param name User name to look up</span>
+</span><span class='line'><span class="cm">    @return ID of user</span>
+</span><span class='line'><span class="cm">    */</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">findId</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Id</span> <span class="o">=</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;name&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nc">Id</span><span class="o">(</span><span class="mi">42</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nc">Id</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that this still <em>would not</em> have solved the <code>toString</code> problem, since the output would simply have been <code>http://service.com?id=Some(Id(42))</code> or the dreaded <code>http://service.com?id=None</code>!</p>
+
+<h3><code>toString</code> is a problematic concept anyway</h3>
+
+<p>The real problem is one that transcends programming language design. (Later in this post I&rsquo;ll show languages that don&rsquo;t have <code>toString</code> but still easily allow a similar problem.)</p>
+
+<p>The real problem is that strings are used for <em>multiple</em> purposes. Some are used just for debugging, showing an internal representation of data. Some are used for &ldquo;human&rdquo; reading. In fact, many languages distinguish between these two purposes: Lisp has <a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_wr_pr.htm"><code>write</code>, <code>prin1</code>, <code>print</code>, <code>pprint</code></a>; Scheme has <a href="http://www.scheme.com/tspl3/io.html"><code>write</code> and <code>display</code></a>; Ruby has <a href="http://ruby-doc.org/core-2.0.0/Object.html"><code>to_s</code> and <code>to_str</code></a>; Python has <a href="http://docs.python.org/2/library/functions.html"><code>repr</code> and <code>str</code></a>.</p>
+
+<p>One is often directed to override the &ldquo;human-oriented&rdquo; version of these mechanisms (implementing one&rsquo;s own special non-default format). In Java and Scala, that&rsquo;s <code>toString</code>. But this is precisely the problem. We are <em>encouraged</em> to abuse this built-in mechanism for getting a string from an object that is supposed to mean something in the <em>context of an application</em>. Yes, <code>Some(Id(42))</code> is a useful human-readable string, but it&rsquo;s not what I want to put into a URL for an ID parameter!</p>
+
+<h4>Different names for different contexts</h4>
+
+<p>Suppose you had a <code>Name</code> class, and it had fields such as <code>first</code> and <code>middle</code> and <code>last</code>. It&rsquo;s nonsensical to expect a single <code>toString</code> override to express all the different contexts in which you might want to get a single string from a full name. Sometimes you might want to generate <code>Franklin Chen</code>; other times, <code>Franklin Ming Chen</code>; other times, <code>Franklin M. Chen</code>; other times, <code>FMC</code>. The point is that there should really be a method for each of these. <code>toString</code> should be treated really as a debugging device.</p>
+
+<p>Instead of piggybacking on <code>toString</code>, we should call a spade a spade, and define our own methods whose name is actually informative and tells us for what <em>purpose</em> we are asking for a string.</p>
+
+<p>Let&rsquo;s refactor the code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="c1">// Wrapper class</span>
+</span><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// Special method for turning to URL string fragment</span>
+</span><span class='line'>    <span class="k">def</span> <span class="n">toUrlString</span> <span class="k">=</span> <span class="n">id</span><span class="o">.</span><span class="n">toString</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/**</span>
+</span><span class='line'><span class="cm">    @param name User name to look up</span>
+</span><span class='line'><span class="cm">    @return Some(ID of user) if found, else None</span>
+</span><span class='line'><span class="cm">    */</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">findId</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Id</span><span class="o">]</span> <span class="k">=</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;name&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nc">Some</span><span class="o">(</span><span class="nc">Id</span><span class="o">(</span><span class="mi">42</span><span class="o">))</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nc">None</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/** Only ever use a String to create a URL. */</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">makeUrl</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">s</span><span class="s">&quot;http://service.com?id=$id&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/** Simulate making the Web request. */</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">getUrl</span><span class="o">(</span><span class="n">url</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="n">println</span><span class="o">(</span><span class="n">url</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="n">findId</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="c1">// Will not compile because Option[Id] does not have toUrlString</span>
+</span><span class='line'>    <span class="c1">//getUrl(makeUrl(id.toUrlString))</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now the code that was creating a junk URL will no longer compile: <code>id</code> is of type <code>Option[Id]</code> but that type does <em>not</em> have a <code>toUrlString</code> method. Mission accomplished!</p>
+
+<p>To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">// Will not compile because Option[Id] does not have toUrlString</span>
+</span><span class='line'><span class="c1">//getUrl(makeUrl(id.toUrlString))</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">id</span> <span class="k">match</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;No id found!&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">getUrl</span><span class="o">(</span><span class="n">makeUrl</span><span class="o">(</span><span class="n">n</span><span class="o">.</span><span class="n">toUrlString</span><span class="o">))</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Simple!</p>
+
+<h2>The final string gotcha (to be discussed later)</h2>
+
+<p>You may have noticed that there is still primitive obsession in this sample code: URLs are presented as <code>String</code> for simplicity. In real life, I use builders such as <code>URIBuilder</code> and <code>HttpGet</code> (Java <a href="http://hc.apache.org/">Apache HttpComponents</a>) or more sophisticated Scala-specific libraries.</p>
+
+<p>However, at some point, data has to be turned into strings: this simply is how the Web works. It is at that point where one has to watch out. I will discuss that boundary in another post. String injection attacks are precisely a result of being sloppy about crossing that boundary.</p>
+
+<h2>Conclusion</h2>
+
+<p>I gave a small taste of what the <code>toString</code> problem is about, and some initial steps toward solving it through better design even if the programming language encourages us to be sloppy.</p>
+
+<p>In part 2 of this series, I will expand on different design choices even in the situation we just examined, especially in the face of continued evolution in which there are multiple domain classes to be turned into strings.</p>
+
+<p>Finally, there actually are quite a few languages that don&rsquo;t have this particular <code>toString</code> problem, but some have analogues to a lesser degree. Part 3 of this series will discuss the different design choices in the languages or in the standard libraries or idioms. Examples will be drawn from C, C++, Haskell, Go, Standard ML, OCaml, Rust, and JavaScript.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Surprised by the Go Programming Language's Treatment of Nil]]></title>
@@ -654,7 +972,7 @@
 
 <h2><code>nil</code> is not even the real problem here: non-determinism is</h2>
 
-<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work!</p>
+<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -762,6 +1080,12 @@
 <h2>My fix</h2>
 
 <p>For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked <code>8</code> to <code>80</code> to avoid a timeout!</p>
+
+<h3>(Update of 2013-12-18)</h3>
+
+<p>The <code>pygments.rb</code> library <a href="https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999">has finally been updated with a <code>MENTOS_TIMEOUT</code> environment variable</a>.</p>
+
+<p>This is obviously a short-term hack, and I don&rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the <code>pygments.rb</code> team, I have no right to complain!</p>
 
 <h2>Conclusion</h2>
 

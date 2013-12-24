@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Travis | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/travis/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-12-24T12:09:21-05:00</updated>
+  <updated>2013-12-24T12:28:20-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -26,7 +26,7 @@
 
 <p>What does that mean?</p>
 
-<p>{% img <a href="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg">http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg</a> Franklin working on laptop %}</p>
+<p><img class="<a" src="href="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg">http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg</a>" title="Franklin working on laptop" ></p>
 
 <!--more-->
 
