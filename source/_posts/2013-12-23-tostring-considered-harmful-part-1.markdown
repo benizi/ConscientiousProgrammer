@@ -22,7 +22,7 @@ categories:
 - object-oriented
 - string interpolation
 ---
-It is easy to rant about the problems or unexpected subtleties involving the use [strings](http://en.wikipedia.org/wiki/String_%28computer_science%29) in programming languages. This post, however, is not so much a rant about strings as about design and meaning, with `toString` only as an obvious example.
+It is easy to rant about the problems or unexpected subtleties involving the use of [strings](http://en.wikipedia.org/wiki/String_%28computer_science%29) in programming languages. This post, however, is not so much a rant about strings as about design and meaning, with `toString` only as an obvious example.
 
 I'll describe a pitfall that came up in my code, and a solution, and make observations about how different programming languages address or avoid this problem.
 
