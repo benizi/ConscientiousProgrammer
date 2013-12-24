@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Lisp | The Conscientious Programmer]]></title>
-  <link href="http://ConscientiousProgrammer.com/blog/categories/lisp/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Rust | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/rust/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
   <updated>2013-12-24T12:09:21-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
