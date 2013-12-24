@@ -4,7 +4,7 @@
   <title><![CDATA[Category: testing | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-11-19T23:32:32-05:00</updated>
+  <updated>2013-12-24T04:28:58-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -26,7 +26,7 @@
 
 <p>What does that mean?</p>
 
-<p><img class="<a" src="href="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg">http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg</a>" title="Franklin working on laptop" ></p>
+<p>{% img <a href="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg">http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg</a> Franklin working on laptop %}</p>
 
 <!--more-->
 
@@ -309,7 +309,7 @@ let highlight (code : string) (opts : my_map) : string option = //...
 
 <h2><code>nil</code> is not even the real problem here: non-determinism is</h2>
 
-<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work!</p>
+<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
 <p>``` ruby</p>
 
@@ -392,6 +392,12 @@ assert_equal nil, code
 
 <p>For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked <code>8</code> to <code>80</code> to avoid a timeout!</p>
 
+<h3>(Update of 2013-12-18)</h3>
+
+<p>The <code>pygments.rb</code> library <a href="https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999">has finally been updated with a <code>MENTOS_TIMEOUT</code> environment variable</a>.</p>
+
+<p>This is obviously a short-term hack, and I don&rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the <code>pygments.rb</code> team, I have no right to complain!</p>
+
 <h2>Conclusion</h2>
 
 <p>I&rsquo;ve used my recent frustration at being unable to publish my personal blog as a vehicle to begin a conversation about error handling and the issues of API design and documentation in the face of errors. I hope you enjoyed the ride.</p>
@@ -403,7 +409,7 @@ assert_equal nil, code
     <link href="http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/"/>
     <updated>2013-06-26T22:50:00-04:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg">http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg</a>" title="Pittsburgh Python User Group" ></p>
+    <content type="html"><![CDATA[<p>{% img <a href="http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg">http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg</a> Pittsburgh Python User Group %}</p>
 
 <p>The <a href="http://www.meetup.com/pghpython/">Pittsburgh Python User Group</a> had <a href="http://www.meetup.com/pghpython/events/120442102">another &ldquo;favorite module night&rdquo;</a>. I enjoy this format because I get to learn about what people find useful, so that I may perhaps use it myself!</p>
 

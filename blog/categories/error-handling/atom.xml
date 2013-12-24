@@ -4,7 +4,7 @@
   <title><![CDATA[Category: error handling | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/error-handling/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-11-19T23:32:32-05:00</updated>
+  <updated>2013-12-24T04:28:58-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -161,7 +161,7 @@ let highlight (code : string) (opts : my_map) : string option = //...
 
 <h2><code>nil</code> is not even the real problem here: non-determinism is</h2>
 
-<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work!</p>
+<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
 <p>``` ruby</p>
 
@@ -244,6 +244,12 @@ assert_equal nil, code
 
 <p>For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked <code>8</code> to <code>80</code> to avoid a timeout!</p>
 
+<h3>(Update of 2013-12-18)</h3>
+
+<p>The <code>pygments.rb</code> library <a href="https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999">has finally been updated with a <code>MENTOS_TIMEOUT</code> environment variable</a>.</p>
+
+<p>This is obviously a short-term hack, and I don&rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the <code>pygments.rb</code> team, I have no right to complain!</p>
+
 <h2>Conclusion</h2>
 
 <p>I&rsquo;ve used my recent frustration at being unable to publish my personal blog as a vehicle to begin a conversation about error handling and the issues of API design and documentation in the face of errors. I hope you enjoyed the ride.</p>
@@ -257,7 +263,9 @@ assert_equal nil, code
     <id>http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user</id>
     <content type="html"><![CDATA[<p>I have a <a href="http://franklinchen.com/blog/2012/03/22/paradox-i-will-observe-the-national-day-of-unplugging-but-just-bought-my-first-smartphone-this-week/">Samsung Galaxy S II smartphone</a>. I recently encountered a problem: auto-updating of apps failed with this terrible error message:</p>
 
-<p><blockquote><p>Application cannot be installed in the default install location.</p></blockquote></p>
+<p>{% blockquote %}
+Application cannot be installed in the default install location.
+{% endblockquote %}</p>
 
 <p>Also, a lot of time and bandwidth was each time spent on re-downloading the app and then failing, with no way to gracefully recover.</p>
 
@@ -280,7 +288,9 @@ assert_equal nil, code
 
 <p>So why that terrible error message? Why not just tell the end user exactly what is going on? Why not something like:</p>
 
-<p><blockquote><p>The application X could not be installed at (device storage | SD card storage) because you don&rsquo;t have enough space. You can try clearing more space, or go to your application settings to move it to (SD card storage | device storage).</p></blockquote></p>
+<p>{% blockquote %}
+The application X could not be installed at (device storage | SD card storage) because you don&rsquo;t have enough space. You can try clearing more space, or go to your application settings to move it to (SD card storage | device storage).
+{% endblockquote %}</p>
 
 <p>The application should know exactly what is going on, and not only that, should be able to suggest a course of action based on all the relevant variables, such as how much space there is in different places, how large the application is, etc.</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-11-19T23:32:32-05:00</updated>
+  <updated>2013-12-24T04:28:58-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,493 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[toString considered harmful]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/23/tostring-considered-harmful/"/>
+    <updated>2013-12-23T23:54:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/23/tostring-considered-harmful</id>
+    <content type="html"><![CDATA[<p>It is easy to rant about the problems or unexpected subtleties involving the use <a href="http://en.wikipedia.org/wiki/String_%28computer_science%29">strings</a> in programming languages. This post, however, is not so much a rant about strings as about design and meaning, with <code>toString</code> only as an obvious example.</p>
+
+<p>I&rsquo;ll describe a pitfall that came up in my code, and a solution, and make observations about how different programming languages address or avoid this problem.</p>
+
+<!--more-->
+
+
+<h2>A bug when evolving my code</h2>
+
+<p>My example code is in Scala, but the problem illustrated actually extends to many (most?) other currently popular object-oriented languages as well, including Java (which Scala inherited <code>Object.toString</code> from), C# (<code>Object.ToString</code> stolen from Java), Ruby (<code>Object#to_s</code>), Python (<code>str</code>, which uses <code>object.__str__</code> in case of an object). (Later in the post, I discuss languages without this specific feature.)</p>
+
+<h3>First working code</h3>
+
+<p>Here&rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.</p>
+
+<p>```scala
+object Example {
+  type Id = Int</p>
+
+<p>  /**</p>
+
+<pre><code>@param name User name to look up
+@return ID of user
+*/
+</code></pre>
+
+<p>  def findId(name: String): Id =</p>
+
+<pre><code>if (name == "name") {
+  42
+} else {
+  0
+}
+</code></pre>
+
+<p>  def makeUrl(id: Id): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
+
+<p>  /<em>* Simulate making the Web request. </em>/
+  def getUrl(url: String): Unit = println(url)</p>
+
+<p>  def main(args: Array[String]): Unit = {</p>
+
+<pre><code>val id = findId("name")
+getUrl(makeUrl(id))
+// output: http://service.com?id=42
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.</p>
+
+<p>If you don&rsquo;t know Scala, just note that <code>s"...$id"</code> is just Scala&rsquo;s string interpolation syntax that behind the scenes calls <code>id.toString</code>.</p>
+
+<h3>Non-working code</h3>
+
+<p>It turned out that finding an ID could fail, so I changed <code>findId</code> to return the type <code>Option[Id]</code> instead of <code>Id</code>. To get the code to compile, I had to change the type of the parameter to <code>makeUrl</code> also:</p>
+
+<p>```scala
+  /**</p>
+
+<pre><code>@param name User name to look up
+@return Some(ID of user) if found, else None
+*/
+</code></pre>
+
+<p>  def findId(name: String): Option[Id] =</p>
+
+<pre><code>if (name == "name") {
+  Some(42)
+} else {
+  None
+}
+</code></pre>
+
+<p>  // Oops, now this has an unintended bug!
+  def makeUrl(id: Option[Id]): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<p>But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: <code>http://service.com?id=Some(42)</code> was being requested.</p>
+
+<p>Furthermore, in the case of an ID not found, the URL constructed is <code>http://service.com?id=None</code>. How many of you have seen applications or Web sites or emails in which something was clearly missing and the text contained either an empty space or the string &ldquo;null&rdquo; or &ldquo;nullvalue&rdquo; such as</p>
+
+<p>{% blockquote %}
+Dear NULL,</p>
+
+<p>You ordered NULL items.
+{% endblockquote %}</p>
+
+<p>Yup, you guessed it: someone wrote crappy code like what I just showed you, and frightening thing is, <em>it could have been me</em> and <em>it could have been you</em>.</p>
+
+<h4>What&rsquo;s the big deal?</h4>
+
+<p>You might think, &ldquo;Big deal, you changed your code, ran your test, and immediately found the bug, so what&rsquo;s the problem?&rdquo;</p>
+
+<p>The problem is that I have higher standards than that. I don&rsquo;t want to rely on my tests to find my bugs. In fact, the test that went over the Web to do stuff was an <em>integration test</em>, not a <em>unit test</em>. The bug only manifested itself when the actual Web request failed. And as we see in real life, many apps are not sufficiently tested to root out all possible accidental string generations.</p>
+
+<p>So although I caught the bug quickly, I caught it far less quickly than I wanted. I didn&rsquo;t want to even construct an obviously garbage URL like <code>http://service.com?id=Some(42)</code> at all. I prefer to have the type checker catch stupid design-level bugs up front. So I was furious at myself that I wrote code that the compiler was perfectly happy with but was obviously wrong. I had gotten lazy in more ways than one, and had been punished accordingly.</p>
+
+<h2>A symptom of bad design</h2>
+
+<p>There were a couple of things wrong with my original code that made it not evolve well.</p>
+
+<h3>Don&rsquo;t use <code>toString</code></h3>
+
+<p>First, by using string interpolation at all, I was relying on the implicit <code>toString</code> method of all objects. String interpolation is an admittedly very convenient feature that I use extensively, but now I consider it rather dangerous.</p>
+
+<p>But even if I hadn&rsquo;t used string interpolation, I would have had to build up strings myself anyway, and would have called <code>toString</code> <em>explicitly</em>, and I would have had the same problem: changing the type of something from <code>Id</code> to <code>Option[Id]</code> does not get rid of <code>toString</code>. In fact, in object-oriented languages where <code>toString</code> is defined way up at the top, <em>everything</em> has <code>toString</code>, whether you like it or not! The best you can do is override <code>toString</code>. (Actually, Scala &ldquo;helpfully&rdquo; generates a nice <code>toString</code> override for you when you use case classes, hence the output of <code>Some(42)</code>.)</p>
+
+<p>I consider this <em>global infection</em> a flaw in object-oriented languages that impose a set of methods on all objects whether you want them or not. <code>toString</code> is hardly the worst offending method, actually, but I&rsquo;ll save my complaints about others for later.</p>
+
+<p>First step in cleaning up the code: make <code>toString</code> explicit:</p>
+
+<p>```scala
+  /<em>* Only ever use a String to create a URL. </em>/
+  def makeUrl(id: String): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
+
+<p>  def main(args: Array[String]): Unit = {</p>
+
+<pre><code>val id = findId("name")
+getUrl(makeUrl(id.toString))
+</code></pre>
+
+<p>  }
+```</p>
+
+<p>(Later in the post, I will discuss alternatives to this explicit <code>toString</code>.)</p>
+
+<h3>Primitive obsession</h3>
+
+<p>Another design smell was that of using</p>
+
+<p><code>scala
+type Id = Int
+</code></p>
+
+<p>in the first place. This is a well-known lazy practice called <a href="http://c2.com/cgi/wiki?PrimitiveObsession">primitive obsession</a>. I know better than that.</p>
+
+<p>The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been</p>
+
+<p>```scala
+  case class Id(id: Int)</p>
+
+<p>  /**</p>
+
+<pre><code>@param name User name to look up
+@return ID of user
+*/
+</code></pre>
+
+<p>  def findId(name: String): Id =</p>
+
+<pre><code>if (name == "name") {
+  Id(42)
+} else {
+  Id(0)
+}
+</code></pre>
+
+<p>```</p>
+
+<p>Note that this still <em>would not</em> have solved the <code>toString</code> problem, since the output would simply have been <code>http://service.com?id=Some(Id(42))</code> or the dreaded <code>http://service.com?id=None</code>!</p>
+
+<h3><code>toString</code> is a bad concept anyway</h3>
+
+<p>The real problem is one that transcends programming language design. (Later in this post I&rsquo;ll show languages that don&rsquo;t have <code>toString</code> but still easily allow a similar problem.)</p>
+
+<p>The real problem is that strings are used for <em>multiple</em> purposes. Some are used just for debugging, showing an internal representation of data. Some are used for &ldquo;human&rdquo; reading. In fact, many languages distinguish between these two purposes: Lisp has <a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_wr_pr.htm"><code>write</code>, <code>prin1</code>, <code>print</code>, <code>pprint</code></a>; Scheme has <a href="http://www.scheme.com/tspl3/io.html"><code>write</code> and <code>display</code></a>; Ruby has <a href="http://ruby-doc.org/core-2.0.0/Object.html"><code>to_s</code> and <code>to_str</code></a>; Python has <a href="http://docs.python.org/2/library/functions.html"><code>repr</code> and <code>str</code></a>.</p>
+
+<p>One is often directed to override the &ldquo;human-oriented&rdquo; version of these mechanisms (implementing one&rsquo;s own special non-default format). In Java and Scala, that&rsquo;s <code>toString</code>. But this is precisely the problem. We are <em>encouraged</em> to abuse this built-in mechanism for getting a string from an object that is supposed to mean something in the <em>context of an application</em>. Yes, <code>Some(Id(42))</code> is a useful human-readable string, but it&rsquo;s not what I want to put into a URL for an ID parameter!</p>
+
+<p>Instead of piggybacking on <code>toString</code>, we should call a spade a spade, and define our own methods whose name is actually informative and tells us for what <em>purpose</em> we are asking for a string.</p>
+
+<p>Let&rsquo;s refactor the code:</p>
+
+<p>```scala
+  // Wrapper class
+  case class Id(id: Int) {</p>
+
+<pre><code>// Special method for turning to URL string fragment
+def toUrlString = id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  /**</p>
+
+<pre><code>@param name User name to look up
+@return Some(ID of user) if found, else None
+*/
+</code></pre>
+
+<p>  def findId(name: String): Option[Id] =</p>
+
+<pre><code>if (name == "name") {
+  Some(Id(42))
+} else {
+  None
+}
+</code></pre>
+
+<p>  /<em>* Only ever use a String to create a URL. </em>/
+  def makeUrl(id: String): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
+
+<p>  /<em>* Simulate making the Web request. </em>/
+  def getUrl(url: String): Unit = println(url)</p>
+
+<p>  def main(args: Array[String]): Unit = {</p>
+
+<pre><code>val id = findId("name")
+// Will not compile because Option[Id] does not have toUrlString
+//getUrl(makeUrl(id.toUrlString))
+</code></pre>
+
+<p>  }
+```</p>
+
+<p>Now the code that was creating a junk URL will no longer compile: <code>id</code> is of type <code>Option[Id]</code> but that type does <em>not</em> have a <code>toUrlString</code> method. Mission accomplished!</p>
+
+<p>To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:</p>
+
+<p>```scala</p>
+
+<pre><code>// Will not compile because Option[Id] does not have toUrlString
+//getUrl(makeUrl(id.toUrlString))
+
+id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(n.toUrlString))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>Simple!</p>
+
+<h2>Other possible designs</h2>
+
+<h3>OO vs. functional</h3>
+
+<p>The fix presented was in <em>object-oriented</em> style, adding a method <code>toUrlString</code> to a class. The other solution is the <em>functional</em> style, leaving the <code>Id</code> class alone, and writing an external function instead:</p>
+
+<p>```scala
+  case class Id(id: Int)</p>
+
+<p>  def toUrlString(id: Id) = id.toString
+```</p>
+
+<p>with</p>
+
+<p>```scala</p>
+
+<pre><code>id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(toUrlString(n)))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>There are advantages and disadvantages to either solution.</p>
+
+<h3>More advanced OO</h3>
+
+<p>It would be very natural, given a whole set of domain classes in addition to <code>Id</code>, to want all of them to have a <code>toUrlString</code>. Then the natural thing to do is to create a mini-universe (parallel to the <code>toString</code> universe) by creating a hierarchy:</p>
+
+<p>```scala
+  trait UrlString {</p>
+
+<pre><code>def toUrlString: String
+</code></pre>
+
+<p>  }</p>
+
+<p>  case class Id(id: Int) extends UrlString {</p>
+
+<pre><code>override def toUrlString = id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  case class &hellip;(&hellip;) extends UrlString {</p>
+
+<pre><code>override def toUrlString = ...
+</code></pre>
+
+<p>  }
+```</p>
+
+<h3>Advanced string interpolation with OO</h3>
+
+<p>In fact, Scala and other languages with advanced string interpolation facilities allow yet another refactoring by making sure that what gets into a URL isn&rsquo;t just an arbitrary string in the first place!</p>
+
+<p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
+
+<p>```scala
+  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
+
+<pre><code>def url(args: UrlString*): String = {
+  val strings = sc.parts.iterator
+  val expressions = args.iterator
+  val buf = new StringBuffer(strings.next)
+  while (strings.hasNext) {
+    buf append expressions.next.toUrlString
+    buf append strings.next
+  }
+  buf.toString
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  /<em>* Only ever use UrlString to create a URL. </em>/
+  def makeUrl(id: UrlString): String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<p>with</p>
+
+<p>```scala</p>
+
+<pre><code>id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(n))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>This may or may not be overengineering.</p>
+
+<h3>Advanced string interpolation with FP</h3>
+
+<p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
+
+<p>```scala
+  // A type class
+  trait UrlString[A] {</p>
+
+<pre><code>def toUrlString(a: A): String
+</code></pre>
+
+<p>  }</p>
+
+<p>  // Wrapper class
+  case class Id(id: Int)</p>
+
+<p>  // Implement the type class UrlString for Id
+  implicit object IdToUrlString extends UrlString[Id] {</p>
+
+<pre><code>override def toUrlString(a: Id) = a.id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
+
+<pre><code>def url[A: UrlString](args: A*): String = {
+  val strings = sc.parts.iterator
+  val expressions = args.iterator
+  val buf = new StringBuffer(strings.next)
+  while (strings.hasNext) {
+    buf append implicitly[UrlString[A]].toUrlString(expressions.next)
+    buf append strings.next
+  }
+  buf.toString
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  /<em>* Anything &ldquo;viewable&rdquo; as UrlString can be used to create a URL. </em>/
+  def makeUrl<span id=" A">A: UrlString</span>: String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<h2>The final string gotcha</h2>
+
+<p>You may have noticed that there is still primitive obsession in this sample code: URLs are presented as <code>String</code> for simplicit. In real life, I use builders such as <code>URIBuilder</code> and <code>HttpGet</code> (Java <a href="http://hc.apache.org/">Apache HttpComponents</a>) or more sophisticated Scala-specific libraries such as <a href="http://spray.io/">Spray</a>.</p>
+
+<h2>Languages without the <code>toString</code> problem</h2>
+
+<p>There actually are quite a few languages that don&rsquo;t have this <code>toString</code> problem, or at least have it to a lesser degree.</p>
+
+<h3>C</h3>
+
+<p>There is no friendly generic conversion to a string (uh, really just a pointer to a null-terminated chunk of <code>char</code>) in C. The closest thing is using the type-unsafe <code>printf</code> family of functions, but you have to do almost all the work if you have some complicated <code>struct</code> and want to turn it into a C string.</p>
+
+<h3>C++</h3>
+
+<p>C++ introduced iostreams, where f you follow certain conventions and overload <code>operator&lt;&lt;</code> for every domain class of interest, you can build up decent looking strings, without using inheritance.</p>
+
+<p>Or you could do the object-oriented thing and set up a hierarchy with a <code>ToString</code> abstract base class. But C++ does not come with everything already inheriting from an <code>Object</code>.</p>
+
+<h3>Haskell</h3>
+
+<p>Haskell does not force a <code>toString</code> on everything, but provides a <a href="http://www.haskell.org/tutorial/stdclasses.html"><code>Show</code> type class</a> for convenience in the standard prelude. It is easy (and convenient for debugging) to just tack on <code>deriving Show</code> and then call <code>show</code> to convert stuff to a string. This means that one can get lazy and fall into the same design traps as mentioned in the very first code example above. Again, the solution is to refuse to abuse <code>show</code>, and to use a different name instead for converting something to a string for a particular purpose.</p>
+
+<h3>Go</h3>
+
+<p>Go was invented at Google as a modernized C. It does not have classes, but does have <a href="http://research.swtch.com/interfaces">dynamic interfaces</a>. All that is required for a user-defined type to satisfy an interface is to implement the method <code>String()</code> returning a <code>string</code>. Basically, this makes the type implement the interface <a href="http://golang.org/pkg/fmt/#Stringer">fmt.Stringer</a>. Again, if you don&rsquo;t implement <code>String() string</code> for your type, then you will get a compile-time error when trying to treat it as a string.</p>
+
+<p>Superficially, this sounds like Haskell type classes, but it&rsquo;s much more limited, because Go does not have generics and Go is only single dispatch. Go&rsquo;s interfaces really implement a kind of structural subtyping.</p>
+
+<h3>Standard ML</h3>
+
+<p><a href="http://www.standardml.org/">Standard ML</a> does not have the <code>toString</code> problem. It does, by convention, supply a <code>toString</code> function in many modules in the <a href="http://www.standardml.org/Basis/">Standard ML Basis Library</a>, such as <a href="http://www.standardml.org/Basis/integer.html">Int</a> and <a href="http://www.standardml.org/Basis/real.html">Real</a> and <a href="http://www.standardml.org/Basis/bool.html">Bool</a>, but these are just conventions and do not participate in any kind of unified conversion to string. If you want to convert anything besides a primitive type to a string, you have to write the conversion function yourself.</p>
+
+<p>Furthermore, Standard ML, as a rather opinionated and <a href="http://mitpress.mit.edu/books/definition-standard-ml">&ldquo;purist&rdquo; language</a>, designed specifically for static simplicity, semantic minimalism, and <a href="http://mlton.org/">runtime efficiency</a>, does not believe in type classes, so there is no way to write a function that at runtime is generic over what can be turned into a string.</p>
+
+<p>The best you can do is write something that is functorized, but then you have to apply it in a statically known context:</p>
+
+<p>```sml
+signature TO_STRING =
+  sig</p>
+
+<pre><code>type t
+val toString : t -&gt; string
+</code></pre>
+
+<p>  end</p>
+
+<p>functor DoStuff(ToString : TO_STRING) =
+  struct</p>
+
+<pre><code>fun doubleString (stuff: ToString.t) =
+  let
+    val s = ToString.toString stuff
+  in
+    s ^ s
+  end
+</code></pre>
+
+<p>  end</p>
+
+<p>structure MyStuff : TO_STRING =
+  struct</p>
+
+<pre><code>type t = int * bool
+fun toString (i, b) =
+  "(" ^ Int.toString i ^ ", " ^ Bool.toString b ^ ")"
+</code></pre>
+
+<p>  end</p>
+
+<p>structure DoMyStuff = DoStuff(MyStuff)
+```</p>
+
+<p>with</p>
+
+<p><code>sml
+DoMyStuff.doubleString (42, true)
+(* result is the string "(42, true)(42, true)" *)
+</code></p>
+
+<p>Since the Standard ML ecosystem is so minimalist, it&rsquo;s hard to fall into the <code>toString</code> trap, because you would have to set it all up yourself.</p>
+
+<h3>OCaml</h3>
+
+<p>OCaml, like Standard ML, does not provide a generic <code>toString</code> out of the box, but the OCaml ecosystem is much more practically oriented.</p>
+
+<p>There is a <a href="http://en.wikipedia.org/wiki/Camlp4">pre-processor for OCaml</a> that can be used to generate convenient printers for types, <a href="https://github.com/ocsigen/deriving"><code>deriving</code></a>. There is also an S-expression based generator, <a href="http://realworldocaml.org/v1/en/html/data-serialization-with-s-expressions.html">Sexplib</a>. But these are mechanically generated, rather than part of something generic at runtime.</p>
+
+<p>Of course, one could also use the <a href="http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html">object-oriented part of OCaml</a> to make a generic &ldquo;to string&rdquo; hierarchy starting with a suitable interface:</p>
+
+<p>```ocaml
+class type convert_to_string =
+  object</p>
+
+<pre><code>method to_string : string
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>But I don&rsquo;t actually know many people who use the object-oriented features of OCaml!</p>
+
+<h2>Conclusion</h2>
+
+<p>An annoying bug I temporarily created in my code led me to take stock of the state of <code>toString</code> design choices in various programming languages, and also consider how we can better escape fragility in our code, independent of whatever language we are using.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant]]></title>
@@ -88,7 +575,7 @@ Then { expect(stack.top).to eq(:second_item) }
     <link href="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"/>
     <updated>2013-07-10T22:37:00-04:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a>" title="Pittsburgh JavaScript" ></p>
+    <content type="html"><![CDATA[<p>{% img <a href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a> Pittsburgh JavaScript %}</p>
 
 <p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
 
@@ -405,7 +892,7 @@ let highlight (code : string) (opts : my_map) : string option = //...
 
 <h2><code>nil</code> is not even the real problem here: non-determinism is</h2>
 
-<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work!</p>
+<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
 <p>``` ruby</p>
 
@@ -487,6 +974,12 @@ assert_equal nil, code
 <h2>My fix</h2>
 
 <p>For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked <code>8</code> to <code>80</code> to avoid a timeout!</p>
+
+<h3>(Update of 2013-12-18)</h3>
+
+<p>The <code>pygments.rb</code> library <a href="https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999">has finally been updated with a <code>MENTOS_TIMEOUT</code> environment variable</a>.</p>
+
+<p>This is obviously a short-term hack, and I don&rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the <code>pygments.rb</code> team, I have no right to complain!</p>
 
 <h2>Conclusion</h2>
 
@@ -649,126 +1142,6 @@ assert_equal nil, code
 <h2>(Update of 2013-07-05)</h2>
 
 <p>An interesting <a href="http://www.infoq.com/presentations/enterprise-api">presentation on APIs in the enterprise</a> came my way.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Introducing this new programming blog]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/"/>
-    <updated>2013-06-24T09:40:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog</id>
-    <content type="html"><![CDATA[<p>Hi. My name is Franklin Chen. I already have a <a href="http://franklinchen.com/">personal Web site and blog</a>.</p>
-
-<p>But I ended up only writing <a href="http://franklinchen.com/blog/categories/programming/">a little bit about programming on that blog</a>.</p>
-
-<p>So I decided it was time to start a separate blog to devoted entirely to computer programming. The problem with the all-in-one personal blog was that I ended up never really working up a momentum to post the kinds of articles I wanted to write about programming.</p>
-
-<h2>Why &ldquo;The Conscientious Programmer&rdquo;?</h2>
-
-<p>At some point in the past year or two, I reflected on how I could best summarize my attitudes and aspirations as a programmer, as someone who loves programming and also works as a professional software developer.</p>
-
-<p>I came up with the decidedly non-sexy term <em>conscientious programmer</em>. It is also a term that requires explanation, because you could easily interpret it as having a connotation that is moralistic, pretentious, or boring!</p>
-
-<p>It is impossible to summarize in a sound bite what I mean by the term, so I have created this blog in order to continually illustrate, by example, the kinds of technical and other issues that come up in software development that I grapple with.</p>
-
-<p>However, since a sound bite is required in some circumstances, here&rsquo;s what I currently have:</p>
-
-<p><blockquote><p>I am a conscientious computer programmer, committed to designing, building, and testing correct, efficient, documented, maintainable software that meets users' real needs.</p></blockquote></p>
-
-<p>My material will come from my own experiences (successes and failures, past and present) as well as from those of others. See the <a href="/about/">About page</a> for more sound bites about what this blog will be about.</p>
-
-<p>Let&rsquo;s start immediately with my personal experience from just the past couple of days!</p>
-
-<h2>Future topics</h2>
-
-<p>But first, here is a little sample of topics I will write about in the future:</p>
-
-<ul>
-<li>positive and negative experiences with statically typed languages</li>
-<li>positive and negative experiences with dynamically typed languages</li>
-<li>the good and bad of the polyglot programming world</li>
-<li>what is object-oriented programming anyway?</li>
-<li>what is functional programming anyway?</li>
-<li>Agile notions</li>
-<li>test-driven development, behavior-driven development, other testing topics</li>
-<li>static analysis</li>
-<li>code performance</li>
-<li>human performance</li>
-<li>controversies over the adjective &ldquo;pragmatic&rdquo;</li>
-<li>how much theory should one know or use?</li>
-<li>how to teach</li>
-<li>how to learn</li>
-<li>how to focus and not be a dilettante</li>
-<li>how to spread ideas</li>
-<li>is syntax important?</li>
-<li>are macros a good idea?</li>
-<li>are unsound type systems justified?</li>
-<li>what is a type system anyway or what should it be?</li>
-<li>monads</li>
-<li>editors and IDEs</li>
-<li>are software patterns a mistake in disguise?</li>
-<li>software evolution and maintenance</li>
-<li>planning for the future vs. getting it done today</li>
-<li>role of emotion in decision making</li>
-<li>what is &ldquo;community&rdquo;?</li>
-<li>politics of open source vs. free software</li>
-<li>open standards</li>
-<li>questions of diversity in our profession</li>
-<li>education</li>
-</ul>
-
-
-<h2>The dilemmas I encountered when deciding to create this blog</h2>
-
-<p>I already encountered a dilemma some years ago when I thought that I should have a personal blog to regularly post to. I had messed around with Blogger and WordPress and they were not at all suitable for me. Luckily, I discovered <a href="http://octopress.org/">Octopress</a> and it got me going very quickly. I&rsquo;m still using it.</p>
-
-<p>If all were going smoothly with the personal blog, then I probably would not have any dilemma when deciding to create the new blog; I would just use exactly the same Octopress platform.</p>
-
-<p><em>Or would I?</em></p>
-
-<h3>Desire for novelty: good or bad?</h3>
-
-<p>I am not immune to the thrill of novelty. I am not an extreme <a href="http://en.wikipedia.org/wiki/Early_adopter">early adopter</a>, but I also do not entirely subscribe to the philosophy <a href="http://en.wiktionary.org/wiki/if_it_ain%27t_broke,_don%27t_fix_it">&ldquo;if it ain&rsquo;t broke, don&rsquo;t fix it&rdquo;</a>. I like opportunities for doing something differently and better than in the past, but I like to evaluate these rationally. This is an example of what I mean by &ldquo;conscientious programmer&rdquo;: <em>always be aware of risks and tradeoffs when making any kind of decision</em>.</p>
-
-<p>One thing that is sometimes forgotten in the rush to make a decision is that it is premature to immediately start making lists of risks and tradeoffs. First, you have to step back and figure out what the real goals are. Many projects fail because the assessments and the followup actions were <em>correct</em>, but toward the <em>wrong</em> goal. <em>Solving the correct problem</em> is more important than <em>solving the wrong problem correctly</em>.</p>
-
-<p>In the case of choosing which software to use for my new blog, there were actually several considerations.</p>
-
-<h3>Unstable branch of Octopress</h3>
-
-<p>Octopress&rsquo;s stable <a href="https://github.com/imathis/octopress"><code>master</code> branch</a> is a continuation of version 2.0. At some point for my personal blog, I got excited about trying out the <a href="https://github.com/imathis/octopress/tree/2.1">unstable <code>2.1</code> branch</a> because of various improvements. I migrated over, and periodically endured a surprising amount of pain. It wasn&rsquo;t just because I had to manually move files around and resolve merge conflicts and refactor my config files, but also bugs kept popping up, and I had to spend time fixing them.</p>
-
-<p>In retrospect, <em>it was a mistake being an early adopter</em> of branch <code>2.1</code>. I stopped pulling and merging over a month ago, when it became clear that the migration to <a href="http://jekyllrb.com/">Jekyll</a> 1.0 was causing major refactorings by the developers of the Octopress <code>2.1</code> branch that were breaking everything on my blog.</p>
-
-<p>It would <em>not</em> have been a mistake if my goal were to help test and develop Octopress. That is a noble goal, because Octopress has been a <em>huge</em> positive contributor to the world of blogging, as a static site generator that is programmable and comes with a good default theme (which I still use). But my <em>real goal</em> is to write and post content, not spend my time fixing or configuring Octopress.</p>
-
-<h3>Coming back to Octopress <code>master</code> branch?</h3>
-
-<p>The official recommendation of the Octopress team right now (<a href="https://twitter.com/octopress/status/348465809624027136">as of two days ago, June 22</a>) is to use <code>master</code>, because once <code>2.1</code> is cleaned up, it will actually become <code>3.0</code> and there will be a tested migration path from <code>2.0</code>.</p>
-
-<p>I confess to having a psychological resistance to &ldquo;downgrading&rdquo;, for this new blog, from my <code>2.1</code>-based setup on my personal blog, but this is exactly the moment when it is necessary to remember that I want to be a <em>conscientious</em> programmer.</p>
-
-<h3>Switching to a new blogging platform?</h3>
-
-<p>The idea also occurred to me to use a completely different blogging platform. <a href="http://jaspervdj.be/hakyll/">Hakyll</a> has always seemed appealing to me, because it is driven by Haskell (Octopress is driven by Ruby). I prefer programming in Haskell to programming in Ruby, both because of the static type safety and because of the expected considerable performance improvement in site generation (right now, full generation of my personal blog takes a very long time).</p>
-
-<p>But after looking at Hakyll, and being tempted to get into it, I decided that my real goal is <em>not</em> to spend a lot of time hacking Haskell as a personal side project, and creating cool themes and features for Hakyll, but to get a blog up and running so that I can focus on content for the blog. <a href="http://en.wiktionary.org/wiki/bikeshedding">Bikeshedding</a> is not what I&rsquo;m here for.</p>
-
-<p>So I used Octopress again for this new blog.</p>
-
-<p>By the way, if you are interested in using Octopress, here is a great <a href="http://webdesign.tutsplus.com/tutorials/applications/getting-started-with-octopress/">tutorial</a>.</p>
-
-<h3>Flexibility</h3>
-
-<p>Another thing I try to remember is to avoid getting backed into a corner when it comes to decision-making. I like to think about the future as well as the present. <em>What if&hellip;?</em></p>
-
-<p>I know that if I wanted to, in the future I could switch blogging platforms at will, by doing some programming. The decisions that I am making <em>now</em> are not irreversible. Using a programmable static site generator means that I have full control over paths, styles, generation of RSS feeds, insertion of JavaScript-based features (such as the <a href="http://disqus.com/">Disqus</a> commenting system), etc.</p>
-
-<p>Thinking up front about the future and how it might be different and what I might need or want to do in the future is not just idle daydreaming; I find it an essential final step in making a decision <em>now</em> and focusing on action <em>now</em>, with the peace of mind that I no longer have to worry about the future because I already have a <a href="http://en.wikipedia.org/wiki/Plan_B">Plan B</a>. We must always assume possible failure and future change. But we don&rsquo;t have to panic about it.</p>
-
-<h2>Conclusion</h2>
-
-<p>I&rsquo;ve started this new programming blog, using the stable <code>master</code> branch of Octopress. I hope we&rsquo;ll share some interesting experiences here!</p>
 ]]></content>
   </entry>
   

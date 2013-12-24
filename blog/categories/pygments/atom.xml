@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Pygments | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/pygments/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-11-19T23:32:32-05:00</updated>
+  <updated>2013-12-24T04:28:58-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -161,7 +161,7 @@ let highlight (code : string) (opts : my_map) : string option = //...
 
 <h2><code>nil</code> is not even the real problem here: non-determinism is</h2>
 
-<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work!</p>
+<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
 <p>``` ruby</p>
 
@@ -243,6 +243,12 @@ assert_equal nil, code
 <h2>My fix</h2>
 
 <p>For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked <code>8</code> to <code>80</code> to avoid a timeout!</p>
+
+<h3>(Update of 2013-12-18)</h3>
+
+<p>The <code>pygments.rb</code> library <a href="https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999">has finally been updated with a <code>MENTOS_TIMEOUT</code> environment variable</a>.</p>
+
+<p>This is obviously a short-term hack, and I don&rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the <code>pygments.rb</code> team, I have no right to complain!</p>
 
 <h2>Conclusion</h2>
 

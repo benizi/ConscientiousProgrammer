@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Scala | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-11-19T23:32:32-05:00</updated>
+  <updated>2013-12-24T04:28:58-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,493 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[toString considered harmful]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/23/tostring-considered-harmful/"/>
+    <updated>2013-12-23T23:54:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/23/tostring-considered-harmful</id>
+    <content type="html"><![CDATA[<p>It is easy to rant about the problems or unexpected subtleties involving the use <a href="http://en.wikipedia.org/wiki/String_%28computer_science%29">strings</a> in programming languages. This post, however, is not so much a rant about strings as about design and meaning, with <code>toString</code> only as an obvious example.</p>
+
+<p>I&rsquo;ll describe a pitfall that came up in my code, and a solution, and make observations about how different programming languages address or avoid this problem.</p>
+
+<!--more-->
+
+
+<h2>A bug when evolving my code</h2>
+
+<p>My example code is in Scala, but the problem illustrated actually extends to many (most?) other currently popular object-oriented languages as well, including Java (which Scala inherited <code>Object.toString</code> from), C# (<code>Object.ToString</code> stolen from Java), Ruby (<code>Object#to_s</code>), Python (<code>str</code>, which uses <code>object.__str__</code> in case of an object). (Later in the post, I discuss languages without this specific feature.)</p>
+
+<h3>First working code</h3>
+
+<p>Here&rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.</p>
+
+<p>```scala
+object Example {
+  type Id = Int</p>
+
+<p>  /**</p>
+
+<pre><code>@param name User name to look up
+@return ID of user
+*/
+</code></pre>
+
+<p>  def findId(name: String): Id =</p>
+
+<pre><code>if (name == "name") {
+  42
+} else {
+  0
+}
+</code></pre>
+
+<p>  def makeUrl(id: Id): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
+
+<p>  /<em>* Simulate making the Web request. </em>/
+  def getUrl(url: String): Unit = println(url)</p>
+
+<p>  def main(args: Array[String]): Unit = {</p>
+
+<pre><code>val id = findId("name")
+getUrl(makeUrl(id))
+// output: http://service.com?id=42
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.</p>
+
+<p>If you don&rsquo;t know Scala, just note that <code>s"...$id"</code> is just Scala&rsquo;s string interpolation syntax that behind the scenes calls <code>id.toString</code>.</p>
+
+<h3>Non-working code</h3>
+
+<p>It turned out that finding an ID could fail, so I changed <code>findId</code> to return the type <code>Option[Id]</code> instead of <code>Id</code>. To get the code to compile, I had to change the type of the parameter to <code>makeUrl</code> also:</p>
+
+<p>```scala
+  /**</p>
+
+<pre><code>@param name User name to look up
+@return Some(ID of user) if found, else None
+*/
+</code></pre>
+
+<p>  def findId(name: String): Option[Id] =</p>
+
+<pre><code>if (name == "name") {
+  Some(42)
+} else {
+  None
+}
+</code></pre>
+
+<p>  // Oops, now this has an unintended bug!
+  def makeUrl(id: Option[Id]): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<p>But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: <code>http://service.com?id=Some(42)</code> was being requested.</p>
+
+<p>Furthermore, in the case of an ID not found, the URL constructed is <code>http://service.com?id=None</code>. How many of you have seen applications or Web sites or emails in which something was clearly missing and the text contained either an empty space or the string &ldquo;null&rdquo; or &ldquo;nullvalue&rdquo; such as</p>
+
+<p>{% blockquote %}
+Dear NULL,</p>
+
+<p>You ordered NULL items.
+{% endblockquote %}</p>
+
+<p>Yup, you guessed it: someone wrote crappy code like what I just showed you, and frightening thing is, <em>it could have been me</em> and <em>it could have been you</em>.</p>
+
+<h4>What&rsquo;s the big deal?</h4>
+
+<p>You might think, &ldquo;Big deal, you changed your code, ran your test, and immediately found the bug, so what&rsquo;s the problem?&rdquo;</p>
+
+<p>The problem is that I have higher standards than that. I don&rsquo;t want to rely on my tests to find my bugs. In fact, the test that went over the Web to do stuff was an <em>integration test</em>, not a <em>unit test</em>. The bug only manifested itself when the actual Web request failed. And as we see in real life, many apps are not sufficiently tested to root out all possible accidental string generations.</p>
+
+<p>So although I caught the bug quickly, I caught it far less quickly than I wanted. I didn&rsquo;t want to even construct an obviously garbage URL like <code>http://service.com?id=Some(42)</code> at all. I prefer to have the type checker catch stupid design-level bugs up front. So I was furious at myself that I wrote code that the compiler was perfectly happy with but was obviously wrong. I had gotten lazy in more ways than one, and had been punished accordingly.</p>
+
+<h2>A symptom of bad design</h2>
+
+<p>There were a couple of things wrong with my original code that made it not evolve well.</p>
+
+<h3>Don&rsquo;t use <code>toString</code></h3>
+
+<p>First, by using string interpolation at all, I was relying on the implicit <code>toString</code> method of all objects. String interpolation is an admittedly very convenient feature that I use extensively, but now I consider it rather dangerous.</p>
+
+<p>But even if I hadn&rsquo;t used string interpolation, I would have had to build up strings myself anyway, and would have called <code>toString</code> <em>explicitly</em>, and I would have had the same problem: changing the type of something from <code>Id</code> to <code>Option[Id]</code> does not get rid of <code>toString</code>. In fact, in object-oriented languages where <code>toString</code> is defined way up at the top, <em>everything</em> has <code>toString</code>, whether you like it or not! The best you can do is override <code>toString</code>. (Actually, Scala &ldquo;helpfully&rdquo; generates a nice <code>toString</code> override for you when you use case classes, hence the output of <code>Some(42)</code>.)</p>
+
+<p>I consider this <em>global infection</em> a flaw in object-oriented languages that impose a set of methods on all objects whether you want them or not. <code>toString</code> is hardly the worst offending method, actually, but I&rsquo;ll save my complaints about others for later.</p>
+
+<p>First step in cleaning up the code: make <code>toString</code> explicit:</p>
+
+<p>```scala
+  /<em>* Only ever use a String to create a URL. </em>/
+  def makeUrl(id: String): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
+
+<p>  def main(args: Array[String]): Unit = {</p>
+
+<pre><code>val id = findId("name")
+getUrl(makeUrl(id.toString))
+</code></pre>
+
+<p>  }
+```</p>
+
+<p>(Later in the post, I will discuss alternatives to this explicit <code>toString</code>.)</p>
+
+<h3>Primitive obsession</h3>
+
+<p>Another design smell was that of using</p>
+
+<p><code>scala
+type Id = Int
+</code></p>
+
+<p>in the first place. This is a well-known lazy practice called <a href="http://c2.com/cgi/wiki?PrimitiveObsession">primitive obsession</a>. I know better than that.</p>
+
+<p>The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been</p>
+
+<p>```scala
+  case class Id(id: Int)</p>
+
+<p>  /**</p>
+
+<pre><code>@param name User name to look up
+@return ID of user
+*/
+</code></pre>
+
+<p>  def findId(name: String): Id =</p>
+
+<pre><code>if (name == "name") {
+  Id(42)
+} else {
+  Id(0)
+}
+</code></pre>
+
+<p>```</p>
+
+<p>Note that this still <em>would not</em> have solved the <code>toString</code> problem, since the output would simply have been <code>http://service.com?id=Some(Id(42))</code> or the dreaded <code>http://service.com?id=None</code>!</p>
+
+<h3><code>toString</code> is a bad concept anyway</h3>
+
+<p>The real problem is one that transcends programming language design. (Later in this post I&rsquo;ll show languages that don&rsquo;t have <code>toString</code> but still easily allow a similar problem.)</p>
+
+<p>The real problem is that strings are used for <em>multiple</em> purposes. Some are used just for debugging, showing an internal representation of data. Some are used for &ldquo;human&rdquo; reading. In fact, many languages distinguish between these two purposes: Lisp has <a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_wr_pr.htm"><code>write</code>, <code>prin1</code>, <code>print</code>, <code>pprint</code></a>; Scheme has <a href="http://www.scheme.com/tspl3/io.html"><code>write</code> and <code>display</code></a>; Ruby has <a href="http://ruby-doc.org/core-2.0.0/Object.html"><code>to_s</code> and <code>to_str</code></a>; Python has <a href="http://docs.python.org/2/library/functions.html"><code>repr</code> and <code>str</code></a>.</p>
+
+<p>One is often directed to override the &ldquo;human-oriented&rdquo; version of these mechanisms (implementing one&rsquo;s own special non-default format). In Java and Scala, that&rsquo;s <code>toString</code>. But this is precisely the problem. We are <em>encouraged</em> to abuse this built-in mechanism for getting a string from an object that is supposed to mean something in the <em>context of an application</em>. Yes, <code>Some(Id(42))</code> is a useful human-readable string, but it&rsquo;s not what I want to put into a URL for an ID parameter!</p>
+
+<p>Instead of piggybacking on <code>toString</code>, we should call a spade a spade, and define our own methods whose name is actually informative and tells us for what <em>purpose</em> we are asking for a string.</p>
+
+<p>Let&rsquo;s refactor the code:</p>
+
+<p>```scala
+  // Wrapper class
+  case class Id(id: Int) {</p>
+
+<pre><code>// Special method for turning to URL string fragment
+def toUrlString = id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  /**</p>
+
+<pre><code>@param name User name to look up
+@return Some(ID of user) if found, else None
+*/
+</code></pre>
+
+<p>  def findId(name: String): Option[Id] =</p>
+
+<pre><code>if (name == "name") {
+  Some(Id(42))
+} else {
+  None
+}
+</code></pre>
+
+<p>  /<em>* Only ever use a String to create a URL. </em>/
+  def makeUrl(id: String): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
+
+<p>  /<em>* Simulate making the Web request. </em>/
+  def getUrl(url: String): Unit = println(url)</p>
+
+<p>  def main(args: Array[String]): Unit = {</p>
+
+<pre><code>val id = findId("name")
+// Will not compile because Option[Id] does not have toUrlString
+//getUrl(makeUrl(id.toUrlString))
+</code></pre>
+
+<p>  }
+```</p>
+
+<p>Now the code that was creating a junk URL will no longer compile: <code>id</code> is of type <code>Option[Id]</code> but that type does <em>not</em> have a <code>toUrlString</code> method. Mission accomplished!</p>
+
+<p>To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:</p>
+
+<p>```scala</p>
+
+<pre><code>// Will not compile because Option[Id] does not have toUrlString
+//getUrl(makeUrl(id.toUrlString))
+
+id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(n.toUrlString))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>Simple!</p>
+
+<h2>Other possible designs</h2>
+
+<h3>OO vs. functional</h3>
+
+<p>The fix presented was in <em>object-oriented</em> style, adding a method <code>toUrlString</code> to a class. The other solution is the <em>functional</em> style, leaving the <code>Id</code> class alone, and writing an external function instead:</p>
+
+<p>```scala
+  case class Id(id: Int)</p>
+
+<p>  def toUrlString(id: Id) = id.toString
+```</p>
+
+<p>with</p>
+
+<p>```scala</p>
+
+<pre><code>id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(toUrlString(n)))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>There are advantages and disadvantages to either solution.</p>
+
+<h3>More advanced OO</h3>
+
+<p>It would be very natural, given a whole set of domain classes in addition to <code>Id</code>, to want all of them to have a <code>toUrlString</code>. Then the natural thing to do is to create a mini-universe (parallel to the <code>toString</code> universe) by creating a hierarchy:</p>
+
+<p>```scala
+  trait UrlString {</p>
+
+<pre><code>def toUrlString: String
+</code></pre>
+
+<p>  }</p>
+
+<p>  case class Id(id: Int) extends UrlString {</p>
+
+<pre><code>override def toUrlString = id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  case class &hellip;(&hellip;) extends UrlString {</p>
+
+<pre><code>override def toUrlString = ...
+</code></pre>
+
+<p>  }
+```</p>
+
+<h3>Advanced string interpolation with OO</h3>
+
+<p>In fact, Scala and other languages with advanced string interpolation facilities allow yet another refactoring by making sure that what gets into a URL isn&rsquo;t just an arbitrary string in the first place!</p>
+
+<p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
+
+<p>```scala
+  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
+
+<pre><code>def url(args: UrlString*): String = {
+  val strings = sc.parts.iterator
+  val expressions = args.iterator
+  val buf = new StringBuffer(strings.next)
+  while (strings.hasNext) {
+    buf append expressions.next.toUrlString
+    buf append strings.next
+  }
+  buf.toString
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  /<em>* Only ever use UrlString to create a URL. </em>/
+  def makeUrl(id: UrlString): String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<p>with</p>
+
+<p>```scala</p>
+
+<pre><code>id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(n))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>This may or may not be overengineering.</p>
+
+<h3>Advanced string interpolation with FP</h3>
+
+<p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
+
+<p>```scala
+  // A type class
+  trait UrlString[A] {</p>
+
+<pre><code>def toUrlString(a: A): String
+</code></pre>
+
+<p>  }</p>
+
+<p>  // Wrapper class
+  case class Id(id: Int)</p>
+
+<p>  // Implement the type class UrlString for Id
+  implicit object IdToUrlString extends UrlString[Id] {</p>
+
+<pre><code>override def toUrlString(a: Id) = a.id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
+
+<pre><code>def url[A: UrlString](args: A*): String = {
+  val strings = sc.parts.iterator
+  val expressions = args.iterator
+  val buf = new StringBuffer(strings.next)
+  while (strings.hasNext) {
+    buf append implicitly[UrlString[A]].toUrlString(expressions.next)
+    buf append strings.next
+  }
+  buf.toString
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  /<em>* Anything &ldquo;viewable&rdquo; as UrlString can be used to create a URL. </em>/
+  def makeUrl<span id=" A">A: UrlString</span>: String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<h2>The final string gotcha</h2>
+
+<p>You may have noticed that there is still primitive obsession in this sample code: URLs are presented as <code>String</code> for simplicit. In real life, I use builders such as <code>URIBuilder</code> and <code>HttpGet</code> (Java <a href="http://hc.apache.org/">Apache HttpComponents</a>) or more sophisticated Scala-specific libraries such as <a href="http://spray.io/">Spray</a>.</p>
+
+<h2>Languages without the <code>toString</code> problem</h2>
+
+<p>There actually are quite a few languages that don&rsquo;t have this <code>toString</code> problem, or at least have it to a lesser degree.</p>
+
+<h3>C</h3>
+
+<p>There is no friendly generic conversion to a string (uh, really just a pointer to a null-terminated chunk of <code>char</code>) in C. The closest thing is using the type-unsafe <code>printf</code> family of functions, but you have to do almost all the work if you have some complicated <code>struct</code> and want to turn it into a C string.</p>
+
+<h3>C++</h3>
+
+<p>C++ introduced iostreams, where f you follow certain conventions and overload <code>operator&lt;&lt;</code> for every domain class of interest, you can build up decent looking strings, without using inheritance.</p>
+
+<p>Or you could do the object-oriented thing and set up a hierarchy with a <code>ToString</code> abstract base class. But C++ does not come with everything already inheriting from an <code>Object</code>.</p>
+
+<h3>Haskell</h3>
+
+<p>Haskell does not force a <code>toString</code> on everything, but provides a <a href="http://www.haskell.org/tutorial/stdclasses.html"><code>Show</code> type class</a> for convenience in the standard prelude. It is easy (and convenient for debugging) to just tack on <code>deriving Show</code> and then call <code>show</code> to convert stuff to a string. This means that one can get lazy and fall into the same design traps as mentioned in the very first code example above. Again, the solution is to refuse to abuse <code>show</code>, and to use a different name instead for converting something to a string for a particular purpose.</p>
+
+<h3>Go</h3>
+
+<p>Go was invented at Google as a modernized C. It does not have classes, but does have <a href="http://research.swtch.com/interfaces">dynamic interfaces</a>. All that is required for a user-defined type to satisfy an interface is to implement the method <code>String()</code> returning a <code>string</code>. Basically, this makes the type implement the interface <a href="http://golang.org/pkg/fmt/#Stringer">fmt.Stringer</a>. Again, if you don&rsquo;t implement <code>String() string</code> for your type, then you will get a compile-time error when trying to treat it as a string.</p>
+
+<p>Superficially, this sounds like Haskell type classes, but it&rsquo;s much more limited, because Go does not have generics and Go is only single dispatch. Go&rsquo;s interfaces really implement a kind of structural subtyping.</p>
+
+<h3>Standard ML</h3>
+
+<p><a href="http://www.standardml.org/">Standard ML</a> does not have the <code>toString</code> problem. It does, by convention, supply a <code>toString</code> function in many modules in the <a href="http://www.standardml.org/Basis/">Standard ML Basis Library</a>, such as <a href="http://www.standardml.org/Basis/integer.html">Int</a> and <a href="http://www.standardml.org/Basis/real.html">Real</a> and <a href="http://www.standardml.org/Basis/bool.html">Bool</a>, but these are just conventions and do not participate in any kind of unified conversion to string. If you want to convert anything besides a primitive type to a string, you have to write the conversion function yourself.</p>
+
+<p>Furthermore, Standard ML, as a rather opinionated and <a href="http://mitpress.mit.edu/books/definition-standard-ml">&ldquo;purist&rdquo; language</a>, designed specifically for static simplicity, semantic minimalism, and <a href="http://mlton.org/">runtime efficiency</a>, does not believe in type classes, so there is no way to write a function that at runtime is generic over what can be turned into a string.</p>
+
+<p>The best you can do is write something that is functorized, but then you have to apply it in a statically known context:</p>
+
+<p>```sml
+signature TO_STRING =
+  sig</p>
+
+<pre><code>type t
+val toString : t -&gt; string
+</code></pre>
+
+<p>  end</p>
+
+<p>functor DoStuff(ToString : TO_STRING) =
+  struct</p>
+
+<pre><code>fun doubleString (stuff: ToString.t) =
+  let
+    val s = ToString.toString stuff
+  in
+    s ^ s
+  end
+</code></pre>
+
+<p>  end</p>
+
+<p>structure MyStuff : TO_STRING =
+  struct</p>
+
+<pre><code>type t = int * bool
+fun toString (i, b) =
+  "(" ^ Int.toString i ^ ", " ^ Bool.toString b ^ ")"
+</code></pre>
+
+<p>  end</p>
+
+<p>structure DoMyStuff = DoStuff(MyStuff)
+```</p>
+
+<p>with</p>
+
+<p><code>sml
+DoMyStuff.doubleString (42, true)
+(* result is the string "(42, true)(42, true)" *)
+</code></p>
+
+<p>Since the Standard ML ecosystem is so minimalist, it&rsquo;s hard to fall into the <code>toString</code> trap, because you would have to set it all up yourself.</p>
+
+<h3>OCaml</h3>
+
+<p>OCaml, like Standard ML, does not provide a generic <code>toString</code> out of the box, but the OCaml ecosystem is much more practically oriented.</p>
+
+<p>There is a <a href="http://en.wikipedia.org/wiki/Camlp4">pre-processor for OCaml</a> that can be used to generate convenient printers for types, <a href="https://github.com/ocsigen/deriving"><code>deriving</code></a>. There is also an S-expression based generator, <a href="http://realworldocaml.org/v1/en/html/data-serialization-with-s-expressions.html">Sexplib</a>. But these are mechanically generated, rather than part of something generic at runtime.</p>
+
+<p>Of course, one could also use the <a href="http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html">object-oriented part of OCaml</a> to make a generic &ldquo;to string&rdquo; hierarchy starting with a suitable interface:</p>
+
+<p>```ocaml
+class type convert_to_string =
+  object</p>
+
+<pre><code>method to_string : string
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>But I don&rsquo;t actually know many people who use the object-oriented features of OCaml!</p>
+
+<h2>Conclusion</h2>
+
+<p>An annoying bug I temporarily created in my code led me to take stock of the state of <code>toString</code> design choices in various programming languages, and also consider how we can better escape fragility in our code, independent of whatever language we are using.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[OpenHack Pittsburgh: learning Elixir test-driven and package-publishing]]></title>
@@ -26,7 +513,7 @@
 
 <p>What does that mean?</p>
 
-<p><img class="<a" src="href="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg">http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg</a>" title="Franklin working on laptop" ></p>
+<p>{% img <a href="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg">http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg</a> Franklin working on laptop %}</p>
 
 <!--more-->
 
@@ -166,7 +653,7 @@
     <link href="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"/>
     <updated>2013-07-10T22:37:00-04:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a>" title="Pittsburgh JavaScript" ></p>
+    <content type="html"><![CDATA[<p>{% img <a href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a> Pittsburgh JavaScript %}</p>
 
 <p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
 
@@ -496,7 +983,7 @@ let highlight (code : string) (opts : my_map) : string option = //...
 
 <h2><code>nil</code> is not even the real problem here: non-determinism is</h2>
 
-<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work!</p>
+<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
 <p>``` ruby</p>
 
@@ -579,93 +1066,15 @@ assert_equal nil, code
 
 <p>For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked <code>8</code> to <code>80</code> to avoid a timeout!</p>
 
+<h3>(Update of 2013-12-18)</h3>
+
+<p>The <code>pygments.rb</code> library <a href="https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999">has finally been updated with a <code>MENTOS_TIMEOUT</code> environment variable</a>.</p>
+
+<p>This is obviously a short-term hack, and I don&rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the <code>pygments.rb</code> team, I have no right to complain!</p>
+
 <h2>Conclusion</h2>
 
 <p>I&rsquo;ve used my recent frustration at being unable to publish my personal blog as a vehicle to begin a conversation about error handling and the issues of API design and documentation in the face of errors. I hope you enjoyed the ride.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Python: night of the favorite module]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/"/>
-    <updated>2013-06-26T22:50:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg">http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg</a>" title="Pittsburgh Python User Group" ></p>
-
-<p>The <a href="http://www.meetup.com/pghpython/">Pittsburgh Python User Group</a> had <a href="http://www.meetup.com/pghpython/events/120442102">another &ldquo;favorite module night&rdquo;</a>. I enjoy this format because I get to learn about what people find useful, so that I may perhaps use it myself!</p>
-
-<h2>How I benefited in the past</h2>
-
-<p>For example, <a href="http://franklinchen.com/blog/2012/08/23/pittsburgh-python-meetup-i-gave-my-first-lightning-talk-ever-the-topic-was-scons/">one of these &ldquo;favorite module night&rdquo; sessions</a> was where I learned about Kenneth Reitz&rsquo;s <code>requests</code> library. Very often it is easy to not be aware of the rapidly changing ecology of very useful libraries in a programming language ecosystem outside of the official &ldquo;standard library&rdquo;, especially when using a language that is <em>not</em> one&rsquo;s primary working language. For example, Python has never been one of my primary working languages, so I&rsquo;m not as up to date on what all the best tools are to use. But just a couple of weeks ago, I had to do some work with Python, and <code>requests</code> came in very handy.</p>
-
-<h2><a href="http://ipython.org/notebook.html">IPython Notebook</a></h2>
-
-<p>Josh Adelman opened the show-and-tell with a demo of <a href="http://ipython.org/notebook.html">IPython Notebook</a>. This is a truly fantastic interactive environment for developing code while creating a full document for publication and sharing. He uses it not only for research but also for his students to use in his teaching.</p>
-
-<p>If you&rsquo;ve used Mathematica, the concept is similar to that environment.</p>
-
-<p>I&rsquo;m also excited that IPython Notebook has been the direct inspiration for similar projects for other languages, e.g., <a href="https://github.com/Bridgewater/scala-notebook">Scala Notebook</a> for Scala in development.</p>
-
-<p>Josh gave a link to this <a href="http://jakevdp.github.io/">cool blog that uses IPython Notebook</a>.</p>
-
-<h2><a href="https://getsentry.com/welcome/">Sentry</a> and <a href="http://raven.readthedocs.org/en/latest/">Raven</a></h2>
-
-<p>Nick Sloan presented on Sentry, a service for collecting errors in your program and notifying you of them, and Raven, the official Python client for Sentry. Sentry is actually open source, so you could host it yourself, but paying for the hosted service provides conveniences.</p>
-
-<p>Using Sentry is no more than using ordinary Python logging after calling a setup function. The ease of use made it sound like a winner.</p>
-
-<h2><a href="http://docopt.org/">docopt</a></h2>
-
-<p>Joe Esposito presented on <code>docopt</code>, a library for command line parsing. The interesting thing about it is that it implements an <em>external</em> domain-specific language for describing command lines: you write a usage message, as a string, and <code>docopt</code> parses it in order to deduce what the expectations and constraints are. This is a very ambitious approach, contrary to the usual internal API-based approaches, some of which are sophisticated and implement an <em>internal</em> domain-specific language.</p>
-
-<p>Of course, Joe contrasted this library with one of the standard command line parsing libraries for Python, <code>argparse</code>, which is lower-level so that when you use it, the high-level end user usage is not as immediately readable.</p>
-
-<p>There were a lot of good questions about <code>docopt</code> since it seemed magical. I&rsquo;ve decided to write more about all this in a separate blog post about command line parsers.</p>
-
-<h2><a href="https://pypi.python.org/pypi/hypothesis">hypothesis</a></h2>
-
-<p>I gave a short 5-minute presentation on <code>hypothesis</code>, a library in development for doing property-based testing, inspired by QuickCheck and ScalaCheck. As I have done recently when giving a much longer <a href="http://franklinchen.com/blog/2013/04/11/my-pittsburgh-scala-meetup-talk-on-property-based-testing-using-scalacheck/">talk on property-based testing using ScalaCheck</a>, I focused on motivating the use of property-based testing as an addition to example-based testing.</p>
-
-<p>Materials for my lightning talk are <a href="https://github.com/franklinchen/lightning-talk-on-hypothesis">here</a>, and my few slides are below:</p>
-
-<iframe src="http://www.slideshare.net/slideshow/embed_code/23548866" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
-
-
-<p> <div style="margin-bottom:5px"> <strong> <a href="http://www.slideshare.net/FranklinChen/handout-23548866" title="5-minute intro to property-based testing in Python with hypothesis" target="_blank">5-minute intro to property-based testing in Python with hypothesis</a> </strong> from <strong><a href="http://www.slideshare.net/FranklinChen" target="_blank">Franklin Chen</a></strong> </div></p>
-
-<h2><a href="http://docs.python.org/2/library/itertools.html"><code>itertools</code></a></h2>
-
-<p>Tim Lesher talked about <code>itertools</code>, a very useful part of the standard library that provides support for efficient functional programming idioms. Part of the efficiency comes from the use of iterators in order to avoid constructing intermediate lists; this is a way of simulating the lazy sequences that are standard in languages such as ML, Haskell, Scala, and Clojure.</p>
-
-<p>Tim noted that although <code>itertools</code> is powerful, &ldquo;don&rsquo;t be stupid&rdquo;: don&rsquo;t write obscure-looking code with it just because you can.</p>
-
-<p>Josh noted that the documentation for <code>itertools</code> is great, with recipes that show you not only how to do things, and also with code for the equivalent more complicated code that you would have to write if you didn&rsquo;t use <code>itertools</code>. I agree that the documentation for <code>itertools</code> is a model of high-quality documentation for a library. Check it out, and use it!</p>
-
-<h2><a href="http://docs.python.org/dev/library/argparse.html"><code>argparse</code></a></h2>
-
-<p>Craig gave a little presentation on <code>argparse</code>, the aforementioned standard library for command line parsing. He noted it was ironic that he had prepared to speak on it before Joe independently decided to talk about <code>docopt</code>. (Actually, I like <code>argparse</code> and had considered talking about it before Craig submitted it already.)</p>
-
-<p>One feature he uses from <code>argparse</code> is the ability to create mutually exclusive groups. There was a question of whether this is supported in <code>docopt</code>.</p>
-
-<p>As mentioned earlier, I&rsquo;ll write more about both <code>argparse</code> and <code>docopt</code> in a separate blog post.</p>
-
-<h2><a href="http://doughellmann.com/python-standard-library-by-example">The Python Standard Library by Example</a></h2>
-
-<p>Someone shared not a &ldquo;favorite module&rdquo;, but a favorite book, &ldquo;The Python Standard Library by Example&rdquo;. I&rsquo;m happy he did, because it is in fact an excellent reference for anyone using the Python standard library, with concrete examples that you can take and use. Too often, I have found that standard documentation is too terse.</p>
-
-<p>The book is based on <a href="http://pymotw.com/2/">&ldquo;Python Module of the Week&rdquo;</a>, which is a great online resource.</p>
-
-<h2>Introductions for new people</h2>
-
-<p>An important part of the vibe of the Pittsburgh Python User Group is how it tries to get everyone actively involved in the local Python community.</p>
-
-<p>There is a tradition of periodically having everyone introduce themselves, to counter the tendency sometimes in these kinds of groups for people to attend a meeting out of curiosity and then silently leave and perhaps not come back, out of intimidation or not knowing how to benefit or contribute. I know I have done that before, especially when attending the meeting of a group where I didn&rsquo;t really know anybody ahead of time and still knew very little about the topics discussed by the group (such as when I joined the Pittsburgh Ruby group as one who had barely used any Ruby).</p>
-
-<p>Since so many people showed up, and a lot seemed to be new faces, we had a round of introductions. I hope we&rsquo;ll continue to see some of these new faces in the future!</p>
-
-<h2>Conclusion</h2>
-
-<p>Thanks again to Google Pittsburgh for hosting the Pittsburgh Python User Group meeting, and Steve Gross of Google for being the guy who makes it able for us to meet there!</p>
 ]]></content>
   </entry>
   
