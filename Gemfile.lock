@@ -22,7 +22,7 @@ GEM
       pygments.rb (~> 0.3.2)
     kramdown (0.14.2)
     liquid (2.3.0)
-    maruku (0.7.1)
+    maruku (0.7.2)
     posix-spawn (0.3.8)
     pygments.rb (0.3.7)
       posix-spawn (~> 0.3.6)
