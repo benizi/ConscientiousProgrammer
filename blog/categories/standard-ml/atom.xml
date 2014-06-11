@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Standard ML | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/standard-ml/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-12-24T18:46:09-05:00</updated>
+  <updated>2014-06-10T23:30:45-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,279 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[toString considered harmful, part 3]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3/"/>
+    <updated>2013-12-27T22:03:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3</id>
+    <content type="html"><![CDATA[<p>This is part 3 of a series of articles, &ldquo;<code>toString</code> considered harmful&rdquo;.</p>
+
+<!--more-->
+
+
+<h2>Languages without the <code>toString</code> problem</h2>
+
+<p>There actually are quite a few languages that don&rsquo;t have the <code>toString</code> problem, or at least have it to a lesser degree.</p>
+
+<h3>C</h3>
+
+<p>There is no friendly generic conversion to a string (uh, really just a pointer to a null-terminated chunk of <code>char</code>) in C. The closest thing is using the type-unsafe <code>printf</code> family of functions, but you have to do almost all the work if you have some complicated <code>struct</code> and want to turn it into a C string.</p>
+
+<h3>C++</h3>
+
+<p>C++ introduced iostreams, where f you follow certain conventions and overload <code>operator&lt;&lt;</code> for every domain class of interest, you can build up decent looking strings, without using inheritance.</p>
+
+<p>Or you could do the object-oriented thing and set up a hierarchy with a <code>ToString</code> abstract base class. But C++ does not come with everything already inheriting from an <code>Object</code>.</p>
+
+<h3>Haskell</h3>
+
+<p>Haskell does not force a <code>toString</code> on everything, but provides a <a href="http://www.haskell.org/tutorial/stdclasses.html"><code>Show</code> type class</a> for convenience in the standard prelude. It is easy (and convenient for debugging) to just tack on <code>deriving Show</code> and then call <code>show</code> to convert stuff to a string. This means that one can get lazy and fall into the same design traps as mentioned in the very first code example above. Again, the solution is to refuse to abuse <code>show</code>, and to use a different name instead for converting something to a string for a particular purpose.</p>
+
+<h3>Go</h3>
+
+<p>Go was invented at Google as a modernized C. It does not have classes, but does have <a href="http://research.swtch.com/interfaces">dynamic interfaces</a>. All that is required for a user-defined type to satisfy an interface is to implement the method <code>String()</code> returning a <code>string</code>. Basically, this makes the type implement the interface <a href="http://golang.org/pkg/fmt/#Stringer">fmt.Stringer</a>. Again, if you don&rsquo;t implement <code>String() string</code> for your type, then you will get a compile-time error when trying to treat it as a string.</p>
+
+<p>Superficially, this sounds like Haskell type classes, but it&rsquo;s much more limited, because Go does not have generics and Go is only single dispatch. Go&rsquo;s interfaces really implement a kind of structural subtyping.</p>
+
+<h3>Standard ML</h3>
+
+<p><a href="http://www.standardml.org/">Standard ML</a> does not have the <code>toString</code> problem. It does, by convention, supply a <code>toString</code> function in many modules in the <a href="http://www.standardml.org/Basis/">Standard ML Basis Library</a>, such as <a href="http://www.standardml.org/Basis/integer.html">Int</a> and <a href="http://www.standardml.org/Basis/real.html">Real</a> and <a href="http://www.standardml.org/Basis/bool.html">Bool</a>, but these are just conventions and do not participate in any kind of unified conversion to string. If you want to convert anything besides a primitive type to a string, you have to write the conversion function yourself.</p>
+
+<p>Furthermore, Standard ML, as a rather opinionated and <a href="http://mitpress.mit.edu/books/definition-standard-ml">&ldquo;purist&rdquo; language</a>, designed specifically for static simplicity, semantic minimalism, and <a href="http://mlton.org/">runtime efficiency</a>, does not believe in type classes, so there is no way to write a function that at runtime is generic over what can be turned into a string.</p>
+
+<p>The best you can do is write something that is functorized, but then you have to apply it in a statically known context:</p>
+
+<p>```sml
+signature TO_STRING =
+  sig</p>
+
+<pre><code>type t
+val toString : t -&gt; string
+</code></pre>
+
+<p>  end</p>
+
+<p>functor DoStuff(ToString : TO_STRING) =
+  struct</p>
+
+<pre><code>fun doubleString (stuff: ToString.t) =
+  let
+    val s = ToString.toString stuff
+  in
+    s ^ s
+  end
+</code></pre>
+
+<p>  end</p>
+
+<p>structure MyStuff : TO_STRING =
+  struct</p>
+
+<pre><code>type t = int * bool
+fun toString (i, b) =
+  "(" ^ Int.toString i ^ ", " ^ Bool.toString b ^ ")"
+</code></pre>
+
+<p>  end</p>
+
+<p>structure DoMyStuff = DoStuff(MyStuff)
+```</p>
+
+<p>with</p>
+
+<p><code>sml
+DoMyStuff.doubleString (42, true)
+(* result is the string "(42, true)(42, true)" *)
+</code></p>
+
+<p>Since the Standard ML ecosystem is so minimalist, it&rsquo;s hard to fall into the <code>toString</code> trap, because you would have to set it all up yourself.</p>
+
+<h3>OCaml</h3>
+
+<p>OCaml, like Standard ML, does not provide a generic <code>toString</code> out of the box, but the OCaml ecosystem is much more practically oriented.</p>
+
+<p>There is a <a href="http://en.wikipedia.org/wiki/Camlp4">pre-processor for OCaml</a> that can be used to generate convenient printers for types, <a href="https://github.com/ocsigen/deriving"><code>deriving</code></a>. There is also an S-expression based generator, <a href="http://realworldocaml.org/v1/en/html/data-serialization-with-s-expressions.html">Sexplib</a>. But these are mechanically generated, rather than part of something generic at runtime.</p>
+
+<p>Of course, one could also use the <a href="http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html">object-oriented part of OCaml</a> to make a generic &ldquo;to string&rdquo; hierarchy starting with a suitable interface:</p>
+
+<p>```ocaml
+class type convert_to_string =
+  object</p>
+
+<pre><code>method to_string : string
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>But I don&rsquo;t actually know many people who use the object-oriented features of OCaml!</p>
+
+<h2>Conclusion</h2>
+
+<p>An annoying bug I temporarily created in my code led me to take stock of the state of <code>toString</code> design choices in various programming languages, and also consider how we can better escape fragility in our code, independent of whatever language we are using.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[toString considered harmful, part 2]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/"/>
+    <updated>2013-12-26T22:03:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2</id>
+    <content type="html"><![CDATA[<p>This is part 2 of a series of articles, &ldquo;<code>toString</code> considered harmful&rdquo;. [Part 1] introduced the problem in the context of a common design flaw present in object-oriented languages, and proposed a simple workaround.</p>
+
+<p>In part 2, we look at advanced ways to organize &ldquo;stringable&rdquo; data, using either an object-oriented or functional style. Examples are in Scala because it equally supports either style.</p>
+
+<!--more-->
+
+
+<h2>Object-oriented vs. functional</h2>
+
+<p>The fix presented was in <em>object-oriented</em> style, adding a method <code>toUrlString</code> to a class. The other solution is the <em>functional</em> style, leaving the <code>Id</code> class alone, and writing an external function instead:</p>
+
+<p>```scala
+  case class Id(id: Int)</p>
+
+<p>  def toUrlString(id: Id) = id.toString
+```</p>
+
+<p>with</p>
+
+<p>```scala</p>
+
+<pre><code>id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(toUrlString(n)))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>There are advantages and disadvantages to either solution.</p>
+
+<h2>More advanced OO</h2>
+
+<p>It would be very natural, given a whole set of domain classes in addition to <code>Id</code>, to want all of them to have a <code>toUrlString</code>. Then the natural thing to do is to create a mini-universe (parallel to the <code>toString</code> universe) by creating a hierarchy:</p>
+
+<p>```scala
+  trait UrlString {</p>
+
+<pre><code>def toUrlString: String
+</code></pre>
+
+<p>  }</p>
+
+<p>  case class Id(id: Int) extends UrlString {</p>
+
+<pre><code>override def toUrlString = id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  case class &hellip;(&hellip;) extends UrlString {</p>
+
+<pre><code>override def toUrlString = ...
+</code></pre>
+
+<p>  }
+```</p>
+
+<h2>Advanced string interpolation with OO</h2>
+
+<p>In fact, Scala and other languages with advanced string interpolation facilities allow yet another refactoring by making sure that what gets into a URL isn&rsquo;t just an arbitrary string in the first place!</p>
+
+<p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
+
+<p>```scala
+  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
+
+<pre><code>def url(args: UrlString*): String = {
+  val strings = sc.parts.iterator
+  val expressions = args.iterator
+  val buf = new StringBuffer(strings.next)
+  while (strings.hasNext) {
+    buf append expressions.next.toUrlString
+    buf append strings.next
+  }
+  buf.toString
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  /<em>* Only ever use UrlString to create a URL. </em>/
+  def makeUrl(id: UrlString): String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<p>with</p>
+
+<p>```scala</p>
+
+<pre><code>id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(n))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>This may or may not be overengineering.</p>
+
+<h2>Advanced string interpolation with FP</h2>
+
+<p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
+
+<p>```scala
+  // A type class
+  trait UrlString[A] {</p>
+
+<pre><code>def toUrlString(a: A): String
+</code></pre>
+
+<p>  }</p>
+
+<p>  // Wrapper class
+  case class Id(id: Int)</p>
+
+<p>  // Implement the type class UrlString for Id
+  implicit object IdToUrlString extends UrlString[Id] {</p>
+
+<pre><code>override def toUrlString(a: Id) = a.id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
+
+<pre><code>def url[A: UrlString](args: A*): String = {
+  val strings = sc.parts.iterator
+  val expressions = args.iterator
+  val buf = new StringBuffer(strings.next)
+  while (strings.hasNext) {
+    buf append implicitly[UrlString[A]].toUrlString(expressions.next)
+    buf append strings.next
+  }
+  buf.toString
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  /<em>* Anything &ldquo;viewable&rdquo; as UrlString can be used to create a URL. </em>/
+  def makeUrl<span id=" A">A: UrlString</span>: String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<h2>The final string gotcha</h2>
+
+<p>You may have noticed that there is still primitive obsession in this sample code: URLs are presented as <code>String</code> for simplicity. In real life, I use builders such as <code>URIBuilder</code> and <code>HttpGet</code> (Java <a href="http://hc.apache.org/">Apache HttpComponents</a>) or more sophisticated Scala-specific libraries such as <a href="http://spray.io/">Spray</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>I thought it would useful to compare an object-oriented and a functional approach to unifying data that share a domain-consistent notion of conversion to a string. Scala is a language that allows easy expression of both.</p>
+
+<p>In part 3, we will look at languages that just don&rsquo;t have the <code>toString</code> problem at all.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[toString considered harmful, part 1]]></title>

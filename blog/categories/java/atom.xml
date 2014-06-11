@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-12-24T18:46:09-05:00</updated>
+  <updated>2014-06-10T23:30:45-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,279 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[toString considered harmful, part 3]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3/"/>
+    <updated>2013-12-27T22:03:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3</id>
+    <content type="html"><![CDATA[<p>This is part 3 of a series of articles, &ldquo;<code>toString</code> considered harmful&rdquo;.</p>
+
+<!--more-->
+
+
+<h2>Languages without the <code>toString</code> problem</h2>
+
+<p>There actually are quite a few languages that don&rsquo;t have the <code>toString</code> problem, or at least have it to a lesser degree.</p>
+
+<h3>C</h3>
+
+<p>There is no friendly generic conversion to a string (uh, really just a pointer to a null-terminated chunk of <code>char</code>) in C. The closest thing is using the type-unsafe <code>printf</code> family of functions, but you have to do almost all the work if you have some complicated <code>struct</code> and want to turn it into a C string.</p>
+
+<h3>C++</h3>
+
+<p>C++ introduced iostreams, where f you follow certain conventions and overload <code>operator&lt;&lt;</code> for every domain class of interest, you can build up decent looking strings, without using inheritance.</p>
+
+<p>Or you could do the object-oriented thing and set up a hierarchy with a <code>ToString</code> abstract base class. But C++ does not come with everything already inheriting from an <code>Object</code>.</p>
+
+<h3>Haskell</h3>
+
+<p>Haskell does not force a <code>toString</code> on everything, but provides a <a href="http://www.haskell.org/tutorial/stdclasses.html"><code>Show</code> type class</a> for convenience in the standard prelude. It is easy (and convenient for debugging) to just tack on <code>deriving Show</code> and then call <code>show</code> to convert stuff to a string. This means that one can get lazy and fall into the same design traps as mentioned in the very first code example above. Again, the solution is to refuse to abuse <code>show</code>, and to use a different name instead for converting something to a string for a particular purpose.</p>
+
+<h3>Go</h3>
+
+<p>Go was invented at Google as a modernized C. It does not have classes, but does have <a href="http://research.swtch.com/interfaces">dynamic interfaces</a>. All that is required for a user-defined type to satisfy an interface is to implement the method <code>String()</code> returning a <code>string</code>. Basically, this makes the type implement the interface <a href="http://golang.org/pkg/fmt/#Stringer">fmt.Stringer</a>. Again, if you don&rsquo;t implement <code>String() string</code> for your type, then you will get a compile-time error when trying to treat it as a string.</p>
+
+<p>Superficially, this sounds like Haskell type classes, but it&rsquo;s much more limited, because Go does not have generics and Go is only single dispatch. Go&rsquo;s interfaces really implement a kind of structural subtyping.</p>
+
+<h3>Standard ML</h3>
+
+<p><a href="http://www.standardml.org/">Standard ML</a> does not have the <code>toString</code> problem. It does, by convention, supply a <code>toString</code> function in many modules in the <a href="http://www.standardml.org/Basis/">Standard ML Basis Library</a>, such as <a href="http://www.standardml.org/Basis/integer.html">Int</a> and <a href="http://www.standardml.org/Basis/real.html">Real</a> and <a href="http://www.standardml.org/Basis/bool.html">Bool</a>, but these are just conventions and do not participate in any kind of unified conversion to string. If you want to convert anything besides a primitive type to a string, you have to write the conversion function yourself.</p>
+
+<p>Furthermore, Standard ML, as a rather opinionated and <a href="http://mitpress.mit.edu/books/definition-standard-ml">&ldquo;purist&rdquo; language</a>, designed specifically for static simplicity, semantic minimalism, and <a href="http://mlton.org/">runtime efficiency</a>, does not believe in type classes, so there is no way to write a function that at runtime is generic over what can be turned into a string.</p>
+
+<p>The best you can do is write something that is functorized, but then you have to apply it in a statically known context:</p>
+
+<p>```sml
+signature TO_STRING =
+  sig</p>
+
+<pre><code>type t
+val toString : t -&gt; string
+</code></pre>
+
+<p>  end</p>
+
+<p>functor DoStuff(ToString : TO_STRING) =
+  struct</p>
+
+<pre><code>fun doubleString (stuff: ToString.t) =
+  let
+    val s = ToString.toString stuff
+  in
+    s ^ s
+  end
+</code></pre>
+
+<p>  end</p>
+
+<p>structure MyStuff : TO_STRING =
+  struct</p>
+
+<pre><code>type t = int * bool
+fun toString (i, b) =
+  "(" ^ Int.toString i ^ ", " ^ Bool.toString b ^ ")"
+</code></pre>
+
+<p>  end</p>
+
+<p>structure DoMyStuff = DoStuff(MyStuff)
+```</p>
+
+<p>with</p>
+
+<p><code>sml
+DoMyStuff.doubleString (42, true)
+(* result is the string "(42, true)(42, true)" *)
+</code></p>
+
+<p>Since the Standard ML ecosystem is so minimalist, it&rsquo;s hard to fall into the <code>toString</code> trap, because you would have to set it all up yourself.</p>
+
+<h3>OCaml</h3>
+
+<p>OCaml, like Standard ML, does not provide a generic <code>toString</code> out of the box, but the OCaml ecosystem is much more practically oriented.</p>
+
+<p>There is a <a href="http://en.wikipedia.org/wiki/Camlp4">pre-processor for OCaml</a> that can be used to generate convenient printers for types, <a href="https://github.com/ocsigen/deriving"><code>deriving</code></a>. There is also an S-expression based generator, <a href="http://realworldocaml.org/v1/en/html/data-serialization-with-s-expressions.html">Sexplib</a>. But these are mechanically generated, rather than part of something generic at runtime.</p>
+
+<p>Of course, one could also use the <a href="http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html">object-oriented part of OCaml</a> to make a generic &ldquo;to string&rdquo; hierarchy starting with a suitable interface:</p>
+
+<p>```ocaml
+class type convert_to_string =
+  object</p>
+
+<pre><code>method to_string : string
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>But I don&rsquo;t actually know many people who use the object-oriented features of OCaml!</p>
+
+<h2>Conclusion</h2>
+
+<p>An annoying bug I temporarily created in my code led me to take stock of the state of <code>toString</code> design choices in various programming languages, and also consider how we can better escape fragility in our code, independent of whatever language we are using.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[toString considered harmful, part 2]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/"/>
+    <updated>2013-12-26T22:03:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2</id>
+    <content type="html"><![CDATA[<p>This is part 2 of a series of articles, &ldquo;<code>toString</code> considered harmful&rdquo;. [Part 1] introduced the problem in the context of a common design flaw present in object-oriented languages, and proposed a simple workaround.</p>
+
+<p>In part 2, we look at advanced ways to organize &ldquo;stringable&rdquo; data, using either an object-oriented or functional style. Examples are in Scala because it equally supports either style.</p>
+
+<!--more-->
+
+
+<h2>Object-oriented vs. functional</h2>
+
+<p>The fix presented was in <em>object-oriented</em> style, adding a method <code>toUrlString</code> to a class. The other solution is the <em>functional</em> style, leaving the <code>Id</code> class alone, and writing an external function instead:</p>
+
+<p>```scala
+  case class Id(id: Int)</p>
+
+<p>  def toUrlString(id: Id) = id.toString
+```</p>
+
+<p>with</p>
+
+<p>```scala</p>
+
+<pre><code>id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(toUrlString(n)))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>There are advantages and disadvantages to either solution.</p>
+
+<h2>More advanced OO</h2>
+
+<p>It would be very natural, given a whole set of domain classes in addition to <code>Id</code>, to want all of them to have a <code>toUrlString</code>. Then the natural thing to do is to create a mini-universe (parallel to the <code>toString</code> universe) by creating a hierarchy:</p>
+
+<p>```scala
+  trait UrlString {</p>
+
+<pre><code>def toUrlString: String
+</code></pre>
+
+<p>  }</p>
+
+<p>  case class Id(id: Int) extends UrlString {</p>
+
+<pre><code>override def toUrlString = id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  case class &hellip;(&hellip;) extends UrlString {</p>
+
+<pre><code>override def toUrlString = ...
+</code></pre>
+
+<p>  }
+```</p>
+
+<h2>Advanced string interpolation with OO</h2>
+
+<p>In fact, Scala and other languages with advanced string interpolation facilities allow yet another refactoring by making sure that what gets into a URL isn&rsquo;t just an arbitrary string in the first place!</p>
+
+<p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
+
+<p>```scala
+  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
+
+<pre><code>def url(args: UrlString*): String = {
+  val strings = sc.parts.iterator
+  val expressions = args.iterator
+  val buf = new StringBuffer(strings.next)
+  while (strings.hasNext) {
+    buf append expressions.next.toUrlString
+    buf append strings.next
+  }
+  buf.toString
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  /<em>* Only ever use UrlString to create a URL. </em>/
+  def makeUrl(id: UrlString): String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<p>with</p>
+
+<p>```scala</p>
+
+<pre><code>id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(n))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>This may or may not be overengineering.</p>
+
+<h2>Advanced string interpolation with FP</h2>
+
+<p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
+
+<p>```scala
+  // A type class
+  trait UrlString[A] {</p>
+
+<pre><code>def toUrlString(a: A): String
+</code></pre>
+
+<p>  }</p>
+
+<p>  // Wrapper class
+  case class Id(id: Int)</p>
+
+<p>  // Implement the type class UrlString for Id
+  implicit object IdToUrlString extends UrlString[Id] {</p>
+
+<pre><code>override def toUrlString(a: Id) = a.id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
+
+<pre><code>def url[A: UrlString](args: A*): String = {
+  val strings = sc.parts.iterator
+  val expressions = args.iterator
+  val buf = new StringBuffer(strings.next)
+  while (strings.hasNext) {
+    buf append implicitly[UrlString[A]].toUrlString(expressions.next)
+    buf append strings.next
+  }
+  buf.toString
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  /<em>* Anything &ldquo;viewable&rdquo; as UrlString can be used to create a URL. </em>/
+  def makeUrl<span id=" A">A: UrlString</span>: String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<h2>The final string gotcha</h2>
+
+<p>You may have noticed that there is still primitive obsession in this sample code: URLs are presented as <code>String</code> for simplicity. In real life, I use builders such as <code>URIBuilder</code> and <code>HttpGet</code> (Java <a href="http://hc.apache.org/">Apache HttpComponents</a>) or more sophisticated Scala-specific libraries such as <a href="http://spray.io/">Spray</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>I thought it would useful to compare an object-oriented and a functional approach to unifying data that share a domain-consistent notion of conversion to a string. Scala is a language that allows easy expression of both.</p>
+
+<p>In part 3, we will look at languages that just don&rsquo;t have the <code>toString</code> problem at all.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[toString considered harmful, part 1]]></title>
@@ -274,6 +547,60 @@ id match {
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[MongoDB free online course: a review]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/"/>
+    <updated>2013-12-04T22:03:55-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://www.mongodb.com/sites/all/themes/bonsai/logo.png">http://www.mongodb.com/sites/all/themes/bonsai/logo.png</a>" title="MongoDB logo" ></p>
+
+<p>I finally finished a two-month <a href="http://education.mongodb.com/">free online course on MongoDB</a>, given by <a href="http://www.mongodb.com/">MongoDB, Inc</a>.</p>
+
+<p>This is a review of the specific course numbered M101J, &ldquo;MongoDB for Java Developers&rdquo;, but it should apply to all thee introductory developer courses on MongoDB in any language, because actually, I had originally signed up months earlier for their original course (in JavaScript), and the content is largely the same (I had gotten busy and dropped that course).</p>
+
+<!--more-->
+
+
+<h2>Why learn MongoDB?</h2>
+
+<p>I had first heard of MongoDB over two years ago, at a meeting of the (now defunct) <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers/">original Pittsburgh JavaScript meetup group</a>, <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers/events/25229441/">&ldquo;In-depth look at Node.js and NoSQL&rdquo;</a>.</p>
+
+<p>MongoDB has become very popular; as far as I can tell, this is because of extreme marketing efforts, as well as the fact that it is very easy to get started doing stuff with it, being a document-oriented NoSQL database requiring no schema.</p>
+
+<p>I took this course in part to expose myself to some NoSQL technology and also in part because I anticipated needing to use something like it. In fact, it turns out <a href="/blog/2013/08/02/pittsburgh-ruby-python-social/">I did use it</a>, heavily, in exactly the kind of use case that works fine with it.</p>
+
+<h2>Why did I take the Java version of the course?</h2>
+
+<p>I took the &ldquo;M101J: MongoDB for Java Developers&rdquo; version of the course because I anticipated writing code in Scala to access MongoDB. In fact, during the course, I ended up using the official Scala driver <a href="https://github.com/mongodb/casbah">Casbah</a> when possible.</p>
+
+<h2>Summary of the course</h2>
+
+<p>A lot of the course actually involved using the JavaScript-based MongoDB shell, which makes sense because it is easy to explore data that way. Since everything is JSON-like, there&rsquo;s no real escaping JavaScript if you&rsquo;re working with MongoDB.</p>
+
+<p>The video lecture/quiz/assignment format is fairly standard for MOOCs, and worked fairly well.</p>
+
+<p>The course was more work than I expected, because it lasted so long, two months.</p>
+
+<p>The ad hoc nature of MongoDB&rsquo;s API (including the Java-based one) tended to bother me throughout.</p>
+
+<p>The weird CRUD syntax, shoehorning everything into a JSON representation, took some getting used to.</p>
+
+<p>The way to specify indexes and to evaluate your guesses about whether they are actually working the way you expected was to look at funny values in JSON. I found this low-level and annoying.</p>
+
+<p>The aggregation API seemed even weirder. Overall, everything had a loose &ldquo;dynamic&rdquo; feel to it: this is the essence of MongoDB, really. Doing things wrong made me frustrated because of the runtime errors.</p>
+
+<p>Finally, the sections on replication and sharding were particularly problematic. The lectures kept mentioning that various defaults and APIs were a moving target. Furthermore, actual hardcoded numbers even showed up that we were supposed to use to specify policies. Wow.</p>
+
+<h2>Conclusion</h2>
+
+<p>The lectures and quizzes were well-designed (until the final portion of the course that seemed particularly ad hoc). The assignments were sometimes rather tricky, with not much of a hint, but offered a decent variety of realistic query formation.</p>
+
+<p>I would recommend this course as an overview to anyone who is committed to using MongoDB to its full extent.</p>
+
+<p>However, although I got my &ldquo;certificate&rdquo; for completing the course, and appreciate that MongoDB, Inc offers this training for free, I felt that there was a lot of ad hoc stuff going on in the evolving design of MongoDB, and embedded in the API design as well. For what I needed to know for my work, I didn&rsquo;t really need the whole course.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[OpenHack Pittsburgh: learning Elixir test-driven and package-publishing]]></title>
     <link href="http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/"/>
     <updated>2013-08-26T22:09:00-04:00</updated>
@@ -418,351 +745,6 @@ id match {
 <p>One thing I didn&rsquo;t get around to was setting up <a href="http://travis-ci.org/">Travis</a> continuous integration. I believe this should also be part of the story in getting up and running in a new programming language environment.</p>
 
 <p>So I did a Web search and figured out how to create a suitable <code>.travis.yml</code>. I committed and pushed to GitHub, flipped the switch in my Travis account, and you can see its <a href="https://travis-ci.org/FranklinChen/tau">passing status</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh JavaScript meetup: functional programming]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"/>
-    <updated>2013-07-10T22:37:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a>" title="Pittsburgh JavaScript" ></p>
-
-<p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
-
-<p>I&rsquo;d met Richard earlier, a month ago at <a href="http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/">Pittsburgh TechFest</a>. He does not claim to be an expert at functional programming, but is enthusiastic about concepts and techniques that he can and does apply to improving software quality in many dimensions. Since I have been a functional programming enthusiast and practitioner for twenty years, I had these goals in attending his presentations:</p>
-
-<ul>
-<li>evaluate what Richard and others have done with, and think is important about,  functional programming</li>
-<li>offer a few corrections, elaborations, suggestions as appropriate for the situation</li>
-<li>gather information on how I may be able to effectively explain functional programming to those who are new to it</li>
-</ul>
-
-
-<!--more-->
-
-
-<h2>History of the Pittsbugh JavaScript meetup group</h2>
-
-<p>Two years ago, in 2011, I had attended the <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers">first incarnation of the group</a> faithfully, attending several months of meetings before it disbanded when the founder left Pittsburgh. I learned quite a bit from those meetings.</p>
-
-<p>Two years is a long time in the world of JavaScript. Looking back at <a href="http://franklinchen.com/blog/2011/09/27/when-jquery-attacks/">one of my blog posts reporting on the old JavaScript meetup group</a>, I am amused by how anachronistic that feels to me today, as in my mention of <a href="http://sproutcore.com/">Sproutcore</a>, which I never hear about any more.</p>
-
-<h2>Up front: my take on the secret of JavaScript</h2>
-
-<p>Here are some observations (not novel) I have about JavaScript, to set the stage for further discussion:</p>
-
-<ul>
-<li>JavaScript is full of horrible, disgusting Bad Parts.</li>
-<li>JavaScript has only one shiny Good Part: it has first-class functions.</li>
-<li>People manage to get a lot of amazingly cool and important stuff done using JavaScript, so take it seriously.</li>
-</ul>
-
-
-<h2>Comments on Richard&rsquo;s presentation</h2>
-
-<h3>Immutability and &ldquo;functional languages&rdquo;</h3>
-
-<p>Richard talked about <a href="http://en.wikipedia.org/wiki/Immutable_object">immutability</a> as being part of what &ldquo;functional programming&rdquo; is about.</p>
-
-<p>Yes, it is, and in addition, common best practices in many programming languages these days argue for favoring immutability. I want to emphasize that you don&rsquo;t have to go full-blown into a specialized &ldquo;functional language&rdquo; in order to take advantage of immutability as desired: for example, this tip has long since been known as at least a &ldquo;design pattern&rdquo; in the <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">Java world</a>, in the <a href="http://www.harukizaemon.com/blog/2010/03/01/functional-programming-in-object-oriented-languages/">Ruby world</a>, and basically everywhere else.</p>
-
-<p>Richard suggested that &ldquo;functional languages&rdquo; don&rsquo;t allow mutation. By my definition, this is <em>not</em> actually true.  I didn&rsquo;t raise an objection during the talk because I didn&rsquo;t want to sidetrack it, but here I have space to elaborate a little. I would argue (but that would have to be another blog post) that the cleanest, most intuitive and novice-accessible &ldquo;functional languages&rdquo;) are those in the <a href="http://en.wikipedia.org/wiki/ML_%28programming_language%29">ML</a> family originally developed in the 1970s and lives on today&rsquo;s popular, industrial-strength dialects of <a href="http://en.wikipedia.org/wiki/Standard_ML">Standard ML</a>, <a href="http://ocaml.org/">OCaml</a>, and <a href="http://fsharp.org/">F#</a>.</p>
-
-<p><em>ML fully supports mutation</em>, through <a href="http://en.wikibooks.org/wiki/Standard_ML_Programming/Types#References">reference cells</a>.</p>
-
-<p>Personally, because of notions like this, I&rsquo;ve been thinking that maybe it would be best if we all stopped using the term &ldquo;functional language&rdquo;, because it has sadly become misleading and ambiguous. In particular, people instantly think &ldquo;Haskell&rdquo; when they use the word &ldquo;functional language&rdquo;, when in fact Haskell is a very unusual, unique language (and ecosystem) among languages that one could call &ldquo;functional&rdquo;.</p>
-
-<h3>Expressions, functions, evaluation, and values</h3>
-
-<p>As Richard put it, &ldquo;favor expressions evaluating to a value&rdquo;. The focus of functional programming is on <em>returning</em> a value, from an expression that includes function calls, rather than munging some mutable global state, or modifying state through a reference passed into a function as a parameter.</p>
-
-<h3>Recursion vs. looping?</h3>
-
-<p>Richard noted that one characteristic of functional programming is the use of recursion instead of looping. He gave examples of writing tail-recursive functions.</p>
-
-<p>One nitpick (which again, I did not bring up during the talk): recursion and looping (as in through &ldquo;normal&rdquo; constructs such as <code>while</code> and <code>for</code>) are <em>not</em> actually opposed. I will write a blog post later about why conventional looping is best thought of as a derived construct built on top of recursion, and why it might be best to consider conventional looping to be a historical accident and mistake (but a very useful invention given the historical circumstances).</p>
-
-<h4>Efficiency of recursion?</h4>
-
-<p>Also, people brought up the topic of efficiency. I have learned over the years that for many people, the word &ldquo;recursion&rdquo; seems to immediately trigger the word &ldquo;efficiency&rdquo;. Richard did a great job in mentioning that <a href="http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls">EMCAScript 6 is going to have proper tail calls (also called tail call optimization)</a>, which will make tail recursion equivalent to ordinary looping in terms of space usage. This is <em>hugely important</em> news, of course. This mandate shows how serious JavaScript is about embracing functional programming.</p>
-
-<h4>Recursion for parallelism</h4>
-
-<p>But beyond the issue tail recursion, I felt I had to point out that recursive algorithms can offer actual <em>speedup</em>. The classic examples, of course, are the <a href="http://www.cs.cmu.edu/~scandal/nesl/alg-sequence.html#quicksort">parallel speedups of divide-and-conquer algorithms such as quicksort that use recursion</a>. If you expressed the algorithms by removing the recursion (with a hand-rolled stack as often taught in courses), you would destroy the inherent parallelism. So in the world of parallelism, you want your code to stay naturally recursive! As <a href="http://adambom.github.io/parallel.js/">parallel computing comes to JavaScript</a>, keep this in mind!</p>
-
-<h3>Higher-order functions, first-class functions</h3>
-
-<p>Richard: &ldquo;A function is an object&rdquo;.</p>
-
-<p>It&rsquo;s really as simple as that. Functions can be created, stored, passed around. Functions can return other functions.</p>
-
-<p>It&rsquo;s amazing, but I claim that this is JavaScript&rsquo;s one Good Part, its killer feature that surprisingly many languages don&rsquo;t have. And it&rsquo;s the one feature that is used <em>all the time</em>, not just in esoteric code. From the very beginning, JavaScript had first-class functions, to support callbacks for client code in Web browsers. and <a href="http://nodejs.org/">Node</a> server-side code is nothing if not a whole bunch of <code>function (...)</code>. Without closures and first-class functions, JavaScript would have been completely useless. Thank goodness <a href="http://brendaneich.com/2008/04/popularity/">Brendan Eich was inspired by the Scheme functional language</a>.</p>
-
-<h4>No methods!</h4>
-
-<p>JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented &ldquo;interference&rdquo; from the conventional class-based object-oriented world, which is mostly based not on functions, but on <a href="https://en.wikipedia.org/wiki/Method_%28computer_programming%29">methods</a> that interference with functions because they are meant to <em>replace</em> functions (since according to &ldquo;pure&rdquo; object-oriented thinking, functions are evil and computation should involve method calls on objects). <em>JavaScript does not (really) have methods</em>; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use <a href="http://emberjs.com">Ember</a>, the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of <code>function</code>s: <code>valueWillChange</code> and <code>valudDidChange</code> are just functions. They are not special things, &ldquo;methods&rdquo;.</p>
-
-<p>``` javascript
-App.PersonView = Ember.View.extend({
-  valueWillChange: function (obj, keyName, value) {</p>
-
-<pre><code>this.changingFrom = value;
-</code></pre>
-
-<p>  }.observesBefore(&lsquo;content.value&rsquo;),
-  valueDidChange: function(obj, keyName, value) {</p>
-
-<pre><code>  // only run if updating a value already in the DOM
-  if(this.get('state') === 'inDOM') {
-      var color = value &gt; this.changingFrom ? 'green' : 'red';
-      // logic
-  }
-</code></pre>
-
-<p>  }.observes(&lsquo;content.value&rsquo;)
-});
-```</p>
-
-<h3>Examples</h3>
-
-<p>Richard gave some standard examples of using higher-order functions such as <code>map</code> and <code>filter</code> and <code>foreach</code> as provided in various popular JavaScript libraries such as <a href="http://underscorejs.org/">Underscore</a>.</p>
-
-<p>As a matter of style, he recommended against long, obscure one-liners that involve chaining. I agree. For readability and testability of pipelines, I have found that it is good to break things up into intermediate steps. (Just <a href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">recently</a>, Tim Lesher also recommended against stupidity masking as excessive cleverness in his Python lightning talk about functional programming with <code>itertools</code>.)</p>
-
-<h3>Monads?!</h3>
-
-<p>Regrettably, Richard brought up the term <a href="http://en.wikipedia.org/wiki/Monad_%28functional_programming%29">&ldquo;monads&rdquo;</a>. I&rsquo;m close to thinking that this word should be <a href="http://fsharpforfunandprofit.com/posts/why-i-wont-be-writing-a-monad-tutorial/">banned</a>, because too many confusions about them have ruined the word. I have yet decided what the best alternative phrase might be. Maybe something like &ldquo;computational context&rdquo;?</p>
-
-<p>Ironically, Richard admitted he was going to abuse the word, and for the sake of example, he said, he was going to say that &ldquo;jQuery is a monad&rdquo;. I didn&rsquo;t want to derail his talk, and since he admitted the abuse, I decided there would be a better time to address this topic.</p>
-
-<p>It was interesting to me, however, that he gathered that the interesting thing about jQuery, and why he wanted to call it a monad, was the chaining of calls in jQuery. I need to think of a good way to deal with this intuition when I get around to explaining monads.</p>
-
-<h3>Partial application and currying</h3>
-
-<p>Richard explained both partial application and currying, then he wondered when one would in practice write a curried function.</p>
-
-<p>I said (but not very convincingly, I think) that you would write a curried function if you knew you would otherwise have to manually do a bunch of partial application. I have to confess that was a weak answer. I think the practical situation in JavaScript is that full-scale up-front currying is not useful.</p>
-
-<h3>Libraries</h3>
-
-<p>Richard recommended checking out the following libraries, especially Lo-Dash, which he judges to be faster than Underscore:</p>
-
-<ul>
-<li><a href="http://underscorejs.org/">Underscore</a></li>
-<li><a href="http://lodash.com/">Lo-Dash</a></li>
-<li><a href="http://osteele.com/sources/javascript/functional/">Functional JavaScript</a></li>
-</ul>
-
-
-<h2>Questions and answers</h2>
-
-<p>There were many interesting questions raised after the presentation.</p>
-
-<h3>Introducing functional programming into a team environment</h3>
-
-<p>Someone asked Richard a good question about whether it&rsquo;s appropriate to, say, start using Underscore at work and expecting other team members to learn how to use it. Is it fair to expect others to learn a new way of doing things that might seem weird?</p>
-
-<p>My point of view is that there&rsquo;s nothing specific about functional programming when it comes to questions like this. The same question comes up when evaluating a particular programming language or a particular MVC framework or a particular version control system, and the answer involve considering all the different realities of who is comfortable with what, whether it is worth learning something new, what the advantages and disadvantages are, how much the decision will affect delivery of business value.</p>
-
-<h3>Growing parameter list for a function vs. passing in a big object</h3>
-
-<p>One concern brought up is that if you&rsquo;re programming in a functional style, you can end up being faced with ever-growing parameter lists for a function to pass in everything that it needs. One solution is to create a big object to stick everything into it that might be needed (for example, a configuration object instead of separate flag parameters). Is this overkill?</p>
-
-<p>Also, <a href="http://tonylukasavage.com/">Tony Lukasavage</a> emphasized that his concern was in the context of the need to evolve an existing API without breaking customers' client code that uses it.</p>
-
-<p>My first note would be that API design is tricky and checking out <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">some resources on API design</a> is very helpful.</p>
-
-<p>Regarding parameter lists, Richard noted that you might have a design problem if you have a function that needs to know about so many things it depends on. You may want to refactor the function (of course, in the context of evolving a mature API that customers depend on, it may be too late, unfortunately) and the data structures passed in. For example, if you have a number of functions that all take as parameters a <code>firstName</code> and <code>lastName</code>, then maybe you want a single <code>name</code> parameter instead.</p>
-
-<p>I suggested also that if certain flags are not always needed, then instead of a huge configuration object, how about simply having separate but related functions (in a language supporting overloading, you could provide overloaded functions, although the topic of overloading is another large one to discuss later), each of which takes only the flags the client cares about. Of course, as some people pointed out, then you might end up with annoyingly long and specific function names.</p>
-
-<p>Nobody said designing an API is easy.</p>
-
-<h3>Do I actually do functional programming?</h3>
-
-<p>One question I got, since before the meetup, I had indicated having experience with functional programming, was basically, do I actually use it in JavaScript and elsewhere. The answer is, yes. As I&rsquo;ve mentioned, you don&rsquo;t have use a special language in order to program in this way, although it&rsquo;s much easier and more efficient to use a language that is tailored to support it. Most of the code I&rsquo;ve written in the past fifteen years has attempted to be primarily functional in style, whatever language I&rsquo;m using for work (mostly Java, Perl, Python, and recently Scala). I don&rsquo;t do this out of some kind of ideology, but because it works well in getting stuff done. Before adopting a primarily functional style of programming, I spent years working in traditional imperative and object-oriented styles, and empirically, that was less pleasant.</p>
-
-<h4>Do I do functional programming in JavaScript?</h4>
-
-<p>I have not actually done any JavaScript programming for work since doing some UI prototyping two years ago. I don&rsquo;t know when I&rsquo;ll return to doing front end work, but meanwhile, I am interested in doing some Web browser stuff for personal projects, so I try to keep up to date on developments in the JavaScript world.</p>
-
-<p>One thing that has been interesting that I need to check out is the rise of <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">functional reactive programming (FRP)</a> libraries for JavaScript, such as <a href="https://github.com/raimohanska/bacon.js">Bacon.js</a>. FRP was originally invented in the 1990s by Conal Elliott in the context of Haskell, but almost twenty years later, has finally spread well beyond that now to mainstream visibility and use. For example, Microsoft has thrown its weight behind <a href="http://rx.codeplex.com/">Reactive Extensions (Rx)</a>, which started out in the .NET world, but Microsoft then ported it to JavaScript, C/C++, Python, and Ruby.</p>
-
-<h2>Conclusion</h2>
-
-<p>I was happy to see interest in functional programming in the local JavaScript community. Richard gave an introductory talk on it that I thought was very useful as a starting point for those who are new to it. I made note of some omissions or inaccuracies in order to improve my thinking about how I can contribute in the future to improving people&rsquo;s understanding and application of functional programming principles.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why I hate calling myself "pragmatic" but do]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/"/>
-    <updated>2013-06-30T23:34:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do</id>
-    <content type="html"><![CDATA[<p>I wrote a <a href="http://franklinchen.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/">post on my personal blog about my being a &ldquo;pragmatist&rdquo;</a>.</p>
-
-<p>I mention it here because few words are as controversial, I think, in the programming community, as &ldquo;pragmatic&rdquo;. I wanted to be on record as identifying myself as &ldquo;pragmatic&rdquo; despite the negative connotations, because the entire mindset of this new programming blog is pragmatic.</p>
-
-<p>For example, I will soon write about the realities of programming language choice, including why I used Java, despite its deficiencies, for a decade, and why it is not going away, and why I currently am an advocate of <em>Scala, one of the most ambitiously pragmatic languages</em> to have come along in my lifetime.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Java User Group: Building and Evolving a Java API]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/"/>
-    <updated>2013-06-25T21:49:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api</id>
-    <content type="html"><![CDATA[<p>The topic for the featured presentation at the <a href="http://java.net/projects/pittjug/">Pittsburgh Java User Group</a> (PittJUG) was &ldquo;Building and Evolving a Java API&rdquo;, presented by Eric Stein of <a href="http://www.fulminatus.com/">Fulminatus Consulting</a>. I was excited to attend because API design is difficult but important, and today more than ever, because of the trend toward integrating many services to build an application, and toward providing such services (both externally and internally).</p>
-
-<p>(For past reports of mine on PittJUG, see the <a href="http://franklinchen.com/blog/categories/pittjug/">PittJUG archives in my other blog</a>.)</p>
-
-<p>The presentation was very good. (Eric&rsquo;s slides are available <a href="http://www.fulminatus.com/presentations/PittJUG%20API%20Presentation.pdf">here</a>, but as always with slides, be aware that it is just an outline, as good slides really should be, and the actual presentation and group discussion had all the substance.) Note that although some of the specific recommendations and examples are Java-specific, the entire area of good API design is <em>general</em> and is applicable no matter what programming language you are using.</p>
-
-<p>However, the presentation also filled me with a combination of <em>sadness</em>, because our computing profession could have done better up front to make good API design much easier in various ways. On the positive side, it&rsquo;s better late than never.</p>
-
-<p>A report on the presentation, with my commentary:</p>
-
-<!--more-->
-
-
-<h2>API design for whom?</h2>
-
-<p>Whenever doing something at all, the question &ldquo;for whom?&rdquo; should always be asked and answered. Eric observed that APIs must meet the different needs of different users, so it&rsquo;s useful to identify three specific end users with different needs, and look at the situation from each of their points of view:</p>
-
-<ul>
-<li>API owner</li>
-<li>specification owner</li>
-<li>logging owner</li>
-</ul>
-
-
-<p>His inclusion of the &ldquo;logging owner&rdquo; was intriguing because the point of view from someone whose job it is to wade through logs is often slighted. But in light of ever more complex applications as well as errors and the need for recovery and quick turnaround in fixing them, I believe that Eric is right to argue that logging should be seriously designed, to &ldquo;tell a consistent story&rdquo;. I am taking this advice to heart.</p>
-
-<h2>Design process</h2>
-
-<p>Eric advised that design should start with use cases. And client code, from the perspective of the end user, as well as tests, should be written up front. He didn&rsquo;t use the term, but this is <a href="http://en.wikipedia.org/wiki/Test-driven_development">test-driven development</a> (TDD), which in my mind has been an unfortunate term, because it is really <em>test-driven design</em>, which happens to have the nice effect of kick-starting development as well. (I&rsquo;ll be writing more later on this blog about TDD; I no longer start a new project without a TDD mentality and process, so productive and efficient I have found it.)</p>
-
-<p>One thing that Eric said was to start with the <em>most important</em> cases first, not the easy cases. Very good advice: I have learned the hard way that it is easy to pat yourself on the back and start with easy cases to feel like you&rsquo;re making progress, but this often leads to hitting a block when getting to the hard cases, and then having to do some major redesign at that point. I&rsquo;ve found that if something is really important, it needs to be addressed immediately, and often will drive the design of the components required to make the important hard case work. (I&rsquo;ll be writing more later on this blog about &ldquo;the hard case&rdquo;, especially in the context of &ldquo;sad paths&rdquo; that are critical.)</p>
-
-<h2>Stability</h2>
-
-<p>Stability is the big difficulty in API design. It&rsquo;s really daunting, actually, to think of the idea of &ldquo;write once, support forever&rdquo;, but people get very unhappy, rightfully, if they start using your API and then things break on them after it changes.</p>
-
-<h2>Simplicity</h2>
-
-<p>Eric argued that a good API should be easy to read as well as easy to write. This is all about human psychology.</p>
-
-<p>Also, he noted that a side effect of his recommendation to write client code and tests first is that you get to see the point of view of the client, and can use this experience to weed out, for example, APIs that require a lot of annoying boilerplate code.</p>
-
-<h2>Subclassing</h2>
-
-<p>There was a lot of good material covered about the dangers of exposing or mandating or allowing subclassing.</p>
-
-<p>I agree with Eric about the <em>dangers of subclassing</em>. The ability to subclass existing classes is the single most abused feature of object-oriented languages, and when it comes to API design, the problems are even more magnified because of the needs for API security and evolution. Almost always, you want to use composition, not subclassing. I&rsquo;m pretty annoyed that composition, which was well-understood in the 1960s and 1970s, ended up being &ldquo;forgotten&rdquo; in some circles. Eric gave the classic example of a totally disastrous API resulting from the Java library originally coming with a <code>Properties</code> class that was a subclass of <code>Hashtable</code>.</p>
-
-<h2>Immutability</h2>
-
-<p>Immutable objects have huge advantages over mutable objects.</p>
-
-<p>This is something has been known by the <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a> community since Lisp in the 1950s and <a href="http://en.wikipedia.org/wiki/ML_(programming_language)">ML</a> in the 1970s and <a href="http://en.wikipedia.org/wiki/Haskell_(programming_language)">Haskell</a> and <a href="http://en.wikipedia.org/wiki/Erlang_(programming_language)">Erlang</a> in the 1980s.</p>
-
-<p>But better late than never.</p>
-
-<h3>My example: Apache HTTP Components</h3>
-
-<p>I have observed that APIs in such languages as Java and Ruby have more and more gravitated toward the use of immutable objects. A very good pattern I have seen is to use a builder (which has internal mutable state) to finally build an instance of an immutable object. Just recently, I was using the <a href="http://hc.apache.org/httpcomponents-client-ga/">Java Apache HTTP Components library</a> and moved from the stable version (4.2.5) to the <a href="http://hc.apache.org/httpcomponents-client-dev/">beta version</a> (4.3-beta2) (because of bugs in the stable version), and happened to notice that a whole slew of methods I was calling were deprecated in favor of a <a href="http://www.apache.org/dist/httpcomponents/httpclient/RELEASE_NOTES.txt">new builder-based API</a>. Excerpts from the release notes of the beta:</p>
-
-<ul>
-<li>Support for Java 7 try-with-resources</li>
-<li>Added fluent Builder classes</li>
-<li>Deprecation of preference and configuration API based on HttpParams interface in favor of constructor injection and plain configuration objects</li>
-<li>Reliance on object immutability instead of access synchronization for thread safety</li>
-</ul>
-
-
-<p>It was very good to see that decades-old lessons about good design are finally making it into important Java libraries!</p>
-
-<h2>Types</h2>
-
-<p>A lot of what Eric talked about had to do with types: type safety as well as the ramifications of types when evolving an API.</p>
-
-<h3><code>null</code></h3>
-
-<p>Several of his examples (see his slides) involved the problem of <code>null</code>, <a href="http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare">Hoare&rsquo;s billion-dollar mistake</a>, which I gave a little <a href="http://franklinchen.com/blog/2012/09/06/my-pittsburgh-ruby-talk-nil/">talk about last year</a>. Basically, <code>null</code> is a hole in a type system, and as a result, in Java one has to compensate by documenting in comments (but not having type checked) when and where something could be null or could not be, so that API clients know what to pass into methods and what to expect in return.</p>
-
-<p>Java is not hopelessly behind: Java 8 has the <a href="http://download.java.net/jdk8/docs/api/java/util/Optional.html"><code>Optional&lt;T&gt;</code> class</a> to help programmers transition away from using <code>null</code>. C++14 has a <a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2013/n3527.html">proposal to add to the standard library <code>std::optional&lt;T&gt;</code></a>.</p>
-
-<p>Admittedly, these are late patches that do not actually prevent continued use of <code>null</code> (ideally, a programming language should simply not even have it; languages such as ML and Haskell from the 1970s and 1980s happily did without this terrible construct), but these are definitely steps forward. New languages being designed and implemented today from a clean slate have no excuse to perpetuate this billion-dollar error: for example, <a href="http://www.rust-lang.org/">Rust</a> does not have <code>null</code>.</p>
-
-<h3>Strings</h3>
-
-<p>Eric noted that use a string is throwing away type safety.</p>
-
-<p>I think the use of strings everywhere is a disaster second to that of using <code>null</code>. The problem is that strings have to be parsed for information. And many people do not actually correctly do such parsing and validation, hence the prevalence of <a href="http://en.wikipedia.org/wiki/SQL_injection">injection attacks</a>.</p>
-
-<p>Even apart from security, the manipulation of strings that actually are supposed to have an intended structure is a major cause of late-caught runtime errors, and of programmer confusion. For example, <a href="http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding">this report on URLs</a> has been recirculating lately, because of errors in both libraries and client code when dealing with URLs as strings rather than as strongly typed data.</p>
-
-<h3>Booleans</h3>
-
-<p>Eric observed that even booleans are an API design smell: booleans are a special case of an enumeration of possible states. What happens if you want to add a new state but your old API used booleans?</p>
-
-<h3>Exceptions</h3>
-
-<p>Eric recommended <em>unchecked</em> over Java&rsquo;s <a href="http://en.wikipedia.org/wiki/Exception_handling#Checked_exceptions"><em>checked</em> exceptions</a>.</p>
-
-<p>Sadly, in my Java programming in the past decade, I&rsquo;ve had to deal with the fact that Java made a big mistake by introducing checked exceptions in the first place; the ramifications were not thought out then. Note that C++11 has finally deprecated exception specifiers, and exceptions in ML have always been unchecked since the introduction in the 1970s, while Java ignored two decades of experience and went ahead and bolted on checked exceptions.</p>
-
-<h4>Not strings!</h4>
-
-<p>Eric advised that all failure data should be included in a thrown exception. Too often, we see exception throwing code that just throws a string message. Then the catcher has to try to parse this message for important data (which may not even be present in the string). If you&rsquo;re going to throw an exception, write a class and stash away important information, not a string message.</p>
-
-<h2>A short note on primitive obsession</h2>
-
-<p>My friend Adam who also attended the PittJUG meeting noted that what we&rsquo;re basically talking about is <a href="http://c2.com/cgi/wiki?PrimitiveObsession">primitive obsession</a>. The larger lesson here is that when designing robust, clear, and safe APIs, using primitives is often a mistake. Everything in the problem domain should really be modeled as its own type, not as a primitive.</p>
-
-<h2>Evolution of an API</h2>
-
-<p>The trickiest thing to get right is making an API so that it can evolve in the future without breaking backwards <em>compatibility</em>. This compatibility can be of different forms:</p>
-
-<ul>
-<li>behavioral</li>
-<li>binary</li>
-<li>source</li>
-</ul>
-
-
-<p>Eric talked a lot about weakening or strengthening contracts. There is a lot of hairy stuff involved, including knowledge of Java compiler internals. I think this is a space where more research is needed for the future in order to get the formal semantics of API evolution done right.</p>
-
-<p><a href="https://code.google.com/p/japi-checker/">japi-checker</a> was mentioned as one tool that one can use for Java.</p>
-
-<h2>Resources</h2>
-
-<p>In the context of software development in Java, it is impossible to avoid mentioning <a href="http://en.wikipedia.org/wiki/Joshua_Bloch">Joshua Bloch</a>&rsquo;s early book (subsequently revised for a second edition), &ldquo;Effective Java&rdquo;. It is a daunting book, over 300 pages long, but it is an indispensable reference for anyone caring about good programming in Java. Eric called it the &ldquo;gold standard&rdquo;.</p>
-
-<p>Check out his links to other resources on his slides.</p>
-
-<h2>Package design</h2>
-
-<p>A question came up about Eric&rsquo;s recommendation of using package-private visibility and his observation that a lot of people don&rsquo;t know about package-private, and don&rsquo;t design packages.</p>
-
-<h3>Modules</h3>
-
-<p>My observation is that people don&rsquo;t design packages because they&rsquo;re not actually modules. <em>Java was invented without a module system</em>, although Java 8 originally was slated to finally include a module system in the form of Jigsaw, which was, however, <a href="http://www.infoworld.com/d/application-development/project-jigsaw-delayed-until-java-9-198007">delayed to Java 9</a>. Meanwhile, there is <a href="http://en.wikipedia.org/wiki/OSGi">OSGi</a>.</p>
-
-<p>I don&rsquo;t like sounding like a broken record, but <a href="http://en.wikipedia.org/wiki/Standard_ML">Standard ML came with a module system in the 1980s</a>, and there has been further work in the area of module systems, including first-class module systems that go beyond stratified module systems. The reality is that Java was born in the 1990s an &ldquo;old&rdquo; language, with no positive technical innovations, that feels more like a language from the 1960s.</p>
-
-<h2>Conclusion</h2>
-
-<p>Eric Stein gave an excellent talk about API design, both from the broadest perspective, focused on human beings and clients, and down and dirty with Java language features to avoid or use carefully.</p>
-
-<h2>Addendum: my involvement with Java</h2>
-
-<p>I had a chance to review some of my feelings I have had about programming in Java myself. I&rsquo;ve been a member of PittJUG for well over a decade now. I first signed up on the PittJUG mailing list in June 1999. I have not always been a regular attendee of the meetings: after some initial years of interest, I stopped attending for some years, and became regular again in 2009. So I&rsquo;ve been around Java since it was a very young language, and all the while knowing of all the problems with the language. So why did I chose it as my main programming language a decade ago, and why have I stuck with it for so long, until last last year, when <a href="http://franklinchen.com/blog/2013/01/11/2013-is-my-year-of-scala/">I decided to write no <em>new</em> Java code, and move on to Scala</a>? I will explain my decision-making in a forthcoming blog post.</p>
-
-<h2>(Update of 2013-07-05)</h2>
-
-<p>An interesting <a href="http://www.infoq.com/presentations/enterprise-api">presentation on APIs in the enterprise</a> came my way.</p>
 ]]></content>
   </entry>
   

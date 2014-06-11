@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Pittsburgh Ruby/Python Social and Some Observations About Our Polyglot World - The Conscientious Programmer</title>
+  <meta name="author" content="Franklin Chen">
+
+  
+  <meta name="description" content="Programming meetups aren&rsquo;t just about presentations and coding. Abby and I joined others in meeting up for dinner for a joint Pittsburgh Ruby &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41982602-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Conscientious Programmer</a></h1>
+  
+    <h2>Humbly exploring what it means to do the right thing.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ConscientiousProgrammer.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Pittsburgh Ruby/Python Social and Some Observations About Our Polyglot World</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-02T22:17:42-04:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Programming meetups aren&rsquo;t just about presentations and coding. Abby and I joined others in meeting up for dinner for a <a href="http://www.meetup.com/pittsburgh-ruby/events/120201652/">joint Pittsburgh Ruby and Pittsburgh Python social</a> and enjoyed relaxing and socializing outdoors in Bakery Square. Although it perpetually looked like it was going to rain, it turned out we weren&rsquo;t really rained on.</p>
+
+<!-- http://instagram.com/p/ch8quus4Kb/ -->
+
+
+<p><img src="http://distilleryimage11.ak.instagram.com/31a91496fbd111e2996722000a9f18fe_7.jpg" title="Dinner outside" ></p>
+
+<!-- https://secure.flickr.com/photos/carolnichols/9425969330/ -->
+
+
+
+
+<iframe src="https://www.flickr.com/photos/carolnichols/9425969330/player/" width="75" height="75" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>It was fitting that there was a joint social for two language communities, because we live in a polyglot world.</p>
+
+<p>Despite my original intention not to engage into any tech-related conversation, I couldn&rsquo;t help remarking on my current polyglot responsibilities at work at CMU on the METAL project!</p>
+
+<!--more-->
+
+
+<h2>Our polyglot world: Ruby, Python, Perl</h2>
+
+<p>I mentioned having to cobble together Ruby, Python, and Perl code recently in an NLP project to process Farsi text into corpora to analyze. We used a Ruby gem <a href="https://github.com/aziz/virastar">Virastar</a> in our pipeline, a Perl script for a Farsi stemmer, <a href="http://perstem.sourceforge.net/">Perstem</a>, and a <a href="https://github.com/wfeely/farsiNLPTools">Python script for normalization</a>.</p>
+
+<h3>(Update of 2013-12-04) C++, Scala, MongoDB</h3>
+
+<p>The work project ended up becoming even more polyglot than I expected.</p>
+
+<p>I also used a C++ tagger, TurboTagger from <a href="http://www.ark.cs.cmu.edu/TurboParser/">TurboParser</a>.</p>
+
+<p>I wrote Scala to execute and monitor the pipeline, because it turned out that component bugs and timeouts (from infinite loops sometimes) had to be dealt with: the original shell script pipelines did not handle any of that at all. Also, the vast amount of data meant that parallelizing was critical. The Scala ecosystem has  turned out great for me. I didn&rsquo;t use Akka actors for this task, just futures and parallel collections.</p>
+
+<p>I also used MongoDB because it is quite a natural fit for document-oriented storage and querying as an intermediate stage I can inspect before the final stage of conversion to Sketch Engine format. And I happened to just <a href="/blog/2013/12/04/mongodb-free-online-course-a-review/">finish a free online MongoDB course</a> which has been useful. In my Scala code, I used the official Scala driver <a href="https://github.com/mongodb/casbah">Casbah</a>.</p>
+
+<p>Why MongoDB? I needed to track the transformations, and experiment with different parameters while also fixing bugs and rerunning stuff. Because there is so much data and sometimes something crashes in the pipeline, I decided to save all intermediate results in a database in order to avoid repeating work.</p>
+
+<p>Finally, I used Scala to generate corpora for importing into <a href="http://www.sketchengine.co.uk/">The Sketch Engine</a> for our Farsi linguistics experts to analyze. Scala&rsquo;s parser combinator library came in very useful, and I represented each stage in the pipeline as a transformation of a custom AST designed to finally serialize well to the Sketch Engine &ldquo;vert&rdquo; file format.</p>
+
+<p>It was pretty important to work with ASTs, since we actually got text in a variety of formats, which I parsed to a common AST in order to push into the pipeline.</p>
+
+<p>Whew!</p>
+
+<h3>(Update of 2014-06-10)</h3>
+
+<p>A description of some of this <a href="http://springfield.metaphor.cs.cmu.edu:8080/MetaphorViz/About.html">METAL project</a> work is in the paper <a href="http://www.lrec-conf.org/proceedings/lrec2014/pdf/596_Paper.pdf">&ldquo;The CMU METAL Farsi NLP Approach&rdquo;</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-02T22:17:42-04:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/bakery-square/'>Bakery Square</a>, <a class='category' href='/blog/categories/c-plus-plus/'>C++</a>, <a class='category' href='/blog/categories/carnegie-mellon-university/'>Carnegie Mellon University</a>, <a class='category' href='/blog/categories/farsi/'>Farsi</a>, <a class='category' href='/blog/categories/metal-project/'>METAL project</a>, <a class='category' href='/blog/categories/mongodb/'>MongoDB</a>, <a class='category' href='/blog/categories/nlp/'>NLP</a>, <a class='category' href='/blog/categories/perl/'>Perl</a>, <a class='category' href='/blog/categories/pittsburgh/'>Pittsburgh</a>, <a class='category' href='/blog/categories/python/'>Python</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>, <a class='category' href='/blog/categories/scala/'>Scala</a>, <a class='category' href='/blog/categories/concurrency/'>concurrency</a>, <a class='category' href='/blog/categories/parallelism/'>parallelism</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt/" title="Previous Post: Pittsburgh Node Meetup: Optimizing development workflow with Grunt">&laquo; Pittsburgh Node Meetup: Optimizing development workflow with Grunt</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond/" title="Next Post: Pittsburgh Java User Group: Java EE 7, 8, and beyond; or done?">Pittsburgh Java User Group: Java EE 7, 8, and beyond; or done? &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/27/tostring-considered-harmful-part-3/">toString Considered Harmful, Part 3</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/26/tostring-considered-harmful-part-2/">toString Considered Harmful, Part 2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/23/tostring-considered-harmful-part-1/">toString Considered Harmful, Part 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/04/mongodb-free-online-course-a-review/">MongoDB Free Online Course: A Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/">Surprised by the Go Programming Language's Treatment of Nil</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'FranklinChen',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+FranklinChen?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - <a href="http://franklinchen.com/">Franklin Chen</a> -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'franklinchen';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/';
+        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

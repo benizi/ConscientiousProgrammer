@@ -4,7 +4,7 @@
   <title><![CDATA[The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-12-24T18:46:09-05:00</updated>
+  <updated>2014-06-10T23:30:45-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,335 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[toString Considered Harmful, Part 3]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3/"/>
+    <updated>2013-12-27T22:03:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3</id>
+    <content type="html"><![CDATA[<p>This is part 3 of a series of articles, &ldquo;<code>toString</code> considered harmful&rdquo;.</p>
+
+<!--more-->
+
+
+<h2>Languages without the <code>toString</code> problem</h2>
+
+<p>There actually are quite a few languages that don&rsquo;t have the <code>toString</code> problem, or at least have it to a lesser degree.</p>
+
+<h3>C</h3>
+
+<p>There is no friendly generic conversion to a string (uh, really just a pointer to a null-terminated chunk of <code>char</code>) in C. The closest thing is using the type-unsafe <code>printf</code> family of functions, but you have to do almost all the work if you have some complicated <code>struct</code> and want to turn it into a C string.</p>
+
+<h3>C++</h3>
+
+<p>C++ introduced iostreams, where f you follow certain conventions and overload <code>operator&lt;&lt;</code> for every domain class of interest, you can build up decent looking strings, without using inheritance.</p>
+
+<p>Or you could do the object-oriented thing and set up a hierarchy with a <code>ToString</code> abstract base class. But C++ does not come with everything already inheriting from an <code>Object</code>.</p>
+
+<h3>Haskell</h3>
+
+<p>Haskell does not force a <code>toString</code> on everything, but provides a <a href="http://www.haskell.org/tutorial/stdclasses.html"><code>Show</code> type class</a> for convenience in the standard prelude. It is easy (and convenient for debugging) to just tack on <code>deriving Show</code> and then call <code>show</code> to convert stuff to a string. This means that one can get lazy and fall into the same design traps as mentioned in the very first code example above. Again, the solution is to refuse to abuse <code>show</code>, and to use a different name instead for converting something to a string for a particular purpose.</p>
+
+<h3>Go</h3>
+
+<p>Go was invented at Google as a modernized C. It does not have classes, but does have <a href="http://research.swtch.com/interfaces">dynamic interfaces</a>. All that is required for a user-defined type to satisfy an interface is to implement the method <code>String()</code> returning a <code>string</code>. Basically, this makes the type implement the interface <a href="http://golang.org/pkg/fmt/#Stringer">fmt.Stringer</a>. Again, if you don&rsquo;t implement <code>String() string</code> for your type, then you will get a compile-time error when trying to treat it as a string.</p>
+
+<p>Superficially, this sounds like Haskell type classes, but it&rsquo;s much more limited, because Go does not have generics and Go is only single dispatch. Go&rsquo;s interfaces really implement a kind of structural subtyping.</p>
+
+<h3>Standard ML</h3>
+
+<p><a href="http://www.standardml.org/">Standard ML</a> does not have the <code>toString</code> problem. It does, by convention, supply a <code>toString</code> function in many modules in the <a href="http://www.standardml.org/Basis/">Standard ML Basis Library</a>, such as <a href="http://www.standardml.org/Basis/integer.html">Int</a> and <a href="http://www.standardml.org/Basis/real.html">Real</a> and <a href="http://www.standardml.org/Basis/bool.html">Bool</a>, but these are just conventions and do not participate in any kind of unified conversion to string. If you want to convert anything besides a primitive type to a string, you have to write the conversion function yourself.</p>
+
+<p>Furthermore, Standard ML, as a rather opinionated and <a href="http://mitpress.mit.edu/books/definition-standard-ml">&ldquo;purist&rdquo; language</a>, designed specifically for static simplicity, semantic minimalism, and <a href="http://mlton.org/">runtime efficiency</a>, does not believe in type classes, so there is no way to write a function that at runtime is generic over what can be turned into a string.</p>
+
+<p>The best you can do is write something that is functorized, but then you have to apply it in a statically known context:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='sml'><span class='line'><span class="kr">signature</span> <span class="nn">TO_STRING</span> <span class="p">=</span>
+</span><span class='line'>  <span class="kr">sig</span>
+</span><span class='line'>    <span class="kr">type</span> <span class="kt">t</span>
+</span><span class='line'>    <span class="kr">val</span> <span class="nv">toString</span> <span class="p">:</span> <span class="n">t</span> <span class="p">-&gt;</span> <span class="n">string</span>
+</span><span class='line'>  <span class="kr">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">functor</span> <span class="nn">DoStuff</span><span class="p">(</span><span class="n">ToString</span> <span class="p">:</span> <span class="n">TO_STRING</span><span class="p">)</span> <span class="p">=</span>
+</span><span class='line'>  <span class="kr">struct</span>
+</span><span class='line'>    <span class="kr">fun</span> <span class="nf">doubleString</span> <span class="p">(</span><span class="n">stuff</span><span class="p">:</span> <span class="nn">ToString</span><span class="p">.</span><span class="n">t</span><span class="p">)</span> <span class="p">=</span>
+</span><span class='line'>      <span class="kr">let</span>
+</span><span class='line'>        <span class="kr">val</span> <span class="nv">s</span> <span class="p">=</span> <span class="nn">ToString</span><span class="p">.</span><span class="n">toString</span> <span class="n">stuff</span>
+</span><span class='line'>      <span class="kr">in</span>
+</span><span class='line'>        <span class="n">s</span> <span class="n">^</span> <span class="n">s</span>
+</span><span class='line'>      <span class="kr">end</span>
+</span><span class='line'>  <span class="kr">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">structure</span> <span class="nn">MyStuff</span> <span class="p">:</span> <span class="n">TO_STRING</span> <span class="p">=</span>
+</span><span class='line'>  <span class="kr">struct</span>
+</span><span class='line'>    <span class="kr">type</span> <span class="kt">t</span> <span class="p">=</span> <span class="n">int</span> <span class="n">*</span> <span class="n">bool</span>
+</span><span class='line'>    <span class="kr">fun</span> <span class="nf">toString</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="p">=</span>
+</span><span class='line'>      <span class="s2">&quot;(&quot;</span> <span class="n">^</span> <span class="nn">Int</span><span class="p">.</span><span class="n">toString</span> <span class="n">i</span> <span class="n">^</span> <span class="s2">&quot;, &quot;</span> <span class="n">^</span> <span class="nn">Bool</span><span class="p">.</span><span class="n">toString</span> <span class="n">b</span> <span class="n">^</span> <span class="s2">&quot;)&quot;</span>
+</span><span class='line'>  <span class="kr">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">structure</span> <span class="nn">DoMyStuff</span> <span class="p">=</span> <span class="n">DoStuff</span><span class="p">(</span><span class="n">MyStuff</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sml'><span class='line'><span class="nn">DoMyStuff</span><span class="p">.</span><span class="n">doubleString</span> <span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="n">true</span><span class="p">)</span>
+</span><span class='line'><span class="cm">(* result is the string &quot;(42, true)(42, true)&quot; *)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since the Standard ML ecosystem is so minimalist, it&rsquo;s hard to fall into the <code>toString</code> trap, because you would have to set it all up yourself.</p>
+
+<h3>OCaml</h3>
+
+<p>OCaml, like Standard ML, does not provide a generic <code>toString</code> out of the box, but the OCaml ecosystem is much more practically oriented.</p>
+
+<p>There is a <a href="http://en.wikipedia.org/wiki/Camlp4">pre-processor for OCaml</a> that can be used to generate convenient printers for types, <a href="https://github.com/ocsigen/deriving"><code>deriving</code></a>. There is also an S-expression based generator, <a href="http://realworldocaml.org/v1/en/html/data-serialization-with-s-expressions.html">Sexplib</a>. But these are mechanically generated, rather than part of something generic at runtime.</p>
+
+<p>Of course, one could also use the <a href="http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html">object-oriented part of OCaml</a> to make a generic &ldquo;to string&rdquo; hierarchy starting with a suitable interface:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ocaml'><span class='line'><span class="k">class</span> <span class="k">type</span> <span class="n">convert_to_string</span> <span class="o">=</span>
+</span><span class='line'>  <span class="k">object</span>
+</span><span class='line'>    <span class="k">method</span> <span class="n">to_string</span> <span class="o">:</span> <span class="kt">string</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But I don&rsquo;t actually know many people who use the object-oriented features of OCaml!</p>
+
+<h2>Conclusion</h2>
+
+<p>An annoying bug I temporarily created in my code led me to take stock of the state of <code>toString</code> design choices in various programming languages, and also consider how we can better escape fragility in our code, independent of whatever language we are using.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[toString Considered Harmful, Part 2]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/"/>
+    <updated>2013-12-26T22:03:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2</id>
+    <content type="html"><![CDATA[<p>This is part 2 of a series of articles, &ldquo;<code>toString</code> considered harmful&rdquo;. [Part 1] introduced the problem in the context of a common design flaw present in object-oriented languages, and proposed a simple workaround.</p>
+
+<p>In part 2, we look at advanced ways to organize &ldquo;stringable&rdquo; data, using either an object-oriented or functional style. Examples are in Scala because it equally supports either style.</p>
+
+<!--more-->
+
+
+<h2>Object-oriented vs. functional</h2>
+
+<p>The fix presented was in <em>object-oriented</em> style, adding a method <code>toUrlString</code> to a class. The other solution is the <em>functional</em> style, leaving the <code>Id</code> class alone, and writing an external function instead:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">toUrlString</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Id</span><span class="o">)</span> <span class="k">=</span> <span class="n">id</span><span class="o">.</span><span class="n">toString</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">id</span> <span class="k">match</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;No id found!&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">getUrl</span><span class="o">(</span><span class="n">makeUrl</span><span class="o">(</span><span class="n">toUrlString</span><span class="o">(</span><span class="n">n</span><span class="o">)))</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are advantages and disadvantages to either solution.</p>
+
+<h2>More advanced OO</h2>
+
+<p>It would be very natural, given a whole set of domain classes in addition to <code>Id</code>, to want all of them to have a <code>toUrlString</code>. Then the natural thing to do is to create a mini-universe (parallel to the <code>toString</code> universe) by creating a hierarchy:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">trait</span> <span class="nc">UrlString</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">def</span> <span class="n">toUrlString</span><span class="k">:</span> <span class="kt">String</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">UrlString</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">override</span> <span class="k">def</span> <span class="n">toUrlString</span> <span class="k">=</span> <span class="n">id</span><span class="o">.</span><span class="n">toString</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="err">...</span><span class="o">(...)</span> <span class="k">extends</span> <span class="nc">UrlString</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">override</span> <span class="k">def</span> <span class="n">toUrlString</span> <span class="k">=</span> <span class="o">...</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Advanced string interpolation with OO</h2>
+
+<p>In fact, Scala and other languages with advanced string interpolation facilities allow yet another refactoring by making sure that what gets into a URL isn&rsquo;t just an arbitrary string in the first place!</p>
+
+<p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">implicit</span> <span class="k">class</span> <span class="nc">UrlHelper</span><span class="o">(</span><span class="k">val</span> <span class="n">sc</span><span class="k">:</span> <span class="kt">StringContext</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">AnyVal</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">def</span> <span class="n">url</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">UrlString*</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">val</span> <span class="n">strings</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">iterator</span>
+</span><span class='line'>      <span class="k">val</span> <span class="n">expressions</span> <span class="k">=</span> <span class="n">args</span><span class="o">.</span><span class="n">iterator</span>
+</span><span class='line'>      <span class="k">val</span> <span class="n">buf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">StringBuffer</span><span class="o">(</span><span class="n">strings</span><span class="o">.</span><span class="n">next</span><span class="o">)</span>
+</span><span class='line'>      <span class="k">while</span> <span class="o">(</span><span class="n">strings</span><span class="o">.</span><span class="n">hasNext</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">buf</span> <span class="n">append</span> <span class="n">expressions</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">toUrlString</span>
+</span><span class='line'>        <span class="n">buf</span> <span class="n">append</span> <span class="n">strings</span><span class="o">.</span><span class="n">next</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="n">buf</span><span class="o">.</span><span class="n">toString</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/** Only ever use UrlString to create a URL. */</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">makeUrl</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">UrlString</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">url</span><span class="s">&quot;http://service.com?id=$id&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>with</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">id</span> <span class="k">match</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;No id found!&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">getUrl</span><span class="o">(</span><span class="n">makeUrl</span><span class="o">(</span><span class="n">n</span><span class="o">))</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This may or may not be overengineering.</p>
+
+<h2>Advanced string interpolation with FP</h2>
+
+<p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="c1">// A type class</span>
+</span><span class='line'>  <span class="k">trait</span> <span class="nc">UrlString</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">def</span> <span class="n">toUrlString</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Wrapper class</span>
+</span><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Implement the type class UrlString for Id</span>
+</span><span class='line'>  <span class="k">implicit</span> <span class="k">object</span> <span class="nc">IdToUrlString</span> <span class="k">extends</span> <span class="nc">UrlString</span><span class="o">[</span><span class="kt">Id</span><span class="o">]</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">override</span> <span class="k">def</span> <span class="n">toUrlString</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Id</span><span class="o">)</span> <span class="k">=</span> <span class="n">a</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">toString</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">implicit</span> <span class="k">class</span> <span class="nc">UrlHelper</span><span class="o">(</span><span class="k">val</span> <span class="n">sc</span><span class="k">:</span> <span class="kt">StringContext</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">AnyVal</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">def</span> <span class="n">url</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">UrlString</span><span class="o">](</span><span class="n">args</span><span class="k">:</span> <span class="kt">A*</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">val</span> <span class="n">strings</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">iterator</span>
+</span><span class='line'>      <span class="k">val</span> <span class="n">expressions</span> <span class="k">=</span> <span class="n">args</span><span class="o">.</span><span class="n">iterator</span>
+</span><span class='line'>      <span class="k">val</span> <span class="n">buf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">StringBuffer</span><span class="o">(</span><span class="n">strings</span><span class="o">.</span><span class="n">next</span><span class="o">)</span>
+</span><span class='line'>      <span class="k">while</span> <span class="o">(</span><span class="n">strings</span><span class="o">.</span><span class="n">hasNext</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">buf</span> <span class="n">append</span> <span class="n">implicitly</span><span class="o">[</span><span class="kt">UrlString</span><span class="o">[</span><span class="kt">A</span><span class="o">]].</span><span class="n">toUrlString</span><span class="o">(</span><span class="n">expressions</span><span class="o">.</span><span class="n">next</span><span class="o">)</span>
+</span><span class='line'>        <span class="n">buf</span> <span class="n">append</span> <span class="n">strings</span><span class="o">.</span><span class="n">next</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="n">buf</span><span class="o">.</span><span class="n">toString</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/** Anything &quot;viewable&quot; as UrlString can be used to create a URL. */</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">makeUrl</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">UrlString</span><span class="o">](</span><span class="n">id</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">url</span><span class="s">&quot;http://service.com?id=$id&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>The final string gotcha</h2>
+
+<p>You may have noticed that there is still primitive obsession in this sample code: URLs are presented as <code>String</code> for simplicity. In real life, I use builders such as <code>URIBuilder</code> and <code>HttpGet</code> (Java <a href="http://hc.apache.org/">Apache HttpComponents</a>) or more sophisticated Scala-specific libraries such as <a href="http://spray.io/">Spray</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>I thought it would useful to compare an object-oriented and a functional approach to unifying data that share a domain-consistent notion of conversion to a string. Scala is a language that allows easy expression of both.</p>
+
+<p>In part 3, we will look at languages that just don&rsquo;t have the <code>toString</code> problem at all.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[toString Considered Harmful, Part 1]]></title>
@@ -332,6 +661,60 @@
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[MongoDB Free Online Course: A Review]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/"/>
+    <updated>2013-12-04T22:03:55-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review</id>
+    <content type="html"><![CDATA[<p><img src="http://www.mongodb.com/sites/all/themes/bonsai/logo.png" title="MongoDB logo" ></p>
+
+<p>I finally finished a two-month <a href="http://education.mongodb.com/">free online course on MongoDB</a>, given by <a href="http://www.mongodb.com/">MongoDB, Inc</a>.</p>
+
+<p>This is a review of the specific course numbered M101J, &ldquo;MongoDB for Java Developers&rdquo;, but it should apply to all thee introductory developer courses on MongoDB in any language, because actually, I had originally signed up months earlier for their original course (in JavaScript), and the content is largely the same (I had gotten busy and dropped that course).</p>
+
+<!--more-->
+
+
+<h2>Why learn MongoDB?</h2>
+
+<p>I had first heard of MongoDB over two years ago, at a meeting of the (now defunct) <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers/">original Pittsburgh JavaScript meetup group</a>, <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers/events/25229441/">&ldquo;In-depth look at Node.js and NoSQL&rdquo;</a>.</p>
+
+<p>MongoDB has become very popular; as far as I can tell, this is because of extreme marketing efforts, as well as the fact that it is very easy to get started doing stuff with it, being a document-oriented NoSQL database requiring no schema.</p>
+
+<p>I took this course in part to expose myself to some NoSQL technology and also in part because I anticipated needing to use something like it. In fact, it turns out <a href="http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/">I did use it</a>, heavily, in exactly the kind of use case that works fine with it.</p>
+
+<h2>Why did I take the Java version of the course?</h2>
+
+<p>I took the &ldquo;M101J: MongoDB for Java Developers&rdquo; version of the course because I anticipated writing code in Scala to access MongoDB. In fact, during the course, I ended up using the official Scala driver <a href="https://github.com/mongodb/casbah">Casbah</a> when possible.</p>
+
+<h2>Summary of the course</h2>
+
+<p>A lot of the course actually involved using the JavaScript-based MongoDB shell, which makes sense because it is easy to explore data that way. Since everything is JSON-like, there&rsquo;s no real escaping JavaScript if you&rsquo;re working with MongoDB.</p>
+
+<p>The video lecture/quiz/assignment format is fairly standard for MOOCs, and worked fairly well.</p>
+
+<p>The course was more work than I expected, because it lasted so long, two months.</p>
+
+<p>The ad hoc nature of MongoDB&rsquo;s API (including the Java-based one) tended to bother me throughout.</p>
+
+<p>The weird CRUD syntax, shoehorning everything into a JSON representation, took some getting used to.</p>
+
+<p>The way to specify indexes and to evaluate your guesses about whether they are actually working the way you expected was to look at funny values in JSON. I found this low-level and annoying.</p>
+
+<p>The aggregation API seemed even weirder. Overall, everything had a loose &ldquo;dynamic&rdquo; feel to it: this is the essence of MongoDB, really. Doing things wrong made me frustrated because of the runtime errors.</p>
+
+<p>Finally, the sections on replication and sharding were particularly problematic. The lectures kept mentioning that various defaults and APIs were a moving target. Furthermore, actual hardcoded numbers even showed up that we were supposed to use to specify policies. Wow.</p>
+
+<h2>Conclusion</h2>
+
+<p>The lectures and quizzes were well-designed (until the final portion of the course that seemed particularly ad hoc). The assignments were sometimes rather tricky, with not much of a hint, but offered a decent variety of realistic query formation.</p>
+
+<p>I would recommend this course as an overview to anyone who is committed to using MongoDB to its full extent.</p>
+
+<p>However, although I got my &ldquo;certificate&rdquo; for completing the course, and appreciate that MongoDB, Inc offers this training for free, I felt that there was a lot of ad hoc stuff going on in the evolving design of MongoDB, and embedded in the API design as well. For what I needed to know for my work, I didn&rsquo;t really need the whole course.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Surprised by the Go Programming Language's Treatment of Nil]]></title>
     <link href="http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/"/>
     <updated>2013-10-31T23:38:00-04:00</updated>
@@ -528,6 +911,128 @@
 <p>One thing I didn&rsquo;t get around to was setting up <a href="http://travis-ci.org/">Travis</a> continuous integration. I believe this should also be part of the story in getting up and running in a new programming language environment.</p>
 
 <p>So I did a Web search and figured out how to create a suitable <code>.travis.yml</code>. I committed and pushed to GitHub, flipped the switch in my Travis account, and you can see its <a href="https://travis-ci.org/FranklinChen/tau">passing status</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Java User Group: Java EE 7, 8, and Beyond; or Done?]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond/"/>
+    <updated>2013-08-13T22:18:11-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond</id>
+    <content type="html"><![CDATA[<p>The Pittsburgh Java User Group has not been meeting regularly for some time now. The <a href="http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">last meeting was almost two months ago</a>. I attended this one with the impression that it might well be my last attendance of the group, and even more, that it might be the end of the group altogether.</p>
+
+<p>The meeting did nothing to change my intuition.</p>
+
+<p><img src="http://ConscientiousProgrammer.com/images/pittjug-2013-08-13/group.jpg"></p>
+
+<!--more-->
+
+
+<h2>Presentation by Reza Rahman</h2>
+
+<p>Reza Rahman of Oracle, a &ldquo;Java EE/GlassFish Evangelist&rdquo; gave the presentation. His goal was to promote the new and exciting things coming up in Java EE, and try to get community feedback into what next.</p>
+
+<p>He gave a retrospective on how surprisingly long ago Java EE came on the scene, a decade ago, and described the evolution over the years to improve developer productivity.</p>
+
+<p><img src="http://ConscientiousProgrammer.com/images/pittjug-2013-08-13/speaker.jpg"></p>
+
+<p>Also it was good to see that the new APIs have improved since the old ones, including &ldquo;fluent&rdquo; APIs, the fact is that everything still seems clunky and &ldquo;old&rdquo;.</p>
+
+<p>Furthermore, the Java community is still stuck with old stuff. He bemoaned the fact that the old J2EE is still most widely used.</p>
+
+<p>And Java developers are still not keeping up to date with developments. He asked the audience how many had heard of WebSocket, and hardly anyone raised their hands. He asked who knew what &ldquo;hypermedia&rdquo; is, and nobody raised their hand. Wow.</p>
+
+<p>The presentation went very long, to two hours. Near the end, he said that they wanted to know what people wanted next, but nobody really responded. He asked, &ldquo;What do we need to do in the cloud?&rdquo;</p>
+
+<h2>Conclusion</h2>
+
+<p>My overall impression was that I was done attending more PittJUG meetings. In any case, the main organizers have long since moved on to other stuff besides Java anyway, and gotten busy, and it has been hard to find speakers. More generally, those who attend have not seemed very excited and proactive about asking for speakers or topics to be covered.</p>
+
+<p>I believe it&rsquo;s the end of an era. After all, I do not write any Java code any more, myself! I came to this talk about Java&rsquo;s future expecting it to be my last, and it did not disappoint.</p>
+
+<h2>(Update of 2014-06-10)</h2>
+
+<p>It&rsquo;s been almost a year since the last PittJUG meeting, as far as I know. So I think the group really is dead.</p>
+
+<p>There has been talk of expanding the group to not just be about Java, but anything JVM-related (such as other languages compiling to the JVM, e.g., Scala, Clojure, JRuby). Nothing seems to have happened of that.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Ruby/Python Social and Some Observations About Our Polyglot World]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/"/>
+    <updated>2013-08-02T22:17:42-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social</id>
+    <content type="html"><![CDATA[<p>Programming meetups aren&rsquo;t just about presentations and coding. Abby and I joined others in meeting up for dinner for a <a href="http://www.meetup.com/pittsburgh-ruby/events/120201652/">joint Pittsburgh Ruby and Pittsburgh Python social</a> and enjoyed relaxing and socializing outdoors in Bakery Square. Although it perpetually looked like it was going to rain, it turned out we weren&rsquo;t really rained on.</p>
+
+<!-- http://instagram.com/p/ch8quus4Kb/ -->
+
+
+<p><img src="http://distilleryimage11.ak.instagram.com/31a91496fbd111e2996722000a9f18fe_7.jpg" title="Dinner outside" ></p>
+
+<!-- https://secure.flickr.com/photos/carolnichols/9425969330/ -->
+
+
+
+
+<iframe src="https://www.flickr.com/photos/carolnichols/9425969330/player/" width="75" height="75" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>It was fitting that there was a joint social for two language communities, because we live in a polyglot world.</p>
+
+<p>Despite my original intention not to engage into any tech-related conversation, I couldn&rsquo;t help remarking on my current polyglot responsibilities at work at CMU on the METAL project!</p>
+
+<!--more-->
+
+
+<h2>Our polyglot world: Ruby, Python, Perl</h2>
+
+<p>I mentioned having to cobble together Ruby, Python, and Perl code recently in an NLP project to process Farsi text into corpora to analyze. We used a Ruby gem <a href="https://github.com/aziz/virastar">Virastar</a> in our pipeline, a Perl script for a Farsi stemmer, <a href="http://perstem.sourceforge.net/">Perstem</a>, and a <a href="https://github.com/wfeely/farsiNLPTools">Python script for normalization</a>.</p>
+
+<h3>(Update of 2013-12-04) C++, Scala, MongoDB</h3>
+
+<p>The work project ended up becoming even more polyglot than I expected.</p>
+
+<p>I also used a C++ tagger, TurboTagger from <a href="http://www.ark.cs.cmu.edu/TurboParser/">TurboParser</a>.</p>
+
+<p>I wrote Scala to execute and monitor the pipeline, because it turned out that component bugs and timeouts (from infinite loops sometimes) had to be dealt with: the original shell script pipelines did not handle any of that at all. Also, the vast amount of data meant that parallelizing was critical. The Scala ecosystem has  turned out great for me. I didn&rsquo;t use Akka actors for this task, just futures and parallel collections.</p>
+
+<p>I also used MongoDB because it is quite a natural fit for document-oriented storage and querying as an intermediate stage I can inspect before the final stage of conversion to Sketch Engine format. And I happened to just <a href="http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/">finish a free online MongoDB course</a> which has been useful. In my Scala code, I used the official Scala driver <a href="https://github.com/mongodb/casbah">Casbah</a>.</p>
+
+<p>Why MongoDB? I needed to track the transformations, and experiment with different parameters while also fixing bugs and rerunning stuff. Because there is so much data and sometimes something crashes in the pipeline, I decided to save all intermediate results in a database in order to avoid repeating work.</p>
+
+<p>Finally, I used Scala to generate corpora for importing into <a href="http://www.sketchengine.co.uk/">The Sketch Engine</a> for our Farsi linguistics experts to analyze. Scala&rsquo;s parser combinator library came in very useful, and I represented each stage in the pipeline as a transformation of a custom AST designed to finally serialize well to the Sketch Engine &ldquo;vert&rdquo; file format.</p>
+
+<p>It was pretty important to work with ASTs, since we actually got text in a variety of formats, which I parsed to a common AST in order to push into the pipeline.</p>
+
+<p>Whew!</p>
+
+<h3>(Update of 2014-06-10)</h3>
+
+<p>A description of some of this <a href="http://springfield.metaphor.cs.cmu.edu:8080/MetaphorViz/About.html">METAL project</a> work is in the paper <a href="http://www.lrec-conf.org/proceedings/lrec2014/pdf/596_Paper.pdf">&ldquo;The CMU METAL Farsi NLP Approach&rdquo;</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Node Meetup: Optimizing Development Workflow With Grunt]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt/"/>
+    <updated>2013-07-31T21:29:45-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt</id>
+    <content type="html"><![CDATA[<p>I am not a <a href="http://nodejs.org/">Node</a> developer. I&rsquo;ve only used Node to play around with JavaScript, not for any real work or personal projects (yet). The last time I used Node was two months ago, for a <a href="http://franklinchen.com/blog/2013/06/01/pittsburgh-tech-fest-2013-my-talk-stop-overusing-regular-expressions/">talk I gave at Pittsburgh TechFest 2013</a> in which I wrote JavaScript code running on Node, but did not actually talk about it, and only mentioned that I had written it and put it up on my <a href="https://github.com/franklinchen/talk-on-overusing-regular-expressions">GitHub repository for the talk</a>.</p>
+
+<p>That is why it took me so long to attend my first <a href="http://www.meetup.com/Pittsburgh-Node-js/">Pittsburgh Node</a> <a href="http://www.meetup.com/Pittsburgh-Node-js/events/128439692/">meeting</a>. I was simply curious who was involved in the local Node community and what tooling they were using. The meeting was about <a href="http://gruntjs.com/">Grunt</a>, a Make-like task runner. Nate Good of ShowClix presented.</p>
+
+<h2>Attendance</h2>
+
+<p>There was a fairly large group of people who attended: around thirty. Node seems to be popular in town.</p>
+
+<h2>The talk</h2>
+
+<p>Overall, Grunt seemed like Make or Rake. You can use plugins and define your own tasks. So there seemed nothing special about it, other than it is a useful tool corresponding to similar tools for other language ecosystems.</p>
+
+<h2>Conclusion</h2>
+
+<p>Since I don&rsquo;t really use Node, I went to the meetup out of curiosity more than anything else. I will probably not attend again. There seemed a lot of enthusiasm though.</p>
 ]]></content>
   </entry>
   

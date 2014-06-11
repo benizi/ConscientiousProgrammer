@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Scala | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2013-12-24T18:46:09-05:00</updated>
+  <updated>2014-06-10T23:30:45-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,279 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[toString considered harmful, part 3]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3/"/>
+    <updated>2013-12-27T22:03:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3</id>
+    <content type="html"><![CDATA[<p>This is part 3 of a series of articles, &ldquo;<code>toString</code> considered harmful&rdquo;.</p>
+
+<!--more-->
+
+
+<h2>Languages without the <code>toString</code> problem</h2>
+
+<p>There actually are quite a few languages that don&rsquo;t have the <code>toString</code> problem, or at least have it to a lesser degree.</p>
+
+<h3>C</h3>
+
+<p>There is no friendly generic conversion to a string (uh, really just a pointer to a null-terminated chunk of <code>char</code>) in C. The closest thing is using the type-unsafe <code>printf</code> family of functions, but you have to do almost all the work if you have some complicated <code>struct</code> and want to turn it into a C string.</p>
+
+<h3>C++</h3>
+
+<p>C++ introduced iostreams, where f you follow certain conventions and overload <code>operator&lt;&lt;</code> for every domain class of interest, you can build up decent looking strings, without using inheritance.</p>
+
+<p>Or you could do the object-oriented thing and set up a hierarchy with a <code>ToString</code> abstract base class. But C++ does not come with everything already inheriting from an <code>Object</code>.</p>
+
+<h3>Haskell</h3>
+
+<p>Haskell does not force a <code>toString</code> on everything, but provides a <a href="http://www.haskell.org/tutorial/stdclasses.html"><code>Show</code> type class</a> for convenience in the standard prelude. It is easy (and convenient for debugging) to just tack on <code>deriving Show</code> and then call <code>show</code> to convert stuff to a string. This means that one can get lazy and fall into the same design traps as mentioned in the very first code example above. Again, the solution is to refuse to abuse <code>show</code>, and to use a different name instead for converting something to a string for a particular purpose.</p>
+
+<h3>Go</h3>
+
+<p>Go was invented at Google as a modernized C. It does not have classes, but does have <a href="http://research.swtch.com/interfaces">dynamic interfaces</a>. All that is required for a user-defined type to satisfy an interface is to implement the method <code>String()</code> returning a <code>string</code>. Basically, this makes the type implement the interface <a href="http://golang.org/pkg/fmt/#Stringer">fmt.Stringer</a>. Again, if you don&rsquo;t implement <code>String() string</code> for your type, then you will get a compile-time error when trying to treat it as a string.</p>
+
+<p>Superficially, this sounds like Haskell type classes, but it&rsquo;s much more limited, because Go does not have generics and Go is only single dispatch. Go&rsquo;s interfaces really implement a kind of structural subtyping.</p>
+
+<h3>Standard ML</h3>
+
+<p><a href="http://www.standardml.org/">Standard ML</a> does not have the <code>toString</code> problem. It does, by convention, supply a <code>toString</code> function in many modules in the <a href="http://www.standardml.org/Basis/">Standard ML Basis Library</a>, such as <a href="http://www.standardml.org/Basis/integer.html">Int</a> and <a href="http://www.standardml.org/Basis/real.html">Real</a> and <a href="http://www.standardml.org/Basis/bool.html">Bool</a>, but these are just conventions and do not participate in any kind of unified conversion to string. If you want to convert anything besides a primitive type to a string, you have to write the conversion function yourself.</p>
+
+<p>Furthermore, Standard ML, as a rather opinionated and <a href="http://mitpress.mit.edu/books/definition-standard-ml">&ldquo;purist&rdquo; language</a>, designed specifically for static simplicity, semantic minimalism, and <a href="http://mlton.org/">runtime efficiency</a>, does not believe in type classes, so there is no way to write a function that at runtime is generic over what can be turned into a string.</p>
+
+<p>The best you can do is write something that is functorized, but then you have to apply it in a statically known context:</p>
+
+<p>```sml
+signature TO_STRING =
+  sig</p>
+
+<pre><code>type t
+val toString : t -&gt; string
+</code></pre>
+
+<p>  end</p>
+
+<p>functor DoStuff(ToString : TO_STRING) =
+  struct</p>
+
+<pre><code>fun doubleString (stuff: ToString.t) =
+  let
+    val s = ToString.toString stuff
+  in
+    s ^ s
+  end
+</code></pre>
+
+<p>  end</p>
+
+<p>structure MyStuff : TO_STRING =
+  struct</p>
+
+<pre><code>type t = int * bool
+fun toString (i, b) =
+  "(" ^ Int.toString i ^ ", " ^ Bool.toString b ^ ")"
+</code></pre>
+
+<p>  end</p>
+
+<p>structure DoMyStuff = DoStuff(MyStuff)
+```</p>
+
+<p>with</p>
+
+<p><code>sml
+DoMyStuff.doubleString (42, true)
+(* result is the string "(42, true)(42, true)" *)
+</code></p>
+
+<p>Since the Standard ML ecosystem is so minimalist, it&rsquo;s hard to fall into the <code>toString</code> trap, because you would have to set it all up yourself.</p>
+
+<h3>OCaml</h3>
+
+<p>OCaml, like Standard ML, does not provide a generic <code>toString</code> out of the box, but the OCaml ecosystem is much more practically oriented.</p>
+
+<p>There is a <a href="http://en.wikipedia.org/wiki/Camlp4">pre-processor for OCaml</a> that can be used to generate convenient printers for types, <a href="https://github.com/ocsigen/deriving"><code>deriving</code></a>. There is also an S-expression based generator, <a href="http://realworldocaml.org/v1/en/html/data-serialization-with-s-expressions.html">Sexplib</a>. But these are mechanically generated, rather than part of something generic at runtime.</p>
+
+<p>Of course, one could also use the <a href="http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html">object-oriented part of OCaml</a> to make a generic &ldquo;to string&rdquo; hierarchy starting with a suitable interface:</p>
+
+<p>```ocaml
+class type convert_to_string =
+  object</p>
+
+<pre><code>method to_string : string
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>But I don&rsquo;t actually know many people who use the object-oriented features of OCaml!</p>
+
+<h2>Conclusion</h2>
+
+<p>An annoying bug I temporarily created in my code led me to take stock of the state of <code>toString</code> design choices in various programming languages, and also consider how we can better escape fragility in our code, independent of whatever language we are using.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[toString considered harmful, part 2]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/"/>
+    <updated>2013-12-26T22:03:00-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2</id>
+    <content type="html"><![CDATA[<p>This is part 2 of a series of articles, &ldquo;<code>toString</code> considered harmful&rdquo;. [Part 1] introduced the problem in the context of a common design flaw present in object-oriented languages, and proposed a simple workaround.</p>
+
+<p>In part 2, we look at advanced ways to organize &ldquo;stringable&rdquo; data, using either an object-oriented or functional style. Examples are in Scala because it equally supports either style.</p>
+
+<!--more-->
+
+
+<h2>Object-oriented vs. functional</h2>
+
+<p>The fix presented was in <em>object-oriented</em> style, adding a method <code>toUrlString</code> to a class. The other solution is the <em>functional</em> style, leaving the <code>Id</code> class alone, and writing an external function instead:</p>
+
+<p>```scala
+  case class Id(id: Int)</p>
+
+<p>  def toUrlString(id: Id) = id.toString
+```</p>
+
+<p>with</p>
+
+<p>```scala</p>
+
+<pre><code>id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(toUrlString(n)))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>There are advantages and disadvantages to either solution.</p>
+
+<h2>More advanced OO</h2>
+
+<p>It would be very natural, given a whole set of domain classes in addition to <code>Id</code>, to want all of them to have a <code>toUrlString</code>. Then the natural thing to do is to create a mini-universe (parallel to the <code>toString</code> universe) by creating a hierarchy:</p>
+
+<p>```scala
+  trait UrlString {</p>
+
+<pre><code>def toUrlString: String
+</code></pre>
+
+<p>  }</p>
+
+<p>  case class Id(id: Int) extends UrlString {</p>
+
+<pre><code>override def toUrlString = id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  case class &hellip;(&hellip;) extends UrlString {</p>
+
+<pre><code>override def toUrlString = ...
+</code></pre>
+
+<p>  }
+```</p>
+
+<h2>Advanced string interpolation with OO</h2>
+
+<p>In fact, Scala and other languages with advanced string interpolation facilities allow yet another refactoring by making sure that what gets into a URL isn&rsquo;t just an arbitrary string in the first place!</p>
+
+<p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
+
+<p>```scala
+  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
+
+<pre><code>def url(args: UrlString*): String = {
+  val strings = sc.parts.iterator
+  val expressions = args.iterator
+  val buf = new StringBuffer(strings.next)
+  while (strings.hasNext) {
+    buf append expressions.next.toUrlString
+    buf append strings.next
+  }
+  buf.toString
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  /<em>* Only ever use UrlString to create a URL. </em>/
+  def makeUrl(id: UrlString): String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<p>with</p>
+
+<p>```scala</p>
+
+<pre><code>id match {
+  case None =&gt; println("No id found!")
+  case Some(n) =&gt; getUrl(makeUrl(n))
+}
+</code></pre>
+
+<p>```</p>
+
+<p>This may or may not be overengineering.</p>
+
+<h2>Advanced string interpolation with FP</h2>
+
+<p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
+
+<p>```scala
+  // A type class
+  trait UrlString[A] {</p>
+
+<pre><code>def toUrlString(a: A): String
+</code></pre>
+
+<p>  }</p>
+
+<p>  // Wrapper class
+  case class Id(id: Int)</p>
+
+<p>  // Implement the type class UrlString for Id
+  implicit object IdToUrlString extends UrlString[Id] {</p>
+
+<pre><code>override def toUrlString(a: Id) = a.id.toString
+</code></pre>
+
+<p>  }</p>
+
+<p>  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
+
+<pre><code>def url[A: UrlString](args: A*): String = {
+  val strings = sc.parts.iterator
+  val expressions = args.iterator
+  val buf = new StringBuffer(strings.next)
+  while (strings.hasNext) {
+    buf append implicitly[UrlString[A]].toUrlString(expressions.next)
+    buf append strings.next
+  }
+  buf.toString
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  /<em>* Anything &ldquo;viewable&rdquo; as UrlString can be used to create a URL. </em>/
+  def makeUrl<span id=" A">A: UrlString</span>: String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
+```</p>
+
+<h2>The final string gotcha</h2>
+
+<p>You may have noticed that there is still primitive obsession in this sample code: URLs are presented as <code>String</code> for simplicity. In real life, I use builders such as <code>URIBuilder</code> and <code>HttpGet</code> (Java <a href="http://hc.apache.org/">Apache HttpComponents</a>) or more sophisticated Scala-specific libraries such as <a href="http://spray.io/">Spray</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>I thought it would useful to compare an object-oriented and a functional approach to unifying data that share a domain-consistent notion of conversion to a string. Scala is a language that allows easy expression of both.</p>
+
+<p>In part 3, we will look at languages that just don&rsquo;t have the <code>toString</code> problem at all.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[toString considered harmful, part 1]]></title>
@@ -274,6 +547,60 @@ id match {
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[MongoDB free online course: a review]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/"/>
+    <updated>2013-12-04T22:03:55-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://www.mongodb.com/sites/all/themes/bonsai/logo.png">http://www.mongodb.com/sites/all/themes/bonsai/logo.png</a>" title="MongoDB logo" ></p>
+
+<p>I finally finished a two-month <a href="http://education.mongodb.com/">free online course on MongoDB</a>, given by <a href="http://www.mongodb.com/">MongoDB, Inc</a>.</p>
+
+<p>This is a review of the specific course numbered M101J, &ldquo;MongoDB for Java Developers&rdquo;, but it should apply to all thee introductory developer courses on MongoDB in any language, because actually, I had originally signed up months earlier for their original course (in JavaScript), and the content is largely the same (I had gotten busy and dropped that course).</p>
+
+<!--more-->
+
+
+<h2>Why learn MongoDB?</h2>
+
+<p>I had first heard of MongoDB over two years ago, at a meeting of the (now defunct) <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers/">original Pittsburgh JavaScript meetup group</a>, <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers/events/25229441/">&ldquo;In-depth look at Node.js and NoSQL&rdquo;</a>.</p>
+
+<p>MongoDB has become very popular; as far as I can tell, this is because of extreme marketing efforts, as well as the fact that it is very easy to get started doing stuff with it, being a document-oriented NoSQL database requiring no schema.</p>
+
+<p>I took this course in part to expose myself to some NoSQL technology and also in part because I anticipated needing to use something like it. In fact, it turns out <a href="/blog/2013/08/02/pittsburgh-ruby-python-social/">I did use it</a>, heavily, in exactly the kind of use case that works fine with it.</p>
+
+<h2>Why did I take the Java version of the course?</h2>
+
+<p>I took the &ldquo;M101J: MongoDB for Java Developers&rdquo; version of the course because I anticipated writing code in Scala to access MongoDB. In fact, during the course, I ended up using the official Scala driver <a href="https://github.com/mongodb/casbah">Casbah</a> when possible.</p>
+
+<h2>Summary of the course</h2>
+
+<p>A lot of the course actually involved using the JavaScript-based MongoDB shell, which makes sense because it is easy to explore data that way. Since everything is JSON-like, there&rsquo;s no real escaping JavaScript if you&rsquo;re working with MongoDB.</p>
+
+<p>The video lecture/quiz/assignment format is fairly standard for MOOCs, and worked fairly well.</p>
+
+<p>The course was more work than I expected, because it lasted so long, two months.</p>
+
+<p>The ad hoc nature of MongoDB&rsquo;s API (including the Java-based one) tended to bother me throughout.</p>
+
+<p>The weird CRUD syntax, shoehorning everything into a JSON representation, took some getting used to.</p>
+
+<p>The way to specify indexes and to evaluate your guesses about whether they are actually working the way you expected was to look at funny values in JSON. I found this low-level and annoying.</p>
+
+<p>The aggregation API seemed even weirder. Overall, everything had a loose &ldquo;dynamic&rdquo; feel to it: this is the essence of MongoDB, really. Doing things wrong made me frustrated because of the runtime errors.</p>
+
+<p>Finally, the sections on replication and sharding were particularly problematic. The lectures kept mentioning that various defaults and APIs were a moving target. Furthermore, actual hardcoded numbers even showed up that we were supposed to use to specify policies. Wow.</p>
+
+<h2>Conclusion</h2>
+
+<p>The lectures and quizzes were well-designed (until the final portion of the course that seemed particularly ad hoc). The assignments were sometimes rather tricky, with not much of a hint, but offered a decent variety of realistic query formation.</p>
+
+<p>I would recommend this course as an overview to anyone who is committed to using MongoDB to its full extent.</p>
+
+<p>However, although I got my &ldquo;certificate&rdquo; for completing the course, and appreciate that MongoDB, Inc offers this training for free, I felt that there was a lot of ad hoc stuff going on in the evolving design of MongoDB, and embedded in the API design as well. For what I needed to know for my work, I didn&rsquo;t really need the whole course.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[OpenHack Pittsburgh: learning Elixir test-driven and package-publishing]]></title>
     <link href="http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/"/>
     <updated>2013-08-26T22:09:00-04:00</updated>
@@ -418,436 +745,6 @@ id match {
 <p>One thing I didn&rsquo;t get around to was setting up <a href="http://travis-ci.org/">Travis</a> continuous integration. I believe this should also be part of the story in getting up and running in a new programming language environment.</p>
 
 <p>So I did a Web search and figured out how to create a suitable <code>.travis.yml</code>. I committed and pushed to GitHub, flipped the switch in my Travis account, and you can see its <a href="https://travis-ci.org/FranklinChen/tau">passing status</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh JavaScript meetup: functional programming]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"/>
-    <updated>2013-07-10T22:37:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a>" title="Pittsburgh JavaScript" ></p>
-
-<p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
-
-<p>I&rsquo;d met Richard earlier, a month ago at <a href="http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/">Pittsburgh TechFest</a>. He does not claim to be an expert at functional programming, but is enthusiastic about concepts and techniques that he can and does apply to improving software quality in many dimensions. Since I have been a functional programming enthusiast and practitioner for twenty years, I had these goals in attending his presentations:</p>
-
-<ul>
-<li>evaluate what Richard and others have done with, and think is important about,  functional programming</li>
-<li>offer a few corrections, elaborations, suggestions as appropriate for the situation</li>
-<li>gather information on how I may be able to effectively explain functional programming to those who are new to it</li>
-</ul>
-
-
-<!--more-->
-
-
-<h2>History of the Pittsbugh JavaScript meetup group</h2>
-
-<p>Two years ago, in 2011, I had attended the <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers">first incarnation of the group</a> faithfully, attending several months of meetings before it disbanded when the founder left Pittsburgh. I learned quite a bit from those meetings.</p>
-
-<p>Two years is a long time in the world of JavaScript. Looking back at <a href="http://franklinchen.com/blog/2011/09/27/when-jquery-attacks/">one of my blog posts reporting on the old JavaScript meetup group</a>, I am amused by how anachronistic that feels to me today, as in my mention of <a href="http://sproutcore.com/">Sproutcore</a>, which I never hear about any more.</p>
-
-<h2>Up front: my take on the secret of JavaScript</h2>
-
-<p>Here are some observations (not novel) I have about JavaScript, to set the stage for further discussion:</p>
-
-<ul>
-<li>JavaScript is full of horrible, disgusting Bad Parts.</li>
-<li>JavaScript has only one shiny Good Part: it has first-class functions.</li>
-<li>People manage to get a lot of amazingly cool and important stuff done using JavaScript, so take it seriously.</li>
-</ul>
-
-
-<h2>Comments on Richard&rsquo;s presentation</h2>
-
-<h3>Immutability and &ldquo;functional languages&rdquo;</h3>
-
-<p>Richard talked about <a href="http://en.wikipedia.org/wiki/Immutable_object">immutability</a> as being part of what &ldquo;functional programming&rdquo; is about.</p>
-
-<p>Yes, it is, and in addition, common best practices in many programming languages these days argue for favoring immutability. I want to emphasize that you don&rsquo;t have to go full-blown into a specialized &ldquo;functional language&rdquo; in order to take advantage of immutability as desired: for example, this tip has long since been known as at least a &ldquo;design pattern&rdquo; in the <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">Java world</a>, in the <a href="http://www.harukizaemon.com/blog/2010/03/01/functional-programming-in-object-oriented-languages/">Ruby world</a>, and basically everywhere else.</p>
-
-<p>Richard suggested that &ldquo;functional languages&rdquo; don&rsquo;t allow mutation. By my definition, this is <em>not</em> actually true.  I didn&rsquo;t raise an objection during the talk because I didn&rsquo;t want to sidetrack it, but here I have space to elaborate a little. I would argue (but that would have to be another blog post) that the cleanest, most intuitive and novice-accessible &ldquo;functional languages&rdquo;) are those in the <a href="http://en.wikipedia.org/wiki/ML_%28programming_language%29">ML</a> family originally developed in the 1970s and lives on today&rsquo;s popular, industrial-strength dialects of <a href="http://en.wikipedia.org/wiki/Standard_ML">Standard ML</a>, <a href="http://ocaml.org/">OCaml</a>, and <a href="http://fsharp.org/">F#</a>.</p>
-
-<p><em>ML fully supports mutation</em>, through <a href="http://en.wikibooks.org/wiki/Standard_ML_Programming/Types#References">reference cells</a>.</p>
-
-<p>Personally, because of notions like this, I&rsquo;ve been thinking that maybe it would be best if we all stopped using the term &ldquo;functional language&rdquo;, because it has sadly become misleading and ambiguous. In particular, people instantly think &ldquo;Haskell&rdquo; when they use the word &ldquo;functional language&rdquo;, when in fact Haskell is a very unusual, unique language (and ecosystem) among languages that one could call &ldquo;functional&rdquo;.</p>
-
-<h3>Expressions, functions, evaluation, and values</h3>
-
-<p>As Richard put it, &ldquo;favor expressions evaluating to a value&rdquo;. The focus of functional programming is on <em>returning</em> a value, from an expression that includes function calls, rather than munging some mutable global state, or modifying state through a reference passed into a function as a parameter.</p>
-
-<h3>Recursion vs. looping?</h3>
-
-<p>Richard noted that one characteristic of functional programming is the use of recursion instead of looping. He gave examples of writing tail-recursive functions.</p>
-
-<p>One nitpick (which again, I did not bring up during the talk): recursion and looping (as in through &ldquo;normal&rdquo; constructs such as <code>while</code> and <code>for</code>) are <em>not</em> actually opposed. I will write a blog post later about why conventional looping is best thought of as a derived construct built on top of recursion, and why it might be best to consider conventional looping to be a historical accident and mistake (but a very useful invention given the historical circumstances).</p>
-
-<h4>Efficiency of recursion?</h4>
-
-<p>Also, people brought up the topic of efficiency. I have learned over the years that for many people, the word &ldquo;recursion&rdquo; seems to immediately trigger the word &ldquo;efficiency&rdquo;. Richard did a great job in mentioning that <a href="http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls">EMCAScript 6 is going to have proper tail calls (also called tail call optimization)</a>, which will make tail recursion equivalent to ordinary looping in terms of space usage. This is <em>hugely important</em> news, of course. This mandate shows how serious JavaScript is about embracing functional programming.</p>
-
-<h4>Recursion for parallelism</h4>
-
-<p>But beyond the issue tail recursion, I felt I had to point out that recursive algorithms can offer actual <em>speedup</em>. The classic examples, of course, are the <a href="http://www.cs.cmu.edu/~scandal/nesl/alg-sequence.html#quicksort">parallel speedups of divide-and-conquer algorithms such as quicksort that use recursion</a>. If you expressed the algorithms by removing the recursion (with a hand-rolled stack as often taught in courses), you would destroy the inherent parallelism. So in the world of parallelism, you want your code to stay naturally recursive! As <a href="http://adambom.github.io/parallel.js/">parallel computing comes to JavaScript</a>, keep this in mind!</p>
-
-<h3>Higher-order functions, first-class functions</h3>
-
-<p>Richard: &ldquo;A function is an object&rdquo;.</p>
-
-<p>It&rsquo;s really as simple as that. Functions can be created, stored, passed around. Functions can return other functions.</p>
-
-<p>It&rsquo;s amazing, but I claim that this is JavaScript&rsquo;s one Good Part, its killer feature that surprisingly many languages don&rsquo;t have. And it&rsquo;s the one feature that is used <em>all the time</em>, not just in esoteric code. From the very beginning, JavaScript had first-class functions, to support callbacks for client code in Web browsers. and <a href="http://nodejs.org/">Node</a> server-side code is nothing if not a whole bunch of <code>function (...)</code>. Without closures and first-class functions, JavaScript would have been completely useless. Thank goodness <a href="http://brendaneich.com/2008/04/popularity/">Brendan Eich was inspired by the Scheme functional language</a>.</p>
-
-<h4>No methods!</h4>
-
-<p>JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented &ldquo;interference&rdquo; from the conventional class-based object-oriented world, which is mostly based not on functions, but on <a href="https://en.wikipedia.org/wiki/Method_%28computer_programming%29">methods</a> that interference with functions because they are meant to <em>replace</em> functions (since according to &ldquo;pure&rdquo; object-oriented thinking, functions are evil and computation should involve method calls on objects). <em>JavaScript does not (really) have methods</em>; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use <a href="http://emberjs.com">Ember</a>, the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of <code>function</code>s: <code>valueWillChange</code> and <code>valudDidChange</code> are just functions. They are not special things, &ldquo;methods&rdquo;.</p>
-
-<p>``` javascript
-App.PersonView = Ember.View.extend({
-  valueWillChange: function (obj, keyName, value) {</p>
-
-<pre><code>this.changingFrom = value;
-</code></pre>
-
-<p>  }.observesBefore(&lsquo;content.value&rsquo;),
-  valueDidChange: function(obj, keyName, value) {</p>
-
-<pre><code>  // only run if updating a value already in the DOM
-  if(this.get('state') === 'inDOM') {
-      var color = value &gt; this.changingFrom ? 'green' : 'red';
-      // logic
-  }
-</code></pre>
-
-<p>  }.observes(&lsquo;content.value&rsquo;)
-});
-```</p>
-
-<h3>Examples</h3>
-
-<p>Richard gave some standard examples of using higher-order functions such as <code>map</code> and <code>filter</code> and <code>foreach</code> as provided in various popular JavaScript libraries such as <a href="http://underscorejs.org/">Underscore</a>.</p>
-
-<p>As a matter of style, he recommended against long, obscure one-liners that involve chaining. I agree. For readability and testability of pipelines, I have found that it is good to break things up into intermediate steps. (Just <a href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">recently</a>, Tim Lesher also recommended against stupidity masking as excessive cleverness in his Python lightning talk about functional programming with <code>itertools</code>.)</p>
-
-<h3>Monads?!</h3>
-
-<p>Regrettably, Richard brought up the term <a href="http://en.wikipedia.org/wiki/Monad_%28functional_programming%29">&ldquo;monads&rdquo;</a>. I&rsquo;m close to thinking that this word should be <a href="http://fsharpforfunandprofit.com/posts/why-i-wont-be-writing-a-monad-tutorial/">banned</a>, because too many confusions about them have ruined the word. I have yet decided what the best alternative phrase might be. Maybe something like &ldquo;computational context&rdquo;?</p>
-
-<p>Ironically, Richard admitted he was going to abuse the word, and for the sake of example, he said, he was going to say that &ldquo;jQuery is a monad&rdquo;. I didn&rsquo;t want to derail his talk, and since he admitted the abuse, I decided there would be a better time to address this topic.</p>
-
-<p>It was interesting to me, however, that he gathered that the interesting thing about jQuery, and why he wanted to call it a monad, was the chaining of calls in jQuery. I need to think of a good way to deal with this intuition when I get around to explaining monads.</p>
-
-<h3>Partial application and currying</h3>
-
-<p>Richard explained both partial application and currying, then he wondered when one would in practice write a curried function.</p>
-
-<p>I said (but not very convincingly, I think) that you would write a curried function if you knew you would otherwise have to manually do a bunch of partial application. I have to confess that was a weak answer. I think the practical situation in JavaScript is that full-scale up-front currying is not useful.</p>
-
-<h3>Libraries</h3>
-
-<p>Richard recommended checking out the following libraries, especially Lo-Dash, which he judges to be faster than Underscore:</p>
-
-<ul>
-<li><a href="http://underscorejs.org/">Underscore</a></li>
-<li><a href="http://lodash.com/">Lo-Dash</a></li>
-<li><a href="http://osteele.com/sources/javascript/functional/">Functional JavaScript</a></li>
-</ul>
-
-
-<h2>Questions and answers</h2>
-
-<p>There were many interesting questions raised after the presentation.</p>
-
-<h3>Introducing functional programming into a team environment</h3>
-
-<p>Someone asked Richard a good question about whether it&rsquo;s appropriate to, say, start using Underscore at work and expecting other team members to learn how to use it. Is it fair to expect others to learn a new way of doing things that might seem weird?</p>
-
-<p>My point of view is that there&rsquo;s nothing specific about functional programming when it comes to questions like this. The same question comes up when evaluating a particular programming language or a particular MVC framework or a particular version control system, and the answer involve considering all the different realities of who is comfortable with what, whether it is worth learning something new, what the advantages and disadvantages are, how much the decision will affect delivery of business value.</p>
-
-<h3>Growing parameter list for a function vs. passing in a big object</h3>
-
-<p>One concern brought up is that if you&rsquo;re programming in a functional style, you can end up being faced with ever-growing parameter lists for a function to pass in everything that it needs. One solution is to create a big object to stick everything into it that might be needed (for example, a configuration object instead of separate flag parameters). Is this overkill?</p>
-
-<p>Also, <a href="http://tonylukasavage.com/">Tony Lukasavage</a> emphasized that his concern was in the context of the need to evolve an existing API without breaking customers' client code that uses it.</p>
-
-<p>My first note would be that API design is tricky and checking out <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">some resources on API design</a> is very helpful.</p>
-
-<p>Regarding parameter lists, Richard noted that you might have a design problem if you have a function that needs to know about so many things it depends on. You may want to refactor the function (of course, in the context of evolving a mature API that customers depend on, it may be too late, unfortunately) and the data structures passed in. For example, if you have a number of functions that all take as parameters a <code>firstName</code> and <code>lastName</code>, then maybe you want a single <code>name</code> parameter instead.</p>
-
-<p>I suggested also that if certain flags are not always needed, then instead of a huge configuration object, how about simply having separate but related functions (in a language supporting overloading, you could provide overloaded functions, although the topic of overloading is another large one to discuss later), each of which takes only the flags the client cares about. Of course, as some people pointed out, then you might end up with annoyingly long and specific function names.</p>
-
-<p>Nobody said designing an API is easy.</p>
-
-<h3>Do I actually do functional programming?</h3>
-
-<p>One question I got, since before the meetup, I had indicated having experience with functional programming, was basically, do I actually use it in JavaScript and elsewhere. The answer is, yes. As I&rsquo;ve mentioned, you don&rsquo;t have use a special language in order to program in this way, although it&rsquo;s much easier and more efficient to use a language that is tailored to support it. Most of the code I&rsquo;ve written in the past fifteen years has attempted to be primarily functional in style, whatever language I&rsquo;m using for work (mostly Java, Perl, Python, and recently Scala). I don&rsquo;t do this out of some kind of ideology, but because it works well in getting stuff done. Before adopting a primarily functional style of programming, I spent years working in traditional imperative and object-oriented styles, and empirically, that was less pleasant.</p>
-
-<h4>Do I do functional programming in JavaScript?</h4>
-
-<p>I have not actually done any JavaScript programming for work since doing some UI prototyping two years ago. I don&rsquo;t know when I&rsquo;ll return to doing front end work, but meanwhile, I am interested in doing some Web browser stuff for personal projects, so I try to keep up to date on developments in the JavaScript world.</p>
-
-<p>One thing that has been interesting that I need to check out is the rise of <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">functional reactive programming (FRP)</a> libraries for JavaScript, such as <a href="https://github.com/raimohanska/bacon.js">Bacon.js</a>. FRP was originally invented in the 1990s by Conal Elliott in the context of Haskell, but almost twenty years later, has finally spread well beyond that now to mainstream visibility and use. For example, Microsoft has thrown its weight behind <a href="http://rx.codeplex.com/">Reactive Extensions (Rx)</a>, which started out in the .NET world, but Microsoft then ported it to JavaScript, C/C++, Python, and Ruby.</p>
-
-<h2>Conclusion</h2>
-
-<p>I was happy to see interest in functional programming in the local JavaScript community. Richard gave an introductory talk on it that I thought was very useful as a starting point for those who are new to it. I made note of some omissions or inaccuracies in order to improve my thinking about how I can contribute in the future to improving people&rsquo;s understanding and application of functional programming principles.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why I hate calling myself "pragmatic" but do]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/"/>
-    <updated>2013-06-30T23:34:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do</id>
-    <content type="html"><![CDATA[<p>I wrote a <a href="http://franklinchen.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/">post on my personal blog about my being a &ldquo;pragmatist&rdquo;</a>.</p>
-
-<p>I mention it here because few words are as controversial, I think, in the programming community, as &ldquo;pragmatic&rdquo;. I wanted to be on record as identifying myself as &ldquo;pragmatic&rdquo; despite the negative connotations, because the entire mindset of this new programming blog is pragmatic.</p>
-
-<p>For example, I will soon write about the realities of programming language choice, including why I used Java, despite its deficiencies, for a decade, and why it is not going away, and why I currently am an advocate of <em>Scala, one of the most ambitiously pragmatic languages</em> to have come along in my lifetime.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[nil, non-determinism, exceptions: a journey in debugging the software that generates my blog]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/"/>
-    <updated>2013-06-29T18:15:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions</id>
-    <content type="html"><![CDATA[<p>I mentioned in my <a href="/blog/2013/06/24/introducing-this-new-programming-blog/">initial post for this blog</a> that I have had some problems with the software I use to generate my personal blog, <a href="http://octopress.org/">Octopress</a>, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.</p>
-
-<p>Here I report on how I figured out the problem and begin a conversation about the nature of error handling and API design.</p>
-
-<!--more-->
-
-
-<h2>A disclaimer</h2>
-
-<p>I want to emphasize that although I will be critiquing some code, I do not mean to imply that I am a perfect programmer or that this software is of really poor quality. I have written software in the past that has crapped out with <code>null</code> or <code>nil</code> errors. In addition, the fact that I basically trust and use this software to drive my blogs is a reflection of the fact that it mostly works. Almost all software that has been written, is being written now, and will be written in the future has bugs. Every day we all trust and use software that we know has bugs. And this blogging platform I use is the product of many, many volunteers who contribute to the world through open source through the goodness of their hearts. I happily use this software, warts and all, and am grateful to everyone who works to maintain and improve it!</p>
-
-<h2>Blog generation</h2>
-
-<p>The problem arose when I tried to generate <a href="http://franklinchen.com/">my personal blog</a>. I got a <a href="http://franklinchen.com/blog/2012/09/06/my-pittsburgh-ruby-talk-nil/"><code>nil</code></a> failure.</p>
-
-<p>Here&rsquo;s the error message (I have omitted the 46-line stack trace):</p>
-
-<p>``` console</p>
-
-<pre><code>  Generating... Liquid Exception: undefined method `sub' for nil:NilClass in atom.xml
-</code></pre>
-
-<p>```</p>
-
-<p>This is, unfortunately, an example of an error message that is next to useless, and should <em>never</em> appear. I have stated that <a href="/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/">we as programmers should not generate useless end user error messages</a>, and of course, in context, I am an end user of the blog generating software I use.</p>
-
-<h2>Debugging and finding the root cause</h2>
-
-<p>Thanks to all the Ruby libraries being open source and installed on my machine, by using the stack trace and <code>debugger</code>, I figured out the immediate cause of the stray <code>nil</code>.</p>
-
-<p>It turns out that Octopress uses Jekyll, which uses <a href="https://github.com/tmm1/pygments.rb">pygments.rb</a> to do HTML highlighting of code blocks. (I use Octopress precisely because of its built-in support for code block highlighting.)</p>
-
-<p>The bug is that the code in Jekyll that does syntax highlighting using Pygments makes an assumption that the return value of <code>Pygments.highlight()</code> is never <code>nil</code>:</p>
-
-<p>``` ruby</p>
-
-<pre><code>          @renderer ||= Class.new(Redcarpet::Render::HTML) do
-            def block_code(code, lang)
-              lang = lang &amp;&amp; lang.split.first || "text"
-              output = add_code_tags(
-                Pygments.highlight(code, :lexer =&gt; lang, :options =&gt; { :encoding =&gt; 'utf-8' }),
-                lang
-              )
-            end
-
-            def add_code_tags(code, lang)
-              code = code.sub(/&lt;pre&gt;/,'&lt;pre&gt;&lt;code class="' + lang + '"&gt;')
-              code = code.sub(/&lt;\/pre&gt;/,"&lt;/code&gt;&lt;/pre&gt;")
-            end
-          end
-</code></pre>
-
-<p>```</p>
-
-<p>Well, it <em>can</em> be <code>nil</code> and was for me, and therefore <code>add_code_tags</code> was calling <code>code.sub()</code> with <code>code</code> being <code>nil</code>.</p>
-
-<p>The bug exists in all the more recent versions of pygments.rb, including 0.4.2 (which is used for my personal blog) and 0.3.7 (which is used for this blog) and the latest released version, 0.5.1. The bug was actually reported by someone two weeks ago, and I added extra commentary, but <a href="https://github.com/tmm1/pygments.rb/issues/78">it has not yet been fixed</a>, so I plan to contribute a fix and submit a pull request.</p>
-
-<h2>Whose responsibility to check for <code>nil</code>?</h2>
-
-<p>Whenever there is an error, one has to ask whose responsibility it was to</p>
-
-<ul>
-<li>detect the error</li>
-<li>handle the error</li>
-</ul>
-
-
-<p>I think it is poor practice to engage in random and spotty &ldquo;defensive programming&rdquo; that checks for <code>nil</code> here and there, willy-nilly, just to avoid a big program crash. There should be clearly delineated boundaries of error handling.</p>
-
-<p>In this case, it is surprising that a syntax highlighter for some text could return <code>nil</code>. One would think that if a syntax highlighter got confused, it could return the text verbatim, for example, without any special formatting. (By the way, don&rsquo;t get me started on the abominable use of HTML string hacking in this code instead of, say, building a proper HTML AST; I&rsquo;ll write about that topic later.)</p>
-
-<h2>Documentation of API</h2>
-
-<p>Unfortunately, the documentation of the Pygments API was incomplete in <code>lib/pygments/popen.rb</code>, where <code>highlight</code> is defined:</p>
-
-<p>``` ruby</p>
-
-<pre><code># Public: Highlight code.
-#
-# Takes a first-position argument of the code to be highlighted, and a
-# second-position hash of various arguments specifiying highlighting properties.
-def highlight(code, opts={})
-  # If the caller didn't give us any code, we have nothing to do,
-  # so return right away.
-  return code if code.nil? || code.empty?
-
-  # Callers pass along options in the hash
-  opts[:options] ||= {}
-
-  # Default to utf-8 for the output encoding, if not given.
-  opts[:options][:outencoding] ||= 'utf-8'
-
-  # Get back the string from mentos and force encoding if we can
-  str = mentos(:highlight, nil, opts, code)
-  str.force_encoding(opts[:options][:outencoding]) if str.respond_to?(:force_encoding)
-  str
-end
-</code></pre>
-
-<p>```</p>
-
-<h2>A problem with dynamically typed language culture</h2>
-
-<p>The documentation doesn&rsquo;t actually fully specify what the arguments can be, and does not specify what the result should be either! This is a glaring drawback of most code that I have seen in dynamically typed languages such as Ruby. People don&rsquo;t document exactly what can come in or out. A newcomer to a code base (such as me in this situation) cannot just read off the types and know immediately what is going on and what has been promised and what is delivered by a function. As a result, the code reader has to play compiler and read a lot more code to try to figure out what is going on.</p>
-
-<p><em>In principle</em>, someone writing code in a dynamically typed language could provide very helpful comments that amount to informal type annotations, but in practice people do not. I have found in my two decades of programming that human psychology trumps theoretical possibility any day. If something is optional, people won&rsquo;t do it, unless there is a very strong de facto community standard. (It turns out, for example, that what I really admire about the Ruby community is that for some reason, there is a very strong de facto community standard of doing at least some <em>unit testing</em> as part of the whole development process. I find this sadly missing in some statically typed language communities.)</p>
-
-<p>In code in a statically typed language such as OCaml (or Haskell or Scala), I would expect to see:</p>
-
-<p><code>ocaml
-let highlight (code : string) (opts : my_map) : string = //...
-</code></p>
-
-<p>and expect that the return value should be a <code>String</code>, or</p>
-
-<p><code>ocaml
-let highlight (code : string) (opts : my_map) : string option = //...
-</code></p>
-
-<p>to indicate that the return value could be either <code>Some(formatted_code)</code> or <code>None</code>.</p>
-
-<h2><code>nil</code> all over the place</h2>
-
-<p>Reading the Ruby code, I saw that the situation is even more complex than I thought:</p>
-
-<p>``` ruby</p>
-
-<pre><code>  # If the caller didn't give us any code, we have nothing to do,
-  # so return right away.
-  return code if code.nil? || code.empty?
-</code></pre>
-
-<p>```</p>
-
-<p>Wow: <code>code</code> can be <code>nil</code>, in which case <code>nil</code> is returned.</p>
-
-<p><em>All code that can return <code>nil</code> should document this fact so that the caller knows what to do.</em> Ideally, the writer of pygments.rb should have documented this fact, and then the writer of Jekyll would in turn have added <code>nil</code> checking in its rendering code.</p>
-
-<p>Furthermore, it turns out that <code>mentos()</code> can return <code>nil</code> on a non-<code>nil</code> code string! This was a surprise to me.</p>
-
-<h2><code>nil</code> is not even the real problem here: non-determinism is</h2>
-
-<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
-
-<p>``` ruby</p>
-
-<pre><code># Our 'rpc'-ish request to mentos. Requires a method name, and then optional
-# args, kwargs, code.
-def mentos(method, args=[], kwargs={}, original_code=nil)
-  # Open the pipe if necessary
-  start unless alive?
-
-  begin
-    # Timeout requests that take too long.
-    timeout_time = 8
-
-    Timeout::timeout(timeout_time) do
-      # ...[I omitted some code]
-    end
-  rescue Timeout::Error
-    # If we timeout, we need to clear out the pipe and start over.
-    @log.error "[#{Time.now.iso8601}] Timeout on a mentos #{method} call"
-    stop "Timeout on mentos #{method} call."
-  end
-
-rescue Errno::EPIPE, EOFError
-stop "EPIPE"
-raise MentosError, "EPIPE"
-end
-</code></pre>
-
-<p>```</p>
-
-<p>It turns out that fundamental problem is not <code>nil</code> so much as <em>non-determinism</em>: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for <code>nil</code> to end up being returned. This non-determinism is worse than <code>nil</code>. I think that in a situation like this, an <em>exception</em> is called for. <code>highlight()</code> should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return <code>nil</code> (or if using a statically typed language, a <code>None</code>).</p>
-
-<p>I was also disappointed that logging was used in this code, indicating that it was known that bad things could happen, but the logged information was not used in generating a useful exception.</p>
-
-<p>Amusingly, upon discovering the logging code, I used it, setting the magic environment variable <code>MENTOS_LOG</code> (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:</p>
-
-<p>``` console</p>
-
-<h1>Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483</h1>
-
-<p>I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.
-I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:19-04:00] Out header: {&ldquo;method&rdquo;:&ldquo;highlight&rdquo;,&ldquo;args&rdquo;:null,&ldquo;kwargs&rdquo;:{&ldquo;lexer&rdquo;:&ldquo;console&rdquo;,&ldquo;options&rdquo;:{&ldquo;encoding&rdquo;:&ldquo;utf-8&rdquo;,&ldquo;outencoding&rdquo;:&ldquo;utf-8&rdquo;},&ldquo;fd&rdquo;:10,&ldquo;id&rdquo;:&ldquo;TVQSJNBV&rdquo;,&ldquo;bytes&rdquo;:147}}
-E, [2013-06-29 10:26 #13799] ERROR &mdash; : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call
-I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.
-I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting
-```</p>
-
-<h2>Testing</h2>
-
-<p>It turns out that there <em>is</em> a place where the intended behavior is in a sense documented: the unit tests in <code>test_pygments.rb</code>:</p>
-
-<p>``` ruby
-  def test_returns_nil_on_timeout</p>
-
-<pre><code>large_code = REDIS_CODE * 300
-code = P.highlight(large_code) # a 30 mb highlight request will timeout
-assert_equal nil, code
-</code></pre>
-
-<p>  end
-```</p>
-
-<p>The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be <code>nil</code>!</p>
-
-<p>OK, fair enough: assuming that the Jekyll authors knew of this intention, then it was Jekyll&rsquo;s responsibility to test for <code>nil</code> in the call to <code>Pygments.highlight()</code>.</p>
-
-<p>The test is not very satisfactory because it artificially tries to generate a timeout. Instead, one could do some mocking or refactoring of <code>mentos()</code>.</p>
-
-<h2><code>nil</code> is still not OK; but are exceptions OK?</h2>
-
-<p>So everything is OK, now that we can take <code>nil</code> to mean a timeout, right? No, actually, <code>highlight()</code> can still return a <code>nil</code> just because <code>code</code> was <code>nil</code>. It is bad to bin random different failure modes into one return value. Personally, I would choose to enforce that the input <code>code</code> is never <code>nil</code> and that the output is never <code>nil</code>, and that an exception is raised if there is a timeout.</p>
-
-<p>An alternative is to not use an exception, but use a union success/failure type instead. This is the route that <a href="http://blog.stackmob.com/2013/03/why-we-avoid-throwing-exceptions-at-stackmob/">StackMob uses for its Scala code</a>. Other Scala developers such as <a href="http://blog.jessitron.com/2013/06/whats-dirtier-than-comments-exceptions.html">Jessica Kerr have been arguing against the use of exceptions also</a>.</p>
-
-<p>Google&rsquo;s systems-level statically typed language <a href="http://golang.org/">Go</a> deliberately <a href="http://golang.org/doc/faq#exceptions">does not even have exceptions</a>, and therefore mandates a style of error handling that involves <a href="http://golang.org/doc/articles/error_handling.html">returning a success and failure everywhere</a>.</p>
-
-<p>I think there are situations for exceptions and situations for reifying errors as ordinary values in a success/failure object. I will explore this topic further in this blog. Note that even in the Haskell community, there is continued debate over how to handle errors; a famous post compares <a href="http://blog.ezyang.com/2011/08/8-ways-to-report-errors-in-haskell-revisited/">eight different ways to handle errors in Haskell</a>. There is no consensus because there are a lot of tradeoffs involved when it comes to error handling.</p>
-
-<h2>My fix</h2>
-
-<p>For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked <code>8</code> to <code>80</code> to avoid a timeout!</p>
-
-<h3>(Update of 2013-12-18)</h3>
-
-<p>The <code>pygments.rb</code> library <a href="https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999">has finally been updated with a <code>MENTOS_TIMEOUT</code> environment variable</a>.</p>
-
-<p>This is obviously a short-term hack, and I don&rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the <code>pygments.rb</code> team, I have no right to complain!</p>
-
-<h2>Conclusion</h2>
-
-<p>I&rsquo;ve used my recent frustration at being unable to publish my personal blog as a vehicle to begin a conversation about error handling and the issues of API design and documentation in the face of errors. I hope you enjoyed the ride.</p>
 ]]></content>
   </entry>
   

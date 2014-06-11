@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Bakery Square | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/bakery-square/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2014-06-10T23:30:45-04:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
+  <author>
+    <name><![CDATA[Franklin Chen]]></name>
+    <email><![CDATA[franklinchen@franklinchen.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Ruby/Python social and some observations about our polyglot world]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/"/>
+    <updated>2013-08-02T22:17:42-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social</id>
+    <content type="html"><![CDATA[<p>Programming meetups aren&rsquo;t just about presentations and coding. Abby and I joined others in meeting up for dinner for a <a href="http://www.meetup.com/pittsburgh-ruby/events/120201652/">joint Pittsburgh Ruby and Pittsburgh Python social</a> and enjoyed relaxing and socializing outdoors in Bakery Square. Although it perpetually looked like it was going to rain, it turned out we weren&rsquo;t really rained on.</p>
+
+<!-- http://instagram.com/p/ch8quus4Kb/ -->
+
+
+<p><img class="<a" src="href="http://distilleryimage11.ak.instagram.com/31a91496fbd111e2996722000a9f18fe_7.jpg">http://distilleryimage11.ak.instagram.com/31a91496fbd111e2996722000a9f18fe_7.jpg</a>" title="Dinner outside" ></p>
+
+<!-- https://secure.flickr.com/photos/carolnichols/9425969330/ -->
+
+
+
+
+<iframe src="https://www.flickr.com/photos/carolnichols/9425969330/player/" width="75" height="75" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+
+
+<p>It was fitting that there was a joint social for two language communities, because we live in a polyglot world.</p>
+
+<p>Despite my original intention not to engage into any tech-related conversation, I couldn&rsquo;t help remarking on my current polyglot responsibilities at work at CMU on the METAL project!</p>
+
+<!--more-->
+
+
+<h2>Our polyglot world: Ruby, Python, Perl</h2>
+
+<p>I mentioned having to cobble together Ruby, Python, and Perl code recently in an NLP project to process Farsi text into corpora to analyze. We used a Ruby gem <a href="https://github.com/aziz/virastar">Virastar</a> in our pipeline, a Perl script for a Farsi stemmer, <a href="http://perstem.sourceforge.net/">Perstem</a>, and a <a href="https://github.com/wfeely/farsiNLPTools">Python script for normalization</a>.</p>
+
+<h3>(Update of 2013-12-04) C++, Scala, MongoDB</h3>
+
+<p>The work project ended up becoming even more polyglot than I expected.</p>
+
+<p>I also used a C++ tagger, TurboTagger from <a href="http://www.ark.cs.cmu.edu/TurboParser/">TurboParser</a>.</p>
+
+<p>I wrote Scala to execute and monitor the pipeline, because it turned out that component bugs and timeouts (from infinite loops sometimes) had to be dealt with: the original shell script pipelines did not handle any of that at all. Also, the vast amount of data meant that parallelizing was critical. The Scala ecosystem has  turned out great for me. I didn&rsquo;t use Akka actors for this task, just futures and parallel collections.</p>
+
+<p>I also used MongoDB because it is quite a natural fit for document-oriented storage and querying as an intermediate stage I can inspect before the final stage of conversion to Sketch Engine format. And I happened to just <a href="/blog/2013/12/04/mongodb-free-online-course-a-review/">finish a free online MongoDB course</a> which has been useful. In my Scala code, I used the official Scala driver <a href="https://github.com/mongodb/casbah">Casbah</a>.</p>
+
+<p>Why MongoDB? I needed to track the transformations, and experiment with different parameters while also fixing bugs and rerunning stuff. Because there is so much data and sometimes something crashes in the pipeline, I decided to save all intermediate results in a database in order to avoid repeating work.</p>
+
+<p>Finally, I used Scala to generate corpora for importing into <a href="http://www.sketchengine.co.uk/">The Sketch Engine</a> for our Farsi linguistics experts to analyze. Scala&rsquo;s parser combinator library came in very useful, and I represented each stage in the pipeline as a transformation of a custom AST designed to finally serialize well to the Sketch Engine &ldquo;vert&rdquo; file format.</p>
+
+<p>It was pretty important to work with ASTs, since we actually got text in a variety of formats, which I parsed to a common AST in order to push into the pipeline.</p>
+
+<p>Whew!</p>
+
+<h3>(Update of 2014-06-10)</h3>
+
+<p>A description of some of this <a href="http://springfield.metaphor.cs.cmu.edu:8080/MetaphorViz/About.html">METAL project</a> work is in the paper <a href="http://www.lrec-conf.org/proceedings/lrec2014/pdf/596_Paper.pdf">&ldquo;The CMU METAL Farsi NLP Approach&rdquo;</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

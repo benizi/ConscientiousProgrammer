@@ -4,82 +4,118 @@
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/
         </loc>
-        <lastmod>2013-08-14T17:37:16-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/
         </loc>
-        <lastmod>2013-08-14T17:37:16-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/
         </loc>
-        <lastmod>2013-08-14T17:37:16-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/
         </loc>
-        <lastmod>2013-08-14T17:37:16-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/
         </loc>
-        <lastmod>2013-12-24T12:25:45-05:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/
         </loc>
-        <lastmod>2013-08-14T17:37:16-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/
         </loc>
-        <lastmod>2013-08-14T17:37:16-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/
         </loc>
-        <lastmod>2013-10-14T15:22:49-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://ConscientiousProgrammer.com/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt/
+        </loc>
+        <lastmod>2014-06-10T21:44:58-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/
+        </loc>
+        <lastmod>2014-06-10T22:50:12-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://ConscientiousProgrammer.com/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond/
+        </loc>
+        <lastmod>2014-06-10T22:10:33-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/
         </loc>
-        <lastmod>2013-11-01T13:59:48-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/
         </loc>
-        <lastmod>2013-11-01T13:55:31-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/
+        </loc>
+        <lastmod>2014-06-10T23:09:41-04:00</lastmod>
     </url>
     <url>
         <loc>
             http://ConscientiousProgrammer.com/blog/2013/12/23/tostring-considered-harmful-part-1/
         </loc>
-        <lastmod>2013-12-24T18:45:25-05:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/
+        </loc>
+        <lastmod>2014-06-10T22:24:04-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://ConscientiousProgrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3/
+        </loc>
+        <lastmod>2014-06-10T22:18:44-04:00</lastmod>
     </url>
     <url>
         <loc>http://ConscientiousProgrammer.com/about/</loc>
-        <lastmod>2013-11-01T13:55:31-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
     </url>
     <url>
         <loc>http://ConscientiousProgrammer.com/blog/archives/</loc>
-        <lastmod>2013-12-24T18:45:25-05:00</lastmod>
+        <lastmod>2014-06-10T23:09:41-04:00</lastmod>
     </url>
     <url>
         <loc>http://ConscientiousProgrammer.com/</loc>
-        <lastmod>2013-12-24T18:45:25-05:00</lastmod>
+        <lastmod>2014-06-10T23:09:41-04:00</lastmod>
     </url>
     <url>
         <loc>http://ConscientiousProgrammer.com/robots.txt</loc>
-        <lastmod>2013-08-14T17:37:16-04:00</lastmod>
+        <lastmod>2014-05-23T23:46:38-04:00</lastmod>
     </url>
 </urlset>
