@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: RSpec | The Conscientious Programmer]]></title>
+  <title><![CDATA[Category: rspec | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-06-10T23:30:45-04:00</updated>
+  <updated>2014-06-26T17:05:55-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -51,15 +51,13 @@
 
 <p>Finally, I love the new natural assertions, the ability to write stuff like</p>
 
-<p><code>ruby
-Then { stack.top == :second_item }
-</code></p>
+<pre><code class="ruby">Then { stack.top == :second_item }
+</code></pre>
 
 <p>instead of</p>
 
-<p><code>ruby
-Then { expect(stack.top).to eq(:second_item) }
-</code></p>
+<pre><code class="ruby">Then { expect(stack.top).to eq(:second_item) }
+</code></pre>
 
 <p>while <code>RSpec</code> automatically generates useful messages on failure.</p>
 

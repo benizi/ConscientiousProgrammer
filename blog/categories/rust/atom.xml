@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Rust | The Conscientious Programmer]]></title>
+  <title><![CDATA[Category: rust | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/rust/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-06-10T23:30:45-04:00</updated>
+  <updated>2014-06-26T17:05:55-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -35,41 +35,32 @@
 
 <p>Here&rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.</p>
 
-<p>``` scala
-object Example {
-  type Id = Int</p>
+<pre><code class="scala">object Example {
+  type Id = Int
 
-<p>  /**</p>
+  /**
+    @param name User name to look up
+    @return ID of user
+    */
+  def findId(name: String): Id =
+    if (name == "name") {
+      42
+    } else {
+      0
+    }
 
-<pre><code>@param name User name to look up
-@return ID of user
-*/
-</code></pre>
+  def makeUrl(id: Id): String = s"http://service.com?id=$id"
 
-<p>  def findId(name: String): Id =</p>
+  /** Simulate making the Web request. */
+  def getUrl(url: String): Unit = println(url)
 
-<pre><code>if (name == "name") {
-  42
-} else {
-  0
+  def main(args: Array[String]): Unit = {
+    val id = findId("name")
+    getUrl(makeUrl(id))
+    // output: http://service.com?id=42
+  }
 }
 </code></pre>
-
-<p>  def makeUrl(id: Id): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
-
-<p>  /<em>* Simulate making the Web request. </em>/
-  def getUrl(url: String): Unit = println(url)</p>
-
-<p>  def main(args: Array[String]): Unit = {</p>
-
-<pre><code>val id = findId("name")
-getUrl(makeUrl(id))
-// output: http://service.com?id=42
-</code></pre>
-
-<p>  }
-}
-```</p>
 
 <p>In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.</p>
 
@@ -79,26 +70,20 @@ getUrl(makeUrl(id))
 
 <p>It turned out that finding an ID could fail, so I changed <code>findId</code> to return the type <code>Option[Id]</code> instead of <code>Id</code>. To get the code to compile, I had to change the type of the parameter to <code>makeUrl</code> also:</p>
 
-<p>``` scala
-  /**</p>
+<pre><code class="scala">  /**
+    @param name User name to look up
+    @return Some(ID of user) if found, else None
+    */
+  def findId(name: String): Option[Id] =
+    if (name == "name") {
+      Some(42)
+    } else {
+      None
+    }
 
-<pre><code>@param name User name to look up
-@return Some(ID of user) if found, else None
-*/
+  // Oops, now this has an unintended bug!
+  def makeUrl(id: Option[Id]): String = s"http://service.com?id=$id"
 </code></pre>
-
-<p>  def findId(name: String): Option[Id] =</p>
-
-<pre><code>if (name == "name") {
-  Some(42)
-} else {
-  None
-}
-</code></pre>
-
-<p>  // Oops, now this has an unintended bug!
-  def makeUrl(id: Option[Id]): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
-```</p>
 
 <p>But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: <code>http://service.com?id=Some(42)</code> was being requested.</p>
 
@@ -130,18 +115,14 @@ getUrl(makeUrl(id))
 
 <p>First step in cleaning up the code: make <code>toString</code> explicit:</p>
 
-<p>``` scala
-  /<em>* Only ever use a String to create a URL. </em>/
-  def makeUrl(id: String): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
+<pre><code class="scala">  /** Only ever use a String to create a URL. */
+  def makeUrl(id: String): String = s"http://service.com?id=$id"
 
-<p>  def main(args: Array[String]): Unit = {</p>
-
-<pre><code>val id = findId("name")
-getUrl(makeUrl(id.toString))
+  def main(args: Array[String]): Unit = {
+    val id = findId("name")
+    getUrl(makeUrl(id.toString))
+  }
 </code></pre>
-
-<p>  }
-```</p>
 
 <p>(Later in the post, I will discuss alternatives to this explicit <code>toString</code>.)</p>
 
@@ -149,34 +130,26 @@ getUrl(makeUrl(id.toString))
 
 <p>Another design smell was that of using</p>
 
-<p><code>scala
-type Id = Int
-</code></p>
+<pre><code class="scala">type Id = Int
+</code></pre>
 
 <p>in the first place. This is a well-known lazy practice called <a href="http://c2.com/cgi/wiki?PrimitiveObsession">primitive obsession</a>. I know better than that.</p>
 
 <p>The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been</p>
 
-<p>``` scala
-  case class Id(id: Int)</p>
+<pre><code class="scala">  case class Id(id: Int)
 
-<p>  /**</p>
-
-<pre><code>@param name User name to look up
-@return ID of user
-*/
+  /**
+    @param name User name to look up
+    @return ID of user
+    */
+  def findId(name: String): Id =
+    if (name == "name") {
+      Id(42)
+    } else {
+      Id(0)
+    }
 </code></pre>
-
-<p>  def findId(name: String): Id =</p>
-
-<pre><code>if (name == "name") {
-  Id(42)
-} else {
-  Id(0)
-}
-</code></pre>
-
-<p>```</p>
 
 <p>Note that this still <em>would not</em> have solved the <code>toString</code> problem, since the output would simply have been <code>http://service.com?id=Some(Id(42))</code> or the dreaded <code>http://service.com?id=None</code>!</p>
 
@@ -196,64 +169,48 @@ type Id = Int
 
 <p>Let&rsquo;s refactor the code:</p>
 
-<p>``` scala
-  // Wrapper class
-  case class Id(id: Int) {</p>
+<pre><code class="scala">  // Wrapper class
+  case class Id(id: Int) {
+    // Special method for turning to URL string fragment
+    def toUrlString = id.toString
+  }
 
-<pre><code>// Special method for turning to URL string fragment
-def toUrlString = id.toString
+  /**
+    @param name User name to look up
+    @return Some(ID of user) if found, else None
+    */
+  def findId(name: String): Option[Id] =
+    if (name == "name") {
+      Some(Id(42))
+    } else {
+      None
+    }
+
+  /** Only ever use a String to create a URL. */
+  def makeUrl(id: String): String = s"http://service.com?id=$id"
+
+  /** Simulate making the Web request. */
+  def getUrl(url: String): Unit = println(url)
+
+  def main(args: Array[String]): Unit = {
+    val id = findId("name")
+    // Will not compile because Option[Id] does not have toUrlString
+    //getUrl(makeUrl(id.toUrlString))
+  }
 </code></pre>
-
-<p>  }</p>
-
-<p>  /**</p>
-
-<pre><code>@param name User name to look up
-@return Some(ID of user) if found, else None
-*/
-</code></pre>
-
-<p>  def findId(name: String): Option[Id] =</p>
-
-<pre><code>if (name == "name") {
-  Some(Id(42))
-} else {
-  None
-}
-</code></pre>
-
-<p>  /<em>* Only ever use a String to create a URL. </em>/
-  def makeUrl(id: String): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
-
-<p>  /<em>* Simulate making the Web request. </em>/
-  def getUrl(url: String): Unit = println(url)</p>
-
-<p>  def main(args: Array[String]): Unit = {</p>
-
-<pre><code>val id = findId("name")
-// Will not compile because Option[Id] does not have toUrlString
-//getUrl(makeUrl(id.toUrlString))
-</code></pre>
-
-<p>  }
-```</p>
 
 <p>Now the code that was creating a junk URL will no longer compile: <code>id</code> is of type <code>Option[Id]</code> but that type does <em>not</em> have a <code>toUrlString</code> method. Mission accomplished!</p>
 
 <p>To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:</p>
 
-<p>``` scala</p>
+<pre><code class="scala">    // Will not compile because Option[Id] does not have toUrlString
+    //getUrl(makeUrl(id.toUrlString))
 
-<pre><code>// Will not compile because Option[Id] does not have toUrlString
-//getUrl(makeUrl(id.toUrlString))
-
-id match {
-  case None =&gt; println("No id found!")
-  case Some(n) =&gt; getUrl(makeUrl(n.toUrlString))
-}
+    id match {
+      case None =&gt; println("No id found!")
+      case Some(n) =&gt; getUrl(makeUrl(n.toUrlString))
+    }
 </code></pre>
-
-<p>```</p>
 
 <p>Simple!</p>
 

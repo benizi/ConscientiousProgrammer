@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Java | The Conscientious Programmer]]></title>
+  <title><![CDATA[Category: java | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-06-10T23:30:45-04:00</updated>
+  <updated>2014-06-26T17:05:55-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -55,48 +55,37 @@
 
 <p>The best you can do is write something that is functorized, but then you have to apply it in a statically known context:</p>
 
-<p>```sml
-signature TO_STRING =
-  sig</p>
-
-<pre><code>type t
-val toString : t -&gt; string
-</code></pre>
-
-<p>  end</p>
-
-<p>functor DoStuff(ToString : TO_STRING) =
-  struct</p>
-
-<pre><code>fun doubleString (stuff: ToString.t) =
-  let
-    val s = ToString.toString stuff
-  in
-    s ^ s
+<pre><code class="sml">signature TO_STRING =
+  sig
+    type t
+    val toString : t -&gt; string
   end
+
+functor DoStuff(ToString : TO_STRING) =
+  struct
+    fun doubleString (stuff: ToString.t) =
+      let
+        val s = ToString.toString stuff
+      in
+        s ^ s
+      end
+  end
+
+structure MyStuff : TO_STRING =
+  struct
+    type t = int * bool
+    fun toString (i, b) =
+      "(" ^ Int.toString i ^ ", " ^ Bool.toString b ^ ")"
+  end
+
+structure DoMyStuff = DoStuff(MyStuff)
 </code></pre>
-
-<p>  end</p>
-
-<p>structure MyStuff : TO_STRING =
-  struct</p>
-
-<pre><code>type t = int * bool
-fun toString (i, b) =
-  "(" ^ Int.toString i ^ ", " ^ Bool.toString b ^ ")"
-</code></pre>
-
-<p>  end</p>
-
-<p>structure DoMyStuff = DoStuff(MyStuff)
-```</p>
 
 <p>with</p>
 
-<p><code>sml
-DoMyStuff.doubleString (42, true)
+<pre><code class="sml">DoMyStuff.doubleString (42, true)
 (* result is the string "(42, true)(42, true)" *)
-</code></p>
+</code></pre>
 
 <p>Since the Standard ML ecosystem is so minimalist, it&rsquo;s hard to fall into the <code>toString</code> trap, because you would have to set it all up yourself.</p>
 
@@ -108,15 +97,11 @@ DoMyStuff.doubleString (42, true)
 
 <p>Of course, one could also use the <a href="http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html">object-oriented part of OCaml</a> to make a generic &ldquo;to string&rdquo; hierarchy starting with a suitable interface:</p>
 
-<p>```ocaml
-class type convert_to_string =
-  object</p>
-
-<pre><code>method to_string : string
+<pre><code class="ocaml">class type convert_to_string =
+  object
+    method to_string : string
+  end
 </code></pre>
-
-<p>  end
-```</p>
 
 <p>But I don&rsquo;t actually know many people who use the object-oriented features of OCaml!</p>
 
@@ -142,23 +127,18 @@ class type convert_to_string =
 
 <p>The fix presented was in <em>object-oriented</em> style, adding a method <code>toUrlString</code> to a class. The other solution is the <em>functional</em> style, leaving the <code>Id</code> class alone, and writing an external function instead:</p>
 
-<p>```scala
-  case class Id(id: Int)</p>
+<pre><code class="scala">  case class Id(id: Int)
 
-<p>  def toUrlString(id: Id) = id.toString
-```</p>
+  def toUrlString(id: Id) = id.toString
+</code></pre>
 
 <p>with</p>
 
-<p>```scala</p>
-
-<pre><code>id match {
-  case None =&gt; println("No id found!")
-  case Some(n) =&gt; getUrl(makeUrl(toUrlString(n)))
-}
+<pre><code class="scala">    id match {
+      case None =&gt; println("No id found!")
+      case Some(n) =&gt; getUrl(makeUrl(toUrlString(n)))
+    }
 </code></pre>
-
-<p>```</p>
 
 <p>There are advantages and disadvantages to either solution.</p>
 
@@ -166,28 +146,18 @@ class type convert_to_string =
 
 <p>It would be very natural, given a whole set of domain classes in addition to <code>Id</code>, to want all of them to have a <code>toUrlString</code>. Then the natural thing to do is to create a mini-universe (parallel to the <code>toString</code> universe) by creating a hierarchy:</p>
 
-<p>```scala
-  trait UrlString {</p>
+<pre><code class="scala">  trait UrlString {
+    def toUrlString: String
+  }
 
-<pre><code>def toUrlString: String
+  case class Id(id: Int) extends UrlString {
+    override def toUrlString = id.toString
+  }
+
+  case class ...(...) extends UrlString {
+    override def toUrlString = ...
+  }
 </code></pre>
-
-<p>  }</p>
-
-<p>  case class Id(id: Int) extends UrlString {</p>
-
-<pre><code>override def toUrlString = id.toString
-</code></pre>
-
-<p>  }</p>
-
-<p>  case class &hellip;(&hellip;) extends UrlString {</p>
-
-<pre><code>override def toUrlString = ...
-</code></pre>
-
-<p>  }
-```</p>
 
 <h2>Advanced string interpolation with OO</h2>
 
@@ -195,38 +165,30 @@ class type convert_to_string =
 
 <p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
 
-<p>```scala
-  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
-
-<pre><code>def url(args: UrlString*): String = {
-  val strings = sc.parts.iterator
-  val expressions = args.iterator
-  val buf = new StringBuffer(strings.next)
-  while (strings.hasNext) {
-    buf append expressions.next.toUrlString
-    buf append strings.next
+<pre><code class="scala">  implicit class UrlHelper(val sc: StringContext) extends AnyVal {
+    def url(args: UrlString*): String = {
+      val strings = sc.parts.iterator
+      val expressions = args.iterator
+      val buf = new StringBuffer(strings.next)
+      while (strings.hasNext) {
+        buf append expressions.next.toUrlString
+        buf append strings.next
+      }
+      buf.toString
+    }
   }
-  buf.toString
-}
+
+  /** Only ever use UrlString to create a URL. */
+  def makeUrl(id: UrlString): String = url"http://service.com?id=$id"
 </code></pre>
-
-<p>  }</p>
-
-<p>  /<em>* Only ever use UrlString to create a URL. </em>/
-  def makeUrl(id: UrlString): String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
-```</p>
 
 <p>with</p>
 
-<p>```scala</p>
-
-<pre><code>id match {
-  case None =&gt; println("No id found!")
-  case Some(n) =&gt; getUrl(makeUrl(n))
-}
+<pre><code class="scala">    id match {
+      case None =&gt; println("No id found!")
+      case Some(n) =&gt; getUrl(makeUrl(n))
+    }
 </code></pre>
-
-<p>```</p>
 
 <p>This may or may not be overengineering.</p>
 
@@ -234,45 +196,35 @@ class type convert_to_string =
 
 <p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
 
-<p>```scala
-  // A type class
-  trait UrlString[A] {</p>
-
-<pre><code>def toUrlString(a: A): String
-</code></pre>
-
-<p>  }</p>
-
-<p>  // Wrapper class
-  case class Id(id: Int)</p>
-
-<p>  // Implement the type class UrlString for Id
-  implicit object IdToUrlString extends UrlString[Id] {</p>
-
-<pre><code>override def toUrlString(a: Id) = a.id.toString
-</code></pre>
-
-<p>  }</p>
-
-<p>  implicit class UrlHelper(val sc: StringContext) extends AnyVal {</p>
-
-<pre><code>def url[A: UrlString](args: A*): String = {
-  val strings = sc.parts.iterator
-  val expressions = args.iterator
-  val buf = new StringBuffer(strings.next)
-  while (strings.hasNext) {
-    buf append implicitly[UrlString[A]].toUrlString(expressions.next)
-    buf append strings.next
+<pre><code class="scala">  // A type class
+  trait UrlString[A] {
+    def toUrlString(a: A): String
   }
-  buf.toString
-}
+
+  // Wrapper class
+  case class Id(id: Int)
+
+  // Implement the type class UrlString for Id
+  implicit object IdToUrlString extends UrlString[Id] {
+    override def toUrlString(a: Id) = a.id.toString
+  }
+
+  implicit class UrlHelper(val sc: StringContext) extends AnyVal {
+    def url[A: UrlString](args: A*): String = {
+      val strings = sc.parts.iterator
+      val expressions = args.iterator
+      val buf = new StringBuffer(strings.next)
+      while (strings.hasNext) {
+        buf append implicitly[UrlString[A]].toUrlString(expressions.next)
+        buf append strings.next
+      }
+      buf.toString
+    }
+  }
+
+  /** Anything "viewable" as UrlString can be used to create a URL. */
+  def makeUrl[A: UrlString](id: A): String = url"http://service.com?id=$id"
 </code></pre>
-
-<p>  }</p>
-
-<p>  /<em>* Anything &ldquo;viewable&rdquo; as UrlString can be used to create a URL. </em>/
-  def makeUrl<span id=" A">A: UrlString</span>: String = url"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
-```</p>
 
 <h2>The final string gotcha</h2>
 
@@ -308,41 +260,32 @@ class type convert_to_string =
 
 <p>Here&rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.</p>
 
-<p>``` scala
-object Example {
-  type Id = Int</p>
+<pre><code class="scala">object Example {
+  type Id = Int
 
-<p>  /**</p>
+  /**
+    @param name User name to look up
+    @return ID of user
+    */
+  def findId(name: String): Id =
+    if (name == "name") {
+      42
+    } else {
+      0
+    }
 
-<pre><code>@param name User name to look up
-@return ID of user
-*/
-</code></pre>
+  def makeUrl(id: Id): String = s"http://service.com?id=$id"
 
-<p>  def findId(name: String): Id =</p>
+  /** Simulate making the Web request. */
+  def getUrl(url: String): Unit = println(url)
 
-<pre><code>if (name == "name") {
-  42
-} else {
-  0
+  def main(args: Array[String]): Unit = {
+    val id = findId("name")
+    getUrl(makeUrl(id))
+    // output: http://service.com?id=42
+  }
 }
 </code></pre>
-
-<p>  def makeUrl(id: Id): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
-
-<p>  /<em>* Simulate making the Web request. </em>/
-  def getUrl(url: String): Unit = println(url)</p>
-
-<p>  def main(args: Array[String]): Unit = {</p>
-
-<pre><code>val id = findId("name")
-getUrl(makeUrl(id))
-// output: http://service.com?id=42
-</code></pre>
-
-<p>  }
-}
-```</p>
 
 <p>In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.</p>
 
@@ -352,26 +295,20 @@ getUrl(makeUrl(id))
 
 <p>It turned out that finding an ID could fail, so I changed <code>findId</code> to return the type <code>Option[Id]</code> instead of <code>Id</code>. To get the code to compile, I had to change the type of the parameter to <code>makeUrl</code> also:</p>
 
-<p>``` scala
-  /**</p>
+<pre><code class="scala">  /**
+    @param name User name to look up
+    @return Some(ID of user) if found, else None
+    */
+  def findId(name: String): Option[Id] =
+    if (name == "name") {
+      Some(42)
+    } else {
+      None
+    }
 
-<pre><code>@param name User name to look up
-@return Some(ID of user) if found, else None
-*/
+  // Oops, now this has an unintended bug!
+  def makeUrl(id: Option[Id]): String = s"http://service.com?id=$id"
 </code></pre>
-
-<p>  def findId(name: String): Option[Id] =</p>
-
-<pre><code>if (name == "name") {
-  Some(42)
-} else {
-  None
-}
-</code></pre>
-
-<p>  // Oops, now this has an unintended bug!
-  def makeUrl(id: Option[Id]): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"
-```</p>
 
 <p>But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: <code>http://service.com?id=Some(42)</code> was being requested.</p>
 
@@ -403,18 +340,14 @@ getUrl(makeUrl(id))
 
 <p>First step in cleaning up the code: make <code>toString</code> explicit:</p>
 
-<p>``` scala
-  /<em>* Only ever use a String to create a URL. </em>/
-  def makeUrl(id: String): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
+<pre><code class="scala">  /** Only ever use a String to create a URL. */
+  def makeUrl(id: String): String = s"http://service.com?id=$id"
 
-<p>  def main(args: Array[String]): Unit = {</p>
-
-<pre><code>val id = findId("name")
-getUrl(makeUrl(id.toString))
+  def main(args: Array[String]): Unit = {
+    val id = findId("name")
+    getUrl(makeUrl(id.toString))
+  }
 </code></pre>
-
-<p>  }
-```</p>
 
 <p>(Later in the post, I will discuss alternatives to this explicit <code>toString</code>.)</p>
 
@@ -422,34 +355,26 @@ getUrl(makeUrl(id.toString))
 
 <p>Another design smell was that of using</p>
 
-<p><code>scala
-type Id = Int
-</code></p>
+<pre><code class="scala">type Id = Int
+</code></pre>
 
 <p>in the first place. This is a well-known lazy practice called <a href="http://c2.com/cgi/wiki?PrimitiveObsession">primitive obsession</a>. I know better than that.</p>
 
 <p>The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been</p>
 
-<p>``` scala
-  case class Id(id: Int)</p>
+<pre><code class="scala">  case class Id(id: Int)
 
-<p>  /**</p>
-
-<pre><code>@param name User name to look up
-@return ID of user
-*/
+  /**
+    @param name User name to look up
+    @return ID of user
+    */
+  def findId(name: String): Id =
+    if (name == "name") {
+      Id(42)
+    } else {
+      Id(0)
+    }
 </code></pre>
-
-<p>  def findId(name: String): Id =</p>
-
-<pre><code>if (name == "name") {
-  Id(42)
-} else {
-  Id(0)
-}
-</code></pre>
-
-<p>```</p>
 
 <p>Note that this still <em>would not</em> have solved the <code>toString</code> problem, since the output would simply have been <code>http://service.com?id=Some(Id(42))</code> or the dreaded <code>http://service.com?id=None</code>!</p>
 
@@ -469,64 +394,48 @@ type Id = Int
 
 <p>Let&rsquo;s refactor the code:</p>
 
-<p>``` scala
-  // Wrapper class
-  case class Id(id: Int) {</p>
+<pre><code class="scala">  // Wrapper class
+  case class Id(id: Int) {
+    // Special method for turning to URL string fragment
+    def toUrlString = id.toString
+  }
 
-<pre><code>// Special method for turning to URL string fragment
-def toUrlString = id.toString
+  /**
+    @param name User name to look up
+    @return Some(ID of user) if found, else None
+    */
+  def findId(name: String): Option[Id] =
+    if (name == "name") {
+      Some(Id(42))
+    } else {
+      None
+    }
+
+  /** Only ever use a String to create a URL. */
+  def makeUrl(id: String): String = s"http://service.com?id=$id"
+
+  /** Simulate making the Web request. */
+  def getUrl(url: String): Unit = println(url)
+
+  def main(args: Array[String]): Unit = {
+    val id = findId("name")
+    // Will not compile because Option[Id] does not have toUrlString
+    //getUrl(makeUrl(id.toUrlString))
+  }
 </code></pre>
-
-<p>  }</p>
-
-<p>  /**</p>
-
-<pre><code>@param name User name to look up
-@return Some(ID of user) if found, else None
-*/
-</code></pre>
-
-<p>  def findId(name: String): Option[Id] =</p>
-
-<pre><code>if (name == "name") {
-  Some(Id(42))
-} else {
-  None
-}
-</code></pre>
-
-<p>  /<em>* Only ever use a String to create a URL. </em>/
-  def makeUrl(id: String): String = s"<a href="http://service.com?id=$id">http://service.com?id=$id</a>"</p>
-
-<p>  /<em>* Simulate making the Web request. </em>/
-  def getUrl(url: String): Unit = println(url)</p>
-
-<p>  def main(args: Array[String]): Unit = {</p>
-
-<pre><code>val id = findId("name")
-// Will not compile because Option[Id] does not have toUrlString
-//getUrl(makeUrl(id.toUrlString))
-</code></pre>
-
-<p>  }
-```</p>
 
 <p>Now the code that was creating a junk URL will no longer compile: <code>id</code> is of type <code>Option[Id]</code> but that type does <em>not</em> have a <code>toUrlString</code> method. Mission accomplished!</p>
 
 <p>To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:</p>
 
-<p>``` scala</p>
+<pre><code class="scala">    // Will not compile because Option[Id] does not have toUrlString
+    //getUrl(makeUrl(id.toUrlString))
 
-<pre><code>// Will not compile because Option[Id] does not have toUrlString
-//getUrl(makeUrl(id.toUrlString))
-
-id match {
-  case None =&gt; println("No id found!")
-  case Some(n) =&gt; getUrl(makeUrl(n.toUrlString))
-}
+    id match {
+      case None =&gt; println("No id found!")
+      case Some(n) =&gt; getUrl(makeUrl(n.toUrlString))
+    }
 </code></pre>
-
-<p>```</p>
 
 <p>Simple!</p>
 

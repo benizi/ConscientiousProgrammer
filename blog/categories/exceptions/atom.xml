@@ -4,7 +4,7 @@
   <title><![CDATA[Category: exceptions | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/exceptions/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-06-10T23:30:45-04:00</updated>
+  <updated>2014-06-26T17:05:55-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -35,12 +35,8 @@
 
 <p>Here&rsquo;s the error message (I have omitted the 46-line stack trace):</p>
 
-<p>``` console</p>
-
-<pre><code>  Generating... Liquid Exception: undefined method `sub' for nil:NilClass in atom.xml
+<pre><code class="console">      Generating... Liquid Exception: undefined method `sub' for nil:NilClass in atom.xml
 </code></pre>
-
-<p>```</p>
 
 <p>This is, unfortunately, an example of an error message that is next to useless, and should <em>never</em> appear. I have stated that <a href="/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/">we as programmers should not generate useless end user error messages</a>, and of course, in context, I am an end user of the blog generating software I use.</p>
 
@@ -52,25 +48,21 @@
 
 <p>The bug is that the code in Jekyll that does syntax highlighting using Pygments makes an assumption that the return value of <code>Pygments.highlight()</code> is never <code>nil</code>:</p>
 
-<p>``` ruby</p>
+<pre><code class="ruby">              @renderer ||= Class.new(Redcarpet::Render::HTML) do
+                def block_code(code, lang)
+                  lang = lang &amp;&amp; lang.split.first || "text"
+                  output = add_code_tags(
+                    Pygments.highlight(code, :lexer =&gt; lang, :options =&gt; { :encoding =&gt; 'utf-8' }),
+                    lang
+                  )
+                end
 
-<pre><code>          @renderer ||= Class.new(Redcarpet::Render::HTML) do
-            def block_code(code, lang)
-              lang = lang &amp;&amp; lang.split.first || "text"
-              output = add_code_tags(
-                Pygments.highlight(code, :lexer =&gt; lang, :options =&gt; { :encoding =&gt; 'utf-8' }),
-                lang
-              )
-            end
-
-            def add_code_tags(code, lang)
-              code = code.sub(/&lt;pre&gt;/,'&lt;pre&gt;&lt;code class="' + lang + '"&gt;')
-              code = code.sub(/&lt;\/pre&gt;/,"&lt;/code&gt;&lt;/pre&gt;")
-            end
-          end
+                def add_code_tags(code, lang)
+                  code = code.sub(/&lt;pre&gt;/,'&lt;pre&gt;&lt;code class="' + lang + '"&gt;')
+                  code = code.sub(/&lt;\/pre&gt;/,"&lt;/code&gt;&lt;/pre&gt;")
+                end
+              end
 </code></pre>
-
-<p>```</p>
 
 <p>Well, it <em>can</em> be <code>nil</code> and was for me, and therefore <code>add_code_tags</code> was calling <code>code.sub()</code> with <code>code</code> being <code>nil</code>.</p>
 
@@ -94,31 +86,27 @@
 
 <p>Unfortunately, the documentation of the Pygments API was incomplete in <code>lib/pygments/popen.rb</code>, where <code>highlight</code> is defined:</p>
 
-<p>``` ruby</p>
+<pre><code class="ruby">    # Public: Highlight code.
+    #
+    # Takes a first-position argument of the code to be highlighted, and a
+    # second-position hash of various arguments specifiying highlighting properties.
+    def highlight(code, opts={})
+      # If the caller didn't give us any code, we have nothing to do,
+      # so return right away.
+      return code if code.nil? || code.empty?
 
-<pre><code># Public: Highlight code.
-#
-# Takes a first-position argument of the code to be highlighted, and a
-# second-position hash of various arguments specifiying highlighting properties.
-def highlight(code, opts={})
-  # If the caller didn't give us any code, we have nothing to do,
-  # so return right away.
-  return code if code.nil? || code.empty?
+      # Callers pass along options in the hash
+      opts[:options] ||= {}
 
-  # Callers pass along options in the hash
-  opts[:options] ||= {}
+      # Default to utf-8 for the output encoding, if not given.
+      opts[:options][:outencoding] ||= 'utf-8'
 
-  # Default to utf-8 for the output encoding, if not given.
-  opts[:options][:outencoding] ||= 'utf-8'
-
-  # Get back the string from mentos and force encoding if we can
-  str = mentos(:highlight, nil, opts, code)
-  str.force_encoding(opts[:options][:outencoding]) if str.respond_to?(:force_encoding)
-  str
-end
+      # Get back the string from mentos and force encoding if we can
+      str = mentos(:highlight, nil, opts, code)
+      str.force_encoding(opts[:options][:outencoding]) if str.respond_to?(:force_encoding)
+      str
+    end
 </code></pre>
-
-<p>```</p>
 
 <h2>A problem with dynamically typed language culture</h2>
 
@@ -128,15 +116,13 @@ end
 
 <p>In code in a statically typed language such as OCaml (or Haskell or Scala), I would expect to see:</p>
 
-<p><code>ocaml
-let highlight (code : string) (opts : my_map) : string = //...
-</code></p>
+<pre><code class="ocaml">let highlight (code : string) (opts : my_map) : string = //...
+</code></pre>
 
 <p>and expect that the return value should be a <code>String</code>, or</p>
 
-<p><code>ocaml
-let highlight (code : string) (opts : my_map) : string option = //...
-</code></p>
+<pre><code class="ocaml">let highlight (code : string) (opts : my_map) : string option = //...
+</code></pre>
 
 <p>to indicate that the return value could be either <code>Some(formatted_code)</code> or <code>None</code>.</p>
 
@@ -144,14 +130,10 @@ let highlight (code : string) (opts : my_map) : string option = //...
 
 <p>Reading the Ruby code, I saw that the situation is even more complex than I thought:</p>
 
-<p>``` ruby</p>
-
-<pre><code>  # If the caller didn't give us any code, we have nothing to do,
-  # so return right away.
-  return code if code.nil? || code.empty?
+<pre><code class="ruby">      # If the caller didn't give us any code, we have nothing to do,
+      # so return right away.
+      return code if code.nil? || code.empty?
 </code></pre>
-
-<p>```</p>
 
 <p>Wow: <code>code</code> can be <code>nil</code>, in which case <code>nil</code> is returned.</p>
 
@@ -163,34 +145,30 @@ let highlight (code : string) (opts : my_map) : string option = //...
 
 <p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
-<p>``` ruby</p>
+<pre><code class="ruby">    # Our 'rpc'-ish request to mentos. Requires a method name, and then optional
+    # args, kwargs, code.
+    def mentos(method, args=[], kwargs={}, original_code=nil)
+      # Open the pipe if necessary
+      start unless alive?
 
-<pre><code># Our 'rpc'-ish request to mentos. Requires a method name, and then optional
-# args, kwargs, code.
-def mentos(method, args=[], kwargs={}, original_code=nil)
-  # Open the pipe if necessary
-  start unless alive?
+      begin
+        # Timeout requests that take too long.
+        timeout_time = 8
 
-  begin
-    # Timeout requests that take too long.
-    timeout_time = 8
+        Timeout::timeout(timeout_time) do
+          # ...[I omitted some code]
+        end
+      rescue Timeout::Error
+        # If we timeout, we need to clear out the pipe and start over.
+        @log.error "[#{Time.now.iso8601}] Timeout on a mentos #{method} call"
+        stop "Timeout on mentos #{method} call."
+      end
 
-    Timeout::timeout(timeout_time) do
-      # ...[I omitted some code]
+    rescue Errno::EPIPE, EOFError
+    stop "EPIPE"
+    raise MentosError, "EPIPE"
     end
-  rescue Timeout::Error
-    # If we timeout, we need to clear out the pipe and start over.
-    @log.error "[#{Time.now.iso8601}] Timeout on a mentos #{method} call"
-    stop "Timeout on mentos #{method} call."
-  end
-
-rescue Errno::EPIPE, EOFError
-stop "EPIPE"
-raise MentosError, "EPIPE"
-end
 </code></pre>
-
-<p>```</p>
 
 <p>It turns out that fundamental problem is not <code>nil</code> so much as <em>non-determinism</em>: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for <code>nil</code> to end up being returned. This non-determinism is worse than <code>nil</code>. I think that in a situation like this, an <em>exception</em> is called for. <code>highlight()</code> should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return <code>nil</code> (or if using a statically typed language, a <code>None</code>).</p>
 
@@ -198,31 +176,24 @@ end
 
 <p>Amusingly, upon discovering the logging code, I used it, setting the magic environment variable <code>MENTOS_LOG</code> (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:</p>
 
-<p>``` console</p>
-
-<h1>Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483</h1>
-
-<p>I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.
-I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:19-04:00] Out header: {&ldquo;method&rdquo;:&ldquo;highlight&rdquo;,&ldquo;args&rdquo;:null,&ldquo;kwargs&rdquo;:{&ldquo;lexer&rdquo;:&ldquo;console&rdquo;,&ldquo;options&rdquo;:{&ldquo;encoding&rdquo;:&ldquo;utf-8&rdquo;,&ldquo;outencoding&rdquo;:&ldquo;utf-8&rdquo;},&ldquo;fd&rdquo;:10,&ldquo;id&rdquo;:&ldquo;TVQSJNBV&rdquo;,&ldquo;bytes&rdquo;:147}}
-E, [2013-06-29 10:26 #13799] ERROR &mdash; : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call
-I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.
-I, [2013-06-29 10:26 #13799]  INFO &mdash; : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting
-```</p>
+<pre><code class="console"># Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
+I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.
+I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Out header: {"method":"highlight","args":null,"kwargs":{"lexer":"console","options":{"encoding":"utf-8","outencoding":"utf-8"},"fd":10,"id":"TVQSJNBV","bytes":147}}
+E, [2013-06-29 10:26 #13799] ERROR -- : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call
+I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.
+I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting
+</code></pre>
 
 <h2>Testing</h2>
 
 <p>It turns out that there <em>is</em> a place where the intended behavior is in a sense documented: the unit tests in <code>test_pygments.rb</code>:</p>
 
-<p>``` ruby
-  def test_returns_nil_on_timeout</p>
-
-<pre><code>large_code = REDIS_CODE * 300
-code = P.highlight(large_code) # a 30 mb highlight request will timeout
-assert_equal nil, code
+<pre><code class="ruby">  def test_returns_nil_on_timeout
+    large_code = REDIS_CODE * 300
+    code = P.highlight(large_code) # a 30 mb highlight request will timeout
+    assert_equal nil, code
+  end
 </code></pre>
-
-<p>  end
-```</p>
 
 <p>The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be <code>nil</code>!</p>
 
