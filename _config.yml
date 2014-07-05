@@ -91,8 +91,8 @@ pinboard_count: 3
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name: franklinchen
-disqus_show_comment_count: false
+disqus_short_name: conscientiousprogrammer
+disqus_show_comment_count: true
 
 # Google Analytics
 google_analytics_tracking_id: UA-41982602-1
