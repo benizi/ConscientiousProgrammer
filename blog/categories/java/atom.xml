@@ -4,7 +4,7 @@
   <title><![CDATA[Category: java | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-07-07T00:18:28-04:00</updated>
+  <updated>2014-07-08T22:54:23-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,66 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Review of the free Coursera course "Principles of Reactive Programming"]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/"/>
+    <updated>2013-12-31T21:29:39-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming</id>
+    <content type="html"><![CDATA[<p>At long last, I have officially completed the free Coursera course <a href="http://www.coursera.org/course/reactive">&ldquo;Principles of Reactive Programming&rdquo;</a>, receiving my &ldquo;Statement of Accomplishment&rdquo;.</p>
+
+<p>This was an intense course, a lot of work, actually, and made the last two month s of my life (November and December) challenging as I juggled many activities. But it was worth the effort. I would definitely recommend this course to anyone who has completed the introductory course <a href="http://www.coursera.org/course/progfun">&ldquo;Principles of Functional Programming in Scala&rdquo;</a> (or has the equivalent background). (See my <a href="http://franklinchen.com/blog/2012-11-15-review-of-courseras-fall-2012-functional-programming-principles-in-scala/">review of that course as offered in fall of 2012</a>.)</p>
+
+<p>I took this course along with a bunch of local friends who are also members of the <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a>.</p>
+
+<!--more-->
+
+
+<h2>What is &ldquo;Reactive&rdquo;?</h2>
+
+<p>&ldquo;Reactive&rdquo; is a fairly new buzzword, popularized recently by the <a href="http://www.reactivemanifesto.org/">Reactive Manifesto</a> to urge consideration of four traits modern applications may need to have:</p>
+
+<ul>
+<li>responsive</li>
+<li>scalable</li>
+<li>resilient</li>
+<li>event-driven</li>
+</ul>
+
+
+<h2>Instructors and topics</h2>
+
+<p>Each instructor was responsible for covering a key technology.</p>
+
+<h3>Martin Odersky</h3>
+
+<p>Martin Oderksy, the inventor of Scala and instructor for the previously mentioned &ldquo;Principles of Functional Programming in Scala&rdquo; course, focused on covering more advanced usage of Scala.</p>
+
+<p>He immediately introduced monads, which are key to many of the concepts and libraries used throughout this course. Scala&rsquo;s support for monads through the syntax of for-comprehensions is very helpful. He introduced the property-based testing framework <a href="http://www.scalacheck.org/">ScalaCheck</a> (which uses monads for generation of data), and the first assignment involved working with the framework. (By the way, I gave a <a href="http://franklinchen.com/blog/2013/04/11/my-pittsburgh-scala-meetup-talk-on-property-based-testing-using-scalacheck/">talk on property-based testing using ScalaCheck</a> eight months ago.)</p>
+
+<p>Then he discussed modeling event simulation in Scala using mutable objects. I felt that this unit was not in the spirit of the others, because there was so much uncontrolled mutable state running around. My friends and I agreed that the assignment for this unit was burdensome and not really useful. I thought to myself, in fact, that I would never solve the problems in this way.</p>
+
+<h3>Erik Meijer</h3>
+
+<p>Erik Meijer is a very energetic and humorous speaker. I really enjoyed his lectures.</p>
+
+<p>In his first unit, he introduced asynchronous programming using Scala&rsquo;s <a href="http://docs.scala-lang.org/overviews/core/futures.html"><code>Future</code> monad (backed by a <code>Promise</code>)</a>, as well as the cool new <a href="https://github.com/scala/async">macro-based <code>async</code>/<code>await</code> library</a>, which greatly simplifies writing code. Our assignment, which was instructive and interesting, was to implement a baby version of Node.js in Scala, ha!</p>
+
+<p>Then he introduced <a href="https://rxscala.github.io/"><code>RxScala</code></a>, a Scala adaptor for <a href="https://github.com/Netflix/RxJava"><code>RxJava</code></a>, which is a Java port of Microsoft&rsquo;s &ldquo;reactive extensions&rdquo; <code>Rx</code> framework. I enjoyed this unit a lot, and appreciated the great documentation available (the &ldquo;marble diagrams&rdquo; are particularly useful). One nitpick I suppose I must have with his presentation is that I&rsquo;m not sure that, for a non-theory-oriented audience, the discussions of &ldquo;duality&rdquo; were necessary. The assignment was very practically-oriented, gathering data asynchronously and displaying it and allowing user interaction. It was enjoyable and showcased the power of using a framework like Rx.</p>
+
+<h3>Roland Kuhn</h3>
+
+<p>Roland Kuhn covered the most complex section of the course, introducing actors by means of the <a href="http://akka.io/">Akka</a> framework.</p>
+
+<p>The first assignment was fairly straightforward, on implemented a distributed binary tree with actors.</p>
+
+<p>The second assignment I found quite difficult, and not only because it was crunch time at the end of December before holiday season! It was a distributed key-value store with multiple levels of possible failure. There is no way I would have successfully and correctly completed this assignment without the helpful discussions I found on the online Coursera forums. To really figure out what was going on required (for me) turning on logging in various places and writing a lot of tests using Akka&rsquo;s <a href="http://doc.akka.io/docs/akka/snapshot/scala/testing.html"><code>TestKit</code></a>. I realized eventually that my code was ugly and not entirely clean and idiomatic, but it was definitely a worthwhile learning experience on a realistic problem to solve.</p>
+
+<h2>Conclusion</h2>
+
+<p>I learned quite a lot from this course. It is a very practical course on &ldquo;reactive&rdquo; programming. I felt after completing this course that I was ready to use the concepts and technologies covered in real problems. I am grateful to the instructors (who were active on the forums, by the way) for sharing their theoretical and practical knowledge as a free Coursera course.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[toString considered harmful, part 3]]></title>
@@ -506,154 +566,6 @@ structure DoMyStuff = DoStuff(MyStuff)
 <p>I would recommend this course as an overview to anyone who is committed to using MongoDB to its full extent.</p>
 
 <p>However, although I got my &ldquo;certificate&rdquo; for completing the course, and appreciate that MongoDB, Inc offers this training for free, I felt that there was a lot of ad hoc stuff going on in the evolving design of MongoDB, and embedded in the API design as well. For what I needed to know for my work, I didn&rsquo;t really need the whole course.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OpenHack Pittsburgh: learning Elixir test-driven and package-publishing]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/"/>
-    <updated>2013-08-26T22:09:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing</id>
-    <content type="html"><![CDATA[<p>It&rsquo;s been a long time since I went to an <a href="http://openhack.github.io/pittsburgh/">OpenHack Pittsburgh</a> meeting. The last time was <a href="http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/">five months ago</a>. On June 24, there was an <a href="http://www.meetup.com/pittsburgh-ruby/events/120200292/">OpenHack Pittsburgh</a> held at <a href="http://www.4moms.com/">4moms</a>, but I really needed to stay home and take it easy that evening, because of my busy schedule later in the week, including attending a <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">PittJUG meeting</a> and preparing a <a href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">Pittsburgh Python talk</a>.</p>
-
-<p><a href="http://www.meetup.com/pittsburgh-ruby/events/120201842/">This August meeting of OpenHack Pittsburgh</a> was held at <a href="http://www.modcloth.com/">ModCloth</a>, which I had never been to. It&rsquo;s in Crafton, which is a place I&rsquo;ve never been before, nearly half an hour drive from Pittsburgh. Because of worries about driving there near rush hour after work, I probably would not have signed up to attend had it not been for <a href="http://justinxreese.com/">Justin</a>, the organizer of OpenHack Pittsburgh.</p>
-
-<p>What happened was that he asked for feedback about who was planning to work on what, and said he planned to learn some <a href="http://elixir-lang.org/">Elixir</a>, a fairly new programming language built on top of the <a href="http://www.erlang.org/">Erlang</a> runtime. Since this language had been on my list of things to look into, I decided that learning loves company, so I proposed to learn some Elixir in a test-driven way!</p>
-
-<p>What does that mean?</p>
-
-<p><img class="<a" src="href="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg">http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg</a>" title="Franklin working on laptop" ></p>
-
-<!--more-->
-
-
-<h2>How to learn a programming language</h2>
-
-<p>I have written code in probably around fifty (50) programming languages. I&rsquo;m not kidding, and I&rsquo;m not proud, but this is simply a fact of my having done programming since 1982, thirty-one (31!!) years ago. Let&rsquo;s face it: languages come and go. I have personally sat at an IBM <a href="http://en.wikipedia.org/wiki/Keypunch">keypunch</a> machine punching out cards for my COBOL and Fortran code.</p>
-
-<p>As with human languages, the fact is that to be truly productive in a language requires much more than learning some syntax and semantics. It requires actually writing and running and fixing code, and in the context of a realistic project.</p>
-
-<p>I&rsquo;ve learned through trial and error that the most common ways of learning a programming language, like the most common ways of learning human languages (other than one&rsquo;s first language), are terribly inefficient and misleading, resulting in minimal competence. I mean, reading through books, typing into a REPL, submitting a single file to a compiler or interpreter, etc.</p>
-
-<p>I feel that we should learn programming languages using a variety of approaches. Yes, the academic bottom-up semantics-based approach is critical in the long run, to avoid wasting a lot of time on pointless misunderstandings. Exploration in a REPL can be very rewarding. But I think what is often missing is the <em>biggest possible picture</em>: immediately seeing how to write a program that is integrated with a test framework, uses libraries, is exportable and publishable publicly as a library, can be submitted to a continuous integration server, is editable in a decent editor or IDE, etc.</p>
-
-<p>Without seeing the biggest possible picture, one usually gets a horribly inaccurate picture of what it is like to program in a particular language ecosystem. (I will be writing more about this subject of pedagogy later.)</p>
-
-<h2>My proposal</h2>
-
-<p>The last couple of languages I have learned in recent years, I slowly came to work with in a more efficient way than in the past, because I focused on matters such as testability. In particular, as I grew to wholly adopt TDD when writing any code at all in any language, it became clear to me that the best way to learn a new language must be in a test-driven way.</p>
-
-<p>Here&rsquo;s an analogy: I believe the best way to learn a human language is to dive into how to be able to converse in some coherent way right off the bat. <a href="http://www.fluentin3months.com/4-hour/">Tim Ferriss and others</a> have exploited this idea to <em>drive</em> the learning of what is most relevant in <a href="http://www.fourhourworkweek.com/blog/2007/11/07/how-to-learn-but-not-master-any-language-in-1-hour-plus-a-favor/">grammar</a> and <a href="http://www.fourhourworkweek.com/blog/2009/01/20/learning-language/">vocabulary</a>.</p>
-
-<p>In the past, I learned human languages in a terrible way, taking lots of courses, but never actually getting fluent in everyday use. This is how we tend to learn &ldquo;foreign&rdquo; programming languages. My proposal is that learning a new programming language should involve getting as quickly as possible up to speed on a <em>minimum viable publishable library</em>.</p>
-
-<p>That the software artifact should be a <em>library</em>, and not just some executable program, is vital, because it means having to adhere by whatever standards apply to real-world API design in the language ecosystem, producing something that client code can import and call.</p>
-
-<p>That it should be <em>publishable</em> is vital because it means adhering to standards of testing, of discovery through metadata, and enabling easy use by a client.</p>
-
-<h2>My concrete example with learning Elixir tonight</h2>
-
-<h3>Prior background in Erlang and Elixir</h3>
-
-<p>I went to OpenHack Pittsburgh <em>never</em> having yet read any Elixir language material, never having written Elixir code, not even &ldquo;hello, world&rdquo;. The only things I had done before tonight:</p>
-
-<ul>
-<li>I first heard of Erlang nearly two decades ago, and when I saw it, I was turned off by the Prolog-style syntax, and it didn&rsquo;t seem relevant to anything I was doing at the time, so I ignored it.</li>
-<li>I intended to learn some Erlang earlier this year, but made little progress before putting it aside: I went to the free book <a href="http://learnyousomeerlang.com/">&ldquo;Learn You Some Erlang for Great Good!&rdquo;</a> and downloaded the code and <a href="https://github.com/FranklinChen/learn-you-some-erlang">got it to compile</a>, but did not proceed any further.</li>
-<li>I installed Elixir on my Mac <a href="http://elixir-lang.org/getting_started/1.html">using Homebrew</a>.</li>
-<li>I installed an <a href="https://github.com/elixir-lang/emacs-elixir">Emacs Elixir mode</a>.</li>
-<li>I made a note of a free online book <a href="http://chimera.labs.oreilly.com/books/1234000001642">&ldquo;Etudes for Elixir&rdquo;</a> and checked out the GitHub repository, but did not look at the book or code.</li>
-</ul>
-
-
-<h3>Find a testing framework</h3>
-
-<p>Upon arrival at ModCloth, getting pizza to eat, and plugging in my MacBook and connecting to the guest WiFi, the first thing I did was search for a testing framework for Elixir.</p>
-
-<p>It&rsquo;s 2013, not 1993, so it is hard to convince me to invest any time at all in learning to operate in a language ecosystem that does not have at least a de facto standard testing framework. For every language that I currently actively use for writing serious programs, I operate with TDD. Some examples of languages and the test frameworks I currently use for them:</p>
-
-<ul>
-<li>C/C++: <a href="https://code.google.com/p/googletest/">googletest</a></li>
-<li>Clojure: <a href="https://github.com/marick/Midje">Midje</a></li>
-<li>Haskell: <a href="http://hspec.github.io/">HSpec</a> and <a href="http://www.haskell.org/haskellwiki/Introduction_to_QuickCheck2">QuickCheck</a></li>
-<li>Java or Scala: <a href="http://specs2.org/">Specs2</a> and <a href="http://www.scalacheck.org/">ScalaCheck</a></li>
-<li>JavaScript: <a href="http://pivotal.github.io/jasmine/">Jasmine</a></li>
-<li>Perl: <a href="http://search.cpan.org/~mschwern/Test-Simple-0.98/lib/Test/More.pm">Test::More</a></li>
-<li>Python: <a href="http://pytest.org/">pytest</a></li>
-<li>Ruby: <a href="http://rspec.info/">RSpec</a></li>
-<li>Racket: <a href="http://docs.racket-lang.org/rackunit/">RackUnit</a></li>
-</ul>
-
-
-<p>Well, first Web search hit for Elixir and unit testing was <a href="http://elixir-lang.org/getting_started/ex_unit/1.html">ExUnit</a>, so that was encouraging.</p>
-
-<p>Justin was still stuck installing Elixir, so we started exploring Elixir together off my laptop.</p>
-
-<h3>One test file</h3>
-
-<p>The first thing I did after discovering ExUnit was to copy and paste the code for a sample test into Emacs and save it into a file <code>test_hello.exs</code>, see that the Elixir mode was working (with syntax highlighting), and figure out how to run the test: <code>$ elixir test_hello.exs</code>.</p>
-
-<p>It worked!</p>
-
-<p>Then we explored adding more tests, changing some assertions, and learning as went, by looking up the Elixir documentation. For example, Elixir uses an interesting callback mechanism for cleanly passing &ldquo;setup&rdquo; state to tests inside a single test case. Also, <code>assert</code> and <code>test</code> are <a href="http://en.wikipedia.org/wiki/Macro_%28computer_science%29#Syntactic_macros">syntactic macros</a>, enabling them to do magic to analyze expressions, hence the support of natural assertion syntax (which <a href="/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/">I like a lot better than special syntax</a>).</p>
-
-<p>After writing some failing tests involving arithmetic and making them pass, I wrote a division by zero test. I was intrigued that not only did it fail, as expected, but also the compiler warned ahead of time that an exception was going to be raised. Nice. In any case, I learned how to make an assertion of the raising of an exception. This is very important. We should always pay attention to <a href="http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/">testing the sad paths</a>.</p>
-
-<p>We saw in the documentation for ExUnit that there was a way to mark a test case as being OK to run concurrently with others. Great! These days there is no excuse not to be able to run tests concurrently. So I wrote another test case, which I put in the same source file (for the moment), and I wanted to see for myself that concurrency was happening. I wanted to call some kind of &ldquo;sleep&rdquo; function. To do that, I did a Web search, and found that Erlang comes with <code>sleep</code> in the <code>timer</code> module. I found out how to call Erlang from Elixir, and it worked!</p>
-
-<h3>More than one source file</h3>
-
-<p>The next obvious step was to write a test for code that did not yet exist, but was to be written outside the test source file. For that, I had to figure out how to define a module and import it. OK, but then there&rsquo;s the question of file organization. Hmm.</p>
-
-<p>At this point, the only reasonable thing to do (and which in retrospect should have been done first) was to find out what the &ldquo;standard&rdquo; way of organizing a project&rsquo;s source files is supposed to be, and what the standard way to build everything is.</p>
-
-<p>A Web search quickly came up with <a href="http://elixir-lang.org/getting_started/mix/1.html">Mix</a>. Awesome, the Elixir people are serious about real software development! Mix turns out to be inspired by Clojure&rsquo;s <a href="https://github.com/technomancy/leiningen">Leiningen</a>, which of course I use to start any new Clojure project. <code>$ mix new hello</code> did the trick, creating the scaffolding for a new Elixir project.</p>
-
-<p>I refactored our existing <code>test_hello.exs</code> file into two files (one for each test case) in the <code>test</code> directory, then wrote a module <code>hello.ex</code> into <code>lib</code>. A failed test, then making it succeed, and finally I wrote my first non-test code in Elixir!</p>
-
-<p>Running tests is very easy once you are using Mix. Just <code>$ mix test</code> does it.</p>
-
-<h3>Packaging for publshing</h3>
-
-<p>At this point, I decided I wanted to create an actual Elixir package to publish.</p>
-
-<p>So I did a Web search to find out whether there was a standard repository and how to publish to it.</p>
-
-<p>Here we go, <a href="http://expm.co/">Expm</a>!</p>
-
-<p>I installed the package manager, set up my user name and password, and went to work on a simple package to publish.</p>
-
-<p>I saw that nobody had yet contributed an implementation of <a href="http://franklinchen.com/blog/2012/03/14/for-real-geeks-today-is-not-pi-day-but-half-tau-day/">tau</a>, so I quickly created a tau library with Mix, did <code>$ expm new</code> to create a <code>package.exs</code> template, filled it out, wrote an ExUnit test that passed, completed the <code>README.md</code>, and just as OpenHack Pittsburgh was officially closing for the evening, I successfully published <a href="http://expm.co/tau">my tau package</a>!</p>
-
-<p>Actually, I accidentally screwed up the first time, forgetting to change all the fields of the template <code>package.exs</code> and ending up published <code>yourlib</code>.</p>
-
-<p>Oh, and I committed my project in Git and pushed <a href="https://github.com/franklinchen/tau">to GitHub</a>.</p>
-
-<h2>Some Haskell stuff</h2>
-
-<p>Steve McCarthy of <a href="http://www.spacefinity.com/">Spacefinity</a> had announced, in the introduction at the beginning of the evening when each of us stood up to say what we planned to work on, that he wanted to do more with the <a href="http://www.haskell.org/cabal/">Cabal</a> package manager for Haskell, so I spent a little bit of time getting him going by pointing him toward a sample Haskell code repository I initially <a href="http://franklinchen.com/blog/2012/11/05/the-start-of-a-local-haskell-study-group.markdown/">set up last year when some friends were interested in getting into Haskell</a>; sadly, we&rsquo;ve all been too busy for Haskell, so I&rsquo;ve let the project rot, in the sense that my configuration file is not optimally organized and also there have been updates in the test framework world in Haskell since then.</p>
-
-<p>Anyway, here&rsquo;s my <a href="https://github.com/FranklinChen/project-euler-haskell">&ldquo;Project Euler in Haskell&rdquo; repository</a>. I plan to get around to improving it.</p>
-
-<h2>Thanks</h2>
-
-<p>Thanks to ModCloth for providing the space, pizza, cookies, and WiFi!</p>
-
-<p>A big thank-you to Justin for providing the inspiration for me to try this experiment in learning!</p>
-
-<p>And thanks to Steve McCarthy for getting me to drag up an old Haskell project and making me think that I should soon update it to be a better example.</p>
-
-<h2>Conclusion</h2>
-
-<p>Tonight was the first time I ever started learning a new programming language, wrote unit tests right off the bat with proper project organization and also published a library immediately.</p>
-
-<p>Of course, there is much more to go in actually really learning and using Elixir, but as a first step in showing that Elixir has a viable ecosystem, I think the experiment was a success. My next steps in continuing to learn Elixir would include writing tests in conjunction with a deep dive into the actual semantics of the language. There is no substitute for the latter; the alternative is dangerously making assumptions based on superficial syntactic similarity with other languages (such as Ruby).</p>
-
-<h3>(Update of 2013-08-27)</h3>
-
-<p>One thing I didn&rsquo;t get around to was setting up <a href="http://travis-ci.org/">Travis</a> continuous integration. I believe this should also be part of the story in getting up and running in a new programming language environment.</p>
-
-<p>So I did a Web search and figured out how to create a suitable <code>.travis.yml</code>. I committed and pushed to GitHub, flipped the switch in my Travis account, and you can see its <a href="https://travis-ci.org/FranklinChen/tau">passing status</a>.</p>
 ]]></content>
   </entry>
   

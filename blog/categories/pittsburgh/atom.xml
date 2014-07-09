@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pittsburgh | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/pittsburgh/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-07-07T00:18:28-04:00</updated>
+  <updated>2014-07-08T22:54:23-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: learning by reading Josh's code!]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/10/11/pittsburgh-scala-meetup-learning-by-reading-joshs-code/"/>
+    <updated>2013-10-11T00:09:33-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/10/11/pittsburgh-scala-meetup-learning-by-reading-joshs-code</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met to <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/135567132/">learn by hacking</a>. There was a change of plan because Josh couldn&rsquo;t make it to the meeting, so instead of a presentation by him, we got a link to his GitHub repository for an implementation of an <a href="https://github.com/jsuereth/tic-tac-toe">interactive Web-based tic-tac-toe game using Play</a>.</p>
+
+<p>Sometimes interesting things happen when plans are changed.</p>
+
+<!--more-->
+
+
+<h2>Reading Josh&rsquo;s code</h2>
+
+<p>Since Josh wasn&rsquo;t around, we decided to study his code, and use it as the basis of discussion of Scala language features and idiomatic style, making sure that all of us understood what the code was doing. This turned out to be a surprisingly useful exercise, very participatory by everyone.</p>
+
+<p>Justin took charge of an SBT session as we played with modifying the code and figuring out what things did. I shared some tips on using SBT in &ldquo;trigger mode&rdquo;, which some had not known about. While experimenting, we ran into interesting Scala gotchas involving <code>def</code> and <code>val</code> in classes that mix in traits. We also had useful discussions on coding style, such as point-free style and use of underscores in closures, and converting between curried and uncurried functions. My personal point of view is that I prefer to be more explicit rather than more concise, to improve clarity, but much does depend on assumptions about people&rsquo;s prior knowledge. Josh was writing this code for only himself, and the complete application was actually not meant to showcase the tic-tac-toe game logic anyway, but the use of Play.</p>
+
+<h2>Conclusion</h2>
+
+<p>I thought it was a really useful session in which we all helped one other get up to speed on various Scala language features or standard library APIs. We all learned something new, and we figured out Josh&rsquo;s code, and collected questions to ask him when he comes back!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[OpenHack Pittsburgh: learning Elixir test-driven and package-publishing]]></title>
@@ -280,74 +304,6 @@
 <h2>Conclusion</h2>
 
 <p>Since I don&rsquo;t really use Node, I went to the meetup out of curiosity more than anything else. I will probably not attend again. There seemed a lot of enthusiasm though.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/"/>
-    <updated>2013-07-11T20:53:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night</id>
-    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/pittsburgh-ruby">Pittsburgh Ruby meetup</a> held a <a href="http://www.meetup.com/pittsburgh-ruby/events/120200102">lightning talks session</a>.</p>
-
-<p>Originally, I was not going to present anything, since I did not feel that I had anything exciting to quickly share (I have not been doing much Ruby programming lately at all other than <a href="/blog/2013/06/29/nil-non-determinism-exceptions">debugging my Octopress-generated blog</a>), and don&rsquo;t like talking just to talk.</p>
-
-<p>But at the very last minute, just half an hour before the meeting, I noticed some developments in the world of <a href="http://rspec.info/">RSpec</a> announced on Twitter by Jim Weirich, and I got excited enough that I decided to talk about his <a href="https://github.com/jimweirich/rspec-given"><code>rspec-given</code></a>, which was just released at version 3.0.0.</p>
-
-<!--more-->
-
-
-<h2>Colin, on <code>rvm_recommended_ruby</code></h2>
-
-<p>Colin briefly talked about how he likes to automate things, and therefore, in the context of using <a href="https://rvm.io/">RVM</a>, created <a href="https://github.com/wayneeseguin/rvm/pull/1074"><code>rvm_recommended_ruby</code></a>.</p>
-
-<h2>Jon, on business logic in pure Ruby</h2>
-
-<p>Jon gave a short summary of his <a href="http://jonathandean.com/2013/07/business-logic-in-pure-ruby/">blog post</a> on not putting all business logic into Rails models, but instead, decoupling from <code>ActiveRecord</code> and Rails altogether. This is a theme that has risen a lot in recent years in the Rails community.</p>
-
-<h2>Carol, on how to use IRC to get help</h2>
-
-<p>Carol talked about how to use IRC to get help when working on projects.</p>
-
-<h2>Me, on <code>rspec-given</code></h2>
-
-<p>I talked about cool features in <a href="https://github.com/jimweirich/rspec-given"><code>rspec-given</code></a>.</p>
-
-<p><code>rspec-given</code> has actually been around for a while, but I had not used in the past. I plan to use it in the future.</p>
-
-<p>It provides <code>Given</code>, <code>When</code>, <code>Then</code>, and <code>And</code> for writing specifications.</p>
-
-<p>Also, now there is <code>Invariant</code>, which I think is a great addition to <code>RSpec</code>, enabling an easy way to check invariants as part of every example.</p>
-
-<p>Finally, I love the new natural assertions, the ability to write stuff like</p>
-
-<pre><code class="ruby">Then { stack.top == :second_item }
-</code></pre>
-
-<p>instead of</p>
-
-<pre><code class="ruby">Then { expect(stack.top).to eq(:second_item) }
-</code></pre>
-
-<p>while <code>RSpec</code> automatically generates useful messages on failure.</p>
-
-<h2>Colin again, on Vagrant</h2>
-
-<p>Since all the lightning talks were done in less than half an hour, Carol called for more volunteers to talk about something. Colin ended up impromptu talking about his use of <a href="http://www.vagrantup.com/">Vagrant</a> to create development environments.</p>
-
-<p>There was particular interest in how to share files with the host file system. Vagrant makes this easy.</p>
-
-<p>Vagrant is great. Use it.</p>
-
-<h2>Ruby meets Python</h2>
-
-<p>Carol reminded everyone that coming up is a Ruby/Python joint social.</p>
-
-<h2>Conclusion</h2>
-
-<p>A relatively short Pittsburgh Ruby meetup, and with a smaller crowd than some others in the past, but a fun and instructive one.</p>
-
-<p>Don&rsquo;t forget, <a href="http://steelcityruby.org/">Steel City Ruby Conference 2013</a> is in a month! I&rsquo;m <a href="http://franklinchen.com/blog/2012/08/07/the-first-steel-city-ruby-conference-an-amazing-experience/">excited to attend again</a>.</p>
 ]]></content>
   </entry>
   

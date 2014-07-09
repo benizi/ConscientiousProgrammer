@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: tableau | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/tableau/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2014-07-08T22:54:23-04:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
+  <author>
+    <name><![CDATA[Franklin Chen]]></name>
+    <email><![CDATA[franklinchen@franklinchen.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Data Visualization Meetup: inaugural meet and greet]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/07/30/pittsburgh-data-visualization-meetup-inaugural-meet-and-greet/"/>
+    <updated>2013-07-30T23:42:33-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/07/30/pittsburgh-data-visualization-meetup-inaugural-meet-and-greet</id>
+    <content type="html"><![CDATA[<p>There is a new <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/">Pittsburgh Data Visualization Meetup</a> and I attended the <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/events/128665542/">first meeting</a>, which was a meet and greet at <a href="http://www.fuelandfuddle.com/">Fuel &amp; Fuddle</a> in Oakland.</p>
+
+<!--more-->
+
+
+<h2>My interest in data visualization</h2>
+
+<p>Data visualization isn&rsquo;t something I&rsquo;ve done much of, but is something I&rsquo;m interested in, both for work and for my own personal project ideas. For example, I have amassed a lot of personal data about the races I&rsquo;ve run and the chess games I&rsquo;ve played.</p>
+
+<p>The only thing I&rsquo;ve done for visualization at work is generate static images using <a href="http://www.graphviz.org/">Graphviz</a> to display, in human-friendly form, <a href="http://en.wikipedia.org/wiki/Grammatical_relation">grammatical relations</a> that are otherwise represented using a text format; this text format is usually automatically generated, but sometimes has errors that humans have to fix. It is hard to either see or fix such errors from the text representation, so the visual display helps a lot. Unfortunately, right now our program only generates a static image, not an interactive and editable representation of each graph, so the user who sees something wrong has to edit the text and regenerate the image to verify the correction visually. Ideally we would like to make the program more interactive, but this task is not performed very often, so I had gone with the simplest possible solution.</p>
+
+<h2>Summary of meeting</h2>
+
+<p>This being the first meeting, we all introduced ourselves and chatted over dinner. The creator of the new meetup is Patrick Dudas, who is involved in all kinds of cool projects in collecting data (such as scraping Twitter) and visualizing it.</p>
+
+<p>People talked about the kind of work they do and the tools they use or would like to switch to using. There was a good variety of people from different disciplines, from science to business, all with a need to create useful visualizations to analyze and report on data.</p>
+
+<p>Libraries and languages mentioned included D3, ggplot, R, Python, and Tableau. There was particular interest in more effective use of D3 and R. Patrick promised to lead a session on D3 soon.</p>
+
+<h2>Conclusion</h2>
+
+<p>It was good to see a new meetup revolving around a need and a discipline, visualization, that cuts across different disciplines and programming languages.</p>
+]]></content>
+  </entry>
+  
+</feed>
