@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pittsburgh | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/pittsburgh/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-07-08T22:54:23-04:00</updated>
+  <updated>2014-07-15T17:15:13-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: code walk through tic-tac-toe with Play]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play/"/>
+    <updated>2013-12-05T22:15:52-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met again with <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581232/">Josh walking through his code for an interactive Web tic-tac-toe program implemented with Play</a>.</p>
+
+<p>It was a good session. I&rsquo;m finding that studying code (with the code&rsquo;s author present) is a great way to learn, to discuss design decisions and alternate possible choices that could have been made. For example, when it comes to actors, there are decisions to be made about how many actors, what state they should contain, and how to transition.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pittsburgh Scala Meetup: learning by reading Josh's code!]]></title>
@@ -281,29 +292,6 @@
 <h3>(Update of 2014-06-10)</h3>
 
 <p>A description of some of this <a href="http://springfield.metaphor.cs.cmu.edu:8080/MetaphorViz/About.html">METAL project</a> work is in the paper <a href="http://www.lrec-conf.org/proceedings/lrec2014/pdf/596_Paper.pdf">&ldquo;The CMU METAL Farsi NLP Approach&rdquo;</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Node Meetup: Optimizing development workflow with Grunt]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt/"/>
-    <updated>2013-07-31T21:29:45-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt</id>
-    <content type="html"><![CDATA[<p>I am not a <a href="http://nodejs.org/">Node</a> developer. I&rsquo;ve only used Node to play around with JavaScript, not for any real work or personal projects (yet). The last time I used Node was two months ago, for a <a href="http://franklinchen.com/blog/2013/06/01/pittsburgh-tech-fest-2013-my-talk-stop-overusing-regular-expressions/">talk I gave at Pittsburgh TechFest 2013</a> in which I wrote JavaScript code running on Node, but did not actually talk about it, and only mentioned that I had written it and put it up on my <a href="https://github.com/franklinchen/talk-on-overusing-regular-expressions">GitHub repository for the talk</a>.</p>
-
-<p>That is why it took me so long to attend my first <a href="http://www.meetup.com/Pittsburgh-Node-js/">Pittsburgh Node</a> <a href="http://www.meetup.com/Pittsburgh-Node-js/events/128439692/">meeting</a>. I was simply curious who was involved in the local Node community and what tooling they were using. The meeting was about <a href="http://gruntjs.com/">Grunt</a>, a Make-like task runner. Nate Good of ShowClix presented.</p>
-
-<h2>Attendance</h2>
-
-<p>There was a fairly large group of people who attended: around thirty. Node seems to be popular in town.</p>
-
-<h2>The talk</h2>
-
-<p>Overall, Grunt seemed like Make or Rake. You can use plugins and define your own tasks. So there seemed nothing special about it, other than it is a useful tool corresponding to similar tools for other language ecosystems.</p>
-
-<h2>Conclusion</h2>
-
-<p>Since I don&rsquo;t really use Node, I went to the meetup out of curiosity more than anything else. I will probably not attend again. There seemed a lot of enthusiasm though.</p>
 ]]></content>
   </entry>
   

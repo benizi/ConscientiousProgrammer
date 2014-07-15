@@ -4,7 +4,7 @@
   <title><![CDATA[Category: m*modal | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/m-star-modal/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-07-08T22:54:23-04:00</updated>
+  <updated>2014-07-15T17:15:13-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: code walk through tic-tac-toe with Play]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play/"/>
+    <updated>2013-12-05T22:15:52-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met again with <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581232/">Josh walking through his code for an interactive Web tic-tac-toe program implemented with Play</a>.</p>
+
+<p>It was a good session. I&rsquo;m finding that studying code (with the code&rsquo;s author present) is a great way to learn, to discuss design decisions and alternate possible choices that could have been made. For example, when it comes to actors, there are decisions to be made about how many actors, what state they should contain, and how to transition.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pittsburgh Scala Meetup: learning by reading Josh's code!]]></title>

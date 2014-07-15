@@ -27,6 +27,12 @@
   </url>
   
   <url>
+    <loc>http://ConscientiousProgrammer.com/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play/</loc>
+    <lastmod>2013-12-05T22:15:52-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/</loc>
     <lastmod>2013-12-04T22:03:55-05:00</lastmod>
     <priority>0.8</priority>
@@ -125,21 +131,21 @@
   
   <url>
     <loc>http://ConscientiousProgrammer.com/blog/archives/</loc>
-    <lastmod>2014-07-08T22:54:23-04:00</lastmod>
+    <lastmod>2014-07-15T17:15:13-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://ConscientiousProgrammer.com/</loc>
-    <lastmod>2014-07-08T22:54:23-04:00</lastmod>
+    <lastmod>2014-07-15T17:15:13-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://ConscientiousProgrammer.com/about/</loc>
-    <lastmod>2014-07-08T22:54:23-04:00</lastmod>
+    <lastmod>2014-07-15T17:15:13-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
