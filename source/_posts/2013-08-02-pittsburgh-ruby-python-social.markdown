@@ -11,6 +11,7 @@ categories:
 - C++
 - Scala
 - MongoDB
+- futures
 - parallelism
 - concurrency
 - Bakery Square
