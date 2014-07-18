@@ -19,6 +19,7 @@ categories:
 - Go
 - object-oriented
 - string interpolation
+- implicits
 ---
 This is part 2 of a series of articles, "`toString` considered harmful". [Part 1] introduced the problem in the context of a common design flaw present in object-oriented languages, and proposed a simple workaround.
 
