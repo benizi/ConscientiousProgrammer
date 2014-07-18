@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Pittsburgh Scala Meetup: Exploring Type-directed, Test-driven Development Using FizzBuzz (My Practice Talk) - The Conscientious Programmer</title>
+  <meta name="author" content="Franklin Chen">
+
+  
+  <meta name="description" content="The Pittsburgh Scala Meetup met, with me presenting a practice talk for &ldquo;Exploring type-directed, test-driven development using FizzBuzz&rdquo &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41982602-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Conscientious Programmer</a></h1>
+  
+    <h2>Humbly exploring what it means to do the right thing.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ConscientiousProgrammer.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Pittsburgh Scala Meetup: Exploring Type-directed, Test-driven Development Using FizzBuzz (My Practice Talk)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-15T22:49:48-04:00" pubdate data-updated="true">May 15<sup>th</sup>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met, with me presenting a <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581402/">practice talk</a> for &ldquo;Exploring type-directed, test-driven development using FizzBuzz&rdquo;, which I am presenting at the upcoming local <a href="http://pghtechfest.com/">Pittsburgh TechFest</a> conference.</p>
+
+<!--more-->
+
+
+<h2>Presentation</h2>
+
+<p>I have only recently completed the slides and code for my talk, and had not actually given the talk yet, so this was a practice talk that did not go so well, unfortunately.</p>
+
+<p>I spoke too quickly and had too much material to cover, and also got lost in some of my own slides. Oops. I think reaction to my talk was mixed. Some enjoyed it, while others seemed lost at places.</p>
+
+<p>After going home, I frankly felt that I had <em>failed</em>.</p>
+
+<p>But I believe I can do much better. I have plenty of time to do a thorough revision before Pittsburgh TechFest in three weeks. I need to cut out material that is not needed for the core of what I am trying to achieve and make some things clearer (especially for the intended Pittsburgh TechFest audience, which I do not expect to even know Scala).</p>
+
+<h2>Supporting material</h2>
+
+<p>Here is the <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz">GitHub repository</a>.</p>
+
+<p>I don&rsquo;t recommend looking at them, but for historical purposes, here are slides of the presentation <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/meetup/doc/presentation.pdf">as it was given in the first draft</a>.</p>
+
+<h2>(Update of 2014-05-16)</h2>
+
+<p>One day makes a difference in my confidence and determination! I noticed that the new <a href="http://www.meetup.com/Pittsburgh-Code-Supply/">Pittsburgh Code and Supply</a> group (which I have not yet attended) is soon having its inaugural <a href="http://www.rust-lang.org/">Rust</a> <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/181773312/">soon</a>.</p>
+
+<p>So I decided to offer to do a version of my talk for Pittsburgh Code and Supply using Rust as the programming language (rather than Scala). I want to spread the news about how to effectively use a sufficiently typed programming language, whether it&rsquo;s Scala or Rust or anything else sufficiently derived from the ML family of type systems.</p>
+
+<p>Justin will schedule it for some time in July. That should give me enough time, after Pittsburgh TechFest in early June, to learn enough Rust to convert my Scala code over properly!</p>
+
+<h2>(Update of 2014-06-07)</h2>
+
+<p>I much improved the presentation for Pittsburgh TechFest.</p>
+
+<p>I recommend reading the <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/master/doc/article.pdf">article version of the presentation</a>, rather than the slides. This is the first time I&rsquo;ve created both an article version of a presentation and slides for use during the live presentation. I will do this in the future as well. Slides are not meant to stand alone or even be read alone.</p>
+
+<h2>(Update of 2014-07-17)</h2>
+
+<p>It&rsquo;s crunch time. My Rust version of the talk, <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/183483622/">&ldquo;Type-Directed TDD in Rust&rdquo;</a> is coming next week.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-15T22:49:48-04:00" pubdate data-updated="true">May 15<sup>th</sup>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/compilers/'>compilers</a>, <a class='category' href='/blog/categories/fizzbuzz/'>fizzbuzz</a>, <a class='category' href='/blog/categories/m-star-modal/'>m*modal</a>, <a class='category' href='/blog/categories/monoids/'>monoids</a>, <a class='category' href='/blog/categories/parallelism/'>parallelism</a>, <a class='category' href='/blog/categories/pittsburgh/'>pittsburgh</a>, <a class='category' href='/blog/categories/pittsburgh-code-and-supply/'>pittsburgh code and supply</a>, <a class='category' href='/blog/categories/pittsburgh-techfest/'>pittsburgh techfest</a>, <a class='category' href='/blog/categories/rust/'>rust</a>, <a class='category' href='/blog/categories/scala/'>scala</a>, <a class='category' href='/blog/categories/scalacheck/'>scalacheck</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/02/13/pittsburgh-scala-meetup-implicits/" title="Previous Post: Pittsburgh Scala Meetup: Implicits">&laquo; Pittsburgh Scala Meetup: Implicits</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/" title="Next Post: Pittsburgh Code and Supply: Programming in journalism">Pittsburgh Code and Supply: Programming in journalism &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/">Pittsburgh Code and Supply: Programming in Journalism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/">Pittsburgh Scala Meetup: Exploring Type-directed, Test-driven Development Using FizzBuzz (My Practice Talk)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/13/pittsburgh-scala-meetup-implicits/">Pittsburgh Scala Meetup: Implicits</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/">Pittsburgh Scala Meetup: Introduction to Reactive</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/">Review of the Free Coursera Course "Principles of Reactive Programming"</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'FranklinChen',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+FranklinChen?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - <a href="http://franklinchen.com/">Franklin Chen</a> -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'conscientiousprogrammer';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/';
+        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

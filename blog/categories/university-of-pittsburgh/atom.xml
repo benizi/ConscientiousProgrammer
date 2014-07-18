@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: university of pittsburgh | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/university-of-pittsburgh/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2014-07-18T00:56:16-04:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
+  <author>
+    <name><![CDATA[Franklin Chen]]></name>
+    <email><![CDATA[franklinchen@franklinchen.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Data Visualization: D3 and only D3]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/08/22/pittsburgh-data-visualization-d3-and-only-d3/"/>
+    <updated>2013-08-22T22:01:22-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/08/22/pittsburgh-data-visualization-d3-and-only-d3</id>
+    <content type="html"><![CDATA[<p>Patrick gave a presentation for the <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/">Pittsburgh Data Visualization Meetup</a> on <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/events/135374702/">only D3</a>, because there was interest after the <a href="/blog/2013/08/07/pittsburgh-data-visualization-d3-and-r/">previous meetup</a> for more on D3.</p>
+
+<!--more-->
+
+
+<h2>Summary</h2>
+
+<p>Patrick started with a review of last time, on selections, data, callbacks, and transitions.</p>
+
+<p>Then he went into the use of <a href="http://en.wikipedia.org/wiki/Heat_map">heat maps</a>.</p>
+
+<p>Finally, he went into forces.</p>
+
+<p>I have to confess that I got lost in the presentation because of the volume of code presented and my unfamiliarity with the API. I believe that I&rsquo;ve reached the limit of what I can passively absorb about using D3, and simply need to get down and dirty and create my own project.</p>
+
+<p>I was also feeling really tired and on the verge of getting sick. I felt very cold in the room and did not have a jacket on me in the summer.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Data Visualization: D3 and R]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/08/07/pittsburgh-data-visualization-d3-and-r/"/>
+    <updated>2013-08-07T22:19:55-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/08/07/pittsburgh-data-visualization-d3-and-r</id>
+    <content type="html"><![CDATA[<p>Just a week ago, the <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/">Pittsburgh Data Visualization Meetup</a> launched with a <a href="/blog/2013/07/30/pittsburgh-data-visualization-meetup-inaugural-meet-and-greet/">&ldquo;meet and greet&rdquo; that I attended</a>. Today was <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/events/132375562/">our first actual presentation-based meeting</a>, with speakers giving introductions to both D3 and R.</p>
+
+<!--more-->
+
+
+<h2>Location</h2>
+
+<p>The meeting was on the Pitt campus. Unfortunately, this meant no WiFi access, because guest WiFi requires a sponsor and is a hassle to set up. So this is not the perfect place to meet, but was available to Patrick in the summer.</p>
+
+<p>About 15 people showed up.</p>
+
+<h2>Patrick on D3</h2>
+
+<p>By popular demand, Patrick gave an introduction to D3.</p>
+
+<p>He is particularly interested in knowledge discovery in data mining. He gave an example of converting data from HTML to XML to SVG and then finally getting it into D3.</p>
+
+<p>Although D3 is a JavaScript library, its API feels like its own domain-specific language with its own conventions, so there&rsquo;s a learning curve. Patrick gave a demo of hooking data up to D3 and then changing the data, and hooking up mouse events. He showed transitions for visualization when data changes. Apparently D3 does an efficient recalculation of what needs to happen when data changes.</p>
+
+<p>He also showed a force-directed graph.</p>
+
+<h2>Rihanna on R</h2>
+
+<p>Rihanna spoke about her use of R for her work.</p>
+
+<p>She has been using R for 13 years! She gave an overview of her work flow, which involves using a workspace and saving objects. She likes to get data from raw sources into R and use plots to look for patterns, spikes. Then she makes different plots in order to tell a story.</p>
+
+<h2>Conclusion</h2>
+
+<p>I found it very informative to hear about the work flows Patrick and Rihanna each adopted in order to find and report on interesting data.</p>
+
+<p>The main drawback of this meeting was that it was very long, because of two talks crammed into one evening. Since this was just the first meeting, I suggested that shorter talks in the future would enable more time for unstructured discussion at meetings.</p>
+]]></content>
+  </entry>
+  
+</feed>

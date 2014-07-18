@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pittsburgh | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/pittsburgh/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-07-15T17:15:13-04:00</updated>
+  <updated>2014-07-18T00:56:16-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -14,6 +14,252 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Pittsburgh Code and Supply: Programming in journalism]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/"/>
+    <updated>2014-07-17T21:21:19-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism</id>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://static.squarespace.com/static/538f3cc8e4b00f52172b5560/t/53a4ec76e4b0488fb14c5a29/1403317372203/sign.png?format=500w">http://static.squarespace.com/static/538f3cc8e4b00f52172b5560/t/53a4ec76e4b0488fb14c5a29/1403317372203/sign.png?format=500w</a>"></p>
+
+<p>I finally attended my first ever <a href="http://www.codeandsupply.co/">Pittsburgh Code and Supply</a> meeting! The group, which posts its <a href="http://www.meetup.com/Pittsburgh-Code-Supply/">events on Meetup</a>, was created by local Pittsburgh software developer <a href="https://twitter.com/justinxreese">Justin Reese</a> just a few months ago, in March 2014. His vision is to create a local community that, unlike conventional specific language/technology-based meetups, is much more universal and broad. If you haven&rsquo;t do so already, read more about the <a href="http://www.codeandsupply.co/about">goals of Pittsburgh Code and Supply</a>. I&rsquo;m very excited about this new group!</p>
+
+<p>The Code and Supply meetup I just attended was about <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/186766512/">&ldquo;Programming in journalism&rdquo;</a>. This is a topic of huge importance, and I was excited to attend to hear more about what some local journalist/programmers are doing.</p>
+
+<!--more-->
+
+
+<h2>A bit about sponsors</h2>
+
+<p>Justin opened by briefly saying a few words about the goals of Pittsburgh Code and Supply. He then noted that this month, the group did not have sponsors, unfortunately.</p>
+
+<p><strong>Pittsburgh Code and Supply needs sponsors!</strong></p>
+
+<p>If you like what Code and Supply is doing, please consider seeing if your employer would be willing to step up as a sponsor for the group.</p>
+
+<h2>Contribute!</h2>
+
+<p>Also, in any case, spread the word about the group.</p>
+
+<p>This is my first meeting, and next Monday, I am actually going to give my first presentation for the group, on <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/183483622/">&ldquo;Type-Directed TDD in Rust&rdquo;</a>. The group is always looking for people to speak about something or facilitate other formats of meetings, so <a href="http://www.codeandsupply.co/speak/">sign up</a> if you have an idea! I personally have some ideas I&rsquo;d like to propose for future meetings, such as discussions about technology-related topics such as philosophy, history, and education.</p>
+
+<h2>AmyJo Brown</h2>
+
+<p><a href="http://amyjobrown.com/">AmyJo Brown</a>, an independent journalist, gave a great talk about the kind of work that she does, and why it is important. She gave an overview of how journalism has changed because of the availability of data and because of the complexity of the world, both of which lead to the necessity of telling stories differently, as evidenced by what <a href="http://www.propublica.org/">ProPublica</a>, the <a href="http://www.nytimes.com/">New York Times</a>, and the <a href="http://www.latimes.com/">Los Angeles Times</a> have been doing.</p>
+
+<p>Her own work involves tracking political donations (&ldquo;follow the money&rdquo;).</p>
+
+<p>She gave examples of software tools she uses to get data, clean it, analyze it, and archive the whole process. On the programming end, she programs in Python, for example (Django for Web development), and uses <a href="http://www.documentcloud.org/">DocumentCloud</a>.</p>
+
+<p>She talked about many things to keep in mind while doing this kind of data journalism. First of all, you have to know the limitations of the data you&rsquo;re getting. She has to deal with handwritten documents, and data in different formats. Data that is clearly incomplete or entered wrong (whether accidentally or maliciously). It is necessary to know the domain, know the context in which data was collected or required or submitted, to not fall into the trap of just blindly treating data as a record of the full truth and just get into programmatically processing it. There&rsquo;s a lot that involves human judgment calls. And this is why it is so important to save all the original information and document each step of data &ldquo;cleaning&rdquo; and interpretation.</p>
+
+<p>Near the end of her talk, AmyJo had her colleague Katrina speak a bit also. Katrina was not originally trained as a programmer, but was always interested in politics. She ended up getting into programming later.</p>
+
+<p>(I&rsquo;m always very excited and impressed to hear of people with domain knowledge and passion who take up computer programming as a useful skill to apply to their domain. Sometimes I hear people saying &ldquo;please don&rsquo;t code&rdquo;; I totally disagree with this sentiment and believe that <a href="http://franklinchen.com/blog/2011/12/09/why-everyone-should-learn-computer-science/">everyone can benefit from learning the fundamentals of computer science and programming</a>.)</p>
+
+<h2>Andrew McGill</h2>
+
+<p><a href="http://www.andrewrmcgill.com/">Andrew McGill</a> bills himself as &ldquo;your friendly neighborhood journalist&rdquo;, and works for the <a href="http://www.post-gazette.com/">Pittsburgh Post-Gazette</a>.</p>
+
+<p>He started by talking about his interesting career path, which involved being into computers before college, but then going to college and then finding other interests and abandoning programming, and then only later taking it back up, in the service of journalism, to enable him to find data and tell stories through visualization.</p>
+
+<p>He showed us specific Web sites and articles he has created to provide better visualizations of data than what is available in raw form. For example, on the funny side, there is <a href="http://newsinteractive.post-gazette.com/wheresbill/">&ldquo;Where&rsquo;s Bill?&rdquo;</a>, which he created because he was not happy with the &ldquo;official&rdquo; boring text news feed of Mayor Bill Peduto&rsquo;s calendar. He scraped the official site with PHP. He also created a Bill Peduto Twitter bot using Python.</p>
+
+<p>He also showed a D3-based visualization of <a href="http://newsinteractive.post-gazette.com/plugged-wells/">&ldquo;The Mystery of the Plugged Wells&rdquo;</a>. Again, the point was to take already available data but to tell a story better with it than just giving raw tables or a purely text-based narrative.</p>
+
+<p>He showed some other projects, such as a visualization of school comparisons based on <a href="http://en.wikipedia.org/wiki/Pennsylvania_System_of_School_Assessment">PSSA</a> data.</p>
+
+<h2>Questions and answers</h2>
+
+<p>There were quite a lot of questions posed to the presenters throughout the evening, on the technologies used, on work with graphic designers, on the process of obtaining data, and political implications of the work. Great discussions.</p>
+
+<h2>Technologies used</h2>
+
+<p>Here&rsquo;s something resembling a summary of technologies mentioned that the presenters use:</p>
+
+<ul>
+<li>Python</li>
+<li>Django</li>
+<li>DocumentCloud</li>
+<li>Bootstrap</li>
+<li>Git</li>
+<li>R</li>
+<li>SQL</li>
+<li>OpenRefine</li>
+<li>D3</li>
+</ul>
+
+
+<h2>Interesting articles</h2>
+
+<p>Before the meetup, I posted to the <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/186766512/">event page</a> a link to a provocative (perhaps too harsh and ranty) article warning about dangers in data journalism, <a href="http://www.niemanlab.org/2014/07/alberto-cairo-data-journalism-needs-to-up-its-own-standards/">by visualization expert Alberto Cairo</a>. It got no response.</p>
+
+<p>Later, I also posted a link to a thoughtful examination of the question of <a href="http://source.opennews.org/en-US/learning/true-facts-maybe/">epistemology in data journalism</a>. I totally recommend reading that article.</p>
+
+<p>AmyJo after the meetup posted some more links on the event page:</p>
+
+<ul>
+<li><a href="https://medium.com/@jeremybowers/why-im-a-newsroom-coder-860d9d49f684">&ldquo;Why I&rsquo;m a newsroom coder&rdquo;</a></li>
+<li><a href="https://source.opennews.org/en-US/articles/planting-next-crop-newsroom-coders/">&ldquo;Planting the next crop of newsroom coders&rdquo;</a></li>
+<li><a href="http://www.nytimes.com/2014/07/17/opinion/the-fec-lags-on-campaign-finance-disclosures.html">&ldquo;Data delayed is democracy denied&rdquo;</a></li>
+</ul>
+
+
+<h2>Conclusion</h2>
+
+<p>I was very excited to attend my first Pittsburgh Code and Supply meetup, on the fascinating topic of programming in journalism. I felt I learned a lot about what is at stake and how programming is being used in journalism to better inform people of what is going on in the world.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: Exploring type-directed, test-driven development using FizzBuzz (my practice talk)]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/"/>
+    <updated>2014-05-15T22:49:48-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met, with me presenting a <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581402/">practice talk</a> for &ldquo;Exploring type-directed, test-driven development using FizzBuzz&rdquo;, which I am presenting at the upcoming local <a href="http://pghtechfest.com/">Pittsburgh TechFest</a> conference.</p>
+
+<!--more-->
+
+
+<h2>Presentation</h2>
+
+<p>I have only recently completed the slides and code for my talk, and had not actually given the talk yet, so this was a practice talk that did not go so well, unfortunately.</p>
+
+<p>I spoke too quickly and had too much material to cover, and also got lost in some of my own slides. Oops. I think reaction to my talk was mixed. Some enjoyed it, while others seemed lost at places.</p>
+
+<p>After going home, I frankly felt that I had <em>failed</em>.</p>
+
+<p>But I believe I can do much better. I have plenty of time to do a thorough revision before Pittsburgh TechFest in three weeks. I need to cut out material that is not needed for the core of what I am trying to achieve and make some things clearer (especially for the intended Pittsburgh TechFest audience, which I do not expect to even know Scala).</p>
+
+<h2>Supporting material</h2>
+
+<p>Here is the <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz">GitHub repository</a>.</p>
+
+<p>I don&rsquo;t recommend looking at them, but for historical purposes, here are slides of the presentation <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/meetup/doc/presentation.pdf">as it was given in the first draft</a>.</p>
+
+<h2>(Update of 2014-05-16)</h2>
+
+<p>One day makes a difference in my confidence and determination! I noticed that the new <a href="http://www.meetup.com/Pittsburgh-Code-Supply/">Pittsburgh Code and Supply</a> group (which I have not yet attended) is soon having its inaugural <a href="http://www.rust-lang.org/">Rust</a> <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/181773312/">soon</a>.</p>
+
+<p>So I decided to offer to do a version of my talk for Pittsburgh Code and Supply using Rust as the programming language (rather than Scala). I want to spread the news about how to effectively use a sufficiently typed programming language, whether it&rsquo;s Scala or Rust or anything else sufficiently derived from the ML family of type systems.</p>
+
+<p>Justin will schedule it for some time in July. That should give me enough time, after Pittsburgh TechFest in early June, to learn enough Rust to convert my Scala code over properly!</p>
+
+<h2>(Update of 2014-06-07)</h2>
+
+<p>I much improved the presentation for Pittsburgh TechFest.</p>
+
+<p>I recommend reading the <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/master/doc/article.pdf">article version of the presentation</a>, rather than the slides. This is the first time I&rsquo;ve created both an article version of a presentation and slides for use during the live presentation. I will do this in the future as well. Slides are not meant to stand alone or even be read alone.</p>
+
+<h2>(Update of 2014-07-17)</h2>
+
+<p>It&rsquo;s crunch time. My Rust version of the talk, <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/183483622/">&ldquo;Type-Directed TDD in Rust&rdquo;</a> is coming next week.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: Implicits]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits/"/>
+    <updated>2014-02-13T21:45:59-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met with Justin presenting on <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581402/">&ldquo;Implicits&rdquo;</a>.</p>
+
+<!--more-->
+
+
+<h2>Implicits</h2>
+
+<p>Implicits are a novel and fantastically important feature of Scala. I wish there were a comprehensive and concise single resource about them out there, but I don&rsquo;t actually know of one.</p>
+
+<p>I&rsquo;ve been doing stuff with implicits lately. Not long ago, I wrote a blog post that involved <a href="/blog/2013/12/26/tostring-considered-harmful-part-2/">using Scala implicits to avoid relying on the inherited Java <code>toString</code> method</a>. More recently, for this meetup I posted some code that I hoped someone would comment on, in which <a href="https://github.com/franklinchen/test-specs2-matchers">I used implicits to try to simplify a DSL</a>. I&rsquo;m not sure this is the right design choice, but it was an experiment.</p>
+
+<h2>Presentation</h2>
+
+<p>Around 7 of us showed up.</p>
+
+<p>Justin did some live coding using the Scala Worksheet to demonstrate various uses of implicits.</p>
+
+<p>One use is to define an &ldquo;implicit function&rdquo; that can convert of a value of one type to another. This can be overused badly, unfortunately.</p>
+
+<p>Another is to define an &ldquo;implicit parameter&rdquo; for a function so that you don&rsquo;t have to explicitly pass a parameter to the function, if there is an implicit value in scope.</p>
+
+<p>Scala 2.10 greatly improved implicits by encapsulating the &ldquo;conversion&rdquo; pattern by means of an &ldquo;implicit class&rdquo;. Strangely, Scala Worksheet seemed to get confused when we played around and defined an implicit class that also had an implicit parameter. This led to some interesting detective work as we examined the generated JVM byte code to figure out what was going on! I thought it was useful for us to dig into this level; often it is useful to understand what something compiles to in order to better understand and appreciate a high-level language construct.</p>
+
+<p>Finally, we briefly discussed the type class pattern, which is arguably the most important use of implicits. This was too big a topic to get into here though.</p>
+
+<h2>Resources</h2>
+
+<p>I posted some good resources that have popped up on my radar on Scala implicits:</p>
+
+<ul>
+<li>A fine <a href="http://like-a-boss.net/2013/03/29/polymorphism-and-typeclasses-in-scala.html">tutorial on type classes in Scala</a>.</li>
+<li><a href="http://typelevel.org/blog/2014/01/18/implicitly_existential.html">Scary stuff with implicits</a> that I don&rsquo;t understand (yet).</li>
+</ul>
+
+
+<h2>Conclusion</h2>
+
+<p>Justin gave a nice introduction to implicits. I think the live coding and experimentation is a great way to involve people in code suggestions and discussion of what things mean and do. It was a fun time.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: Introduction to Reactive]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/"/>
+    <updated>2014-01-09T21:29:20-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met with Josh presenting an <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581352/">&ldquo;Introduction to Reactive&rdquo;</a>.</p>
+
+<p>It was great.</p>
+
+<!--more-->
+
+
+<h2>Pre-meetup dinner</h2>
+
+<p>A couple of us (Justin, Josh, Chris, me) had an early dinner at Everyday Noodles before the meetup. Very filling!</p>
+
+<h2>Turnout</h2>
+
+<p>Ten of us showed up for this meeting.</p>
+
+<h2>Presentation</h2>
+
+<h3>What is &ldquo;reactive&rdquo; anyway?</h3>
+
+<p>In case you didn&rsquo;t hear about it in the media, the term &ldquo;reactive&rdquo; has been popularized in recent months, and I <a href="/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/">reviewed the free Coursera course &ldquo;Principles of Reactive Programming&rdquo;</a> that some of us in the Pittsburgh Scala group just completed, so check out my post for more on &ldquo;reactive&rdquo;.</p>
+
+<h3>Futures</h3>
+
+<p>Josh did a live SBT session reviewing futures and promises.</p>
+
+<p>He noted that futures have limitations as a component of reactive systems. (This had become apparent when <a href="http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/">I started using futures last year in my personal projects</a> and then <a href="/blog/2013/08/02/pittsburgh-ruby-python-social/">for work</a>.) By themselves, futures do not support cancellation or <a href="http://en.wikipedia.org/wiki/Back_pressure">back pressure</a>. Futures are a low-level, limited mechanism that are the right tool only if you have a pipeline all the way through forward, no back channel.</p>
+
+<p>An alternative to futures, of course, is to go all out and use Akka actors. But the drawback I&rsquo;ve found with that is that this is a heavyweight mechanism for problems that don&rsquo;t need the full power of actors. I&rsquo;ve wanted something more structured and lightweight than using actors directly. I find it tricky to program using actors, because it is very easy to start writing spaghetti code that is spread out everywhere (which is what happened to me in the final project for the Coursera course).</p>
+
+<p>It turns out, according to Josh, that Typesafe is working on precisely this problem! Nice. He&rsquo;ll tell us more when it comes out.</p>
+
+<h4>(Update of 2014-07-10)</h4>
+
+<p>Half a year later, the promise was realized, as the Pittsburgh Scala Meetup had Josh <a href="/blog/2014/07/10/pittsburgh-scala-meetup-reactive-streams/">gave a talk on the new API called Reactive Streams</a>!</p>
+
+<h3>Play</h3>
+
+<p>Josh demonstrated <a href="http://typesafe.com/activator">Typesafe Activator</a>, the cool new Web browser-based platform for using Scala. He showed an app using Play that looks at blogs simultaneously and uses <code>recoverWith</code>.</p>
+
+<h2>Random other questions and discussions</h2>
+
+<p>What I like about the Pittsburgh Scala Meetup is that even when we have a presentation, discussion often wanders off to related topics (or unrelated topics). Anything goes, and I usually learn a lot.</p>
+
+<p>Someone asked about support for channels as in Go or Clojure&rsquo;s <a href="https://github.com/clojure/core.async"><code>core.async</code></a>. Josh said they&rsquo;re working on this sort of thing with support for back pressure.</p>
+
+<p>Someone asked about how to connect <a href="http://www.playframework.com/documentation/2.0/Iteratees">iteratees</a> with actors. Josh said, you can feed from an iteratee to an actor, and then just let the actor do stuff. However, there is some controversy about the whole iteratee thing in Play.</p>
+
+<h2>Conclusion</h2>
+
+<p>This was a great Pittsburgh Scala Meetup session. I felt that a lot of questions that had built up in my mind after having gotten into reactive programming are being addressed with continuing work.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Pittsburgh Scala Meetup: code walk through tic-tac-toe with Play]]></title>
     <link href="http://ConscientiousProgrammer.com/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play/"/>
     <updated>2013-12-05T22:15:52-05:00</updated>
@@ -21,277 +267,6 @@
     <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met again with <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581232/">Josh walking through his code for an interactive Web tic-tac-toe program implemented with Play</a>.</p>
 
 <p>It was a good session. I&rsquo;m finding that studying code (with the code&rsquo;s author present) is a great way to learn, to discuss design decisions and alternate possible choices that could have been made. For example, when it comes to actors, there are decisions to be made about how many actors, what state they should contain, and how to transition.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Scala Meetup: learning by reading Josh's code!]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/10/11/pittsburgh-scala-meetup-learning-by-reading-joshs-code/"/>
-    <updated>2013-10-11T00:09:33-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/10/11/pittsburgh-scala-meetup-learning-by-reading-joshs-code</id>
-    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met to <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/135567132/">learn by hacking</a>. There was a change of plan because Josh couldn&rsquo;t make it to the meeting, so instead of a presentation by him, we got a link to his GitHub repository for an implementation of an <a href="https://github.com/jsuereth/tic-tac-toe">interactive Web-based tic-tac-toe game using Play</a>.</p>
-
-<p>Sometimes interesting things happen when plans are changed.</p>
-
-<!--more-->
-
-
-<h2>Reading Josh&rsquo;s code</h2>
-
-<p>Since Josh wasn&rsquo;t around, we decided to study his code, and use it as the basis of discussion of Scala language features and idiomatic style, making sure that all of us understood what the code was doing. This turned out to be a surprisingly useful exercise, very participatory by everyone.</p>
-
-<p>Justin took charge of an SBT session as we played with modifying the code and figuring out what things did. I shared some tips on using SBT in &ldquo;trigger mode&rdquo;, which some had not known about. While experimenting, we ran into interesting Scala gotchas involving <code>def</code> and <code>val</code> in classes that mix in traits. We also had useful discussions on coding style, such as point-free style and use of underscores in closures, and converting between curried and uncurried functions. My personal point of view is that I prefer to be more explicit rather than more concise, to improve clarity, but much does depend on assumptions about people&rsquo;s prior knowledge. Josh was writing this code for only himself, and the complete application was actually not meant to showcase the tic-tac-toe game logic anyway, but the use of Play.</p>
-
-<h2>Conclusion</h2>
-
-<p>I thought it was a really useful session in which we all helped one other get up to speed on various Scala language features or standard library APIs. We all learned something new, and we figured out Josh&rsquo;s code, and collected questions to ask him when he comes back!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OpenHack Pittsburgh: learning Elixir test-driven and package-publishing]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/"/>
-    <updated>2013-08-26T22:09:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing</id>
-    <content type="html"><![CDATA[<p>It&rsquo;s been a long time since I went to an <a href="http://openhack.github.io/pittsburgh/">OpenHack Pittsburgh</a> meeting. The last time was <a href="http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/">five months ago</a>. On June 24, there was an <a href="http://www.meetup.com/pittsburgh-ruby/events/120200292/">OpenHack Pittsburgh</a> held at <a href="http://www.4moms.com/">4moms</a>, but I really needed to stay home and take it easy that evening, because of my busy schedule later in the week, including attending a <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">PittJUG meeting</a> and preparing a <a href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">Pittsburgh Python talk</a>.</p>
-
-<p><a href="http://www.meetup.com/pittsburgh-ruby/events/120201842/">This August meeting of OpenHack Pittsburgh</a> was held at <a href="http://www.modcloth.com/">ModCloth</a>, which I had never been to. It&rsquo;s in Crafton, which is a place I&rsquo;ve never been before, nearly half an hour drive from Pittsburgh. Because of worries about driving there near rush hour after work, I probably would not have signed up to attend had it not been for <a href="http://justinxreese.com/">Justin</a>, the organizer of OpenHack Pittsburgh.</p>
-
-<p>What happened was that he asked for feedback about who was planning to work on what, and said he planned to learn some <a href="http://elixir-lang.org/">Elixir</a>, a fairly new programming language built on top of the <a href="http://www.erlang.org/">Erlang</a> runtime. Since this language had been on my list of things to look into, I decided that learning loves company, so I proposed to learn some Elixir in a test-driven way!</p>
-
-<p>What does that mean?</p>
-
-<p><img class="<a" src="href="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg">http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg</a>" title="Franklin working on laptop" ></p>
-
-<!--more-->
-
-
-<h2>How to learn a programming language</h2>
-
-<p>I have written code in probably around fifty (50) programming languages. I&rsquo;m not kidding, and I&rsquo;m not proud, but this is simply a fact of my having done programming since 1982, thirty-one (31!!) years ago. Let&rsquo;s face it: languages come and go. I have personally sat at an IBM <a href="http://en.wikipedia.org/wiki/Keypunch">keypunch</a> machine punching out cards for my COBOL and Fortran code.</p>
-
-<p>As with human languages, the fact is that to be truly productive in a language requires much more than learning some syntax and semantics. It requires actually writing and running and fixing code, and in the context of a realistic project.</p>
-
-<p>I&rsquo;ve learned through trial and error that the most common ways of learning a programming language, like the most common ways of learning human languages (other than one&rsquo;s first language), are terribly inefficient and misleading, resulting in minimal competence. I mean, reading through books, typing into a REPL, submitting a single file to a compiler or interpreter, etc.</p>
-
-<p>I feel that we should learn programming languages using a variety of approaches. Yes, the academic bottom-up semantics-based approach is critical in the long run, to avoid wasting a lot of time on pointless misunderstandings. Exploration in a REPL can be very rewarding. But I think what is often missing is the <em>biggest possible picture</em>: immediately seeing how to write a program that is integrated with a test framework, uses libraries, is exportable and publishable publicly as a library, can be submitted to a continuous integration server, is editable in a decent editor or IDE, etc.</p>
-
-<p>Without seeing the biggest possible picture, one usually gets a horribly inaccurate picture of what it is like to program in a particular language ecosystem. (I will be writing more about this subject of pedagogy later.)</p>
-
-<h2>My proposal</h2>
-
-<p>The last couple of languages I have learned in recent years, I slowly came to work with in a more efficient way than in the past, because I focused on matters such as testability. In particular, as I grew to wholly adopt TDD when writing any code at all in any language, it became clear to me that the best way to learn a new language must be in a test-driven way.</p>
-
-<p>Here&rsquo;s an analogy: I believe the best way to learn a human language is to dive into how to be able to converse in some coherent way right off the bat. <a href="http://www.fluentin3months.com/4-hour/">Tim Ferriss and others</a> have exploited this idea to <em>drive</em> the learning of what is most relevant in <a href="http://www.fourhourworkweek.com/blog/2007/11/07/how-to-learn-but-not-master-any-language-in-1-hour-plus-a-favor/">grammar</a> and <a href="http://www.fourhourworkweek.com/blog/2009/01/20/learning-language/">vocabulary</a>.</p>
-
-<p>In the past, I learned human languages in a terrible way, taking lots of courses, but never actually getting fluent in everyday use. This is how we tend to learn &ldquo;foreign&rdquo; programming languages. My proposal is that learning a new programming language should involve getting as quickly as possible up to speed on a <em>minimum viable publishable library</em>.</p>
-
-<p>That the software artifact should be a <em>library</em>, and not just some executable program, is vital, because it means having to adhere by whatever standards apply to real-world API design in the language ecosystem, producing something that client code can import and call.</p>
-
-<p>That it should be <em>publishable</em> is vital because it means adhering to standards of testing, of discovery through metadata, and enabling easy use by a client.</p>
-
-<h2>My concrete example with learning Elixir tonight</h2>
-
-<h3>Prior background in Erlang and Elixir</h3>
-
-<p>I went to OpenHack Pittsburgh <em>never</em> having yet read any Elixir language material, never having written Elixir code, not even &ldquo;hello, world&rdquo;. The only things I had done before tonight:</p>
-
-<ul>
-<li>I first heard of Erlang nearly two decades ago, and when I saw it, I was turned off by the Prolog-style syntax, and it didn&rsquo;t seem relevant to anything I was doing at the time, so I ignored it.</li>
-<li>I intended to learn some Erlang earlier this year, but made little progress before putting it aside: I went to the free book <a href="http://learnyousomeerlang.com/">&ldquo;Learn You Some Erlang for Great Good!&rdquo;</a> and downloaded the code and <a href="https://github.com/FranklinChen/learn-you-some-erlang">got it to compile</a>, but did not proceed any further.</li>
-<li>I installed Elixir on my Mac <a href="http://elixir-lang.org/getting_started/1.html">using Homebrew</a>.</li>
-<li>I installed an <a href="https://github.com/elixir-lang/emacs-elixir">Emacs Elixir mode</a>.</li>
-<li>I made a note of a free online book <a href="http://chimera.labs.oreilly.com/books/1234000001642">&ldquo;Etudes for Elixir&rdquo;</a> and checked out the GitHub repository, but did not look at the book or code.</li>
-</ul>
-
-
-<h3>Find a testing framework</h3>
-
-<p>Upon arrival at ModCloth, getting pizza to eat, and plugging in my MacBook and connecting to the guest WiFi, the first thing I did was search for a testing framework for Elixir.</p>
-
-<p>It&rsquo;s 2013, not 1993, so it is hard to convince me to invest any time at all in learning to operate in a language ecosystem that does not have at least a de facto standard testing framework. For every language that I currently actively use for writing serious programs, I operate with TDD. Some examples of languages and the test frameworks I currently use for them:</p>
-
-<ul>
-<li>C/C++: <a href="https://code.google.com/p/googletest/">googletest</a></li>
-<li>Clojure: <a href="https://github.com/marick/Midje">Midje</a></li>
-<li>Haskell: <a href="http://hspec.github.io/">HSpec</a> and <a href="http://www.haskell.org/haskellwiki/Introduction_to_QuickCheck2">QuickCheck</a></li>
-<li>Java or Scala: <a href="http://specs2.org/">Specs2</a> and <a href="http://www.scalacheck.org/">ScalaCheck</a></li>
-<li>JavaScript: <a href="http://pivotal.github.io/jasmine/">Jasmine</a></li>
-<li>Perl: <a href="http://search.cpan.org/~mschwern/Test-Simple-0.98/lib/Test/More.pm">Test::More</a></li>
-<li>Python: <a href="http://pytest.org/">pytest</a></li>
-<li>Ruby: <a href="http://rspec.info/">RSpec</a></li>
-<li>Racket: <a href="http://docs.racket-lang.org/rackunit/">RackUnit</a></li>
-</ul>
-
-
-<p>Well, first Web search hit for Elixir and unit testing was <a href="http://elixir-lang.org/getting_started/ex_unit/1.html">ExUnit</a>, so that was encouraging.</p>
-
-<p>Justin was still stuck installing Elixir, so we started exploring Elixir together off my laptop.</p>
-
-<h3>One test file</h3>
-
-<p>The first thing I did after discovering ExUnit was to copy and paste the code for a sample test into Emacs and save it into a file <code>test_hello.exs</code>, see that the Elixir mode was working (with syntax highlighting), and figure out how to run the test: <code>$ elixir test_hello.exs</code>.</p>
-
-<p>It worked!</p>
-
-<p>Then we explored adding more tests, changing some assertions, and learning as went, by looking up the Elixir documentation. For example, Elixir uses an interesting callback mechanism for cleanly passing &ldquo;setup&rdquo; state to tests inside a single test case. Also, <code>assert</code> and <code>test</code> are <a href="http://en.wikipedia.org/wiki/Macro_%28computer_science%29#Syntactic_macros">syntactic macros</a>, enabling them to do magic to analyze expressions, hence the support of natural assertion syntax (which <a href="/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/">I like a lot better than special syntax</a>).</p>
-
-<p>After writing some failing tests involving arithmetic and making them pass, I wrote a division by zero test. I was intrigued that not only did it fail, as expected, but also the compiler warned ahead of time that an exception was going to be raised. Nice. In any case, I learned how to make an assertion of the raising of an exception. This is very important. We should always pay attention to <a href="http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/">testing the sad paths</a>.</p>
-
-<p>We saw in the documentation for ExUnit that there was a way to mark a test case as being OK to run concurrently with others. Great! These days there is no excuse not to be able to run tests concurrently. So I wrote another test case, which I put in the same source file (for the moment), and I wanted to see for myself that concurrency was happening. I wanted to call some kind of &ldquo;sleep&rdquo; function. To do that, I did a Web search, and found that Erlang comes with <code>sleep</code> in the <code>timer</code> module. I found out how to call Erlang from Elixir, and it worked!</p>
-
-<h3>More than one source file</h3>
-
-<p>The next obvious step was to write a test for code that did not yet exist, but was to be written outside the test source file. For that, I had to figure out how to define a module and import it. OK, but then there&rsquo;s the question of file organization. Hmm.</p>
-
-<p>At this point, the only reasonable thing to do (and which in retrospect should have been done first) was to find out what the &ldquo;standard&rdquo; way of organizing a project&rsquo;s source files is supposed to be, and what the standard way to build everything is.</p>
-
-<p>A Web search quickly came up with <a href="http://elixir-lang.org/getting_started/mix/1.html">Mix</a>. Awesome, the Elixir people are serious about real software development! Mix turns out to be inspired by Clojure&rsquo;s <a href="https://github.com/technomancy/leiningen">Leiningen</a>, which of course I use to start any new Clojure project. <code>$ mix new hello</code> did the trick, creating the scaffolding for a new Elixir project.</p>
-
-<p>I refactored our existing <code>test_hello.exs</code> file into two files (one for each test case) in the <code>test</code> directory, then wrote a module <code>hello.ex</code> into <code>lib</code>. A failed test, then making it succeed, and finally I wrote my first non-test code in Elixir!</p>
-
-<p>Running tests is very easy once you are using Mix. Just <code>$ mix test</code> does it.</p>
-
-<h3>Packaging for publshing</h3>
-
-<p>At this point, I decided I wanted to create an actual Elixir package to publish.</p>
-
-<p>So I did a Web search to find out whether there was a standard repository and how to publish to it.</p>
-
-<p>Here we go, <a href="http://expm.co/">Expm</a>!</p>
-
-<p>I installed the package manager, set up my user name and password, and went to work on a simple package to publish.</p>
-
-<p>I saw that nobody had yet contributed an implementation of <a href="http://franklinchen.com/blog/2012/03/14/for-real-geeks-today-is-not-pi-day-but-half-tau-day/">tau</a>, so I quickly created a tau library with Mix, did <code>$ expm new</code> to create a <code>package.exs</code> template, filled it out, wrote an ExUnit test that passed, completed the <code>README.md</code>, and just as OpenHack Pittsburgh was officially closing for the evening, I successfully published <a href="http://expm.co/tau">my tau package</a>!</p>
-
-<p>Actually, I accidentally screwed up the first time, forgetting to change all the fields of the template <code>package.exs</code> and ending up published <code>yourlib</code>.</p>
-
-<p>Oh, and I committed my project in Git and pushed <a href="https://github.com/franklinchen/tau">to GitHub</a>.</p>
-
-<h2>Some Haskell stuff</h2>
-
-<p>Steve McCarthy of <a href="http://www.spacefinity.com/">Spacefinity</a> had announced, in the introduction at the beginning of the evening when each of us stood up to say what we planned to work on, that he wanted to do more with the <a href="http://www.haskell.org/cabal/">Cabal</a> package manager for Haskell, so I spent a little bit of time getting him going by pointing him toward a sample Haskell code repository I initially <a href="http://franklinchen.com/blog/2012/11/05/the-start-of-a-local-haskell-study-group.markdown/">set up last year when some friends were interested in getting into Haskell</a>; sadly, we&rsquo;ve all been too busy for Haskell, so I&rsquo;ve let the project rot, in the sense that my configuration file is not optimally organized and also there have been updates in the test framework world in Haskell since then.</p>
-
-<p>Anyway, here&rsquo;s my <a href="https://github.com/FranklinChen/project-euler-haskell">&ldquo;Project Euler in Haskell&rdquo; repository</a>. I plan to get around to improving it.</p>
-
-<h2>Thanks</h2>
-
-<p>Thanks to ModCloth for providing the space, pizza, cookies, and WiFi!</p>
-
-<p>A big thank-you to Justin for providing the inspiration for me to try this experiment in learning!</p>
-
-<p>And thanks to Steve McCarthy for getting me to drag up an old Haskell project and making me think that I should soon update it to be a better example.</p>
-
-<h2>Conclusion</h2>
-
-<p>Tonight was the first time I ever started learning a new programming language, wrote unit tests right off the bat with proper project organization and also published a library immediately.</p>
-
-<p>Of course, there is much more to go in actually really learning and using Elixir, but as a first step in showing that Elixir has a viable ecosystem, I think the experiment was a success. My next steps in continuing to learn Elixir would include writing tests in conjunction with a deep dive into the actual semantics of the language. There is no substitute for the latter; the alternative is dangerously making assumptions based on superficial syntactic similarity with other languages (such as Ruby).</p>
-
-<h3>(Update of 2013-08-27)</h3>
-
-<p>One thing I didn&rsquo;t get around to was setting up <a href="http://travis-ci.org/">Travis</a> continuous integration. I believe this should also be part of the story in getting up and running in a new programming language environment.</p>
-
-<p>So I did a Web search and figured out how to create a suitable <code>.travis.yml</code>. I committed and pushed to GitHub, flipped the switch in my Travis account, and you can see its <a href="https://travis-ci.org/FranklinChen/tau">passing status</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Java User Group: Java EE 7, 8, and beyond; or done?]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond/"/>
-    <updated>2013-08-13T22:18:11-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond</id>
-    <content type="html"><![CDATA[<p>The Pittsburgh Java User Group has not been meeting regularly for some time now. The <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">last meeting was almost two months ago</a>. I attended this one with the impression that it might well be my last attendance of the group, and even more, that it might be the end of the group altogether.</p>
-
-<p>The meeting did nothing to change my intuition.</p>
-
-<p><img src="/images/pittjug-2013-08-13/group.jpg"></p>
-
-<!--more-->
-
-
-<h2>Presentation by Reza Rahman</h2>
-
-<p>Reza Rahman of Oracle, a &ldquo;Java EE/GlassFish Evangelist&rdquo; gave the presentation. His goal was to promote the new and exciting things coming up in Java EE, and try to get community feedback into what next.</p>
-
-<p>He gave a retrospective on how surprisingly long ago Java EE came on the scene, a decade ago, and described the evolution over the years to improve developer productivity.</p>
-
-<p><img src="/images/pittjug-2013-08-13/speaker.jpg"></p>
-
-<p>Also it was good to see that the new APIs have improved since the old ones, including &ldquo;fluent&rdquo; APIs, the fact is that everything still seems clunky and &ldquo;old&rdquo;.</p>
-
-<p>Furthermore, the Java community is still stuck with old stuff. He bemoaned the fact that the old J2EE is still most widely used.</p>
-
-<p>And Java developers are still not keeping up to date with developments. He asked the audience how many had heard of WebSocket, and hardly anyone raised their hands. He asked who knew what &ldquo;hypermedia&rdquo; is, and nobody raised their hand. Wow.</p>
-
-<p>The presentation went very long, to two hours. Near the end, he said that they wanted to know what people wanted next, but nobody really responded. He asked, &ldquo;What do we need to do in the cloud?&rdquo;</p>
-
-<h2>Conclusion</h2>
-
-<p>My overall impression was that I was done attending more PittJUG meetings. In any case, the main organizers have long since moved on to other stuff besides Java anyway, and gotten busy, and it has been hard to find speakers. More generally, those who attend have not seemed very excited and proactive about asking for speakers or topics to be covered.</p>
-
-<p>I believe it&rsquo;s the end of an era. After all, I do not write any Java code any more, myself! I came to this talk about Java&rsquo;s future expecting it to be my last, and it did not disappoint.</p>
-
-<h2>(Update of 2014-06-10)</h2>
-
-<p>It&rsquo;s been almost a year since the last PittJUG meeting, as far as I know. So I think the group really is dead.</p>
-
-<p>There has been talk of expanding the group to not just be about Java, but anything JVM-related (such as other languages compiling to the JVM, e.g., Scala, Clojure, JRuby). Nothing seems to have happened of that.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Ruby/Python social and some observations about our polyglot world]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/"/>
-    <updated>2013-08-02T22:17:42-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social</id>
-    <content type="html"><![CDATA[<p>Programming meetups aren&rsquo;t just about presentations and coding. Abby and I joined others in meeting up for dinner for a <a href="http://www.meetup.com/pittsburgh-ruby/events/120201652/">joint Pittsburgh Ruby and Pittsburgh Python social</a> and enjoyed relaxing and socializing outdoors in Bakery Square. Although it perpetually looked like it was going to rain, it turned out we weren&rsquo;t really rained on.</p>
-
-<!-- http://instagram.com/p/ch8quus4Kb/ -->
-
-
-<p><img class="<a" src="href="http://distilleryimage11.ak.instagram.com/31a91496fbd111e2996722000a9f18fe_7.jpg">http://distilleryimage11.ak.instagram.com/31a91496fbd111e2996722000a9f18fe_7.jpg</a>" title="Dinner outside" ></p>
-
-<!-- https://secure.flickr.com/photos/carolnichols/9425969330/ -->
-
-
-
-
-<iframe src="https://www.flickr.com/photos/carolnichols/9425969330/player/" width="75" height="75" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
-
-
-<p>It was fitting that there was a joint social for two language communities, because we live in a polyglot world.</p>
-
-<p>Despite my original intention not to engage into any tech-related conversation, I couldn&rsquo;t help remarking on my current polyglot responsibilities at work at CMU on the METAL project!</p>
-
-<!--more-->
-
-
-<h2>Our polyglot world: Ruby, Python, Perl</h2>
-
-<p>I mentioned having to cobble together Ruby, Python, and Perl code recently in an NLP project to process Farsi text into corpora to analyze. We used a Ruby gem <a href="https://github.com/aziz/virastar">Virastar</a> in our pipeline, a Perl script for a Farsi stemmer, <a href="http://perstem.sourceforge.net/">Perstem</a>, and a <a href="https://github.com/wfeely/farsiNLPTools">Python script for normalization</a>.</p>
-
-<h3>(Update of 2013-12-04) C++, Scala, MongoDB</h3>
-
-<p>The work project ended up becoming even more polyglot than I expected.</p>
-
-<p>I also used a C++ tagger, TurboTagger from <a href="http://www.ark.cs.cmu.edu/TurboParser/">TurboParser</a>.</p>
-
-<p>I wrote Scala to execute and monitor the pipeline, because it turned out that component bugs and timeouts (from infinite loops sometimes) had to be dealt with: the original shell script pipelines did not handle any of that at all. Also, the vast amount of data meant that parallelizing was critical. The Scala ecosystem has  turned out great for me. I didn&rsquo;t use Akka actors for this task, just futures and parallel collections.</p>
-
-<p>I also used MongoDB because it is quite a natural fit for document-oriented storage and querying as an intermediate stage I can inspect before the final stage of conversion to Sketch Engine format. And I happened to just <a href="/blog/2013/12/04/mongodb-free-online-course-a-review/">finish a free online MongoDB course</a> which has been useful. In my Scala code, I used the official Scala driver <a href="https://github.com/mongodb/casbah">Casbah</a>.</p>
-
-<p>Why MongoDB? I needed to track the transformations, and experiment with different parameters while also fixing bugs and rerunning stuff. Because there is so much data and sometimes something crashes in the pipeline, I decided to save all intermediate results in a database in order to avoid repeating work.</p>
-
-<p>Finally, I used Scala to generate corpora for importing into <a href="http://www.sketchengine.co.uk/">The Sketch Engine</a> for our Farsi linguistics experts to analyze. Scala&rsquo;s parser combinator library came in very useful, and I represented each stage in the pipeline as a transformation of a custom AST designed to finally serialize well to the Sketch Engine &ldquo;vert&rdquo; file format.</p>
-
-<p>It was pretty important to work with ASTs, since we actually got text in a variety of formats, which I parsed to a common AST in order to push into the pipeline.</p>
-
-<p>Whew!</p>
-
-<h3>(Update of 2014-06-10)</h3>
-
-<p>A description of some of this <a href="http://springfield.metaphor.cs.cmu.edu:8080/MetaphorViz/About.html">METAL project</a> work is in the paper <a href="http://www.lrec-conf.org/proceedings/lrec2014/pdf/596_Paper.pdf">&ldquo;The CMU METAL Farsi NLP Approach&rdquo;</a>.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-07-15T17:15:13-04:00</updated>
+  <updated>2014-07-18T00:56:16-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,252 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Code and Supply: Programming in Journalism]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/"/>
+    <updated>2014-07-17T21:21:19-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism</id>
+    <content type="html"><![CDATA[<p><img src="http://static.squarespace.com/static/538f3cc8e4b00f52172b5560/t/53a4ec76e4b0488fb14c5a29/1403317372203/sign.png?format=500w"></p>
+
+<p>I finally attended my first ever <a href="http://www.codeandsupply.co/">Pittsburgh Code and Supply</a> meeting! The group, which posts its <a href="http://www.meetup.com/Pittsburgh-Code-Supply/">events on Meetup</a>, was created by local Pittsburgh software developer <a href="https://twitter.com/justinxreese">Justin Reese</a> just a few months ago, in March 2014. His vision is to create a local community that, unlike conventional specific language/technology-based meetups, is much more universal and broad. If you haven&rsquo;t do so already, read more about the <a href="http://www.codeandsupply.co/about">goals of Pittsburgh Code and Supply</a>. I&rsquo;m very excited about this new group!</p>
+
+<p>The Code and Supply meetup I just attended was about <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/186766512/">&ldquo;Programming in journalism&rdquo;</a>. This is a topic of huge importance, and I was excited to attend to hear more about what some local journalist/programmers are doing.</p>
+
+<!--more-->
+
+
+<h2>A bit about sponsors</h2>
+
+<p>Justin opened by briefly saying a few words about the goals of Pittsburgh Code and Supply. He then noted that this month, the group did not have sponsors, unfortunately.</p>
+
+<p><strong>Pittsburgh Code and Supply needs sponsors!</strong></p>
+
+<p>If you like what Code and Supply is doing, please consider seeing if your employer would be willing to step up as a sponsor for the group.</p>
+
+<h2>Contribute!</h2>
+
+<p>Also, in any case, spread the word about the group.</p>
+
+<p>This is my first meeting, and next Monday, I am actually going to give my first presentation for the group, on <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/183483622/">&ldquo;Type-Directed TDD in Rust&rdquo;</a>. The group is always looking for people to speak about something or facilitate other formats of meetings, so <a href="http://www.codeandsupply.co/speak/">sign up</a> if you have an idea! I personally have some ideas I&rsquo;d like to propose for future meetings, such as discussions about technology-related topics such as philosophy, history, and education.</p>
+
+<h2>AmyJo Brown</h2>
+
+<p><a href="http://amyjobrown.com/">AmyJo Brown</a>, an independent journalist, gave a great talk about the kind of work that she does, and why it is important. She gave an overview of how journalism has changed because of the availability of data and because of the complexity of the world, both of which lead to the necessity of telling stories differently, as evidenced by what <a href="http://www.propublica.org/">ProPublica</a>, the <a href="http://www.nytimes.com/">New York Times</a>, and the <a href="http://www.latimes.com/">Los Angeles Times</a> have been doing.</p>
+
+<p>Her own work involves tracking political donations (&ldquo;follow the money&rdquo;).</p>
+
+<p>She gave examples of software tools she uses to get data, clean it, analyze it, and archive the whole process. On the programming end, she programs in Python, for example (Django for Web development), and uses <a href="http://www.documentcloud.org/">DocumentCloud</a>.</p>
+
+<p>She talked about many things to keep in mind while doing this kind of data journalism. First of all, you have to know the limitations of the data you&rsquo;re getting. She has to deal with handwritten documents, and data in different formats. Data that is clearly incomplete or entered wrong (whether accidentally or maliciously). It is necessary to know the domain, know the context in which data was collected or required or submitted, to not fall into the trap of just blindly treating data as a record of the full truth and just get into programmatically processing it. There&rsquo;s a lot that involves human judgment calls. And this is why it is so important to save all the original information and document each step of data &ldquo;cleaning&rdquo; and interpretation.</p>
+
+<p>Near the end of her talk, AmyJo had her colleague Katrina speak a bit also. Katrina was not originally trained as a programmer, but was always interested in politics. She ended up getting into programming later.</p>
+
+<p>(I&rsquo;m always very excited and impressed to hear of people with domain knowledge and passion who take up computer programming as a useful skill to apply to their domain. Sometimes I hear people saying &ldquo;please don&rsquo;t code&rdquo;; I totally disagree with this sentiment and believe that <a href="http://franklinchen.com/blog/2011/12/09/why-everyone-should-learn-computer-science/">everyone can benefit from learning the fundamentals of computer science and programming</a>.)</p>
+
+<h2>Andrew McGill</h2>
+
+<p><a href="http://www.andrewrmcgill.com/">Andrew McGill</a> bills himself as &ldquo;your friendly neighborhood journalist&rdquo;, and works for the <a href="http://www.post-gazette.com/">Pittsburgh Post-Gazette</a>.</p>
+
+<p>He started by talking about his interesting career path, which involved being into computers before college, but then going to college and then finding other interests and abandoning programming, and then only later taking it back up, in the service of journalism, to enable him to find data and tell stories through visualization.</p>
+
+<p>He showed us specific Web sites and articles he has created to provide better visualizations of data than what is available in raw form. For example, on the funny side, there is <a href="http://newsinteractive.post-gazette.com/wheresbill/">&ldquo;Where&rsquo;s Bill?&rdquo;</a>, which he created because he was not happy with the &ldquo;official&rdquo; boring text news feed of Mayor Bill Peduto&rsquo;s calendar. He scraped the official site with PHP. He also created a Bill Peduto Twitter bot using Python.</p>
+
+<p>He also showed a D3-based visualization of <a href="http://newsinteractive.post-gazette.com/plugged-wells/">&ldquo;The Mystery of the Plugged Wells&rdquo;</a>. Again, the point was to take already available data but to tell a story better with it than just giving raw tables or a purely text-based narrative.</p>
+
+<p>He showed some other projects, such as a visualization of school comparisons based on <a href="http://en.wikipedia.org/wiki/Pennsylvania_System_of_School_Assessment">PSSA</a> data.</p>
+
+<h2>Questions and answers</h2>
+
+<p>There were quite a lot of questions posed to the presenters throughout the evening, on the technologies used, on work with graphic designers, on the process of obtaining data, and political implications of the work. Great discussions.</p>
+
+<h2>Technologies used</h2>
+
+<p>Here&rsquo;s something resembling a summary of technologies mentioned that the presenters use:</p>
+
+<ul>
+<li>Python</li>
+<li>Django</li>
+<li>DocumentCloud</li>
+<li>Bootstrap</li>
+<li>Git</li>
+<li>R</li>
+<li>SQL</li>
+<li>OpenRefine</li>
+<li>D3</li>
+</ul>
+
+
+<h2>Interesting articles</h2>
+
+<p>Before the meetup, I posted to the <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/186766512/">event page</a> a link to a provocative (perhaps too harsh and ranty) article warning about dangers in data journalism, <a href="http://www.niemanlab.org/2014/07/alberto-cairo-data-journalism-needs-to-up-its-own-standards/">by visualization expert Alberto Cairo</a>. It got no response.</p>
+
+<p>Later, I also posted a link to a thoughtful examination of the question of <a href="http://source.opennews.org/en-US/learning/true-facts-maybe/">epistemology in data journalism</a>. I totally recommend reading that article.</p>
+
+<p>AmyJo after the meetup posted some more links on the event page:</p>
+
+<ul>
+<li><a href="https://medium.com/@jeremybowers/why-im-a-newsroom-coder-860d9d49f684">&ldquo;Why I&rsquo;m a newsroom coder&rdquo;</a></li>
+<li><a href="https://source.opennews.org/en-US/articles/planting-next-crop-newsroom-coders/">&ldquo;Planting the next crop of newsroom coders&rdquo;</a></li>
+<li><a href="http://www.nytimes.com/2014/07/17/opinion/the-fec-lags-on-campaign-finance-disclosures.html">&ldquo;Data delayed is democracy denied&rdquo;</a></li>
+</ul>
+
+
+<h2>Conclusion</h2>
+
+<p>I was very excited to attend my first Pittsburgh Code and Supply meetup, on the fascinating topic of programming in journalism. I felt I learned a lot about what is at stake and how programming is being used in journalism to better inform people of what is going on in the world.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: Exploring Type-directed, Test-driven Development Using FizzBuzz (My Practice Talk)]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/"/>
+    <updated>2014-05-15T22:49:48-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met, with me presenting a <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581402/">practice talk</a> for &ldquo;Exploring type-directed, test-driven development using FizzBuzz&rdquo;, which I am presenting at the upcoming local <a href="http://pghtechfest.com/">Pittsburgh TechFest</a> conference.</p>
+
+<!--more-->
+
+
+<h2>Presentation</h2>
+
+<p>I have only recently completed the slides and code for my talk, and had not actually given the talk yet, so this was a practice talk that did not go so well, unfortunately.</p>
+
+<p>I spoke too quickly and had too much material to cover, and also got lost in some of my own slides. Oops. I think reaction to my talk was mixed. Some enjoyed it, while others seemed lost at places.</p>
+
+<p>After going home, I frankly felt that I had <em>failed</em>.</p>
+
+<p>But I believe I can do much better. I have plenty of time to do a thorough revision before Pittsburgh TechFest in three weeks. I need to cut out material that is not needed for the core of what I am trying to achieve and make some things clearer (especially for the intended Pittsburgh TechFest audience, which I do not expect to even know Scala).</p>
+
+<h2>Supporting material</h2>
+
+<p>Here is the <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz">GitHub repository</a>.</p>
+
+<p>I don&rsquo;t recommend looking at them, but for historical purposes, here are slides of the presentation <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/meetup/doc/presentation.pdf">as it was given in the first draft</a>.</p>
+
+<h2>(Update of 2014-05-16)</h2>
+
+<p>One day makes a difference in my confidence and determination! I noticed that the new <a href="http://www.meetup.com/Pittsburgh-Code-Supply/">Pittsburgh Code and Supply</a> group (which I have not yet attended) is soon having its inaugural <a href="http://www.rust-lang.org/">Rust</a> <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/181773312/">soon</a>.</p>
+
+<p>So I decided to offer to do a version of my talk for Pittsburgh Code and Supply using Rust as the programming language (rather than Scala). I want to spread the news about how to effectively use a sufficiently typed programming language, whether it&rsquo;s Scala or Rust or anything else sufficiently derived from the ML family of type systems.</p>
+
+<p>Justin will schedule it for some time in July. That should give me enough time, after Pittsburgh TechFest in early June, to learn enough Rust to convert my Scala code over properly!</p>
+
+<h2>(Update of 2014-06-07)</h2>
+
+<p>I much improved the presentation for Pittsburgh TechFest.</p>
+
+<p>I recommend reading the <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/master/doc/article.pdf">article version of the presentation</a>, rather than the slides. This is the first time I&rsquo;ve created both an article version of a presentation and slides for use during the live presentation. I will do this in the future as well. Slides are not meant to stand alone or even be read alone.</p>
+
+<h2>(Update of 2014-07-17)</h2>
+
+<p>It&rsquo;s crunch time. My Rust version of the talk, <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/183483622/">&ldquo;Type-Directed TDD in Rust&rdquo;</a> is coming next week.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: Implicits]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits/"/>
+    <updated>2014-02-13T21:45:59-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met with Justin presenting on <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581402/">&ldquo;Implicits&rdquo;</a>.</p>
+
+<!--more-->
+
+
+<h2>Implicits</h2>
+
+<p>Implicits are a novel and fantastically important feature of Scala. I wish there were a comprehensive and concise single resource about them out there, but I don&rsquo;t actually know of one.</p>
+
+<p>I&rsquo;ve been doing stuff with implicits lately. Not long ago, I wrote a blog post that involved <a href="http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/">using Scala implicits to avoid relying on the inherited Java <code>toString</code> method</a>. More recently, for this meetup I posted some code that I hoped someone would comment on, in which <a href="https://github.com/franklinchen/test-specs2-matchers">I used implicits to try to simplify a DSL</a>. I&rsquo;m not sure this is the right design choice, but it was an experiment.</p>
+
+<h2>Presentation</h2>
+
+<p>Around 7 of us showed up.</p>
+
+<p>Justin did some live coding using the Scala Worksheet to demonstrate various uses of implicits.</p>
+
+<p>One use is to define an &ldquo;implicit function&rdquo; that can convert of a value of one type to another. This can be overused badly, unfortunately.</p>
+
+<p>Another is to define an &ldquo;implicit parameter&rdquo; for a function so that you don&rsquo;t have to explicitly pass a parameter to the function, if there is an implicit value in scope.</p>
+
+<p>Scala 2.10 greatly improved implicits by encapsulating the &ldquo;conversion&rdquo; pattern by means of an &ldquo;implicit class&rdquo;. Strangely, Scala Worksheet seemed to get confused when we played around and defined an implicit class that also had an implicit parameter. This led to some interesting detective work as we examined the generated JVM byte code to figure out what was going on! I thought it was useful for us to dig into this level; often it is useful to understand what something compiles to in order to better understand and appreciate a high-level language construct.</p>
+
+<p>Finally, we briefly discussed the type class pattern, which is arguably the most important use of implicits. This was too big a topic to get into here though.</p>
+
+<h2>Resources</h2>
+
+<p>I posted some good resources that have popped up on my radar on Scala implicits:</p>
+
+<ul>
+<li>A fine <a href="http://like-a-boss.net/2013/03/29/polymorphism-and-typeclasses-in-scala.html">tutorial on type classes in Scala</a>.</li>
+<li><a href="http://typelevel.org/blog/2014/01/18/implicitly_existential.html">Scary stuff with implicits</a> that I don&rsquo;t understand (yet).</li>
+</ul>
+
+
+<h2>Conclusion</h2>
+
+<p>Justin gave a nice introduction to implicits. I think the live coding and experimentation is a great way to involve people in code suggestions and discussion of what things mean and do. It was a fun time.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: Introduction to Reactive]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/"/>
+    <updated>2014-01-09T21:29:20-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met with Josh presenting an <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581352/">&ldquo;Introduction to Reactive&rdquo;</a>.</p>
+
+<p>It was great.</p>
+
+<!--more-->
+
+
+<h2>Pre-meetup dinner</h2>
+
+<p>A couple of us (Justin, Josh, Chris, me) had an early dinner at Everyday Noodles before the meetup. Very filling!</p>
+
+<h2>Turnout</h2>
+
+<p>Ten of us showed up for this meeting.</p>
+
+<h2>Presentation</h2>
+
+<h3>What is &ldquo;reactive&rdquo; anyway?</h3>
+
+<p>In case you didn&rsquo;t hear about it in the media, the term &ldquo;reactive&rdquo; has been popularized in recent months, and I <a href="http://ConscientiousProgrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/">reviewed the free Coursera course &ldquo;Principles of Reactive Programming&rdquo;</a> that some of us in the Pittsburgh Scala group just completed, so check out my post for more on &ldquo;reactive&rdquo;.</p>
+
+<h3>Futures</h3>
+
+<p>Josh did a live SBT session reviewing futures and promises.</p>
+
+<p>He noted that futures have limitations as a component of reactive systems. (This had become apparent when <a href="http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/">I started using futures last year in my personal projects</a> and then <a href="http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/">for work</a>.) By themselves, futures do not support cancellation or <a href="http://en.wikipedia.org/wiki/Back_pressure">back pressure</a>. Futures are a low-level, limited mechanism that are the right tool only if you have a pipeline all the way through forward, no back channel.</p>
+
+<p>An alternative to futures, of course, is to go all out and use Akka actors. But the drawback I&rsquo;ve found with that is that this is a heavyweight mechanism for problems that don&rsquo;t need the full power of actors. I&rsquo;ve wanted something more structured and lightweight than using actors directly. I find it tricky to program using actors, because it is very easy to start writing spaghetti code that is spread out everywhere (which is what happened to me in the final project for the Coursera course).</p>
+
+<p>It turns out, according to Josh, that Typesafe is working on precisely this problem! Nice. He&rsquo;ll tell us more when it comes out.</p>
+
+<h4>(Update of 2014-07-10)</h4>
+
+<p>Half a year later, the promise was realized, as the Pittsburgh Scala Meetup had Josh <a href="http://ConscientiousProgrammer.com/blog/2014/07/10/pittsburgh-scala-meetup-reactive-streams/">gave a talk on the new API called Reactive Streams</a>!</p>
+
+<h3>Play</h3>
+
+<p>Josh demonstrated <a href="http://typesafe.com/activator">Typesafe Activator</a>, the cool new Web browser-based platform for using Scala. He showed an app using Play that looks at blogs simultaneously and uses <code>recoverWith</code>.</p>
+
+<h2>Random other questions and discussions</h2>
+
+<p>What I like about the Pittsburgh Scala Meetup is that even when we have a presentation, discussion often wanders off to related topics (or unrelated topics). Anything goes, and I usually learn a lot.</p>
+
+<p>Someone asked about support for channels as in Go or Clojure&rsquo;s <a href="https://github.com/clojure/core.async"><code>core.async</code></a>. Josh said they&rsquo;re working on this sort of thing with support for back pressure.</p>
+
+<p>Someone asked about how to connect <a href="http://www.playframework.com/documentation/2.0/Iteratees">iteratees</a> with actors. Josh said, you can feed from an iteratee to an actor, and then just let the actor do stuff. However, there is some controversy about the whole iteratee thing in Play.</p>
+
+<h2>Conclusion</h2>
+
+<p>This was a great Pittsburgh Scala Meetup session. I felt that a lot of questions that had built up in my mind after having gotten into reactive programming are being addressed with continuing work.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Review of the Free Coursera Course "Principles of Reactive Programming"]]></title>
@@ -1010,6 +1256,30 @@
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Pittsburgh Data Visualization: D3 and Only D3]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/08/22/pittsburgh-data-visualization-d3-and-only-d3/"/>
+    <updated>2013-08-22T22:01:22-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/08/22/pittsburgh-data-visualization-d3-and-only-d3</id>
+    <content type="html"><![CDATA[<p>Patrick gave a presentation for the <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/">Pittsburgh Data Visualization Meetup</a> on <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/events/135374702/">only D3</a>, because there was interest after the <a href="http://ConscientiousProgrammer.com/blog/2013/08/07/pittsburgh-data-visualization-d3-and-r/">previous meetup</a> for more on D3.</p>
+
+<!--more-->
+
+
+<h2>Summary</h2>
+
+<p>Patrick started with a review of last time, on selections, data, callbacks, and transitions.</p>
+
+<p>Then he went into the use of <a href="http://en.wikipedia.org/wiki/Heat_map">heat maps</a>.</p>
+
+<p>Finally, he went into forces.</p>
+
+<p>I have to confess that I got lost in the presentation because of the volume of code presented and my unfamiliarity with the API. I believe that I&rsquo;ve reached the limit of what I can passively absorb about using D3, and simply need to get down and dirty and create my own project.</p>
+
+<p>I was also feeling really tired and on the verge of getting sick. I felt very cold in the room and did not have a jacket on me in the summer.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Pittsburgh Java User Group: Java EE 7, 8, and Beyond; or Done?]]></title>
     <link href="http://ConscientiousProgrammer.com/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond/"/>
     <updated>2013-08-13T22:18:11-04:00</updated>
@@ -1050,6 +1320,46 @@
 <p>It&rsquo;s been almost a year since the last PittJUG meeting, as far as I know. So I think the group really is dead.</p>
 
 <p>There has been talk of expanding the group to not just be about Java, but anything JVM-related (such as other languages compiling to the JVM, e.g., Scala, Clojure, JRuby). Nothing seems to have happened of that.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Data Visualization: D3 and R]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/08/07/pittsburgh-data-visualization-d3-and-r/"/>
+    <updated>2013-08-07T22:19:55-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/08/07/pittsburgh-data-visualization-d3-and-r</id>
+    <content type="html"><![CDATA[<p>Just a week ago, the <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/">Pittsburgh Data Visualization Meetup</a> launched with a <a href="http://ConscientiousProgrammer.com/blog/2013/07/30/pittsburgh-data-visualization-meetup-inaugural-meet-and-greet/">&ldquo;meet and greet&rdquo; that I attended</a>. Today was <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/events/132375562/">our first actual presentation-based meeting</a>, with speakers giving introductions to both D3 and R.</p>
+
+<!--more-->
+
+
+<h2>Location</h2>
+
+<p>The meeting was on the Pitt campus. Unfortunately, this meant no WiFi access, because guest WiFi requires a sponsor and is a hassle to set up. So this is not the perfect place to meet, but was available to Patrick in the summer.</p>
+
+<p>About 15 people showed up.</p>
+
+<h2>Patrick on D3</h2>
+
+<p>By popular demand, Patrick gave an introduction to D3.</p>
+
+<p>He is particularly interested in knowledge discovery in data mining. He gave an example of converting data from HTML to XML to SVG and then finally getting it into D3.</p>
+
+<p>Although D3 is a JavaScript library, its API feels like its own domain-specific language with its own conventions, so there&rsquo;s a learning curve. Patrick gave a demo of hooking data up to D3 and then changing the data, and hooking up mouse events. He showed transitions for visualization when data changes. Apparently D3 does an efficient recalculation of what needs to happen when data changes.</p>
+
+<p>He also showed a force-directed graph.</p>
+
+<h2>Rihanna on R</h2>
+
+<p>Rihanna spoke about her use of R for her work.</p>
+
+<p>She has been using R for 13 years! She gave an overview of her work flow, which involves using a workspace and saving objects. She likes to get data from raw sources into R and use plots to look for patterns, spikes. Then she makes different plots in order to tell a story.</p>
+
+<h2>Conclusion</h2>
+
+<p>I found it very informative to hear about the work flows Patrick and Rihanna each adopted in order to find and report on interesting data.</p>
+
+<p>The main drawback of this meeting was that it was very long, because of two talks crammed into one evening. Since this was just the first meeting, I suggested that shorter talks in the future would enable more time for unstructured discussion at meetings.</p>
 ]]></content>
   </entry>
   
@@ -1230,806 +1540,6 @@
 <p>A relatively short Pittsburgh Ruby meetup, and with a smaller crowd than some others in the past, but a fun and instructive one.</p>
 
 <p>Don&rsquo;t forget, <a href="http://steelcityruby.org/">Steel City Ruby Conference 2013</a> is in a month! I&rsquo;m <a href="http://franklinchen.com/blog/2012/08/07/the-first-steel-city-ruby-conference-an-amazing-experience/">excited to attend again</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh JavaScript Meetup: Functional Programming]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"/>
-    <updated>2013-07-10T22:37:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming</id>
-    <content type="html"><![CDATA[<p><img src="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg" title="Pittsburgh JavaScript" ></p>
-
-<p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
-
-<p>I&rsquo;d met Richard earlier, a month ago at <a href="http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/">Pittsburgh TechFest</a>. He does not claim to be an expert at functional programming, but is enthusiastic about concepts and techniques that he can and does apply to improving software quality in many dimensions. Since I have been a functional programming enthusiast and practitioner for twenty years, I had these goals in attending his presentations:</p>
-
-<ul>
-<li>evaluate what Richard and others have done with, and think is important about,  functional programming</li>
-<li>offer a few corrections, elaborations, suggestions as appropriate for the situation</li>
-<li>gather information on how I may be able to effectively explain functional programming to those who are new to it</li>
-</ul>
-
-
-<!--more-->
-
-
-<h2>History of the Pittsbugh JavaScript meetup group</h2>
-
-<p>Two years ago, in 2011, I had attended the <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers">first incarnation of the group</a> faithfully, attending several months of meetings before it disbanded when the founder left Pittsburgh. I learned quite a bit from those meetings.</p>
-
-<p>Two years is a long time in the world of JavaScript. Looking back at <a href="http://franklinchen.com/blog/2011/09/27/when-jquery-attacks/">one of my blog posts reporting on the old JavaScript meetup group</a>, I am amused by how anachronistic that feels to me today, as in my mention of <a href="http://sproutcore.com/">Sproutcore</a>, which I never hear about any more.</p>
-
-<h2>Up front: my take on the secret of JavaScript</h2>
-
-<p>Here are some observations (not novel) I have about JavaScript, to set the stage for further discussion:</p>
-
-<ul>
-<li>JavaScript is full of horrible, disgusting Bad Parts.</li>
-<li>JavaScript has only one shiny Good Part: it has first-class functions.</li>
-<li>People manage to get a lot of amazingly cool and important stuff done using JavaScript, so take it seriously.</li>
-</ul>
-
-
-<h2>Comments on Richard&rsquo;s presentation</h2>
-
-<h3>Immutability and &ldquo;functional languages&rdquo;</h3>
-
-<p>Richard talked about <a href="http://en.wikipedia.org/wiki/Immutable_object">immutability</a> as being part of what &ldquo;functional programming&rdquo; is about.</p>
-
-<p>Yes, it is, and in addition, common best practices in many programming languages these days argue for favoring immutability. I want to emphasize that you don&rsquo;t have to go full-blown into a specialized &ldquo;functional language&rdquo; in order to take advantage of immutability as desired: for example, this tip has long since been known as at least a &ldquo;design pattern&rdquo; in the <a href="http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">Java world</a>, in the <a href="http://www.harukizaemon.com/blog/2010/03/01/functional-programming-in-object-oriented-languages/">Ruby world</a>, and basically everywhere else.</p>
-
-<p>Richard suggested that &ldquo;functional languages&rdquo; don&rsquo;t allow mutation. By my definition, this is <em>not</em> actually true.  I didn&rsquo;t raise an objection during the talk because I didn&rsquo;t want to sidetrack it, but here I have space to elaborate a little. I would argue (but that would have to be another blog post) that the cleanest, most intuitive and novice-accessible &ldquo;functional languages&rdquo;) are those in the <a href="http://en.wikipedia.org/wiki/ML_%28programming_language%29">ML</a> family originally developed in the 1970s and lives on today&rsquo;s popular, industrial-strength dialects of <a href="http://en.wikipedia.org/wiki/Standard_ML">Standard ML</a>, <a href="http://ocaml.org/">OCaml</a>, and <a href="http://fsharp.org/">F#</a>.</p>
-
-<p><em>ML fully supports mutation</em>, through <a href="http://en.wikibooks.org/wiki/Standard_ML_Programming/Types#References">reference cells</a>.</p>
-
-<p>Personally, because of notions like this, I&rsquo;ve been thinking that maybe it would be best if we all stopped using the term &ldquo;functional language&rdquo;, because it has sadly become misleading and ambiguous. In particular, people instantly think &ldquo;Haskell&rdquo; when they use the word &ldquo;functional language&rdquo;, when in fact Haskell is a very unusual, unique language (and ecosystem) among languages that one could call &ldquo;functional&rdquo;.</p>
-
-<h3>Expressions, functions, evaluation, and values</h3>
-
-<p>As Richard put it, &ldquo;favor expressions evaluating to a value&rdquo;. The focus of functional programming is on <em>returning</em> a value, from an expression that includes function calls, rather than munging some mutable global state, or modifying state through a reference passed into a function as a parameter.</p>
-
-<h3>Recursion vs. looping?</h3>
-
-<p>Richard noted that one characteristic of functional programming is the use of recursion instead of looping. He gave examples of writing tail-recursive functions.</p>
-
-<p>One nitpick (which again, I did not bring up during the talk): recursion and looping (as in through &ldquo;normal&rdquo; constructs such as <code>while</code> and <code>for</code>) are <em>not</em> actually opposed. I will write a blog post later about why conventional looping is best thought of as a derived construct built on top of recursion, and why it might be best to consider conventional looping to be a historical accident and mistake (but a very useful invention given the historical circumstances).</p>
-
-<h4>Efficiency of recursion?</h4>
-
-<p>Also, people brought up the topic of efficiency. I have learned over the years that for many people, the word &ldquo;recursion&rdquo; seems to immediately trigger the word &ldquo;efficiency&rdquo;. Richard did a great job in mentioning that <a href="http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls">EMCAScript 6 is going to have proper tail calls (also called tail call optimization)</a>, which will make tail recursion equivalent to ordinary looping in terms of space usage. This is <em>hugely important</em> news, of course. This mandate shows how serious JavaScript is about embracing functional programming.</p>
-
-<h4>Recursion for parallelism</h4>
-
-<p>But beyond the issue tail recursion, I felt I had to point out that recursive algorithms can offer actual <em>speedup</em>. The classic examples, of course, are the <a href="http://www.cs.cmu.edu/~scandal/nesl/alg-sequence.html#quicksort">parallel speedups of divide-and-conquer algorithms such as quicksort that use recursion</a>. If you expressed the algorithms by removing the recursion (with a hand-rolled stack as often taught in courses), you would destroy the inherent parallelism. So in the world of parallelism, you want your code to stay naturally recursive! As <a href="http://adambom.github.io/parallel.js/">parallel computing comes to JavaScript</a>, keep this in mind!</p>
-
-<h3>Higher-order functions, first-class functions</h3>
-
-<p>Richard: &ldquo;A function is an object&rdquo;.</p>
-
-<p>It&rsquo;s really as simple as that. Functions can be created, stored, passed around. Functions can return other functions.</p>
-
-<p>It&rsquo;s amazing, but I claim that this is JavaScript&rsquo;s one Good Part, its killer feature that surprisingly many languages don&rsquo;t have. And it&rsquo;s the one feature that is used <em>all the time</em>, not just in esoteric code. From the very beginning, JavaScript had first-class functions, to support callbacks for client code in Web browsers. and <a href="http://nodejs.org/">Node</a> server-side code is nothing if not a whole bunch of <code>function (...)</code>. Without closures and first-class functions, JavaScript would have been completely useless. Thank goodness <a href="http://brendaneich.com/2008/04/popularity/">Brendan Eich was inspired by the Scheme functional language</a>.</p>
-
-<h4>No methods!</h4>
-
-<p>JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented &ldquo;interference&rdquo; from the conventional class-based object-oriented world, which is mostly based not on functions, but on <a href="https://en.wikipedia.org/wiki/Method_%28computer_programming%29">methods</a> that interference with functions because they are meant to <em>replace</em> functions (since according to &ldquo;pure&rdquo; object-oriented thinking, functions are evil and computation should involve method calls on objects). <em>JavaScript does not (really) have methods</em>; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use <a href="http://emberjs.com">Ember</a>, the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of <code>function</code>s: <code>valueWillChange</code> and <code>valudDidChange</code> are just functions. They are not special things, &ldquo;methods&rdquo;.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">App</span><span class="p">.</span><span class="nx">PersonView</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">valueWillChange</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">keyName</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">changingFrom</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}.</span><span class="nx">observesBefore</span><span class="p">(</span><span class="s1">&#39;content.value&#39;</span><span class="p">),</span>
-</span><span class='line'>  <span class="nx">valueDidChange</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">keyName</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="c1">// only run if updating a value already in the DOM</span>
-</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;inDOM&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="kd">var</span> <span class="nx">color</span> <span class="o">=</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">changingFrom</span> <span class="o">?</span> <span class="s1">&#39;green&#39;</span> <span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
-</span><span class='line'>          <span class="c1">// logic</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>  <span class="p">}.</span><span class="nx">observes</span><span class="p">(</span><span class="s1">&#39;content.value&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Examples</h3>
-
-<p>Richard gave some standard examples of using higher-order functions such as <code>map</code> and <code>filter</code> and <code>foreach</code> as provided in various popular JavaScript libraries such as <a href="http://underscorejs.org/">Underscore</a>.</p>
-
-<p>As a matter of style, he recommended against long, obscure one-liners that involve chaining. I agree. For readability and testability of pipelines, I have found that it is good to break things up into intermediate steps. (Just <a href="http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">recently</a>, Tim Lesher also recommended against stupidity masking as excessive cleverness in his Python lightning talk about functional programming with <code>itertools</code>.)</p>
-
-<h3>Monads?!</h3>
-
-<p>Regrettably, Richard brought up the term <a href="http://en.wikipedia.org/wiki/Monad_%28functional_programming%29">&ldquo;monads&rdquo;</a>. I&rsquo;m close to thinking that this word should be <a href="http://fsharpforfunandprofit.com/posts/why-i-wont-be-writing-a-monad-tutorial/">banned</a>, because too many confusions about them have ruined the word. I have yet decided what the best alternative phrase might be. Maybe something like &ldquo;computational context&rdquo;?</p>
-
-<p>Ironically, Richard admitted he was going to abuse the word, and for the sake of example, he said, he was going to say that &ldquo;jQuery is a monad&rdquo;. I didn&rsquo;t want to derail his talk, and since he admitted the abuse, I decided there would be a better time to address this topic.</p>
-
-<p>It was interesting to me, however, that he gathered that the interesting thing about jQuery, and why he wanted to call it a monad, was the chaining of calls in jQuery. I need to think of a good way to deal with this intuition when I get around to explaining monads.</p>
-
-<h3>Partial application and currying</h3>
-
-<p>Richard explained both partial application and currying, then he wondered when one would in practice write a curried function.</p>
-
-<p>I said (but not very convincingly, I think) that you would write a curried function if you knew you would otherwise have to manually do a bunch of partial application. I have to confess that was a weak answer. I think the practical situation in JavaScript is that full-scale up-front currying is not useful.</p>
-
-<h3>Libraries</h3>
-
-<p>Richard recommended checking out the following libraries, especially Lo-Dash, which he judges to be faster than Underscore:</p>
-
-<ul>
-<li><a href="http://underscorejs.org/">Underscore</a></li>
-<li><a href="http://lodash.com/">Lo-Dash</a></li>
-<li><a href="http://osteele.com/sources/javascript/functional/">Functional JavaScript</a></li>
-</ul>
-
-
-<h2>Questions and answers</h2>
-
-<p>There were many interesting questions raised after the presentation.</p>
-
-<h3>Introducing functional programming into a team environment</h3>
-
-<p>Someone asked Richard a good question about whether it&rsquo;s appropriate to, say, start using Underscore at work and expecting other team members to learn how to use it. Is it fair to expect others to learn a new way of doing things that might seem weird?</p>
-
-<p>My point of view is that there&rsquo;s nothing specific about functional programming when it comes to questions like this. The same question comes up when evaluating a particular programming language or a particular MVC framework or a particular version control system, and the answer involve considering all the different realities of who is comfortable with what, whether it is worth learning something new, what the advantages and disadvantages are, how much the decision will affect delivery of business value.</p>
-
-<h3>Growing parameter list for a function vs. passing in a big object</h3>
-
-<p>One concern brought up is that if you&rsquo;re programming in a functional style, you can end up being faced with ever-growing parameter lists for a function to pass in everything that it needs. One solution is to create a big object to stick everything into it that might be needed (for example, a configuration object instead of separate flag parameters). Is this overkill?</p>
-
-<p>Also, <a href="http://tonylukasavage.com/">Tony Lukasavage</a> emphasized that his concern was in the context of the need to evolve an existing API without breaking customers&#8217; client code that uses it.</p>
-
-<p>My first note would be that API design is tricky and checking out <a href="http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">some resources on API design</a> is very helpful.</p>
-
-<p>Regarding parameter lists, Richard noted that you might have a design problem if you have a function that needs to know about so many things it depends on. You may want to refactor the function (of course, in the context of evolving a mature API that customers depend on, it may be too late, unfortunately) and the data structures passed in. For example, if you have a number of functions that all take as parameters a <code>firstName</code> and <code>lastName</code>, then maybe you want a single <code>name</code> parameter instead.</p>
-
-<p>I suggested also that if certain flags are not always needed, then instead of a huge configuration object, how about simply having separate but related functions (in a language supporting overloading, you could provide overloaded functions, although the topic of overloading is another large one to discuss later), each of which takes only the flags the client cares about. Of course, as some people pointed out, then you might end up with annoyingly long and specific function names.</p>
-
-<p>Nobody said designing an API is easy.</p>
-
-<h3>Do I actually do functional programming?</h3>
-
-<p>One question I got, since before the meetup, I had indicated having experience with functional programming, was basically, do I actually use it in JavaScript and elsewhere. The answer is, yes. As I&rsquo;ve mentioned, you don&rsquo;t have use a special language in order to program in this way, although it&rsquo;s much easier and more efficient to use a language that is tailored to support it. Most of the code I&rsquo;ve written in the past fifteen years has attempted to be primarily functional in style, whatever language I&rsquo;m using for work (mostly Java, Perl, Python, and recently Scala). I don&rsquo;t do this out of some kind of ideology, but because it works well in getting stuff done. Before adopting a primarily functional style of programming, I spent years working in traditional imperative and object-oriented styles, and empirically, that was less pleasant.</p>
-
-<h4>Do I do functional programming in JavaScript?</h4>
-
-<p>I have not actually done any JavaScript programming for work since doing some UI prototyping two years ago. I don&rsquo;t know when I&rsquo;ll return to doing front end work, but meanwhile, I am interested in doing some Web browser stuff for personal projects, so I try to keep up to date on developments in the JavaScript world.</p>
-
-<p>One thing that has been interesting that I need to check out is the rise of <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">functional reactive programming (FRP)</a> libraries for JavaScript, such as <a href="https://github.com/raimohanska/bacon.js">Bacon.js</a>. FRP was originally invented in the 1990s by Conal Elliott in the context of Haskell, but almost twenty years later, has finally spread well beyond that now to mainstream visibility and use. For example, Microsoft has thrown its weight behind <a href="http://rx.codeplex.com/">Reactive Extensions (Rx)</a>, which started out in the .NET world, but Microsoft then ported it to JavaScript, C/C++, Python, and Ruby.</p>
-
-<h2>Conclusion</h2>
-
-<p>I was happy to see interest in functional programming in the local JavaScript community. Richard gave an introductory talk on it that I thought was very useful as a starting point for those who are new to it. I made note of some omissions or inaccuracies in order to improve my thinking about how I can contribute in the future to improving people&rsquo;s understanding and application of functional programming principles.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why I Hate Calling Myself "Pragmatic" but Do]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/"/>
-    <updated>2013-06-30T23:34:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do</id>
-    <content type="html"><![CDATA[<p>I wrote a <a href="http://franklinchen.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/">post on my personal blog about my being a &ldquo;pragmatist&rdquo;</a>.</p>
-
-<p>I mention it here because few words are as controversial, I think, in the programming community, as &ldquo;pragmatic&rdquo;. I wanted to be on record as identifying myself as &ldquo;pragmatic&rdquo; despite the negative connotations, because the entire mindset of this new programming blog is pragmatic.</p>
-
-<p>For example, I will soon write about the realities of programming language choice, including why I used Java, despite its deficiencies, for a decade, and why it is not going away, and why I currently am an advocate of <em>Scala, one of the most ambitiously pragmatic languages</em> to have come along in my lifetime.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Nil, Non-determinism, Exceptions: A Journey in Debugging the Software That Generates My Blog]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/"/>
-    <updated>2013-06-29T18:15:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions</id>
-    <content type="html"><![CDATA[<p>I mentioned in my <a href="http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/">initial post for this blog</a> that I have had some problems with the software I use to generate my personal blog, <a href="http://octopress.org/">Octopress</a>, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.</p>
-
-<p>Here I report on how I figured out the problem and begin a conversation about the nature of error handling and API design.</p>
-
-<!--more-->
-
-
-<h2>A disclaimer</h2>
-
-<p>I want to emphasize that although I will be critiquing some code, I do not mean to imply that I am a perfect programmer or that this software is of really poor quality. I have written software in the past that has crapped out with <code>null</code> or <code>nil</code> errors. In addition, the fact that I basically trust and use this software to drive my blogs is a reflection of the fact that it mostly works. Almost all software that has been written, is being written now, and will be written in the future has bugs. Every day we all trust and use software that we know has bugs. And this blogging platform I use is the product of many, many volunteers who contribute to the world through open source through the goodness of their hearts. I happily use this software, warts and all, and am grateful to everyone who works to maintain and improve it!</p>
-
-<h2>Blog generation</h2>
-
-<p>The problem arose when I tried to generate <a href="http://franklinchen.com/">my personal blog</a>. I got a <a href="http://franklinchen.com/blog/2012/09/06/my-pittsburgh-ruby-talk-nil/"><code>nil</code></a> failure.</p>
-
-<p>Here&rsquo;s the error message (I have omitted the 46-line stack trace):</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">  Generating... Liquid Exception: undefined method `sub&#39; for nil:NilClass in atom.xml</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is, unfortunately, an example of an error message that is next to useless, and should <em>never</em> appear. I have stated that <a href="http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/">we as programmers should not generate useless end user error messages</a>, and of course, in context, I am an end user of the blog generating software I use.</p>
-
-<h2>Debugging and finding the root cause</h2>
-
-<p>Thanks to all the Ruby libraries being open source and installed on my machine, by using the stack trace and <code>debugger</code>, I figured out the immediate cause of the stray <code>nil</code>.</p>
-
-<p>It turns out that Octopress uses Jekyll, which uses <a href="https://github.com/tmm1/pygments.rb">pygments.rb</a> to do HTML highlighting of code blocks. (I use Octopress precisely because of its built-in support for code block highlighting.)</p>
-
-<p>The bug is that the code in Jekyll that does syntax highlighting using Pygments makes an assumption that the return value of <code>Pygments.highlight()</code> is never <code>nil</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>          <span class="vi">@renderer</span> <span class="o">||=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">Redcarpet</span><span class="p">:</span><span class="ss">:Render</span><span class="o">::</span><span class="no">HTML</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>            <span class="k">def</span> <span class="nf">block_code</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">lang</span><span class="p">)</span>
-</span><span class='line'>              <span class="n">lang</span> <span class="o">=</span> <span class="n">lang</span> <span class="o">&amp;&amp;</span> <span class="n">lang</span><span class="o">.</span><span class="n">split</span><span class="o">.</span><span class="n">first</span> <span class="o">||</span> <span class="s2">&quot;text&quot;</span>
-</span><span class='line'>              <span class="n">output</span> <span class="o">=</span> <span class="n">add_code_tags</span><span class="p">(</span>
-</span><span class='line'>                <span class="no">Pygments</span><span class="o">.</span><span class="n">highlight</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="ss">:lexer</span> <span class="o">=&gt;</span> <span class="n">lang</span><span class="p">,</span> <span class="ss">:options</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:encoding</span> <span class="o">=&gt;</span> <span class="s1">&#39;utf-8&#39;</span> <span class="p">}),</span>
-</span><span class='line'>                <span class="n">lang</span>
-</span><span class='line'>              <span class="p">)</span>
-</span><span class='line'>            <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>            <span class="k">def</span> <span class="nf">add_code_tags</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">lang</span><span class="p">)</span>
-</span><span class='line'>              <span class="n">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sr">/&lt;pre&gt;/</span><span class="p">,</span><span class="s1">&#39;&lt;pre&gt;&lt;code class=&quot;&#39;</span> <span class="o">+</span> <span class="n">lang</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="p">)</span>
-</span><span class='line'>              <span class="n">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sr">/&lt;\/pre&gt;/</span><span class="p">,</span><span class="s2">&quot;&lt;/code&gt;&lt;/pre&gt;&quot;</span><span class="p">)</span>
-</span><span class='line'>            <span class="k">end</span>
-</span><span class='line'>          <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Well, it <em>can</em> be <code>nil</code> and was for me, and therefore <code>add_code_tags</code> was calling <code>code.sub()</code> with <code>code</code> being <code>nil</code>.</p>
-
-<p>The bug exists in all the more recent versions of pygments.rb, including 0.4.2 (which is used for my personal blog) and 0.3.7 (which is used for this blog) and the latest released version, 0.5.1. The bug was actually reported by someone two weeks ago, and I added extra commentary, but <a href="https://github.com/tmm1/pygments.rb/issues/78">it has not yet been fixed</a>, so I plan to contribute a fix and submit a pull request.</p>
-
-<h2>Whose responsibility to check for <code>nil</code>?</h2>
-
-<p>Whenever there is an error, one has to ask whose responsibility it was to</p>
-
-<ul>
-<li>detect the error</li>
-<li>handle the error</li>
-</ul>
-
-
-<p>I think it is poor practice to engage in random and spotty &ldquo;defensive programming&rdquo; that checks for <code>nil</code> here and there, willy-nilly, just to avoid a big program crash. There should be clearly delineated boundaries of error handling.</p>
-
-<p>In this case, it is surprising that a syntax highlighter for some text could return <code>nil</code>. One would think that if a syntax highlighter got confused, it could return the text verbatim, for example, without any special formatting. (By the way, don&rsquo;t get me started on the abominable use of HTML string hacking in this code instead of, say, building a proper HTML AST; I&rsquo;ll write about that topic later.)</p>
-
-<h2>Documentation of API</h2>
-
-<p>Unfortunately, the documentation of the Pygments API was incomplete in <code>lib/pygments/popen.rb</code>, where <code>highlight</code> is defined:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Public: Highlight code.</span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># Takes a first-position argument of the code to be highlighted, and a</span>
-</span><span class='line'><span class="c1"># second-position hash of various arguments specifiying highlighting properties.</span>
-</span><span class='line'><span class="k">def</span> <span class="nf">highlight</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="p">{})</span>
-</span><span class='line'>  <span class="c1"># If the caller didn&#39;t give us any code, we have nothing to do,</span>
-</span><span class='line'>  <span class="c1"># so return right away.</span>
-</span><span class='line'>  <span class="k">return</span> <span class="n">code</span> <span class="k">if</span> <span class="n">code</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">code</span><span class="o">.</span><span class="n">empty?</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Callers pass along options in the hash</span>
-</span><span class='line'>  <span class="n">opts</span><span class="o">[</span><span class="ss">:options</span><span class="o">]</span> <span class="o">||=</span> <span class="p">{}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Default to utf-8 for the output encoding, if not given.</span>
-</span><span class='line'>  <span class="n">opts</span><span class="o">[</span><span class="ss">:options</span><span class="o">][</span><span class="ss">:outencoding</span><span class="o">]</span> <span class="o">||=</span> <span class="s1">&#39;utf-8&#39;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Get back the string from mentos and force encoding if we can</span>
-</span><span class='line'>  <span class="n">str</span> <span class="o">=</span> <span class="n">mentos</span><span class="p">(</span><span class="ss">:highlight</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">str</span><span class="o">.</span><span class="n">force_encoding</span><span class="p">(</span><span class="n">opts</span><span class="o">[</span><span class="ss">:options</span><span class="o">][</span><span class="ss">:outencoding</span><span class="o">]</span><span class="p">)</span> <span class="k">if</span> <span class="n">str</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:force_encoding</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">str</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>A problem with dynamically typed language culture</h2>
-
-<p>The documentation doesn&rsquo;t actually fully specify what the arguments can be, and does not specify what the result should be either! This is a glaring drawback of most code that I have seen in dynamically typed languages such as Ruby. People don&rsquo;t document exactly what can come in or out. A newcomer to a code base (such as me in this situation) cannot just read off the types and know immediately what is going on and what has been promised and what is delivered by a function. As a result, the code reader has to play compiler and read a lot more code to try to figure out what is going on.</p>
-
-<p><em>In principle</em>, someone writing code in a dynamically typed language could provide very helpful comments that amount to informal type annotations, but in practice people do not. I have found in my two decades of programming that human psychology trumps theoretical possibility any day. If something is optional, people won&rsquo;t do it, unless there is a very strong de facto community standard. (It turns out, for example, that what I really admire about the Ruby community is that for some reason, there is a very strong de facto community standard of doing at least some <em>unit testing</em> as part of the whole development process. I find this sadly missing in some statically typed language communities.)</p>
-
-<p>In code in a statically typed language such as OCaml (or Haskell or Scala), I would expect to see:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ocaml'><span class='line'><span class="k">let</span> <span class="n">highlight</span> <span class="o">(</span><span class="n">code</span> <span class="o">:</span> <span class="kt">string</span><span class="o">)</span> <span class="o">(</span><span class="n">opts</span> <span class="o">:</span> <span class="n">my_map</span><span class="o">)</span> <span class="o">:</span> <span class="kt">string</span> <span class="o">=</span> <span class="o">//...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>and expect that the return value should be a <code>String</code>, or</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ocaml'><span class='line'><span class="k">let</span> <span class="n">highlight</span> <span class="o">(</span><span class="n">code</span> <span class="o">:</span> <span class="kt">string</span><span class="o">)</span> <span class="o">(</span><span class="n">opts</span> <span class="o">:</span> <span class="n">my_map</span><span class="o">)</span> <span class="o">:</span> <span class="kt">string</span> <span class="n">option</span> <span class="o">=</span> <span class="o">//...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>to indicate that the return value could be either <code>Some(formatted_code)</code> or <code>None</code>.</p>
-
-<h2><code>nil</code> all over the place</h2>
-
-<p>Reading the Ruby code, I saw that the situation is even more complex than I thought:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="c1"># If the caller didn&#39;t give us any code, we have nothing to do,</span>
-</span><span class='line'>  <span class="c1"># so return right away.</span>
-</span><span class='line'>  <span class="k">return</span> <span class="n">code</span> <span class="k">if</span> <span class="n">code</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">code</span><span class="o">.</span><span class="n">empty?</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Wow: <code>code</code> can be <code>nil</code>, in which case <code>nil</code> is returned.</p>
-
-<p><em>All code that can return <code>nil</code> should document this fact so that the caller knows what to do.</em> Ideally, the writer of pygments.rb should have documented this fact, and then the writer of Jekyll would in turn have added <code>nil</code> checking in its rendering code.</p>
-
-<p>Furthermore, it turns out that <code>mentos()</code> can return <code>nil</code> on a non-<code>nil</code> code string! This was a surprise to me.</p>
-
-<h2><code>nil</code> is not even the real problem here: non-determinism is</h2>
-
-<p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Our &#39;rpc&#39;-ish request to mentos. Requires a method name, and then optional</span>
-</span><span class='line'><span class="c1"># args, kwargs, code.</span>
-</span><span class='line'><span class="k">def</span> <span class="nf">mentos</span><span class="p">(</span><span class="nb">method</span><span class="p">,</span> <span class="n">args</span><span class="o">=[]</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">original_code</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>  <span class="c1"># Open the pipe if necessary</span>
-</span><span class='line'>  <span class="n">start</span> <span class="k">unless</span> <span class="n">alive?</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">begin</span>
-</span><span class='line'>    <span class="c1"># Timeout requests that take too long.</span>
-</span><span class='line'>    <span class="n">timeout_time</span> <span class="o">=</span> <span class="mi">8</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="ss">Timeout</span><span class="p">:</span><span class="ss">:timeout</span><span class="p">(</span><span class="n">timeout_time</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>      <span class="c1"># ...[I omitted some code]</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">rescue</span> <span class="ss">Timeout</span><span class="p">:</span><span class="ss">:Error</span>
-</span><span class='line'>    <span class="c1"># If we timeout, we need to clear out the pipe and start over.</span>
-</span><span class='line'>    <span class="vi">@log</span><span class="o">.</span><span class="n">error</span> <span class="s2">&quot;[</span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">iso8601</span><span class="si">}</span><span class="s2">] Timeout on a mentos </span><span class="si">#{</span><span class="nb">method</span><span class="si">}</span><span class="s2"> call&quot;</span>
-</span><span class='line'>    <span class="n">stop</span> <span class="s2">&quot;Timeout on mentos </span><span class="si">#{</span><span class="nb">method</span><span class="si">}</span><span class="s2"> call.&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">rescue</span> <span class="ss">Errno</span><span class="p">:</span><span class="ss">:EPIPE</span><span class="p">,</span> <span class="no">EOFError</span>
-</span><span class='line'><span class="n">stop</span> <span class="s2">&quot;EPIPE&quot;</span>
-</span><span class='line'><span class="k">raise</span> <span class="no">MentosError</span><span class="p">,</span> <span class="s2">&quot;EPIPE&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It turns out that fundamental problem is not <code>nil</code> so much as <em>non-determinism</em>: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for <code>nil</code> to end up being returned. This non-determinism is worse than <code>nil</code>. I think that in a situation like this, an <em>exception</em> is called for. <code>highlight()</code> should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return <code>nil</code> (or if using a statically typed language, a <code>None</code>).</p>
-
-<p>I was also disappointed that logging was used in this code, indicating that it was known that bad things could happen, but the logged information was not used in generating a useful exception.</p>
-
-<p>Amusingly, upon discovering the logging code, I used it, setting the magic environment variable <code>MENTOS_LOG</code> (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="gp">#</span> Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
-</span><span class='line'><span class="go">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.</span>
-</span><span class='line'><span class="go">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Out header: {&quot;method&quot;:&quot;highlight&quot;,&quot;args&quot;:null,&quot;kwargs&quot;:{&quot;lexer&quot;:&quot;console&quot;,&quot;options&quot;:{&quot;encoding&quot;:&quot;utf-8&quot;,&quot;outencoding&quot;:&quot;utf-8&quot;},&quot;fd&quot;:10,&quot;id&quot;:&quot;TVQSJNBV&quot;,&quot;bytes&quot;:147}}</span>
-</span><span class='line'><span class="go">E, [2013-06-29 10:26 #13799] ERROR -- : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call</span>
-</span><span class='line'><span class="go">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.</span>
-</span><span class='line'><span class="go">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Testing</h2>
-
-<p>It turns out that there <em>is</em> a place where the intended behavior is in a sense documented: the unit tests in <code>test_pygments.rb</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">def</span> <span class="nf">test_returns_nil_on_timeout</span>
-</span><span class='line'>    <span class="n">large_code</span> <span class="o">=</span> <span class="no">REDIS_CODE</span> <span class="o">*</span> <span class="mi">300</span>
-</span><span class='line'>    <span class="n">code</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">highlight</span><span class="p">(</span><span class="n">large_code</span><span class="p">)</span> <span class="c1"># a 30 mb highlight request will timeout</span>
-</span><span class='line'>    <span class="n">assert_equal</span> <span class="kp">nil</span><span class="p">,</span> <span class="n">code</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be <code>nil</code>!</p>
-
-<p>OK, fair enough: assuming that the Jekyll authors knew of this intention, then it was Jekyll&rsquo;s responsibility to test for <code>nil</code> in the call to <code>Pygments.highlight()</code>.</p>
-
-<p>The test is not very satisfactory because it artificially tries to generate a timeout. Instead, one could do some mocking or refactoring of <code>mentos()</code>.</p>
-
-<h2><code>nil</code> is still not OK; but are exceptions OK?</h2>
-
-<p>So everything is OK, now that we can take <code>nil</code> to mean a timeout, right? No, actually, <code>highlight()</code> can still return a <code>nil</code> just because <code>code</code> was <code>nil</code>. It is bad to bin random different failure modes into one return value. Personally, I would choose to enforce that the input <code>code</code> is never <code>nil</code> and that the output is never <code>nil</code>, and that an exception is raised if there is a timeout.</p>
-
-<p>An alternative is to not use an exception, but use a union success/failure type instead. This is the route that <a href="http://blog.stackmob.com/2013/03/why-we-avoid-throwing-exceptions-at-stackmob/">StackMob uses for its Scala code</a>. Other Scala developers such as <a href="http://blog.jessitron.com/2013/06/whats-dirtier-than-comments-exceptions.html">Jessica Kerr have been arguing against the use of exceptions also</a>.</p>
-
-<p>Google&rsquo;s systems-level statically typed language <a href="http://golang.org/">Go</a> deliberately <a href="http://golang.org/doc/faq#exceptions">does not even have exceptions</a>, and therefore mandates a style of error handling that involves <a href="http://golang.org/doc/articles/error_handling.html">returning a success and failure everywhere</a>.</p>
-
-<p>I think there are situations for exceptions and situations for reifying errors as ordinary values in a success/failure object. I will explore this topic further in this blog. Note that even in the Haskell community, there is continued debate over how to handle errors; a famous post compares <a href="http://blog.ezyang.com/2011/08/8-ways-to-report-errors-in-haskell-revisited/">eight different ways to handle errors in Haskell</a>. There is no consensus because there are a lot of tradeoffs involved when it comes to error handling.</p>
-
-<h2>My fix</h2>
-
-<p>For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked <code>8</code> to <code>80</code> to avoid a timeout!</p>
-
-<h3>(Update of 2013-12-18)</h3>
-
-<p>The <code>pygments.rb</code> library <a href="https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999">has finally been updated with a <code>MENTOS_TIMEOUT</code> environment variable</a>.</p>
-
-<p>This is obviously a short-term hack, and I don&rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the <code>pygments.rb</code> team, I have no right to complain!</p>
-
-<h2>Conclusion</h2>
-
-<p>I&rsquo;ve used my recent frustration at being unable to publish my personal blog as a vehicle to begin a conversation about error handling and the issues of API design and documentation in the face of errors. I hope you enjoyed the ride.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[We Should Not Create This Kind of Terrible Error Message for the End User]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/"/>
-    <updated>2013-06-26T23:44:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user</id>
-    <content type="html"><![CDATA[<p>I have a <a href="http://franklinchen.com/blog/2012/03/22/paradox-i-will-observe-the-national-day-of-unplugging-but-just-bought-my-first-smartphone-this-week/">Samsung Galaxy S II smartphone</a>. I recently encountered a problem: auto-updating of apps failed with this terrible error message:</p>
-
-<blockquote><p>Application cannot be installed in the default install location.</p></blockquote>
-
-
-<p>Also, a lot of time and bandwidth was each time spent on re-downloading the app and then failing, with no way to gracefully recover.</p>
-
-<p>If you search the Web for this unpleasant error message, you will see hundreds if not thousands of confused end users like me asking on various forums how to deal with this.</p>
-
-<p>I feel pretty bad about this situation, both as a programmer and as an end user.</p>
-
-<!--more-->
-
-
-<h2>As an end user</h2>
-
-<p>As an end user, I know very little about smartphones. I am not currently a mobile-device developer. I just want things to work, and I have never read the huge manual that came with my phone. If there is an error in my operation of the phone, I want some kind of useful guidance (ideally very specific and tailored to a common use case known by the vendor), not a mysterious generic error message.</p>
-
-<h2>As a programmer</h2>
-
-<p>It turns out that there is internal device storage and SD card storage, and if you run out of space somewhere, an error can happen, and that there is a default install location for apps. The gory details for developers are <a href="https://developer.android.com/guide/topics/data/install-location.html">here</a>.</p>
-
-<p>Clearing some space and also moving a large app to SD card storage solved my problem.</p>
-
-<p>So why that terrible error message? Why not just tell the end user exactly what is going on? Why not something like:</p>
-
-<blockquote><p>The application X could not be installed at (device storage | SD card storage) because you don&#8217;t have enough space. You can try clearing more space, or go to your application settings to move it to (SD card storage | device storage).</p></blockquote>
-
-
-<p>The application should know exactly what is going on, and not only that, should be able to suggest a course of action based on all the relevant variables, such as how much space there is in different places, how large the application is, etc.</p>
-
-<h3>Why?</h3>
-
-<p>I haven&rsquo;t seen the source code that generates the existing error message, but as a programmer, I can guess what might be happening.</p>
-
-<p>I have been as guilty as anyone else of not providing good end user error messages in software I have written. It is very easy to do the following sloppy things instead:</p>
-
-<ul>
-<li>Throwing exceptions that contain no useful information except some string</li>
-<li>Not handling an exception close to where useful recovery can actually happen</li>
-</ul>
-
-
-<p>It is superficially &ldquo;more work&rdquo; to throw an exception that includes all relevant information, and for handlers to also do something intelligent rather than just pass the buck all the way to some top level catch-all handler.</p>
-
-<p>Also, why should the phone download the whole app and then fail, if there is actually enough information to guess that the whole update might fail? Surely there is information about how big the app is, before downloading it?</p>
-
-<p>And what&rsquo;s with the default concurrent downloads of many updates at the same time, which greatly increases the probability of failure of all of them, when serializing the downloads results in less use of temporary space?</p>
-
-<h2>Conclusion</h2>
-
-<p>We programmers clearly are not conscientious enough about error handling and reporting. I believe that today, more than ever, we have a responsibility to <em>handle failure gracefully</em> in software. I believe that failure should even be considered to be the <em>default</em> expectation, rather than success, in order to create reliable software. As <a href="http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/">Dick Wall said at the recent 2013 Pittsburgh TechFest</a>, it&rsquo;s not enough to design and code and test primarily for the &ldquo;happy path&rdquo;.</p>
-
-<p>There are ways to do error handling better, but they require serious thinking up front. This is a large topic we will be exploring in depth on this blog.</p>
-
-<h3>(Update of 2013-06-27)</h3>
-
-<p>By sheer coincidence, a great <a href="http://programming.oreilly.com/2013/06/human-centered-design-may-be-what-makes-your-app-stand-out.html">interview on <em>human-centered design</em></a> arrived in my RSS feed. Check it out.</p>
-
-<p>I will be the first to admit that I don&rsquo;t know much about UX or human-centered design. I just have some intuitions as an end user. I think we developers should learn more about this stuff in a more formal, serious way. And it&rsquo;s just a matter of thinking about the ultimate end user. Even if we are not programming for the ultimate end user, we are at least programming for other programmers. If we are writing an API, the principles that guide human behavior must still be valid, even if programmers are an unusual subset of human beings! We write code <em>not</em> primarily for computers but for other human beings (including our future selves).</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Python: Night of the Favorite Module]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/"/>
-    <updated>2013-06-26T22:50:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module</id>
-    <content type="html"><![CDATA[<p><img src="http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg" title="Pittsburgh Python User Group" ></p>
-
-<p>The <a href="http://www.meetup.com/pghpython/">Pittsburgh Python User Group</a> had <a href="http://www.meetup.com/pghpython/events/120442102">another &ldquo;favorite module night&rdquo;</a>. I enjoy this format because I get to learn about what people find useful, so that I may perhaps use it myself!</p>
-
-<h2>How I benefited in the past</h2>
-
-<p>For example, <a href="http://franklinchen.com/blog/2012/08/23/pittsburgh-python-meetup-i-gave-my-first-lightning-talk-ever-the-topic-was-scons/">one of these &ldquo;favorite module night&rdquo; sessions</a> was where I learned about Kenneth Reitz&rsquo;s <code>requests</code> library. Very often it is easy to not be aware of the rapidly changing ecology of very useful libraries in a programming language ecosystem outside of the official &ldquo;standard library&rdquo;, especially when using a language that is <em>not</em> one&rsquo;s primary working language. For example, Python has never been one of my primary working languages, so I&rsquo;m not as up to date on what all the best tools are to use. But just a couple of weeks ago, I had to do some work with Python, and <code>requests</code> came in very handy.</p>
-
-<h2><a href="http://ipython.org/notebook.html">IPython Notebook</a></h2>
-
-<p>Josh Adelman opened the show-and-tell with a demo of <a href="http://ipython.org/notebook.html">IPython Notebook</a>. This is a truly fantastic interactive environment for developing code while creating a full document for publication and sharing. He uses it not only for research but also for his students to use in his teaching.</p>
-
-<p>If you&rsquo;ve used Mathematica, the concept is similar to that environment.</p>
-
-<p>I&rsquo;m also excited that IPython Notebook has been the direct inspiration for similar projects for other languages, e.g., <a href="https://github.com/Bridgewater/scala-notebook">Scala Notebook</a> for Scala in development.</p>
-
-<p>Josh gave a link to this <a href="http://jakevdp.github.io/">cool blog that uses IPython Notebook</a>.</p>
-
-<h2><a href="https://getsentry.com/welcome/">Sentry</a> and <a href="http://raven.readthedocs.org/en/latest/">Raven</a></h2>
-
-<p>Nick Sloan presented on Sentry, a service for collecting errors in your program and notifying you of them, and Raven, the official Python client for Sentry. Sentry is actually open source, so you could host it yourself, but paying for the hosted service provides conveniences.</p>
-
-<p>Using Sentry is no more than using ordinary Python logging after calling a setup function. The ease of use made it sound like a winner.</p>
-
-<h2><a href="http://docopt.org/">docopt</a></h2>
-
-<p>Joe Esposito presented on <code>docopt</code>, a library for command line parsing. The interesting thing about it is that it implements an <em>external</em> domain-specific language for describing command lines: you write a usage message, as a string, and <code>docopt</code> parses it in order to deduce what the expectations and constraints are. This is a very ambitious approach, contrary to the usual internal API-based approaches, some of which are sophisticated and implement an <em>internal</em> domain-specific language.</p>
-
-<p>Of course, Joe contrasted this library with one of the standard command line parsing libraries for Python, <code>argparse</code>, which is lower-level so that when you use it, the high-level end user usage is not as immediately readable.</p>
-
-<p>There were a lot of good questions about <code>docopt</code> since it seemed magical. I&rsquo;ve decided to write more about all this in a separate blog post about command line parsers.</p>
-
-<h2><a href="https://pypi.python.org/pypi/hypothesis">hypothesis</a></h2>
-
-<p>I gave a short 5-minute presentation on <code>hypothesis</code>, a library in development for doing property-based testing, inspired by QuickCheck and ScalaCheck. As I have done recently when giving a much longer <a href="http://franklinchen.com/blog/2013/04/11/my-pittsburgh-scala-meetup-talk-on-property-based-testing-using-scalacheck/">talk on property-based testing using ScalaCheck</a>, I focused on motivating the use of property-based testing as an addition to example-based testing.</p>
-
-<p>Materials for my lightning talk are <a href="https://github.com/franklinchen/lightning-talk-on-hypothesis">here</a>, and my few slides are below:</p>
-
-<iframe src="http://www.slideshare.net/slideshow/embed_code/23548866" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
-
-
-<p> <div style="margin-bottom:5px"> <strong> <a href="http://www.slideshare.net/FranklinChen/handout-23548866" title="5-minute intro to property-based testing in Python with hypothesis" target="_blank">5-minute intro to property-based testing in Python with hypothesis</a> </strong> from <strong><a href="http://www.slideshare.net/FranklinChen" target="_blank">Franklin Chen</a></strong> </div></p>
-
-<h2><a href="http://docs.python.org/2/library/itertools.html"><code>itertools</code></a></h2>
-
-<p>Tim Lesher talked about <code>itertools</code>, a very useful part of the standard library that provides support for efficient functional programming idioms. Part of the efficiency comes from the use of iterators in order to avoid constructing intermediate lists; this is a way of simulating the lazy sequences that are standard in languages such as ML, Haskell, Scala, and Clojure.</p>
-
-<p>Tim noted that although <code>itertools</code> is powerful, &ldquo;don&rsquo;t be stupid&rdquo;: don&rsquo;t write obscure-looking code with it just because you can.</p>
-
-<p>Josh noted that the documentation for <code>itertools</code> is great, with recipes that show you not only how to do things, and also with code for the equivalent more complicated code that you would have to write if you didn&rsquo;t use <code>itertools</code>. I agree that the documentation for <code>itertools</code> is a model of high-quality documentation for a library. Check it out, and use it!</p>
-
-<h2><a href="http://docs.python.org/dev/library/argparse.html"><code>argparse</code></a></h2>
-
-<p>Craig gave a little presentation on <code>argparse</code>, the aforementioned standard library for command line parsing. He noted it was ironic that he had prepared to speak on it before Joe independently decided to talk about <code>docopt</code>. (Actually, I like <code>argparse</code> and had considered talking about it before Craig submitted it already.)</p>
-
-<p>One feature he uses from <code>argparse</code> is the ability to create mutually exclusive groups. There was a question of whether this is supported in <code>docopt</code>.</p>
-
-<p>As mentioned earlier, I&rsquo;ll write more about both <code>argparse</code> and <code>docopt</code> in a separate blog post.</p>
-
-<h2><a href="http://doughellmann.com/python-standard-library-by-example">The Python Standard Library by Example</a></h2>
-
-<p>Someone shared not a &ldquo;favorite module&rdquo;, but a favorite book, &ldquo;The Python Standard Library by Example&rdquo;. I&rsquo;m happy he did, because it is in fact an excellent reference for anyone using the Python standard library, with concrete examples that you can take and use. Too often, I have found that standard documentation is too terse.</p>
-
-<p>The book is based on <a href="http://pymotw.com/2/">&ldquo;Python Module of the Week&rdquo;</a>, which is a great online resource.</p>
-
-<h2>Introductions for new people</h2>
-
-<p>An important part of the vibe of the Pittsburgh Python User Group is how it tries to get everyone actively involved in the local Python community.</p>
-
-<p>There is a tradition of periodically having everyone introduce themselves, to counter the tendency sometimes in these kinds of groups for people to attend a meeting out of curiosity and then silently leave and perhaps not come back, out of intimidation or not knowing how to benefit or contribute. I know I have done that before, especially when attending the meeting of a group where I didn&rsquo;t really know anybody ahead of time and still knew very little about the topics discussed by the group (such as when I joined the Pittsburgh Ruby group as one who had barely used any Ruby).</p>
-
-<p>Since so many people showed up, and a lot seemed to be new faces, we had a round of introductions. I hope we&rsquo;ll continue to see some of these new faces in the future!</p>
-
-<h2>Conclusion</h2>
-
-<p>Thanks again to Google Pittsburgh for hosting the Pittsburgh Python User Group meeting, and Steve Gross of Google for being the guy who makes it able for us to meet there!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Java User Group: Building and Evolving a Java API]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/"/>
-    <updated>2013-06-25T21:49:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api</id>
-    <content type="html"><![CDATA[<p>The topic for the featured presentation at the <a href="http://java.net/projects/pittjug/">Pittsburgh Java User Group</a> (PittJUG) was &ldquo;Building and Evolving a Java API&rdquo;, presented by Eric Stein of <a href="http://www.fulminatus.com/">Fulminatus Consulting</a>. I was excited to attend because API design is difficult but important, and today more than ever, because of the trend toward integrating many services to build an application, and toward providing such services (both externally and internally).</p>
-
-<p>(For past reports of mine on PittJUG, see the <a href="http://franklinchen.com/blog/categories/pittjug/">PittJUG archives in my other blog</a>.)</p>
-
-<p>The presentation was very good. (Eric&rsquo;s slides are available <a href="http://www.fulminatus.com/presentations/PittJUG%20API%20Presentation.pdf">here</a>, but as always with slides, be aware that it is just an outline, as good slides really should be, and the actual presentation and group discussion had all the substance.) Note that although some of the specific recommendations and examples are Java-specific, the entire area of good API design is <em>general</em> and is applicable no matter what programming language you are using.</p>
-
-<p>However, the presentation also filled me with a combination of <em>sadness</em>, because our computing profession could have done better up front to make good API design much easier in various ways. On the positive side, it&rsquo;s better late than never.</p>
-
-<p>A report on the presentation, with my commentary:</p>
-
-<!--more-->
-
-
-<h2>API design for whom?</h2>
-
-<p>Whenever doing something at all, the question &ldquo;for whom?&rdquo; should always be asked and answered. Eric observed that APIs must meet the different needs of different users, so it&rsquo;s useful to identify three specific end users with different needs, and look at the situation from each of their points of view:</p>
-
-<ul>
-<li>API owner</li>
-<li>specification owner</li>
-<li>logging owner</li>
-</ul>
-
-
-<p>His inclusion of the &ldquo;logging owner&rdquo; was intriguing because the point of view from someone whose job it is to wade through logs is often slighted. But in light of ever more complex applications as well as errors and the need for recovery and quick turnaround in fixing them, I believe that Eric is right to argue that logging should be seriously designed, to &ldquo;tell a consistent story&rdquo;. I am taking this advice to heart.</p>
-
-<h2>Design process</h2>
-
-<p>Eric advised that design should start with use cases. And client code, from the perspective of the end user, as well as tests, should be written up front. He didn&rsquo;t use the term, but this is <a href="http://en.wikipedia.org/wiki/Test-driven_development">test-driven development</a> (TDD), which in my mind has been an unfortunate term, because it is really <em>test-driven design</em>, which happens to have the nice effect of kick-starting development as well. (I&rsquo;ll be writing more later on this blog about TDD; I no longer start a new project without a TDD mentality and process, so productive and efficient I have found it.)</p>
-
-<p>One thing that Eric said was to start with the <em>most important</em> cases first, not the easy cases. Very good advice: I have learned the hard way that it is easy to pat yourself on the back and start with easy cases to feel like you&rsquo;re making progress, but this often leads to hitting a block when getting to the hard cases, and then having to do some major redesign at that point. I&rsquo;ve found that if something is really important, it needs to be addressed immediately, and often will drive the design of the components required to make the important hard case work. (I&rsquo;ll be writing more later on this blog about &ldquo;the hard case&rdquo;, especially in the context of &ldquo;sad paths&rdquo; that are critical.)</p>
-
-<h2>Stability</h2>
-
-<p>Stability is the big difficulty in API design. It&rsquo;s really daunting, actually, to think of the idea of &ldquo;write once, support forever&rdquo;, but people get very unhappy, rightfully, if they start using your API and then things break on them after it changes.</p>
-
-<h2>Simplicity</h2>
-
-<p>Eric argued that a good API should be easy to read as well as easy to write. This is all about human psychology.</p>
-
-<p>Also, he noted that a side effect of his recommendation to write client code and tests first is that you get to see the point of view of the client, and can use this experience to weed out, for example, APIs that require a lot of annoying boilerplate code.</p>
-
-<h2>Subclassing</h2>
-
-<p>There was a lot of good material covered about the dangers of exposing or mandating or allowing subclassing.</p>
-
-<p>I agree with Eric about the <em>dangers of subclassing</em>. The ability to subclass existing classes is the single most abused feature of object-oriented languages, and when it comes to API design, the problems are even more magnified because of the needs for API security and evolution. Almost always, you want to use composition, not subclassing. I&rsquo;m pretty annoyed that composition, which was well-understood in the 1960s and 1970s, ended up being &ldquo;forgotten&rdquo; in some circles. Eric gave the classic example of a totally disastrous API resulting from the Java library originally coming with a <code>Properties</code> class that was a subclass of <code>Hashtable</code>.</p>
-
-<h2>Immutability</h2>
-
-<p>Immutable objects have huge advantages over mutable objects.</p>
-
-<p>This is something has been known by the <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a> community since Lisp in the 1950s and <a href="http://en.wikipedia.org/wiki/ML_(programming_language)">ML</a> in the 1970s and <a href="http://en.wikipedia.org/wiki/Haskell_(programming_language)">Haskell</a> and <a href="http://en.wikipedia.org/wiki/Erlang_(programming_language)">Erlang</a> in the 1980s.</p>
-
-<p>But better late than never.</p>
-
-<h3>My example: Apache HTTP Components</h3>
-
-<p>I have observed that APIs in such languages as Java and Ruby have more and more gravitated toward the use of immutable objects. A very good pattern I have seen is to use a builder (which has internal mutable state) to finally build an instance of an immutable object. Just recently, I was using the <a href="http://hc.apache.org/httpcomponents-client-ga/">Java Apache HTTP Components library</a> and moved from the stable version (4.2.5) to the <a href="http://hc.apache.org/httpcomponents-client-dev/">beta version</a> (4.3-beta2) (because of bugs in the stable version), and happened to notice that a whole slew of methods I was calling were deprecated in favor of a <a href="http://www.apache.org/dist/httpcomponents/httpclient/RELEASE_NOTES.txt">new builder-based API</a>. Excerpts from the release notes of the beta:</p>
-
-<ul>
-<li>Support for Java 7 try-with-resources</li>
-<li>Added fluent Builder classes</li>
-<li>Deprecation of preference and configuration API based on HttpParams interface in favor of constructor injection and plain configuration objects</li>
-<li>Reliance on object immutability instead of access synchronization for thread safety</li>
-</ul>
-
-
-<p>It was very good to see that decades-old lessons about good design are finally making it into important Java libraries!</p>
-
-<h2>Types</h2>
-
-<p>A lot of what Eric talked about had to do with types: type safety as well as the ramifications of types when evolving an API.</p>
-
-<h3><code>null</code></h3>
-
-<p>Several of his examples (see his slides) involved the problem of <code>null</code>, <a href="http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare">Hoare&rsquo;s billion-dollar mistake</a>, which I gave a little <a href="http://franklinchen.com/blog/2012/09/06/my-pittsburgh-ruby-talk-nil/">talk about last year</a>. Basically, <code>null</code> is a hole in a type system, and as a result, in Java one has to compensate by documenting in comments (but not having type checked) when and where something could be null or could not be, so that API clients know what to pass into methods and what to expect in return.</p>
-
-<p>Java is not hopelessly behind: Java 8 has the <a href="http://download.java.net/jdk8/docs/api/java/util/Optional.html"><code>Optional&lt;T&gt;</code> class</a> to help programmers transition away from using <code>null</code>. C++14 has a <a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2013/n3527.html">proposal to add to the standard library <code>std::optional&lt;T&gt;</code></a>.</p>
-
-<p>Admittedly, these are late patches that do not actually prevent continued use of <code>null</code> (ideally, a programming language should simply not even have it; languages such as ML and Haskell from the 1970s and 1980s happily did without this terrible construct), but these are definitely steps forward. New languages being designed and implemented today from a clean slate have no excuse to perpetuate this billion-dollar error: for example, <a href="http://www.rust-lang.org/">Rust</a> does not have <code>null</code>.</p>
-
-<h3>Strings</h3>
-
-<p>Eric noted that use a string is throwing away type safety.</p>
-
-<p>I think the use of strings everywhere is a disaster second to that of using <code>null</code>. The problem is that strings have to be parsed for information. And many people do not actually correctly do such parsing and validation, hence the prevalence of <a href="http://en.wikipedia.org/wiki/SQL_injection">injection attacks</a>.</p>
-
-<p>Even apart from security, the manipulation of strings that actually are supposed to have an intended structure is a major cause of late-caught runtime errors, and of programmer confusion. For example, <a href="http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding">this report on URLs</a> has been recirculating lately, because of errors in both libraries and client code when dealing with URLs as strings rather than as strongly typed data.</p>
-
-<h3>Booleans</h3>
-
-<p>Eric observed that even booleans are an API design smell: booleans are a special case of an enumeration of possible states. What happens if you want to add a new state but your old API used booleans?</p>
-
-<h3>Exceptions</h3>
-
-<p>Eric recommended <em>unchecked</em> over Java&rsquo;s <a href="http://en.wikipedia.org/wiki/Exception_handling#Checked_exceptions"><em>checked</em> exceptions</a>.</p>
-
-<p>Sadly, in my Java programming in the past decade, I&rsquo;ve had to deal with the fact that Java made a big mistake by introducing checked exceptions in the first place; the ramifications were not thought out then. Note that C++11 has finally deprecated exception specifiers, and exceptions in ML have always been unchecked since the introduction in the 1970s, while Java ignored two decades of experience and went ahead and bolted on checked exceptions.</p>
-
-<h4>Not strings!</h4>
-
-<p>Eric advised that all failure data should be included in a thrown exception. Too often, we see exception throwing code that just throws a string message. Then the catcher has to try to parse this message for important data (which may not even be present in the string). If you&rsquo;re going to throw an exception, write a class and stash away important information, not a string message.</p>
-
-<h2>A short note on primitive obsession</h2>
-
-<p>My friend Adam who also attended the PittJUG meeting noted that what we&rsquo;re basically talking about is <a href="http://c2.com/cgi/wiki?PrimitiveObsession">primitive obsession</a>. The larger lesson here is that when designing robust, clear, and safe APIs, using primitives is often a mistake. Everything in the problem domain should really be modeled as its own type, not as a primitive.</p>
-
-<h2>Evolution of an API</h2>
-
-<p>The trickiest thing to get right is making an API so that it can evolve in the future without breaking backwards <em>compatibility</em>. This compatibility can be of different forms:</p>
-
-<ul>
-<li>behavioral</li>
-<li>binary</li>
-<li>source</li>
-</ul>
-
-
-<p>Eric talked a lot about weakening or strengthening contracts. There is a lot of hairy stuff involved, including knowledge of Java compiler internals. I think this is a space where more research is needed for the future in order to get the formal semantics of API evolution done right.</p>
-
-<p><a href="https://code.google.com/p/japi-checker/">japi-checker</a> was mentioned as one tool that one can use for Java.</p>
-
-<h2>Resources</h2>
-
-<p>In the context of software development in Java, it is impossible to avoid mentioning <a href="http://en.wikipedia.org/wiki/Joshua_Bloch">Joshua Bloch</a>&rsquo;s early book (subsequently revised for a second edition), &ldquo;Effective Java&rdquo;. It is a daunting book, over 300 pages long, but it is an indispensable reference for anyone caring about good programming in Java. Eric called it the &ldquo;gold standard&rdquo;.</p>
-
-<p>Check out his links to other resources on his slides.</p>
-
-<h2>Package design</h2>
-
-<p>A question came up about Eric&rsquo;s recommendation of using package-private visibility and his observation that a lot of people don&rsquo;t know about package-private, and don&rsquo;t design packages.</p>
-
-<h3>Modules</h3>
-
-<p>My observation is that people don&rsquo;t design packages because they&rsquo;re not actually modules. <em>Java was invented without a module system</em>, although Java 8 originally was slated to finally include a module system in the form of Jigsaw, which was, however, <a href="http://www.infoworld.com/d/application-development/project-jigsaw-delayed-until-java-9-198007">delayed to Java 9</a>. Meanwhile, there is <a href="http://en.wikipedia.org/wiki/OSGi">OSGi</a>.</p>
-
-<p>I don&rsquo;t like sounding like a broken record, but <a href="http://en.wikipedia.org/wiki/Standard_ML">Standard ML came with a module system in the 1980s</a>, and there has been further work in the area of module systems, including first-class module systems that go beyond stratified module systems. The reality is that Java was born in the 1990s an &ldquo;old&rdquo; language, with no positive technical innovations, that feels more like a language from the 1960s.</p>
-
-<h2>Conclusion</h2>
-
-<p>Eric Stein gave an excellent talk about API design, both from the broadest perspective, focused on human beings and clients, and down and dirty with Java language features to avoid or use carefully.</p>
-
-<h2>Addendum: my involvement with Java</h2>
-
-<p>I had a chance to review some of my feelings I have had about programming in Java myself. I&rsquo;ve been a member of PittJUG for well over a decade now. I first signed up on the PittJUG mailing list in June 1999. I have not always been a regular attendee of the meetings: after some initial years of interest, I stopped attending for some years, and became regular again in 2009. So I&rsquo;ve been around Java since it was a very young language, and all the while knowing of all the problems with the language. So why did I chose it as my main programming language a decade ago, and why have I stuck with it for so long, until last last year, when <a href="http://franklinchen.com/blog/2013/01/11/2013-is-my-year-of-scala/">I decided to write no <em>new</em> Java code, and move on to Scala</a>? I will explain my decision-making in a forthcoming blog post.</p>
-
-<h2>(Update of 2013-07-05)</h2>
-
-<p>An interesting <a href="http://www.infoq.com/presentations/enterprise-api">presentation on APIs in the enterprise</a> came my way.</p>
 ]]></content>
   </entry>
   

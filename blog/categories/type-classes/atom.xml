@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: type classes | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/type-classes/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2014-07-18T00:56:16-04:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
+  <author>
+    <name><![CDATA[Franklin Chen]]></name>
+    <email><![CDATA[franklinchen@franklinchen.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: Implicits]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits/"/>
+    <updated>2014-02-13T21:45:59-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met with Justin presenting on <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581402/">&ldquo;Implicits&rdquo;</a>.</p>
+
+<!--more-->
+
+
+<h2>Implicits</h2>
+
+<p>Implicits are a novel and fantastically important feature of Scala. I wish there were a comprehensive and concise single resource about them out there, but I don&rsquo;t actually know of one.</p>
+
+<p>I&rsquo;ve been doing stuff with implicits lately. Not long ago, I wrote a blog post that involved <a href="/blog/2013/12/26/tostring-considered-harmful-part-2/">using Scala implicits to avoid relying on the inherited Java <code>toString</code> method</a>. More recently, for this meetup I posted some code that I hoped someone would comment on, in which <a href="https://github.com/franklinchen/test-specs2-matchers">I used implicits to try to simplify a DSL</a>. I&rsquo;m not sure this is the right design choice, but it was an experiment.</p>
+
+<h2>Presentation</h2>
+
+<p>Around 7 of us showed up.</p>
+
+<p>Justin did some live coding using the Scala Worksheet to demonstrate various uses of implicits.</p>
+
+<p>One use is to define an &ldquo;implicit function&rdquo; that can convert of a value of one type to another. This can be overused badly, unfortunately.</p>
+
+<p>Another is to define an &ldquo;implicit parameter&rdquo; for a function so that you don&rsquo;t have to explicitly pass a parameter to the function, if there is an implicit value in scope.</p>
+
+<p>Scala 2.10 greatly improved implicits by encapsulating the &ldquo;conversion&rdquo; pattern by means of an &ldquo;implicit class&rdquo;. Strangely, Scala Worksheet seemed to get confused when we played around and defined an implicit class that also had an implicit parameter. This led to some interesting detective work as we examined the generated JVM byte code to figure out what was going on! I thought it was useful for us to dig into this level; often it is useful to understand what something compiles to in order to better understand and appreciate a high-level language construct.</p>
+
+<p>Finally, we briefly discussed the type class pattern, which is arguably the most important use of implicits. This was too big a topic to get into here though.</p>
+
+<h2>Resources</h2>
+
+<p>I posted some good resources that have popped up on my radar on Scala implicits:</p>
+
+<ul>
+<li>A fine <a href="http://like-a-boss.net/2013/03/29/polymorphism-and-typeclasses-in-scala.html">tutorial on type classes in Scala</a>.</li>
+<li><a href="http://typelevel.org/blog/2014/01/18/implicitly_existential.html">Scary stuff with implicits</a> that I don&rsquo;t understand (yet).</li>
+</ul>
+
+
+<h2>Conclusion</h2>
+
+<p>Justin gave a nice introduction to implicits. I think the live coding and experimentation is a great way to involve people in code suggestions and discussion of what things mean and do. It was a fun time.</p>
+]]></content>
+  </entry>
+  
+</feed>

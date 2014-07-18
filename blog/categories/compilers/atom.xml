@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: compilers | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/compilers/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2014-07-18T00:56:16-04:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
+  <author>
+    <name><![CDATA[Franklin Chen]]></name>
+    <email><![CDATA[franklinchen@franklinchen.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Scala Meetup: Exploring type-directed, test-driven development using FizzBuzz (my practice talk)]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/"/>
+    <updated>2014-05-15T22:49:48-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met, with me presenting a <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581402/">practice talk</a> for &ldquo;Exploring type-directed, test-driven development using FizzBuzz&rdquo;, which I am presenting at the upcoming local <a href="http://pghtechfest.com/">Pittsburgh TechFest</a> conference.</p>
+
+<!--more-->
+
+
+<h2>Presentation</h2>
+
+<p>I have only recently completed the slides and code for my talk, and had not actually given the talk yet, so this was a practice talk that did not go so well, unfortunately.</p>
+
+<p>I spoke too quickly and had too much material to cover, and also got lost in some of my own slides. Oops. I think reaction to my talk was mixed. Some enjoyed it, while others seemed lost at places.</p>
+
+<p>After going home, I frankly felt that I had <em>failed</em>.</p>
+
+<p>But I believe I can do much better. I have plenty of time to do a thorough revision before Pittsburgh TechFest in three weeks. I need to cut out material that is not needed for the core of what I am trying to achieve and make some things clearer (especially for the intended Pittsburgh TechFest audience, which I do not expect to even know Scala).</p>
+
+<h2>Supporting material</h2>
+
+<p>Here is the <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz">GitHub repository</a>.</p>
+
+<p>I don&rsquo;t recommend looking at them, but for historical purposes, here are slides of the presentation <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/meetup/doc/presentation.pdf">as it was given in the first draft</a>.</p>
+
+<h2>(Update of 2014-05-16)</h2>
+
+<p>One day makes a difference in my confidence and determination! I noticed that the new <a href="http://www.meetup.com/Pittsburgh-Code-Supply/">Pittsburgh Code and Supply</a> group (which I have not yet attended) is soon having its inaugural <a href="http://www.rust-lang.org/">Rust</a> <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/181773312/">soon</a>.</p>
+
+<p>So I decided to offer to do a version of my talk for Pittsburgh Code and Supply using Rust as the programming language (rather than Scala). I want to spread the news about how to effectively use a sufficiently typed programming language, whether it&rsquo;s Scala or Rust or anything else sufficiently derived from the ML family of type systems.</p>
+
+<p>Justin will schedule it for some time in July. That should give me enough time, after Pittsburgh TechFest in early June, to learn enough Rust to convert my Scala code over properly!</p>
+
+<h2>(Update of 2014-06-07)</h2>
+
+<p>I much improved the presentation for Pittsburgh TechFest.</p>
+
+<p>I recommend reading the <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/master/doc/article.pdf">article version of the presentation</a>, rather than the slides. This is the first time I&rsquo;ve created both an article version of a presentation and slides for use during the live presentation. I will do this in the future as well. Slides are not meant to stand alone or even be read alone.</p>
+
+<h2>(Update of 2014-07-17)</h2>
+
+<p>It&rsquo;s crunch time. My Rust version of the talk, <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/183483622/">&ldquo;Type-Directed TDD in Rust&rdquo;</a> is coming next week.</p>
+]]></content>
+  </entry>
+  
+</feed>
