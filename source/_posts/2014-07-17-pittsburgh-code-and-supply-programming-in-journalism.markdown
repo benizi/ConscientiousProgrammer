@@ -43,6 +43,8 @@ This is my first meeting, and next Monday, I am actually going to give my first 
 
 ## AmyJo Brown
 
+<iframe width="560" height="315" src="//www.youtube.com/embed/DaOxhNkHvvw" frameborder="0" allowfullscreen></iframe>
+
 [AmyJo Brown](http://amyjobrown.com/), an independent journalist, gave a great talk about the kind of work that she does, and why it is important. She gave an overview of how journalism has changed because of the availability of data and because of the complexity of the world, both of which lead to the necessity of telling stories differently, as evidenced by what [ProPublica](http://www.propublica.org/), the [New York Times](http://www.nytimes.com/), and the [Los Angeles Times](http://www.latimes.com/) have been doing.
 
 Her own work involves tracking political donations ("follow the money").
@@ -56,6 +58,8 @@ Near the end of her talk, AmyJo had her colleague Katrina speak a bit also. Katr
 (I'm always very excited and impressed to hear of people with domain knowledge and passion who take up computer programming as a useful skill to apply to their domain. Sometimes I hear people saying "please don't code"; I totally disagree with this sentiment and believe that [everyone can benefit from learning the fundamentals of computer science and programming](http://franklinchen.com/blog/2011/12/09/why-everyone-should-learn-computer-science/).)
 
 ## Andrew McGill
+
+<iframe width="560" height="315" src="//www.youtube.com/embed/0iT9rhwRXVs" frameborder="0" allowfullscreen></iframe>
 
 [Andrew McGill](http://www.andrewrmcgill.com/) bills himself as "your friendly neighborhood journalist", and works for the [Pittsburgh Post-Gazette](http://www.post-gazette.com/).
 
