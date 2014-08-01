@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: unit testing | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/unit-testing/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2014-08-01T01:41:29-04:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
+  <author>
+    <name><![CDATA[Franklin Chen]]></name>
+    <email><![CDATA[franklinchen@franklinchen.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[OpenHack Pittsburgh: a great place to share and learn]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/"/>
+    <updated>2014-01-27T22:38:48-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn</id>
+    <content type="html"><![CDATA[<p>Another month, another <a href="http://www.meetup.com/pittsburgh-ruby/events/158236852/">meeting of OpenHack Pittsburgh</a>!</p>
+
+<p>The project I worked on was writing a blog post on the controversial subject of <a href="https://twitter.com/BillLaboon/status/427525236406243328">unit testing private methods</a>. I ended up not finishing the post, not only because there&rsquo;s a lot to say, but also because I got sidetracked (in a good way) because of discussions with people while at OpenHack!</p>
+
+<p>There were many good points that were made and so I had to reconsider some of my arguments. My overall viewpoint is still that the distinction between &ldquo;public&rdquo; and &ldquo;private&rdquo; is fluid, and that anything that seems significant enough that it feels like it should be tested should in fact be tested, ignoring the artifacts of how it is currently classified. One of the main counterpoints was that if you need to test it, then it should be factored out and made its own unit so that in essence, the rule against testing the private is maintained.</p>
+
+<p>Anyway, I will put up my post once I actually collect all my thoughts together and finish it.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -15,8 +15,20 @@
   </url>
   
   <url>
+    <loc>http://ConscientiousProgrammer.com/blog/2014/02/24/openhack-pittsburgh-working-on-a-private-project/</loc>
+    <lastmod>2014-02-24T18:46:39-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://ConscientiousProgrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits/</loc>
     <lastmod>2014-02-13T21:45:59-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://ConscientiousProgrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/</loc>
+    <lastmod>2014-01-27T22:38:48-05:00</lastmod>
     <priority>0.8</priority>
   </url>
   
@@ -167,21 +179,21 @@
   
   <url>
     <loc>http://ConscientiousProgrammer.com/blog/archives/</loc>
-    <lastmod>2014-07-31T10:44:45-04:00</lastmod>
+    <lastmod>2014-08-01T01:41:29-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://ConscientiousProgrammer.com/</loc>
-    <lastmod>2014-07-31T10:44:45-04:00</lastmod>
+    <lastmod>2014-08-01T01:41:29-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://ConscientiousProgrammer.com/about/</loc>
-    <lastmod>2014-07-31T10:44:45-04:00</lastmod>
+    <lastmod>2014-08-01T01:41:29-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

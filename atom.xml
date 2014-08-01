@@ -4,7 +4,7 @@
   <title><![CDATA[The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-07-31T10:44:45-04:00</updated>
+  <updated>2014-08-01T01:41:29-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -162,6 +162,19 @@
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[OpenHack Pittsburgh: Working on a Private Project]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/02/24/openhack-pittsburgh-working-on-a-private-project/"/>
+    <updated>2014-02-24T18:46:39-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/02/24/openhack-pittsburgh-working-on-a-private-project</id>
+    <content type="html"><![CDATA[<p>Last month at OpenHack Pittsburgh, I had a rather <a href="http://ConscientiousProgrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/">social time</a>.</p>
+
+<p><a href="http://www.meetup.com/pittsburgh-ruby/events/163727212/">This month</a>, I kept entirely to myself. I didn&rsquo;t even speak up to say what I was working on. I was in a somber mood, and didn&rsquo;t really want to talk. I worked on a private project that I will share when I am ready.</p>
+
+<p>It did feel consoling to be around other people, even while keeping to myself. Sometimes I just need to know that I am not alone.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Pittsburgh Scala Meetup: Implicits]]></title>
     <link href="http://ConscientiousProgrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits/"/>
     <updated>2014-02-13T21:45:59-05:00</updated>
@@ -204,6 +217,21 @@
 <h2>Conclusion</h2>
 
 <p>Justin gave a nice introduction to implicits. I think the live coding and experimentation is a great way to involve people in code suggestions and discussion of what things mean and do. It was a fun time.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OpenHack Pittsburgh: A Great Place to Share and Learn]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/"/>
+    <updated>2014-01-27T22:38:48-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn</id>
+    <content type="html"><![CDATA[<p>Another month, another <a href="http://www.meetup.com/pittsburgh-ruby/events/158236852/">meeting of OpenHack Pittsburgh</a>!</p>
+
+<p>The project I worked on was writing a blog post on the controversial subject of <a href="https://twitter.com/BillLaboon/status/427525236406243328">unit testing private methods</a>. I ended up not finishing the post, not only because there&rsquo;s a lot to say, but also because I got sidetracked (in a good way) because of discussions with people while at OpenHack!</p>
+
+<p>There were many good points that were made and so I had to reconsider some of my arguments. My overall viewpoint is still that the distinction between &ldquo;public&rdquo; and &ldquo;private&rdquo; is fluid, and that anything that seems significant enough that it feels like it should be tested should in fact be tested, ignoring the artifacts of how it is currently classified. One of the main counterpoints was that if you need to test it, then it should be factored out and made its own unit so that in essence, the rule against testing the private is maintained.</p>
+
+<p>Anyway, I will put up my post once I actually collect all my thoughts together and finish it.</p>
 ]]></content>
   </entry>
   
@@ -1444,108 +1472,6 @@
 <h2>Conclusion</h2>
 
 <p>Since I don&rsquo;t really use Node, I went to the meetup out of curiosity more than anything else. I will probably not attend again. There seemed a lot of enthusiasm though.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Data Visualization Meetup: Inaugural Meet and Greet]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/07/30/pittsburgh-data-visualization-meetup-inaugural-meet-and-greet/"/>
-    <updated>2013-07-30T23:42:33-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/07/30/pittsburgh-data-visualization-meetup-inaugural-meet-and-greet</id>
-    <content type="html"><![CDATA[<p>There is a new <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/">Pittsburgh Data Visualization Meetup</a> and I attended the <a href="http://www.meetup.com/Pittsburgh-Data-Visualization-Group/events/128665542/">first meeting</a>, which was a meet and greet at <a href="http://www.fuelandfuddle.com/">Fuel &amp; Fuddle</a> in Oakland.</p>
-
-<!--more-->
-
-
-<h2>My interest in data visualization</h2>
-
-<p>Data visualization isn&rsquo;t something I&rsquo;ve done much of, but is something I&rsquo;m interested in, both for work and for my own personal project ideas. For example, I have amassed a lot of personal data about the races I&rsquo;ve run and the chess games I&rsquo;ve played.</p>
-
-<p>The only thing I&rsquo;ve done for visualization at work is generate static images using <a href="http://www.graphviz.org/">Graphviz</a> to display, in human-friendly form, <a href="http://en.wikipedia.org/wiki/Grammatical_relation">grammatical relations</a> that are otherwise represented using a text format; this text format is usually automatically generated, but sometimes has errors that humans have to fix. It is hard to either see or fix such errors from the text representation, so the visual display helps a lot. Unfortunately, right now our program only generates a static image, not an interactive and editable representation of each graph, so the user who sees something wrong has to edit the text and regenerate the image to verify the correction visually. Ideally we would like to make the program more interactive, but this task is not performed very often, so I had gone with the simplest possible solution.</p>
-
-<h2>Summary of meeting</h2>
-
-<p>This being the first meeting, we all introduced ourselves and chatted over dinner. The creator of the new meetup is Patrick Dudas, who is involved in all kinds of cool projects in collecting data (such as scraping Twitter) and visualizing it.</p>
-
-<p>People talked about the kind of work they do and the tools they use or would like to switch to using. There was a good variety of people from different disciplines, from science to business, all with a need to create useful visualizations to analyze and report on data.</p>
-
-<p>Libraries and languages mentioned included D3, ggplot, R, Python, and Tableau. There was particular interest in more effective use of D3 and R. Patrick promised to lead a session on D3 soon.</p>
-
-<h2>Conclusion</h2>
-
-<p>It was good to see a new meetup revolving around a need and a discipline, visualization, that cuts across different disciplines and programming languages.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Ruby Lightning Talk Night: RVM, Business Logic With Rails, IRC, Rspec-given, Vagrant]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/"/>
-    <updated>2013-07-11T20:53:00-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night</id>
-    <content type="html"><![CDATA[<p>The <a href="http://www.meetup.com/pittsburgh-ruby">Pittsburgh Ruby meetup</a> held a <a href="http://www.meetup.com/pittsburgh-ruby/events/120200102">lightning talks session</a>.</p>
-
-<p>Originally, I was not going to present anything, since I did not feel that I had anything exciting to quickly share (I have not been doing much Ruby programming lately at all other than <a href="http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions">debugging my Octopress-generated blog</a>), and don&rsquo;t like talking just to talk.</p>
-
-<p>But at the very last minute, just half an hour before the meeting, I noticed some developments in the world of <a href="http://rspec.info/">RSpec</a> announced on Twitter by Jim Weirich, and I got excited enough that I decided to talk about his <a href="https://github.com/jimweirich/rspec-given"><code>rspec-given</code></a>, which was just released at version 3.0.0.</p>
-
-<!--more-->
-
-
-<h2>Colin, on <code>rvm_recommended_ruby</code></h2>
-
-<p>Colin briefly talked about how he likes to automate things, and therefore, in the context of using <a href="https://rvm.io/">RVM</a>, created <a href="https://github.com/wayneeseguin/rvm/pull/1074"><code>rvm_recommended_ruby</code></a>.</p>
-
-<h2>Jon, on business logic in pure Ruby</h2>
-
-<p>Jon gave a short summary of his <a href="http://jonathandean.com/2013/07/business-logic-in-pure-ruby/">blog post</a> on not putting all business logic into Rails models, but instead, decoupling from <code>ActiveRecord</code> and Rails altogether. This is a theme that has risen a lot in recent years in the Rails community.</p>
-
-<h2>Carol, on how to use IRC to get help</h2>
-
-<p>Carol talked about how to use IRC to get help when working on projects.</p>
-
-<h2>Me, on <code>rspec-given</code></h2>
-
-<p>I talked about cool features in <a href="https://github.com/jimweirich/rspec-given"><code>rspec-given</code></a>.</p>
-
-<p><code>rspec-given</code> has actually been around for a while, but I had not used in the past. I plan to use it in the future.</p>
-
-<p>It provides <code>Given</code>, <code>When</code>, <code>Then</code>, and <code>And</code> for writing specifications.</p>
-
-<p>Also, now there is <code>Invariant</code>, which I think is a great addition to <code>RSpec</code>, enabling an easy way to check invariants as part of every example.</p>
-
-<p>Finally, I love the new natural assertions, the ability to write stuff like</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Then</span> <span class="p">{</span> <span class="n">stack</span><span class="o">.</span><span class="n">top</span> <span class="o">==</span> <span class="ss">:second_item</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>instead of</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Then</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">stack</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="ss">:second_item</span><span class="p">)</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>while <code>RSpec</code> automatically generates useful messages on failure.</p>
-
-<h2>Colin again, on Vagrant</h2>
-
-<p>Since all the lightning talks were done in less than half an hour, Carol called for more volunteers to talk about something. Colin ended up impromptu talking about his use of <a href="http://www.vagrantup.com/">Vagrant</a> to create development environments.</p>
-
-<p>There was particular interest in how to share files with the host file system. Vagrant makes this easy.</p>
-
-<p>Vagrant is great. Use it.</p>
-
-<h2>Ruby meets Python</h2>
-
-<p>Carol reminded everyone that coming up is a Ruby/Python joint social.</p>
-
-<h2>Conclusion</h2>
-
-<p>A relatively short Pittsburgh Ruby meetup, and with a smaller crowd than some others in the past, but a fun and instructive one.</p>
-
-<p>Don&rsquo;t forget, <a href="http://steelcityruby.org/">Steel City Ruby Conference 2013</a> is in a month! I&rsquo;m <a href="http://franklinchen.com/blog/2012/08/07/the-first-steel-city-ruby-conference-an-amazing-experience/">excited to attend again</a>.</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: recursion | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/recursion/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-07-31T10:44:45-04:00</updated>
+  <updated>2014-08-01T01:41:29-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -18,7 +18,7 @@
     <link href="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"/>
     <updated>2013-07-10T22:37:00-04:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a>" title="Pittsburgh JavaScript" ></p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a>&#8221; title=&#8221;Pittsburgh JavaScript&#8221; ></p>
 
 <p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
 
@@ -154,7 +154,7 @@
 
 <p>One concern brought up is that if you&rsquo;re programming in a functional style, you can end up being faced with ever-growing parameter lists for a function to pass in everything that it needs. One solution is to create a big object to stick everything into it that might be needed (for example, a configuration object instead of separate flag parameters). Is this overkill?</p>
 
-<p>Also, <a href="http://tonylukasavage.com/">Tony Lukasavage</a> emphasized that his concern was in the context of the need to evolve an existing API without breaking customers' client code that uses it.</p>
+<p>Also, <a href="http://tonylukasavage.com/">Tony Lukasavage</a> emphasized that his concern was in the context of the need to evolve an existing API without breaking customers&#8217; client code that uses it.</p>
 
 <p>My first note would be that API design is tricky and checking out <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">some resources on API design</a> is very helpful.</p>
 
