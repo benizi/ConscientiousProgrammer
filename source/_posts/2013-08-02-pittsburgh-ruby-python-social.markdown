@@ -22,13 +22,11 @@ categories:
 ---
 Programming meetups aren't just about presentations and coding. Abby and I joined others in meeting up for dinner for a [joint Pittsburgh Ruby and Pittsburgh Python social](http://www.meetup.com/pittsburgh-ruby/events/120201652/) and enjoyed relaxing and socializing outdoors in Bakery Square. Although it perpetually looked like it was going to rain, it turned out we weren't really rained on.
 
-<!-- http://instagram.com/p/ch8quus4Kb/ -->
+<iframe src="//instagram.com/p/ch8quus4Kb/embed/" width="612" height="710" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
 
-{% img http://distilleryimage11.ak.instagram.com/31a91496fbd111e2996722000a9f18fe_7.jpg Dinner outside %}
+Carol, Andre, and Abby:
 
-<!-- https://secure.flickr.com/photos/carolnichols/9425969330/ -->
-
-<iframe src="https://www.flickr.com/photos/carolnichols/9425969330/player/" width="75" height="75" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+<a href="https://www.flickr.com/photos/carolnichols/9425969330" title="ttm! by Carol Nichols, on Flickr"><img src="https://farm4.staticflickr.com/3754/9425969330_d8ecdbf987.jpg" width="500" height="281" alt="ttm!"></a>
 
 It was fitting that there was a joint social for two language communities, because we live in a polyglot world.
 
