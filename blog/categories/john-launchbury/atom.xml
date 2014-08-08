@@ -4,7 +4,7 @@
   <title><![CDATA[Category: john launchbury | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/john-launchbury/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-08-08T02:33:16-04:00</updated>
+  <updated>2014-08-08T02:38:11-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -181,7 +181,7 @@ type Transducer a b = Reducer a r -&gt; Reducer b r
 
 <p>It turns out you need <a href="http://www.haskell.org/haskellwiki/Rank-N_types">higher-rank types</a>. Rank-1 types are not sufficient; we need a rank-2 type to quantify <code>r</code>, to say that a transducer from <code>a</code> to <code>b</code> is a transformation that takes a reducer to a specific <code>r</code> and returns another reducer to the <em>same</em> <code>r</code>.</p>
 
-<pre><code class="haskell">-- Here's where then rank-2 type is needed
+<pre><code class="haskell">-- Here's where the rank-2 type is needed
 type Transducer a b = forall r . Reducer a r -&gt; Reducer b r
 </code></pre>
 

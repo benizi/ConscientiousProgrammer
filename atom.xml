@@ -4,7 +4,7 @@
   <title><![CDATA[The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-08-08T02:33:16-04:00</updated>
+  <updated>2014-08-08T02:38:11-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -240,7 +240,7 @@
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Here&#39;s where then rank-2 type is needed</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Here&#39;s where the rank-2 type is needed</span>
 </span><span class='line'><span class="kr">type</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">b</span> <span class="ow">=</span> <span class="n">forall</span> <span class="n">r</span> <span class="o">.</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="kt">Reducer</span> <span class="n">b</span> <span class="n">r</span>
 </span></code></pre></td></tr></table></div></figure>
 
