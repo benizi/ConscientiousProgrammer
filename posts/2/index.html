@@ -9,7 +9,7 @@
   <meta name="author" content="Franklin Chen">
 
   
-  <meta name="description" content="The Pittsburgh Scala Meetup met again with Josh walking through his code for an interactive Web tic-tac-toe program implemented with Play. It was a &hellip;">
+  <meta name="description" content="It is easy to rant about the problems or unexpected subtleties involving the use of strings in programming languages. This post, however, is not so &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,54 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/23/tostring-considered-harmful-part-1/">toString Considered Harmful, Part 1</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-23T23:54:00-05:00" pubdate data-updated="true">Dec 23<sup>rd</sup>, 2013</time>
+        
+           | <a href="/blog/2013/12/23/tostring-considered-harmful-part-1/#disqus_thread"
+             data-disqus-identifier="http://ConscientiousProgrammer.com/blog/2013/12/23/tostring-considered-harmful-part-1/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It is easy to rant about the problems or unexpected subtleties involving the use of <a href="http://en.wikipedia.org/wiki/String_%28computer_science%29">strings</a> in programming languages. This post, however, is not so much a rant about strings as about design and meaning, with <code>toString</code> only as an obvious example.</p>
+
+<p>I&rsquo;ll describe a pitfall that came up in my code, and a solution, and make observations about how different programming languages address or avoid this problem.</p>
+
+<p>This is part one of a series.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/12/23/tostring-considered-harmful-part-1/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -481,18 +529,12 @@
 
   <div class="entry-content"><p>Programming meetups aren&rsquo;t just about presentations and coding. Abby and I joined others in meeting up for dinner for a <a href="http://www.meetup.com/pittsburgh-ruby/events/120201652/">joint Pittsburgh Ruby and Pittsburgh Python social</a> and enjoyed relaxing and socializing outdoors in Bakery Square. Although it perpetually looked like it was going to rain, it turned out we weren&rsquo;t really rained on.</p>
 
-<!-- http://instagram.com/p/ch8quus4Kb/ -->
+<iframe src="//instagram.com/p/ch8quus4Kb/embed/" width="612" height="710" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
 
 
-<p><img src="http://distilleryimage11.ak.instagram.com/31a91496fbd111e2996722000a9f18fe_7.jpg" title="Dinner outside" ></p>
+<p>Carol, Andre, and Abby:</p>
 
-<!-- https://secure.flickr.com/photos/carolnichols/9425969330/ -->
-
-
-
-
-<iframe src="https://www.flickr.com/photos/carolnichols/9425969330/player/" width="75" height="75" frameborder="0" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
-
+<p><a href="https://www.flickr.com/photos/carolnichols/9425969330" title="ttm! by Carol Nichols, on Flickr"><img src="https://farm4.staticflickr.com/3754/9425969330_d8ecdbf987.jpg" width="500" height="281" alt="ttm!"></a></p>
 
 <p>It was fitting that there was a joint social for two language communities, because we live in a polyglot world.</p>
 
@@ -504,59 +546,6 @@
     <footer>
       <a rel="full-article" href="/blog/2013/08/02/pittsburgh-ruby-python-social/">Read on &rarr;</a>
     </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt/">Pittsburgh Node Meetup: Optimizing Development Workflow With Grunt</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-31T21:29:45-04:00" pubdate data-updated="true">Jul 31<sup>st</sup>, 2013</time>
-        
-           | <a href="/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt/#disqus_thread"
-             data-disqus-identifier="http://ConscientiousProgrammer.com/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am not a <a href="http://nodejs.org/">Node</a> developer. I&rsquo;ve only used Node to play around with JavaScript, not for any real work or personal projects (yet). The last time I used Node was two months ago, for a <a href="http://franklinchen.com/blog/2013/06/01/pittsburgh-tech-fest-2013-my-talk-stop-overusing-regular-expressions/">talk I gave at Pittsburgh TechFest 2013</a> in which I wrote JavaScript code running on Node, but did not actually talk about it, and only mentioned that I had written it and put it up on my <a href="https://github.com/franklinchen/talk-on-overusing-regular-expressions">GitHub repository for the talk</a>.</p>
-
-<p>That is why it took me so long to attend my first <a href="http://www.meetup.com/Pittsburgh-Node-js/">Pittsburgh Node</a> <a href="http://www.meetup.com/Pittsburgh-Node-js/events/128439692/">meeting</a>. I was simply curious who was involved in the local Node community and what tooling they were using. The meeting was about <a href="http://gruntjs.com/">Grunt</a>, a Make-like task runner. Nate Good of ShowClix presented.</p>
-
-<h2>Attendance</h2>
-
-<p>There was a fairly large group of people who attended: around thirty. Node seems to be popular in town.</p>
-
-<h2>The talk</h2>
-
-<p>Overall, Grunt seemed like Make or Rake. You can use plugins and define your own tasks. So there seemed nothing special about it, other than it is a useful tool corresponding to similar tools for other language ecosystems.</p>
-
-<h2>Conclusion</h2>
-
-<p>Since I don&rsquo;t really use Node, I went to the meetup out of curiosity more than anything else. I will probably not attend again. There seemed a lot of enthusiasm though.</p>
-</div>
-  
   
 
 
@@ -579,6 +568,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/08/07/understanding-cloure-transducers-through-types/">Understanding Clojure Transducers Through Types</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/">Pittsburgh Code and Supply: Programming in Journalism</a>
       </li>
     
@@ -592,10 +585,6 @@
     
       <li class="post">
         <a href="/blog/2014/02/13/pittsburgh-scala-meetup-implicits/">Pittsburgh Scala Meetup: Implicits</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/">OpenHack Pittsburgh: A Great Place to Share and Learn</a>
       </li>
     
   </ul>

@@ -1,0 +1,741 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Understanding Clojure Transducers Through Types - The Conscientious Programmer</title>
+  <meta name="author" content="Franklin Chen">
+
+  
+  <meta name="description" content="Yesterday, Rich Hickey published a blog post, &ldquo;Transducers are Coming&rdquo;, which attracted a lot of attention. I have a confession to make, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41982602-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Conscientious Programmer</a></h1>
+  
+    <h2>Humbly exploring what it means to do the right thing.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ConscientiousProgrammer.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Understanding Clojure Transducers Through Types</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-07T22:58:16-04:00" pubdate data-updated="true">Aug 7<sup>th</sup>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Yesterday, Rich Hickey published a blog post, <a href="http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming">&ldquo;Transducers are Coming&rdquo;</a>, which attracted a lot of attention.</p>
+
+<p>I have a confession to make, which I have made before: I find it very difficult to understand ideas or code not presented with <em>types</em>. So I decided that the only way I could possibly understand what &ldquo;transducers&rdquo; are would be to actually implement them in a typed language. I ended up doing so and am sharing my findings here.</p>
+
+<!--more-->
+
+
+<h2>Vague types in the original blog post</h2>
+
+<p>Rich informally gave some type signatures in his blog post:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>;;reducing function signature
+</span><span class='line'>whatever, input -&gt; whatever
+</span><span class='line'>
+</span><span class='line'>;;transducer signature
+</span><span class='line'>(whatever, input -&gt; whatever) -&gt; (whatever, input -&gt; whatever)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This was, unfortunately, not very helpful. It is hard to make sense of this pseudo-notation for types. What is quantified over what? And what is bound to what? I&rsquo;ll explain later what I mean by these questions.</p>
+
+<h2>First discussion thread I saw</h2>
+
+<p>There was much tweeting online about transducers after Rich Hickey&rsquo;s initial announcement; the tweets did not help me, except for links posted to discussion elsewhere.</p>
+
+<p>One of them was <a href="https://news.ycombinator.com/item?id=8143905">on Hacker News</a>. I browsed through it but found it mostly not useful. The problem was that although a lot of interesting Haskell code was thrown around, it tended to be <em>related</em> to transducers but not an <em>exact</em> translation of the concept. I already had my own intuitions about transducers being related to well-known types such as <a href="http://www.haskell.org/haskellwiki/Foldable_and_Traversable">foldables</a>, <a href="http://en.wikipedia.org/wiki/Iteratee">iteratees</a>, <a href="https://lens.github.io/">lenses</a>, etc. That &ldquo;ordinary function composition&rdquo; was involved immediately suggested the connections, because function composition is huge in these existing Haskell libraries.</p>
+
+<p>But what I wanted was to understand transducers <em>as they are</em>, before even thinking about generalizations and comparisons.</p>
+
+<h3>What are the types?</h3>
+
+<p>Rich Hickey <a href="https://news.ycombinator.com/item?id=8144385">informally offered some types</a> (which he said were &ldquo;a la Haskell&rdquo;) to try to help out:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>;;reducing fn
+</span><span class='line'>x-&gt;a-&gt;x
+</span><span class='line'>
+</span><span class='line'>;;transducer fn
+</span><span class='line'>(x-&gt;a-&gt;x)-&gt;(x-&gt;b-&gt;x)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>OK, by using type variables <code>a</code>, <code>b</code>, and <code>x</code>, that indicates what is bound to what. The blog post should have used this notation rather than</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>;;transducer signature
+</span><span class='line'>(whatever, input -&gt; whatever) -&gt; (whatever, input -&gt; whatever)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Sample Clojure code</h3>
+
+<p>He also posted some sample Clojure code:</p>
+
+<div><script src='https://gist.github.com/b5aefa622180681e1c81.js'></script>
+<noscript><pre><code>(require &#39;[clojure.core.async :as a])
+
+(def xform (comp (map inc)
+              (filter even?)
+              (dedupe)
+              (flatmap range)
+              (partition-all 3)
+              (partition-by #(&lt; (apply + %) 7))
+              (flatmap flatten)
+              (random-sample 1.0)
+              (take-nth 1)
+              (keep #(when (odd? %) (* % %)))
+              (keep-indexed #(when (even? %1) (* %1 %2)))
+              (replace {2 &quot;two&quot; 6 &quot;six&quot; 18 &quot;eighteen&quot;})
+              (take 11)
+              (take-while #(not= 300 %))
+              (drop 1)
+              (drop-while string?)
+              (remove string?)))
+
+(def data (vec (interleave (range 18) (range 20))))
+
+;; lazily transform the data
+(sequence xform data)
+;; reduce with a transformation (no laziness)
+(transduce xform + 0 data)
+;;build one collection from a transformation of another, again no laziness
+(into [] xform data)
+;;create a recipe for a transformation, which can be subsequently sequenced, iterated or reduced
+(iteration xform data)
+;;transform everything that goes through a channel - same transducer stack!
+(let [c (a/chan 1 xform)]
+  (a/thread (a/onto-chan c data))
+  (a/&lt;!! (a/into [] c)))</code></pre></noscript></div>
+
+
+<h2>Second discussion thread I saw</h2>
+
+<p>Then today, I saw a discussion thread on Reddit, titled <a href="http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/">&ldquo;Clojure&rsquo;s Transducers are Perverse Lenses&rdquo;</a>.</p>
+
+<h3>Actual runnable Haskell code</h3>
+
+<p>Rich finally posted some actual <a href="http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/">type-checked, runnable Haskell code</a>!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Transducers in Haskell</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">mapping</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span>
+</span><span class='line'><span class="nf">mapping</span> <span class="n">f</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">xf</span> <span class="n">r</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">filtering</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span>
+</span><span class='line'><span class="nf">filtering</span> <span class="n">p</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="kr">if</span> <span class="n">p</span> <span class="n">a</span> <span class="kr">then</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="kr">else</span> <span class="n">r</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">flatmapping</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">b</span><span class="p">])</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span>
+</span><span class='line'><span class="nf">flatmapping</span> <span class="n">f</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">foldl</span> <span class="n">xf</span> <span class="n">r</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- for exposition only, yes, conj is gross for lazy lists</span>
+</span><span class='line'><span class="c1">-- in Clojure conj and left folds dominate</span>
+</span><span class='line'><span class="nf">conj</span> <span class="n">xs</span> <span class="n">x</span> <span class="ow">=</span> <span class="n">xs</span> <span class="o">++</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+</span><span class='line'><span class="nf">xlist</span> <span class="n">xf</span> <span class="ow">=</span> <span class="n">foldl</span> <span class="p">(</span><span class="n">xf</span> <span class="n">conj</span><span class="p">)</span> <span class="kt">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- build any old list function with its transducer, all the same way</span>
+</span><span class='line'><span class="nf">xmap</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span><span class='line'><span class="nf">xmap</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">xlist</span> <span class="o">$</span> <span class="n">mapping</span> <span class="n">f</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">xfilter</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+</span><span class='line'><span class="nf">xfilter</span> <span class="n">p</span> <span class="ow">=</span> <span class="n">xlist</span> <span class="o">$</span> <span class="n">filtering</span> <span class="n">p</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">xflatmap</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">b</span><span class="p">])</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span><span class='line'><span class="nf">xflatmap</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">xlist</span> <span class="o">$</span> <span class="n">flatmapping</span> <span class="n">f</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- again, not interesting for lists, but the same transform </span>
+</span><span class='line'><span class="c1">-- can be put to use wherever there&#39;s a step fn</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">xform</span> <span class="ow">::</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="kt">Integer</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="kt">Integer</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span>
+</span><span class='line'><span class="nf">xform</span> <span class="ow">=</span> <span class="n">mapping</span> <span class="p">(</span><span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">.</span> <span class="n">filtering</span> <span class="n">even</span> <span class="o">.</span> <span class="n">flatmapping</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="mi">0</span> <span class="o">..</span> <span class="n">x</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nf">print</span> <span class="o">$</span> <span class="n">xlist</span> <span class="n">xform</span> <span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="c1">-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After this post, I knew it would not take me long to figure out transducers.</p>
+
+<h2>Refactoring his Haskell code</h2>
+
+<p>Two things to notice about the original code:</p>
+
+<ul>
+<li>It has long, low-level function types rather than types that actually <em>name</em> the concepts being discussed (<em>reducers</em> and <em>transducers</em>).</li>
+<li>It uses hardcoded list types <code>[a]</code>.</li>
+</ul>
+
+
+<h3>Type synonyms and higher-rank types</h3>
+
+<p>Defining lots and lots of types (whether synonyms or <a href="http://www.haskell.org/haskellwiki/Newtype">newtypes</a> is standard practice when programming in a modern typed language. OK, so I defined a type synonym</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Left reduce</span>
+</span><span class='line'><span class="kr">type</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="n">r</span> <span class="ow">=</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But what about transducer? This is trickier.</p>
+
+<p>An <em>invalid</em> attempt at a type would be</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Illegal!</span>
+</span><span class='line'><span class="kr">type</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">b</span> <span class="ow">=</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="kt">Reducer</span> <span class="n">b</span> <span class="n">r</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>because the type variable <code>r</code> is not bound in the type definition. And it would be incorrect to just randomly add <code>r</code> on the left hand side as an extra parameter to the <code>Transducer</code> type, because in fact it is <em>critical</em> that a transducer <em>does not care</em> about the underlying reducer&rsquo;s return type <code>r</code>. How do we write the desired type?</p>
+
+<p>It turns out you need <a href="http://www.haskell.org/haskellwiki/Rank-N_types">higher-rank types</a>. Rank-1 types are not sufficient; we need a rank-2 type to quantify <code>r</code>, to say that a transducer from <code>a</code> to <code>b</code> is a transformation that takes a reducer to a specific <code>r</code> and returns another reducer to the <em>same</em> <code>r</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Here&#39;s where then rank-2 type is needed</span>
+</span><span class='line'><span class="kr">type</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">b</span> <span class="ow">=</span> <span class="n">forall</span> <span class="n">r</span> <span class="o">.</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="kt">Reducer</span> <span class="n">b</span> <span class="n">r</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>A bit of history</h4>
+
+<p>Higher-rank types are a powerful technique for expressing &ldquo;hiding&rdquo; of unnecessary details about types going on somewhere. My first recollection of the real world use of rank-2 types is from 1994, when I was excited to read a paper by John Launchbury and Philip Wadler that solved, using a rank-2 type, a specific, important, practical problem, <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.3299">&ldquo;Lazy Functional State Threads&rdquo;</a> (twenty years later, their <a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad-ST.html">ST monad</a> is still part of the standard library for GHC).</p>
+
+<h3>Introducing type classes</h3>
+
+<p>Clojure uses <a href="http://clojure.org/protocols">protocols</a> as an abstraction mechanism, and the &ldquo;magic&rdquo; of transducers uses protocols. In Haskell, type classes are the major abstraction mechanism (this is true of Scala also).</p>
+
+<p>So I abstracted away from the hardcoded list-oriented functions and values in Rich Hickey&rsquo;s Haskell code:</p>
+
+<ul>
+<li><code>foldl</code> abstracted to a <code>class Foldable</code></li>
+<li><code>conj</code> and empty list <code>[]</code> abstracted to a <code>class Conjable</code></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Left fold</span>
+</span><span class='line'><span class="kr">class</span> <span class="kt">Foldable</span> <span class="n">t</span> <span class="kr">where</span>
+</span><span class='line'>  <span class="n">fold</span> <span class="ow">::</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">class</span> <span class="kt">Conjable</span> <span class="n">f</span> <span class="kr">where</span>
+</span><span class='line'>  <span class="n">empty</span> <span class="ow">::</span> <span class="n">f</span> <span class="n">a</span>
+</span><span class='line'>  <span class="n">conj</span> <span class="ow">::</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So now we have</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">mapping</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">b</span>
+</span><span class='line'><span class="nf">mapping</span> <span class="n">f</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">xf</span> <span class="n">r</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">filtering</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">a</span>
+</span><span class='line'><span class="nf">filtering</span> <span class="n">p</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="kr">if</span> <span class="n">p</span> <span class="n">a</span> <span class="kr">then</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="kr">else</span> <span class="n">r</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">flatmapping</span> <span class="ow">::</span> <span class="kt">Foldable</span> <span class="n">f</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">b</span> <span class="n">a</span>
+</span><span class='line'><span class="nf">flatmapping</span> <span class="n">f</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">fold</span> <span class="n">xf</span> <span class="n">r</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- I changed Rich Hickey&#39;s code to be more general than just list</span>
+</span><span class='line'><span class="c1">-- but accept anything Conjable</span>
+</span><span class='line'><span class="nf">xlist</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Foldable</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Conjable</span> <span class="n">f</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">a</span>
+</span><span class='line'><span class="nf">xlist</span> <span class="n">xf</span> <span class="ow">=</span> <span class="n">fold</span> <span class="p">(</span><span class="n">xf</span> <span class="n">conj</span><span class="p">)</span> <span class="n">empty</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- build any old Foldable function with its transducer, all the same way</span>
+</span><span class='line'><span class="nf">xmap</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Foldable</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Conjable</span> <span class="n">f</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span>
+</span><span class='line'><span class="nf">xmap</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">xlist</span> <span class="o">$</span> <span class="n">mapping</span> <span class="n">f</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">xfilter</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Foldable</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Conjable</span> <span class="n">f</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">a</span>
+</span><span class='line'><span class="nf">xfilter</span> <span class="n">p</span> <span class="ow">=</span> <span class="n">xlist</span> <span class="o">$</span> <span class="n">filtering</span> <span class="n">p</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">xflatmap</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Foldable</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Conjable</span> <span class="n">f</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span>
+</span><span class='line'><span class="nf">xflatmap</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">xlist</span> <span class="o">$</span> <span class="n">flatmapping</span> <span class="n">f</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>List-specific stuff</h3>
+
+<p>Here is the list-specific code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Stuff specialized to lists.</span>
+</span><span class='line'><span class="c1">-- To use another type, just make it a Foldable and Conjable.</span>
+</span><span class='line'><span class="kr">instance</span> <span class="kt">Foldable</span> <span class="kt">[]</span> <span class="kr">where</span>
+</span><span class='line'>  <span class="n">fold</span> <span class="ow">=</span> <span class="n">foldl</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- for exposition only, yes, conj is gross for lazy lists</span>
+</span><span class='line'><span class="c1">-- in Clojure conj and left folds dominate</span>
+</span><span class='line'><span class="kr">instance</span> <span class="kt">Conjable</span> <span class="kt">[]</span> <span class="kr">where</span>
+</span><span class='line'>  <span class="n">empty</span> <span class="ow">=</span> <span class="kt">[]</span>
+</span><span class='line'>  <span class="n">conj</span> <span class="n">xs</span> <span class="n">x</span> <span class="ow">=</span> <span class="n">xs</span> <span class="o">++</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- Note: the type does not say anything about Foldable or Conjable,</span>
+</span><span class='line'><span class="c1">-- even though the implementation just happens to use a list!</span>
+</span><span class='line'><span class="nf">xform</span> <span class="ow">::</span> <span class="kt">Transducer</span> <span class="kt">Integer</span> <span class="kt">Integer</span>
+</span><span class='line'><span class="nf">xform</span> <span class="ow">=</span> <span class="n">mapping</span> <span class="p">(</span><span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">.</span> <span class="n">filtering</span> <span class="n">even</span> <span class="o">.</span> <span class="n">flatmapping</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="mi">0</span> <span class="o">..</span> <span class="n">x</span><span class="p">])</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- Again, this can munge anything Foldable and Conjable, not just a list.</span>
+</span><span class='line'><span class="nf">munge</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Foldable</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Conjable</span> <span class="n">f</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">f</span> <span class="kt">Integer</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="kt">Integer</span>
+</span><span class='line'><span class="nf">munge</span> <span class="ow">=</span> <span class="n">xlist</span> <span class="n">xform</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice some very important properties of this code:</p>
+
+<ul>
+<li><code>xform</code> has a type that does not mention lists at all, even though it is implemented using a list and cannot compile without the list <code>instance</code> implementations.</li>
+<li><code>munge</code> also does not mention lists, and can transform anything that is <code>Foldable</code> and <code>Conjable</code>.</li>
+</ul>
+
+
+<p>Example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- munge a list</span>
+</span><span class='line'><span class="c1">-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]</span>
+</span><span class='line'><span class="nf">example1</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Integer</span><span class="p">]</span>
+</span><span class='line'><span class="nf">example1</span> <span class="ow">=</span> <span class="n">munge</span> <span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Implementing another type to illustrate the genericity of transducers</h3>
+
+<p>To illustrate Rich Hickey&rsquo;s main point, I implemented instances of <code>Foldable</code> and <code>Conjable</code> for a standard Haskell <code>Vector</code> library as an alternate &ldquo;collection-like&rdquo; type.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- For example using Vector instead of list</span>
+</span><span class='line'><span class="kr">import</span> <span class="k">qualified</span> <span class="nn">Data.Vector</span> <span class="k">as</span> <span class="n">V</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- Implement Foldable, Conjable type classes for Vector</span>
+</span><span class='line'><span class="kr">instance</span> <span class="kt">Foldable</span> <span class="kt">V</span><span class="o">.</span><span class="kt">Vector</span> <span class="kr">where</span>
+</span><span class='line'>  <span class="n">fold</span> <span class="ow">=</span> <span class="kt">V</span><span class="o">.</span><span class="n">foldl</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">instance</span> <span class="kt">Conjable</span> <span class="kt">V</span><span class="o">.</span><span class="kt">Vector</span> <span class="kr">where</span>
+</span><span class='line'>  <span class="n">empty</span> <span class="ow">=</span> <span class="kt">V</span><span class="o">.</span><span class="n">empty</span>
+</span><span class='line'>  <span class="n">conj</span> <span class="ow">=</span> <span class="kt">V</span><span class="o">.</span><span class="n">snoc</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And we can run <code>munge</code> directly on a vector instead of a list, <em>without making any changes</em>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- return a vector rather than a list; note the fact that munge actually</span>
+</span><span class='line'><span class="c1">-- internally uses a list</span>
+</span><span class='line'><span class="nf">example2</span> <span class="ow">::</span> <span class="kt">V</span><span class="o">.</span><span class="kt">Vector</span> <span class="kt">Integer</span>
+</span><span class='line'><span class="nf">example2</span> <span class="ow">=</span> <span class="n">munge</span> <span class="o">$</span> <span class="kt">V</span><span class="o">.</span><span class="n">enumFromN</span> <span class="mi">1</span> <span class="mi">5</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is <em>code reuse</em> at its best.</p>
+
+<p>Note that there is nothing that ties transducers to any concrete &ldquo;collection&rdquo; type. We could write instances of <code>Foldable</code> and <code>Conjable</code> for some kind of &ldquo;channel&rdquo; abstraction, for example, and instantaneously be able to munge data coming from it and to another. In fact, this is already what is done in the real world, where Haskell and Scala are used in production at places like Facebook and Twitter to efficiently handle large amounts of data.</p>
+
+<h2>My code repository</h2>
+
+<p>My complete code is available <a href="https://github.com/FranklinChen/clojure-transducers-in-haskell">on GitHub</a>.</p>
+
+<h2>Conclusion</h2>
+
+<p>It was pretty exciting to see the announcement of the transducers library for Clojure, because it represents a level of abstraction that I think has not been expressed much in the world of dynamically typed languages, although the techniques are two decades old in the Haskell community in a statically typed setting. And I hope that I was able to convey the sheer elegance of Haskell as a way to express interesting types with practical ramifications for abstraction and pluggability.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-07T22:58:16-04:00" pubdate data-updated="true">Aug 7<sup>th</sup>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/haskell/'>haskell</a>, <a class='category' href='/blog/categories/higher-rank-types/'>higher-rank types</a>, <a class='category' href='/blog/categories/john-launchbury/'>john launchbury</a>, <a class='category' href='/blog/categories/monads/'>monads</a>, <a class='category' href='/blog/categories/philip-wadler/'>philip wadler</a>, <a class='category' href='/blog/categories/rich-hickey/'>rich hickey</a>, <a class='category' href='/blog/categories/scala/'>scala</a>, <a class='category' href='/blog/categories/transducers/'>transducers</a>, <a class='category' href='/blog/categories/type-classes/'>type classes</a>, <a class='category' href='/blog/categories/types/'>types</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/" title="Previous Post: Pittsburgh Code and Supply: Programming in journalism">&laquo; Pittsburgh Code and Supply: Programming in journalism</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/07/understanding-cloure-transducers-through-types/">Understanding Clojure Transducers Through Types</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/">Pittsburgh Code and Supply: Programming in Journalism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/">Pittsburgh Scala Meetup: Exploring Type-directed, Test-driven Development Using FizzBuzz (My Practice Talk)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/24/openhack-pittsburgh-working-on-a-private-project/">OpenHack Pittsburgh: Working on a Private Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/13/pittsburgh-scala-meetup-implicits/">Pittsburgh Scala Meetup: Implicits</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'FranklinChen',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+FranklinChen?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - <a href="http://franklinchen.com/">Franklin Chen</a> -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'conscientiousprogrammer';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/';
+        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
