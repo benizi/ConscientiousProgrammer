@@ -4,7 +4,7 @@
   <title><![CDATA[Category: john launchbury | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/john-launchbury/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-08-08T13:05:05-04:00</updated>
+  <updated>2014-08-08T13:40:31-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -223,7 +223,7 @@ class Conjable f where
 
 <h4><code>Foldable</code> constraint</h4>
 
-<p>Unlike <code>mapping</code> and <code>filtering</code>, but <code>flatmapping</code> is not, because it depends on something being <code>Foldable</code> (implementing a <code>fold</code>):</p>
+<p>Unlike <code>mapping</code> and <code>filtering</code>, <code>flatmapping</code> is <em>not completely generic</em>, because it depends on something being <code>Foldable</code> (implementing a <code>fold</code>):</p>
 
 <pre><code class="haskell">flatmapping :: Foldable f =&gt; (a -&gt; f b) -&gt; Transducer b a
 flatmapping f xf r a = fold xf r (f a)
