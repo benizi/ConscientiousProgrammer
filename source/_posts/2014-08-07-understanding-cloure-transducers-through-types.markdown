@@ -80,7 +80,9 @@ Rich finally posted some actual [type-checked, runnable Haskell code](http://www
 ```haskell
 -- Transducers in Haskell
 
-mapping :: (b -> a) -> (r -> a -> r) -> (r -> b -> r)
+mapping :: (a -> b) -> (r -> b -> r) -> (r -> a -> r)
+-- Original was (b -> a) -> (r -> a -> r) -> (r -> b -> r)
+-- but Michael O'Keefe in comment pointed out this is misleading
 mapping f xf r a = xf r (f a)
 
 filtering :: (a -> Bool) -> (r -> a -> r) -> (r -> a -> r)
@@ -151,6 +153,16 @@ It turns out you need [higher-rank types](http://www.haskell.org/haskellwiki/Ran
 type Transducer a b = forall r . Reducer a r -> Reducer b r
 ```
 
+Now we can see more clearly some *completely generic* ways to create a transducer:
+
+```haskell
+mapping :: (a -> b) -> Transducer b a
+mapping f xf r a = xf r (f a)
+
+filtering :: (a -> Bool) -> Transducer a a
+filtering p xf r a = if p a then xf r a else r
+```
+
 #### A bit of history
 
 Higher-rank types are a powerful technique for expressing "hiding" of unnecessary details about types going on somewhere. My first recollection of the real world use of rank-2 types is from 1994 (the year I started using Haskell, although I did not actually use it in my work as a software engineer until 1995), when I was excited to read a paper by John Launchbury and Philip Wadler that solved, using a rank-2 type, a specific, important, practical problem, ["Lazy Functional State Threads"](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.3299); twenty years later, their [ST monad](http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad-ST.html) is still part of the standard library!
@@ -174,21 +186,23 @@ class Conjable f where
   conj :: Reducer a (f a)
 ```
 
-So now we have
+#### `Foldable` constraint
+
+Unlike `mapping` and `filtering`, `flatmapping` is *not completely generic*, because it depends on something being `Foldable` (implementing a `fold`):
 
 ```haskell
-mapping :: (b -> a) -> Transducer a b
-mapping f xf r a = xf r (f a)
-
-filtering :: (a -> Bool) -> Transducer a a
-filtering p xf r a = if p a then xf r a else r
-
 flatmapping :: Foldable f => (a -> f b) -> Transducer b a
 flatmapping f xf r a = fold xf r (f a)
+```
 
+#### `Conjable` constraint
+
+Finally, here's the originally list-specific code that now depends only on `Foldable` and `Conjable`:
+
+```haskell
 -- I changed Rich Hickey's code to be more general than just list
 -- but accept anything Conjable
-xlist :: (Foldable f, Conjable f) => Transducer a b -> f b -> f a
+xlist :: (Foldable f, Conjable f) => Transducer b a -> f a -> f b
 xlist xf = fold (xf conj) empty
 
 -- build any old Foldable function with its transducer, all the same way
