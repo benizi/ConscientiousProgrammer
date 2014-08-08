@@ -4,7 +4,7 @@
   <title><![CDATA[The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-08-08T02:38:11-04:00</updated>
+  <updated>2014-08-08T13:05:05-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -162,9 +162,13 @@
 <span class='line-number'>33</span>
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
 </pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Transducers in Haskell</span>
 </span><span class='line'>
-</span><span class='line'><span class="nf">mapping</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span>
+</span><span class='line'><span class="nf">mapping</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span>
+</span><span class='line'><span class="c1">-- Original was (b -&gt; a) -&gt; (r -&gt; a -&gt; r) -&gt; (r -&gt; b -&gt; r)</span>
+</span><span class='line'><span class="c1">-- but Michael O&#39;Keefe in comment pointed out this is misleading</span>
 </span><span class='line'><span class="nf">mapping</span> <span class="n">f</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">xf</span> <span class="n">r</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="nf">filtering</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="p">(</span><span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span><span class="p">)</span>
@@ -245,6 +249,21 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>Now we can see more clearly some <em>completely generic</em> ways to create a transducer:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">mapping</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">b</span> <span class="n">a</span>
+</span><span class='line'><span class="nf">mapping</span> <span class="n">f</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">xf</span> <span class="n">r</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">filtering</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">a</span>
+</span><span class='line'><span class="nf">filtering</span> <span class="n">p</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="kr">if</span> <span class="n">p</span> <span class="n">a</span> <span class="kr">then</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="kr">else</span> <span class="n">r</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <h4>A bit of history</h4>
 
 <p>Higher-rank types are a powerful technique for expressing &ldquo;hiding&rdquo; of unnecessary details about types going on somewhere. My first recollection of the real world use of rank-2 types is from 1994 (the year I started using Haskell, although I did not actually use it in my work as a software engineer until 1995), when I was excited to read a paper by John Launchbury and Philip Wadler that solved, using a rank-2 type, a specific, important, practical problem, <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.3299">&ldquo;Lazy Functional State Threads&rdquo;</a>; twenty years later, their <a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad-ST.html">ST monad</a> is still part of the standard library!</p>
@@ -278,7 +297,20 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>So now we have</p>
+<h4><code>Foldable</code> constraint</h4>
+
+<p>Unlike <code>mapping</code> and <code>filtering</code>, but <code>flatmapping</code> is not, because it depends on something being <code>Foldable</code> (implementing a <code>fold</code>):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">flatmapping</span> <span class="ow">::</span> <span class="kt">Foldable</span> <span class="n">f</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">b</span> <span class="n">a</span>
+</span><span class='line'><span class="nf">flatmapping</span> <span class="n">f</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">fold</span> <span class="n">xf</span> <span class="n">r</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4><code>Conjable</code> constraint</h4>
+
+<p>Finally, here&rsquo;s the originally list-specific code that now depends only on <code>Foldable</code> and <code>Conjable</code>:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -294,27 +326,9 @@
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">mapping</span> <span class="ow">::</span> <span class="p">(</span><span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">a</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">b</span>
-</span><span class='line'><span class="nf">mapping</span> <span class="n">f</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">xf</span> <span class="n">r</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">filtering</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">a</span>
-</span><span class='line'><span class="nf">filtering</span> <span class="n">p</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="kr">if</span> <span class="n">p</span> <span class="n">a</span> <span class="kr">then</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="kr">else</span> <span class="n">r</span>
-</span><span class='line'>
-</span><span class='line'><span class="nf">flatmapping</span> <span class="ow">::</span> <span class="kt">Foldable</span> <span class="n">f</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">b</span> <span class="n">a</span>
-</span><span class='line'><span class="nf">flatmapping</span> <span class="n">f</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">fold</span> <span class="n">xf</span> <span class="n">r</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">-- I changed Rich Hickey&#39;s code to be more general than just list</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- I changed Rich Hickey&#39;s code to be more general than just list</span>
 </span><span class='line'><span class="c1">-- but accept anything Conjable</span>
-</span><span class='line'><span class="nf">xlist</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Foldable</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Conjable</span> <span class="n">f</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">a</span>
+</span><span class='line'><span class="nf">xlist</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Foldable</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Conjable</span> <span class="n">f</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="kt">Transducer</span> <span class="n">b</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span>
 </span><span class='line'><span class="nf">xlist</span> <span class="n">xf</span> <span class="ow">=</span> <span class="n">fold</span> <span class="p">(</span><span class="n">xf</span> <span class="n">conj</span><span class="p">)</span> <span class="n">empty</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">-- build any old Foldable function with its transducer, all the same way</span>
