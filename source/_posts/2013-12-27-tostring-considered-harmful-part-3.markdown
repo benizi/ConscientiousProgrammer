@@ -19,6 +19,7 @@ categories:
 - Go
 - object-oriented
 - string interpolation
+- type classes
 ---
 This is part 3 of a series of articles, "`toString` considered harmful".
 

@@ -20,6 +20,7 @@ categories:
 - object-oriented
 - string interpolation
 - implicits
+- type classes
 ---
 This is part 2 of a series of articles, "`toString` considered harmful". [Part 1] introduced the problem in the context of a common design flaw present in object-oriented languages, and proposed a simple workaround.
 
