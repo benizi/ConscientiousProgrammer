@@ -4,7 +4,7 @@
   <title><![CDATA[The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-08-08T13:40:31-04:00</updated>
+  <updated>2014-08-08T20:58:03-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -288,14 +288,16 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Left fold</span>
-</span><span class='line'><span class="kr">class</span> <span class="kt">Foldable</span> <span class="n">t</span> <span class="kr">where</span>
-</span><span class='line'>  <span class="n">fold</span> <span class="ow">::</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span>
+</span><span class='line'><span class="kr">class</span> <span class="kt">Foldable</span> <span class="n">f</span> <span class="kr">where</span>
+</span><span class='line'>  <span class="n">fold</span> <span class="ow">::</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="kr">class</span> <span class="kt">Conjable</span> <span class="n">f</span> <span class="kr">where</span>
 </span><span class='line'>  <span class="n">empty</span> <span class="ow">::</span> <span class="n">f</span> <span class="n">a</span>
 </span><span class='line'>  <span class="n">conj</span> <span class="ow">::</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>Note our reliance on transducing and reducing from one type <code>a</code> to another, <code>f a</code>.</p>
 
 <h4><code>Foldable</code> constraint</h4>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: type classes | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/type-classes/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-08-08T13:40:31-04:00</updated>
+  <updated>2014-08-08T20:58:03-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -213,13 +213,15 @@ filtering p xf r a = if p a then xf r a else r
 
 
 <pre><code class="haskell">-- Left fold
-class Foldable t where
-  fold :: Reducer a r -&gt; r -&gt; t a -&gt; r
+class Foldable f where
+  fold :: Transducer a (f a)
 
 class Conjable f where
   empty :: f a
   conj :: Reducer a (f a)
 </code></pre>
+
+<p>Note our reliance on transducing and reducing from one type <code>a</code> to another, <code>f a</code>.</p>
 
 <h4><code>Foldable</code> constraint</h4>
 
