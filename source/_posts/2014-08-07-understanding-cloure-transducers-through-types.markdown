@@ -178,13 +178,15 @@ So I abstracted away from the hardcoded list-oriented functions and values in Ri
 
 ```haskell
 -- Left fold
-class Foldable t where
-  fold :: Reducer a r -> r -> t a -> r
+class Foldable f where
+  fold :: Transducer a (f a)
 
 class Conjable f where
   empty :: f a
   conj :: Reducer a (f a)
 ```
+
+Note our reliance on transducing and reducing from one type `a` to another, `f a`.
 
 #### `Foldable` constraint
 
