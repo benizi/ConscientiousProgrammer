@@ -14,7 +14,7 @@ categories:
 - Scala
 - Rich Hickey
 - John Launchbury
-- Philip Wadler
+- Simon Peyton Jones
 ---
 Yesterday, Rich Hickey published a blog post, ["Transducers are Coming"](http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming), which attracted a lot of attention.
 
@@ -165,7 +165,7 @@ filtering p xf r a = if p a then xf r a else r
 
 #### A bit of history
 
-Higher-rank types are a powerful technique for expressing "hiding" of unnecessary details about types going on somewhere. My first recollection of the real world use of rank-2 types is from 1994 (the year I started using Haskell, although I did not actually use it in my work as a software engineer until 1995), when I was excited to read a paper by John Launchbury and Philip Wadler that solved, using a rank-2 type, a specific, important, practical problem, ["Lazy Functional State Threads"](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.3299); twenty years later, their [ST monad](http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad-ST.html) is still part of the standard library!
+Higher-rank types are a powerful technique for expressing "hiding" of unnecessary details about types going on somewhere. My first recollection of the real world use of rank-2 types is from 1994 (the year I started using Haskell, although I did not actually use it in my work as a software engineer until 1995), when I was excited to read a paper by John Launchbury and Simon Peyton Jones that solved, using a rank-2 type, a specific, important, practical problem, ["Lazy Functional State Threads"](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.3299); twenty years later, their [ST monad](http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad-ST.html) is still part of the standard library!
 
 ### Introducing type classes
 
