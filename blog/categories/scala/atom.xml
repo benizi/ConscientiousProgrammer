@@ -4,7 +4,7 @@
   <title><![CDATA[Category: scala | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-08-08T20:58:03-04:00</updated>
+  <updated>2014-08-10T20:44:20-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -198,7 +198,7 @@ filtering p xf r a = if p a then xf r a else r
 
 <h4>A bit of history</h4>
 
-<p>Higher-rank types are a powerful technique for expressing &ldquo;hiding&rdquo; of unnecessary details about types going on somewhere. My first recollection of the real world use of rank-2 types is from 1994 (the year I started using Haskell, although I did not actually use it in my work as a software engineer until 1995), when I was excited to read a paper by John Launchbury and Philip Wadler that solved, using a rank-2 type, a specific, important, practical problem, <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.3299">&ldquo;Lazy Functional State Threads&rdquo;</a>; twenty years later, their <a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad-ST.html">ST monad</a> is still part of the standard library!</p>
+<p>Higher-rank types are a powerful technique for expressing &ldquo;hiding&rdquo; of unnecessary details about types going on somewhere. My first recollection of the real world use of rank-2 types is from 1994 (the year I started using Haskell, although I did not actually use it in my work as a software engineer until 1995), when I was excited to read a paper by John Launchbury and Simon Peyton Jones that solved, using a rank-2 type, a specific, important, practical problem, <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.3299">&ldquo;Lazy Functional State Threads&rdquo;</a>; twenty years later, their <a href="http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad-ST.html">ST monad</a> is still part of the standard library!</p>
 
 <h3>Introducing type classes</h3>
 
@@ -366,9 +366,14 @@ example2 = munge $ V.enumFromN 1 5
 
 <h2>(Update of 2014-06-07)</h2>
 
-<p>I much improved the presentation for Pittsburgh TechFest.</p>
+<p>I much improved the presentation for Pittsburgh TechFest, which I <a href="/blog/2014/06/07/report-on-the-2014-pittsburgh-techfest-my-third-year/">attended for the third year</a>.</p>
 
-<p>I recommend reading the <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/master/doc/article.pdf">article version of the presentation</a>, rather than the slides. This is the first time I&rsquo;ve created both an article version of a presentation and slides for use during the live presentation. I will do this in the future as well. Slides are not meant to stand alone or even be read alone.</p>
+<p>I recommend reading the <a href="https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/master/doc/article.pdf">article version of the presentation</a>, rather than the slides. This is the first time I&rsquo;ve created both an article version of a presentation and slides for use during the live presentation. I will do this in the future as well. Slides are not meant to stand alone or even be read alone, but in case you really want to see them, they are here:</p>
+
+<iframe src="//www.slideshare.net/slideshow/embed_code/37257104" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+
+
+<p> <div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/FranklinChen/presentation-37257104" title="Exploring type-directed, test-driven development: a case study using FizzBuzz" target="_blank">Exploring type-directed, test-driven development: a case study using FizzBuzz</a> </strong> from <strong><a href="http://www.slideshare.net/FranklinChen" target="_blank">Franklin Chen</a></strong> </div></p>
 
 <h2>(Update of 2014-07-17)</h2>
 
