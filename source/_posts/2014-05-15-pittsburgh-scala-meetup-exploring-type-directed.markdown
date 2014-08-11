@@ -46,9 +46,11 @@ Justin will schedule it for some time in July. That should give me enough time, 
 
 ## (Update of 2014-06-07)
 
-I much improved the presentation for Pittsburgh TechFest.
+I much improved the presentation for Pittsburgh TechFest, which I [attended for the third year](/blog/2014/06/07/report-on-the-2014-pittsburgh-techfest-my-third-year/).
 
-I recommend reading the [article version of the presentation](https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/master/doc/article.pdf), rather than the slides. This is the first time I've created both an article version of a presentation and slides for use during the live presentation. I will do this in the future as well. Slides are not meant to stand alone or even be read alone.
+I recommend reading the [article version of the presentation](https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/master/doc/article.pdf), rather than the slides. This is the first time I've created both an article version of a presentation and slides for use during the live presentation. I will do this in the future as well. Slides are not meant to stand alone or even be read alone, but in case you really want to see them, they are here:
+
+<iframe src="//www.slideshare.net/slideshow/embed_code/37257104" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/FranklinChen/presentation-37257104" title="Exploring type-directed, test-driven development: a case study using FizzBuzz" target="_blank">Exploring type-directed, test-driven development: a case study using FizzBuzz</a> </strong> from <strong><a href="http://www.slideshare.net/FranklinChen" target="_blank">Franklin Chen</a></strong> </div>
 
 ## (Update of 2014-07-17)
 
