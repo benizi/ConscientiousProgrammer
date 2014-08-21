@@ -90,14 +90,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-12-26T22:03:00-05:00" pubdate data-updated="true">Dec 26<sup>th</sup>, 2013</time>
+<time class='entry-date' datetime='2013-12-26T22:03:00-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:03 pm</span></time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
@@ -118,18 +111,18 @@
 
 <p>The fix presented was in <em>object-oriented</em> style, adding a method <code>toUrlString</code> to a class. The other solution is the <em>functional</em> style, leaving the <code>Id</code> class alone, and writing an external function instead:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="n">toUrlString</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Id</span><span class="o">)</span> <span class="k">=</span> <span class="n">id</span><span class="o">.</span><span class="n">toString</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>with</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -137,7 +130,7 @@
 </span><span class='line'>  <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;No id found!&quot;</span><span class="o">)</span>
 </span><span class='line'>  <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">getUrl</span><span class="o">(</span><span class="n">makeUrl</span><span class="o">(</span><span class="n">toUrlString</span><span class="o">(</span><span class="n">n</span><span class="o">)))</span>
 </span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>There are advantages and disadvantages to either solution.</p>
@@ -146,7 +139,7 @@
 
 <p>It would be very natural, given a whole set of domain classes in addition to <code>Id</code>, to want all of them to have a <code>toUrlString</code>. Then the natural thing to do is to create a mini-universe (parallel to the <code>toString</code> universe) by creating a hierarchy:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -168,7 +161,7 @@
 </span><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="err">...</span><span class="o">(...)</span> <span class="k">extends</span> <span class="nc">UrlString</span> <span class="o">{</span>
 </span><span class='line'>    <span class="k">override</span> <span class="k">def</span> <span class="n">toUrlString</span> <span class="k">=</span> <span class="o">...</span>
 </span><span class='line'>  <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <h2>Advanced string interpolation with OO</h2>
@@ -177,7 +170,7 @@
 
 <p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -207,12 +200,12 @@
 </span><span class='line'>
 </span><span class='line'>  <span class="cm">/** Only ever use UrlString to create a URL. */</span>
 </span><span class='line'>  <span class="k">def</span> <span class="n">makeUrl</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">UrlString</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">url</span><span class="s">&quot;http://service.com?id=$id&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>with</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -220,7 +213,7 @@
 </span><span class='line'>  <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;No id found!&quot;</span><span class="o">)</span>
 </span><span class='line'>  <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">getUrl</span><span class="o">(</span><span class="n">makeUrl</span><span class="o">(</span><span class="n">n</span><span class="o">))</span>
 </span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>This may or may not be overengineering.</p>
@@ -229,7 +222,7 @@
 
 <p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -285,7 +278,7 @@
 </span><span class='line'>
 </span><span class='line'>  <span class="cm">/** Anything &quot;viewable&quot; as UrlString can be used to create a URL. */</span>
 </span><span class='line'>  <span class="k">def</span> <span class="n">makeUrl</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">UrlString</span><span class="o">](</span><span class="n">id</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">url</span><span class="s">&quot;http://service.com?id=$id&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <h2>The final string gotcha</h2>
@@ -312,14 +305,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-12-26T22:03:00-05:00" pubdate data-updated="true">Dec 26<sup>th</sup>, 2013</time>
+<time class='entry-date' datetime='2013-12-26T22:03:00-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:03 pm</span></time>
       
 
 <span class="categories">

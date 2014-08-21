@@ -90,14 +90,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-12-27T22:03:00-05:00" pubdate data-updated="true">Dec 27<sup>th</sup>, 2013</time>
+<time class='entry-date' datetime='2013-12-27T22:03:00-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:03 pm</span></time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
@@ -144,7 +137,7 @@
 
 <p>The best you can do is write something that is functorized, but then you have to apply it in a statically known context:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -192,16 +185,16 @@
 </span><span class='line'>  <span class="kr">end</span>
 </span><span class='line'>
 </span><span class='line'><span class="kr">structure</span> <span class="nn">DoMyStuff</span> <span class="p">=</span> <span class="n">DoStuff</span><span class="p">(</span><span class="n">MyStuff</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>with</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='sml'><span class='line'><span class="nn">DoMyStuff</span><span class="p">.</span><span class="n">doubleString</span> <span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="n">true</span><span class="p">)</span>
 </span><span class='line'><span class="cm">(* result is the string &quot;(42, true)(42, true)&quot; *)</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>Since the Standard ML ecosystem is so minimalist, it&rsquo;s hard to fall into the <code>toString</code> trap, because you would have to set it all up yourself.</p>
@@ -214,7 +207,7 @@
 
 <p>Of course, one could also use the <a href="http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html">object-oriented part of OCaml</a> to make a generic &ldquo;to string&rdquo; hierarchy starting with a suitable interface:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -222,7 +215,7 @@
 </span><span class='line'>  <span class="k">object</span>
 </span><span class='line'>    <span class="k">method</span> <span class="n">to_string</span> <span class="o">:</span> <span class="kt">string</span>
 </span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>But I don&rsquo;t actually know many people who use the object-oriented features of OCaml!</p>
@@ -245,14 +238,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-12-27T22:03:00-05:00" pubdate data-updated="true">Dec 27<sup>th</sup>, 2013</time>
+<time class='entry-date' datetime='2013-12-27T22:03:00-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:03 pm</span></time>
       
 
 <span class="categories">
