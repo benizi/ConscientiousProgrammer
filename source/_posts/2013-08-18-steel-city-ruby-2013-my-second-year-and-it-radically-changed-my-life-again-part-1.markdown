@@ -90,7 +90,7 @@ Given the anticipation, I confess I could not pay that much attention to the tal
 
 Here are all of Friday's lightning talks. I've provided in a separate post a [transcript of my lightning talk, "Reflections"](/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/).
 
-<iframe src="//player.vimeo.com/video/72703334#t=19m35s" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<iframe src="//player.vimeo.com/video/72703334" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
 ### Angela Harms, "A Collaborative Approach to Making"
 
