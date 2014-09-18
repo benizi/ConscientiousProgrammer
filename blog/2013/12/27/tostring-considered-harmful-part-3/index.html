@@ -137,7 +137,7 @@
 
 <p>The best you can do is write something that is functorized, but then you have to apply it in a statically known context:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -185,16 +185,16 @@
 </span><span class='line'>  <span class="kr">end</span>
 </span><span class='line'>
 </span><span class='line'><span class="kr">structure</span> <span class="nn">DoMyStuff</span> <span class="p">=</span> <span class="n">DoStuff</span><span class="p">(</span><span class="n">MyStuff</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>with</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='sml'><span class='line'><span class="nn">DoMyStuff</span><span class="p">.</span><span class="n">doubleString</span> <span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="n">true</span><span class="p">)</span>
 </span><span class='line'><span class="cm">(* result is the string &quot;(42, true)(42, true)&quot; *)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Since the Standard ML ecosystem is so minimalist, it&rsquo;s hard to fall into the <code>toString</code> trap, because you would have to set it all up yourself.</p>
@@ -207,7 +207,7 @@
 
 <p>Of course, one could also use the <a href="http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html">object-oriented part of OCaml</a> to make a generic &ldquo;to string&rdquo; hierarchy starting with a suitable interface:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -215,7 +215,7 @@
 </span><span class='line'>  <span class="k">object</span>
 </span><span class='line'>    <span class="k">method</span> <span class="n">to_string</span> <span class="o">:</span> <span class="kt">string</span>
 </span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>But I don&rsquo;t actually know many people who use the object-oriented features of OCaml!</p>
@@ -268,7 +268,7 @@
         <a class="basic-alignment left" href="/blog/2013/12/26/tostring-considered-harmful-part-2/" title="Previous Post: toString considered harmful, part 2">&laquo; toString considered harmful, part 2</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/" title="Next Post: Review of the free Coursera course "Principles of Reactive Programming"">Review of the free Coursera course "Principles of Reactive Programming" &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/" title="Next Post: Review of the free Coursera course "Principles of Reactive Programming"">Review of the free Coursera course &#8220;Principles of Reactive Programming&#8221; &raquo;</a>
       
     </p>
   </footer>
@@ -314,7 +314,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub

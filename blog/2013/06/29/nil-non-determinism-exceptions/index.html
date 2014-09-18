@@ -117,9 +117,9 @@
 
 <p>Here&rsquo;s the error message (I have omitted the 46-line stack trace):</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">  Generating... Liquid Exception: undefined method `sub&#39; for nil:NilClass in atom.xml</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>This is, unfortunately, an example of an error message that is next to useless, and should <em>never</em> appear. I have stated that <a href="/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/">we as programmers should not generate useless end user error messages</a>, and of course, in context, I am an end user of the blog generating software I use.</p>
@@ -132,7 +132,7 @@
 
 <p>The bug is that the code in Jekyll that does syntax highlighting using Pygments makes an assumption that the return value of <code>Pygments.highlight()</code> is never <code>nil</code>:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -160,7 +160,7 @@
 </span><span class='line'>              <span class="n">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sr">/&lt;\/pre&gt;/</span><span class="p">,</span><span class="s2">&quot;&lt;/code&gt;&lt;/pre&gt;&quot;</span><span class="p">)</span>
 </span><span class='line'>            <span class="k">end</span>
 </span><span class='line'>          <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Well, it <em>can</em> be <code>nil</code> and was for me, and therefore <code>add_code_tags</code> was calling <code>code.sub()</code> with <code>code</code> being <code>nil</code>.</p>
@@ -185,7 +185,7 @@
 
 <p>Unfortunately, the documentation of the Pygments API was incomplete in <code>lib/pygments/popen.rb</code>, where <code>highlight</code> is defined:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -225,7 +225,7 @@
 </span><span class='line'>  <span class="n">str</span><span class="o">.</span><span class="n">force_encoding</span><span class="p">(</span><span class="n">opts</span><span class="o">[</span><span class="ss">:options</span><span class="o">][</span><span class="ss">:outencoding</span><span class="o">]</span><span class="p">)</span> <span class="k">if</span> <span class="n">str</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:force_encoding</span><span class="p">)</span>
 </span><span class='line'>  <span class="n">str</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>A problem with dynamically typed language culture</h2>
@@ -236,16 +236,16 @@
 
 <p>In code in a statically typed language such as OCaml (or Haskell or Scala), I would expect to see:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ocaml'><span class='line'><span class="k">let</span> <span class="n">highlight</span> <span class="o">(</span><span class="n">code</span> <span class="o">:</span> <span class="kt">string</span><span class="o">)</span> <span class="o">(</span><span class="n">opts</span> <span class="o">:</span> <span class="n">my_map</span><span class="o">)</span> <span class="o">:</span> <span class="kt">string</span> <span class="o">=</span> <span class="o">//...</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>and expect that the return value should be a <code>String</code>, or</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ocaml'><span class='line'><span class="k">let</span> <span class="n">highlight</span> <span class="o">(</span><span class="n">code</span> <span class="o">:</span> <span class="kt">string</span><span class="o">)</span> <span class="o">(</span><span class="n">opts</span> <span class="o">:</span> <span class="n">my_map</span><span class="o">)</span> <span class="o">:</span> <span class="kt">string</span> <span class="n">option</span> <span class="o">=</span> <span class="o">//...</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>to indicate that the return value could be either <code>Some(formatted_code)</code> or <code>None</code>.</p>
@@ -254,13 +254,13 @@
 
 <p>Reading the Ruby code, I saw that the situation is even more complex than I thought:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="c1"># If the caller didn&#39;t give us any code, we have nothing to do,</span>
 </span><span class='line'>  <span class="c1"># so return right away.</span>
 </span><span class='line'>  <span class="k">return</span> <span class="n">code</span> <span class="k">if</span> <span class="n">code</span><span class="o">.</span><span class="n">nil?</span> <span class="o">||</span> <span class="n">code</span><span class="o">.</span><span class="n">empty?</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Wow: <code>code</code> can be <code>nil</code>, in which case <code>nil</code> is returned.</p>
@@ -273,7 +273,7 @@
 
 <p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -319,7 +319,7 @@
 </span><span class='line'><span class="n">stop</span> <span class="s2">&quot;EPIPE&quot;</span>
 </span><span class='line'><span class="k">raise</span> <span class="no">MentosError</span><span class="p">,</span> <span class="s2">&quot;EPIPE&quot;</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>It turns out that fundamental problem is not <code>nil</code> so much as <em>non-determinism</em>: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for <code>nil</code> to end up being returned. This non-determinism is worse than <code>nil</code>. I think that in a situation like this, an <em>exception</em> is called for. <code>highlight()</code> should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return <code>nil</code> (or if using a statically typed language, a <code>None</code>).</p>
@@ -328,7 +328,7 @@
 
 <p>Amusingly, upon discovering the logging code, I used it, setting the magic environment variable <code>MENTOS_LOG</code> (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -340,14 +340,14 @@
 </span><span class='line'><span class="go">E, [2013-06-29 10:26 #13799] ERROR -- : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call</span>
 </span><span class='line'><span class="go">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.</span>
 </span><span class='line'><span class="go">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>Testing</h2>
 
 <p>It turns out that there <em>is</em> a place where the intended behavior is in a sense documented: the unit tests in <code>test_pygments.rb</code>:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -357,7 +357,7 @@
 </span><span class='line'>    <span class="n">code</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">highlight</span><span class="p">(</span><span class="n">large_code</span><span class="p">)</span> <span class="c1"># a 30 mb highlight request will timeout</span>
 </span><span class='line'>    <span class="n">assert_equal</span> <span class="kp">nil</span><span class="p">,</span> <span class="n">code</span>
 </span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be <code>nil</code>!</p>
@@ -434,7 +434,7 @@
         <a class="basic-alignment left" href="/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/" title="Previous Post: We should not create this kind of terrible error message for the end user">&laquo; We should not create this kind of terrible error message for the end user</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/" title="Next Post: Why I hate calling myself "pragmatic" but do">Why I hate calling myself "pragmatic" but do &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/" title="Next Post: Why I hate calling myself "pragmatic" but do">Why I hate calling myself &#8220;pragmatic&#8221; but do &raquo;</a>
       
     </p>
   </footer>
@@ -480,7 +480,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub

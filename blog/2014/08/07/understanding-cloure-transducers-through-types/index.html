@@ -111,7 +111,7 @@
 
 <p>Rich informally gave some type signatures in his blog post:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -121,7 +121,7 @@
 </span><span class='line'>
 </span><span class='line'>;;transducer signature
 </span><span class='line'>(whatever, input -&gt; whatever) -&gt; (whatever, input -&gt; whatever)
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>This was, unfortunately, not very helpful. It is hard to make sense of this pseudo-notation for types. What is quantified over what? And what is bound to what? I&rsquo;ll explain later what I mean by these questions.</p>
@@ -138,7 +138,7 @@
 
 <p>Rich Hickey <a href="https://news.ycombinator.com/item?id=8144385">informally offered some types</a> (which he said were &ldquo;a la Haskell&rdquo;) to try to help out:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -148,16 +148,16 @@
 </span><span class='line'>
 </span><span class='line'>;;transducer fn
 </span><span class='line'>(x-&gt;a-&gt;x)-&gt;(x-&gt;b-&gt;x)
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>OK, by using type variables <code>a</code>, <code>b</code>, and <code>x</code>, that indicates what is bound to what. The blog post should have used this notation rather than</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='text'><span class='line'>;;transducer signature
 </span><span class='line'>(whatever, input -&gt; whatever) -&gt; (whatever, input -&gt; whatever)
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>Sample Clojure code</h3>
@@ -209,7 +209,7 @@
 
 <p>Rich finally posted some actual <a href="http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/">type-checked, runnable Haskell code</a>!</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -283,7 +283,7 @@
 </span><span class='line'>
 </span><span class='line'><span class="nf">print</span> <span class="o">$</span> <span class="n">xlist</span> <span class="n">xform</span> <span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">]</span>
 </span><span class='line'><span class="c1">-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>After this post, I knew it would not take me long to figure out transducers.</p>
@@ -302,38 +302,38 @@
 
 <p>Defining lots and lots of types (whether synonyms or <a href="http://www.haskell.org/haskellwiki/Newtype">newtypes</a> is standard practice when programming in a modern typed language. OK, so I defined a type synonym</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Left reduce</span>
 </span><span class='line'><span class="kr">type</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="n">r</span> <span class="ow">=</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">r</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>But what about transducer? This is trickier.</p>
 
 <p>An <em>invalid</em> attempt at a type would be</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Illegal!</span>
 </span><span class='line'><span class="kr">type</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">b</span> <span class="ow">=</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="kt">Reducer</span> <span class="n">b</span> <span class="n">r</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>because the type variable <code>r</code> is not bound in the type definition. And it would be incorrect to just randomly add <code>r</code> on the left hand side as an extra parameter to the <code>Transducer</code> type, because in fact it is <em>critical</em> that a transducer <em>does not care</em> about the underlying reducer&rsquo;s return type <code>r</code>. How do we write the desired type?</p>
 
 <p>It turns out you need <a href="http://www.haskell.org/haskellwiki/Rank-N_types">higher-rank types</a>. Rank-1 types are not sufficient; we need a rank-2 type to quantify <code>r</code>, to say that a transducer from <code>a</code> to <code>b</code> is a transformation that takes a reducer to a specific <code>r</code> and returns another reducer to the <em>same</em> <code>r</code>.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- Here&#39;s where the rank-2 type is needed</span>
 </span><span class='line'><span class="kr">type</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">b</span> <span class="ow">=</span> <span class="n">forall</span> <span class="n">r</span> <span class="o">.</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="n">r</span> <span class="ow">-&gt;</span> <span class="kt">Reducer</span> <span class="n">b</span> <span class="n">r</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Now we can see more clearly some <em>completely generic</em> ways to create a transducer:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -343,7 +343,7 @@
 </span><span class='line'>
 </span><span class='line'><span class="nf">filtering</span> <span class="ow">::</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">a</span> <span class="n">a</span>
 </span><span class='line'><span class="nf">filtering</span> <span class="n">p</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="kr">if</span> <span class="n">p</span> <span class="n">a</span> <span class="kr">then</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="kr">else</span> <span class="n">r</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h4>A bit of history</h4>
@@ -362,7 +362,7 @@
 </ul>
 
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -376,7 +376,7 @@
 </span><span class='line'><span class="kr">class</span> <span class="kt">Conjable</span> <span class="n">f</span> <span class="kr">where</span>
 </span><span class='line'>  <span class="n">empty</span> <span class="ow">::</span> <span class="n">f</span> <span class="n">a</span>
 </span><span class='line'>  <span class="n">conj</span> <span class="ow">::</span> <span class="kt">Reducer</span> <span class="n">a</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Note our reliance on transducing and reducing from one type <code>a</code> to another, <code>f a</code>.</p>
@@ -385,18 +385,18 @@
 
 <p>Unlike <code>mapping</code> and <code>filtering</code>, <code>flatmapping</code> is <em>not completely generic</em>, because it depends on something being <code>Foldable</code> (implementing a <code>fold</code>):</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">flatmapping</span> <span class="ow">::</span> <span class="kt">Foldable</span> <span class="n">f</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">Transducer</span> <span class="n">b</span> <span class="n">a</span>
 </span><span class='line'><span class="nf">flatmapping</span> <span class="n">f</span> <span class="n">xf</span> <span class="n">r</span> <span class="n">a</span> <span class="ow">=</span> <span class="n">fold</span> <span class="n">xf</span> <span class="n">r</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h4><code>Conjable</code> constraint</h4>
 
 <p>Finally, here&rsquo;s the originally list-specific code that now depends only on <code>Foldable</code> and <code>Conjable</code>:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -424,14 +424,14 @@
 </span><span class='line'>
 </span><span class='line'><span class="nf">xflatmap</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Foldable</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Conjable</span> <span class="n">f</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">a</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="n">b</span>
 </span><span class='line'><span class="nf">xflatmap</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">xlist</span> <span class="o">$</span> <span class="n">flatmapping</span> <span class="n">f</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>List-specific stuff</h3>
 
 <p>Here is the list-specific code:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -469,7 +469,7 @@
 </span><span class='line'><span class="c1">-- Again, this can munge anything Foldable and Conjable, not just a list.</span>
 </span><span class='line'><span class="nf">munge</span> <span class="ow">::</span> <span class="p">(</span><span class="kt">Foldable</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Conjable</span> <span class="n">f</span><span class="p">)</span> <span class="ow">=&gt;</span> <span class="n">f</span> <span class="kt">Integer</span> <span class="ow">-&gt;</span> <span class="n">f</span> <span class="kt">Integer</span>
 </span><span class='line'><span class="nf">munge</span> <span class="ow">=</span> <span class="n">xlist</span> <span class="n">xform</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Notice some very important properties of this code:</p>
@@ -482,7 +482,7 @@
 
 <p>Example:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -490,14 +490,14 @@
 </span><span class='line'><span class="c1">-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]</span>
 </span><span class='line'><span class="nf">example1</span> <span class="ow">::</span> <span class="p">[</span><span class="kt">Integer</span><span class="p">]</span>
 </span><span class='line'><span class="nf">example1</span> <span class="ow">=</span> <span class="n">munge</span> <span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h3>Implementing another type to illustrate the genericity of transducers</h3>
 
 <p>To illustrate Rich Hickey&rsquo;s main point, I implemented instances of <code>Foldable</code> and <code>Conjable</code> for a standard Haskell <code>Vector</code> library as an alternate &ldquo;collection-like&rdquo; type.</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -517,12 +517,12 @@
 </span><span class='line'><span class="kr">instance</span> <span class="kt">Conjable</span> <span class="kt">V</span><span class="o">.</span><span class="kt">Vector</span> <span class="kr">where</span>
 </span><span class='line'>  <span class="n">empty</span> <span class="ow">=</span> <span class="kt">V</span><span class="o">.</span><span class="n">empty</span>
 </span><span class='line'>  <span class="n">conj</span> <span class="ow">=</span> <span class="kt">V</span><span class="o">.</span><span class="n">snoc</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>And we can run <code>munge</code> directly on a vector instead of a list, <em>without making any changes</em>:</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -530,7 +530,7 @@
 </span><span class='line'><span class="c1">-- internally uses a list</span>
 </span><span class='line'><span class="nf">example2</span> <span class="ow">::</span> <span class="kt">V</span><span class="o">.</span><span class="kt">Vector</span> <span class="kt">Integer</span>
 </span><span class='line'><span class="nf">example2</span> <span class="ow">=</span> <span class="n">munge</span> <span class="o">$</span> <span class="kt">V</span><span class="o">.</span><span class="n">enumFromN</span> <span class="mi">1</span> <span class="mi">5</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>This is <em>code reuse</em> at its best.</p>
@@ -633,7 +633,7 @@
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
+    <li class="loading">Status updating&#8230;</li>
   </ul>
   
   <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub

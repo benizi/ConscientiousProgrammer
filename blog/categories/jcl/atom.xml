@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: jcl | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/jcl/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2014-09-17T23:24:29-04:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
+  <author>
+    <name><![CDATA[Franklin Chen]]></name>
+    <email><![CDATA[franklinchen@franklinchen.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My lightning talk at Steel City Ruby 2013: "Reflections"]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/"/>
+    <updated>2013-08-18T21:54:09-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013</id>
+    <content type="html"><![CDATA[<p>Below is video for, and a transcript of, my five-minute lightning talk I gave at Steel City Ruby 2013, which I reported on <a href="/blog/2013/08/18/report-on-the-second-steel-city-ruby-conference-another-life-changing-one-for-me-part-1/">here</a>.</p>
+
+<!--more-->
+
+
+<p>My 5-minute lightning talk starts at 19:35 and ends at 24:37 in the full video. I have embedded it here to start where I begin:</p>
+
+<iframe src="//player.vimeo.com/video/72703334#t=19m35s" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+
+<p>I provide below my best try at transcribing my talk, which was given impromptu without any notes or slides. Unfortunately, I spoke very quickly and I can&rsquo;t figure out every word I said; if you find any glaring omissions or errors, please let me know!</p>
+
+<h2>Transcript</h2>
+
+<p>Hi, my name is Franklin, and I&rsquo;ve lived in Pittsburgh fifteen years, and this is the largest audience of front of which I&rsquo;ve ever spoken in my life! (Applause.)</p>
+
+<p>I&rsquo;m an extreme introvert, and I&rsquo;m also shy, but last year, I came to Steel City Ruby Conf, and I saw people giving talks, lightning talks, and I was inspired, so I started talking at local meetup groups, and I decided I had to speak here, and the question was, what was I going to talk about?</p>
+
+<p>Originally, I was going to title my lightning talk &ldquo;Confessions&rdquo;, but somebody already had &ldquo;Confessions&rdquo;, so I changed it to &ldquo;Reflections&rdquo;.</p>
+
+<p>So, how many of you have had RSI? How many of you have had RSI from spending too much time at a <a href="http://en.wikipedia.org/wiki/Keypunch">keypunch</a> machine? (I raise my hand. Laughter.) Yes, well, the first programming course I actually took, I coded on <a href="http://en.wikipedia.org/wiki/Punched_card">punch cards</a>.</p>
+
+<p>I sat at IBM keypunch machines and typed, and got RSI. And I&rsquo;m telling you this because I may not look that old, but I&rsquo;ve been around for some time (laughter). I punched cards, I wrote <a href="http://en.wikipedia.org/wiki/COBOL">COBOL</a> programs, FORTRAN programs. We used cards and had to sort them, had to put in the compiler as well as the <a href="http://en.wikipedia.org/wiki/Job_Control_Language">Job Control Language</a> cards, put them in a deck, ship them off to some place where my teacher took them, and that&rsquo;s how we coded.</p>
+
+<p>So, I have some reflections on that, given how long I&rsquo;ve been doing this stuff. I still don&rsquo;t know what programming really is. And that&rsquo;s why I come to places like Steel City Ruby Conf, and go to programming meetups, and I do this for many different programming languages. I try to do things better, and what I like about the Ruby community is that people are open and welcome, and they are care about quality, about different ideas. And also about things that relate to living, not just about coding.</p>
+
+<p>And so when I was looking at the program for this year&rsquo;s conference, I was thinking, &ldquo;how can I contribute here?&rdquo; I&rsquo;m not primarily a Ruby developer. But it turns out that programming is about much more than particular programming languages. In fact, I like that at lunch today, and last year, I met people who talked about Clojure, about Python, about Scala, and other languages, and it&rsquo;s really great to have these conversations.</p>
+
+<p>So, I&rsquo;ve seen code using &ldquo;goto&rdquo;, and seen books on <a href="http://en.wikipedia.org/wiki/Structured_programming">&ldquo;structured programming&rdquo;</a> from the 60s, when I was writing COBOL in the early 1980s. I think some of you here are younger and haven&rsquo;t had that experience of having to code with &ldquo;goto&rdquo;. So, I saw that. I saw C come into play, I saw C++, the object-oriented revolution. I saw functional programming, and now concurrency, and it&rsquo;s amazing that things keep on happening. I think it&rsquo;s a great time to be a developer.</p>
+
+<p>The last thing I want to say is, on the program there was a talk that was just given before lunch, and it was about depression. And that made a big impression on me. I&rsquo;ve taken this moment to come out, as a 43-year-old, as having suffered from major depression, and really for about twenty-five years, I was unable to function. I even had to drop out of school twice, but I overcame that, and I think it&rsquo;s time to stop being afraid to talk about it. We need to share it with our friends and talk about what we&rsquo;ve done to overcome it and how to get help. So that&rsquo;s my final reflection.</p>
+
+<h2>Reactions</h2>
+
+<p>Note that the talk about depression I mentioned was the <a href="http://vimeo.com/72690223">morning talk by Greg Baugues, &ldquo;Developers and Depression&rdquo;</a>.</p>
+
+<p>I was very moved that throughout the rest of the first day of the conference, people came up to me and thanked me for talking about my depression. Some of them said they were currently dealing with depression, or had done so. This only reinforced in my mind Greg&rsquo;s point that there is still a stigma about openly discussing depression.</p>
+
+<h2>Some historical notes on programming</h2>
+
+<p>I regret that I did not keep any of my old COBOL programs. I do have some old data decks of punch cards in my basement, but no code!</p>
+
+<p>I believe that the textbook we used in my high school COBOL class in 1983 was <a href="http://books.google.com/books?id=cE0gAQAAIAAJ">Shelly and Cashman&rsquo;s &ldquo;Introduction to Computer Programming: Structured COBOL&rdquo;</a>. Basically all the programming books of the day for any language boasted of teaching structured programming. Given that, I was amused by the whole &ldquo;object-oriented programming&rdquo; fad in all texts in the 1990s. Marketing never changes.</p>
+
+<h2>To do</h2>
+
+<p>I still haven&rsquo;t told publicly the full story of my struggle with depression that finished its last chapter only late in 2004, when, after six years of therapy, I decided I no longer needed to see my therapist, and told her I was discontinuing my weekly visits to her I had been making since 1998. I expect to gradually roll out this story as I feel ready to tell it.</p>
+]]></content>
+  </entry>
+  
+</feed>

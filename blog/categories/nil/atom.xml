@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nil | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/nil/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-08-21T13:29:07-04:00</updated>
+  <updated>2014-09-17T23:24:29-04:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -18,7 +18,7 @@
     <link href="http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/"/>
     <updated>2013-10-31T23:38:00-04:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://golang.org/doc/gopher/frontpage.png">http://golang.org/doc/gopher/frontpage.png</a>" title="Go" ></p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://golang.org/doc/gopher/frontpage.png">http://golang.org/doc/gopher/frontpage.png</a>&#8221; title=&#8221;Go&#8221; ></p>
 
 <p>So I happened to see an <a href="http://tip.golang.org/doc/go1.2">announcement of Go version 1.2</a>. I saw something that disturbed me, having to do with <code>nil</code>, a <a href="/blog/2013/06/29/nil-non-determinism-exceptions/">&ldquo;favorite&rdquo; topic of mine</a>.</p>
 

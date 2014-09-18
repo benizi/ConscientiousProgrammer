@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>My Lightning Talk at Steel City Ruby 2013: &#8220;Reflections&#8221; - The Conscientious Programmer</title>
+  <meta name="author" content="Franklin Chen">
+
+  
+  <meta name="description" content="Below is video for, and a transcript of, my five-minute lightning talk I gave at Steel City Ruby 2013, which I reported on here. My 5-minute &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41982602-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Conscientious Programmer</a></h1>
+  
+    <h2>Humbly exploring what it means to do the right thing.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ConscientiousProgrammer.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">My Lightning Talk at Steel City Ruby 2013: &#8220;Reflections&#8221;</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-08-18T21:54:09-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:54 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Below is video for, and a transcript of, my five-minute lightning talk I gave at Steel City Ruby 2013, which I reported on <a href="/blog/2013/08/18/report-on-the-second-steel-city-ruby-conference-another-life-changing-one-for-me-part-1/">here</a>.</p>
+
+<!--more-->
+
+
+<p>My 5-minute lightning talk starts at 19:35 and ends at 24:37 in the full video. I have embedded it here to start where I begin:</p>
+
+<iframe src="//player.vimeo.com/video/72703334#t=19m35s" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+
+<p>I provide below my best try at transcribing my talk, which was given impromptu without any notes or slides. Unfortunately, I spoke very quickly and I can&rsquo;t figure out every word I said; if you find any glaring omissions or errors, please let me know!</p>
+
+<h2>Transcript</h2>
+
+<p>Hi, my name is Franklin, and I&rsquo;ve lived in Pittsburgh fifteen years, and this is the largest audience of front of which I&rsquo;ve ever spoken in my life! (Applause.)</p>
+
+<p>I&rsquo;m an extreme introvert, and I&rsquo;m also shy, but last year, I came to Steel City Ruby Conf, and I saw people giving talks, lightning talks, and I was inspired, so I started talking at local meetup groups, and I decided I had to speak here, and the question was, what was I going to talk about?</p>
+
+<p>Originally, I was going to title my lightning talk &ldquo;Confessions&rdquo;, but somebody already had &ldquo;Confessions&rdquo;, so I changed it to &ldquo;Reflections&rdquo;.</p>
+
+<p>So, how many of you have had RSI? How many of you have had RSI from spending too much time at a <a href="http://en.wikipedia.org/wiki/Keypunch">keypunch</a> machine? (I raise my hand. Laughter.) Yes, well, the first programming course I actually took, I coded on <a href="http://en.wikipedia.org/wiki/Punched_card">punch cards</a>.</p>
+
+<p>I sat at IBM keypunch machines and typed, and got RSI. And I&rsquo;m telling you this because I may not look that old, but I&rsquo;ve been around for some time (laughter). I punched cards, I wrote <a href="http://en.wikipedia.org/wiki/COBOL">COBOL</a> programs, FORTRAN programs. We used cards and had to sort them, had to put in the compiler as well as the <a href="http://en.wikipedia.org/wiki/Job_Control_Language">Job Control Language</a> cards, put them in a deck, ship them off to some place where my teacher took them, and that&rsquo;s how we coded.</p>
+
+<p>So, I have some reflections on that, given how long I&rsquo;ve been doing this stuff. I still don&rsquo;t know what programming really is. And that&rsquo;s why I come to places like Steel City Ruby Conf, and go to programming meetups, and I do this for many different programming languages. I try to do things better, and what I like about the Ruby community is that people are open and welcome, and they are care about quality, about different ideas. And also about things that relate to living, not just about coding.</p>
+
+<p>And so when I was looking at the program for this year&rsquo;s conference, I was thinking, &ldquo;how can I contribute here?&rdquo; I&rsquo;m not primarily a Ruby developer. But it turns out that programming is about much more than particular programming languages. In fact, I like that at lunch today, and last year, I met people who talked about Clojure, about Python, about Scala, and other languages, and it&rsquo;s really great to have these conversations.</p>
+
+<p>So, I&rsquo;ve seen code using &ldquo;goto&rdquo;, and seen books on <a href="http://en.wikipedia.org/wiki/Structured_programming">&ldquo;structured programming&rdquo;</a> from the 60s, when I was writing COBOL in the early 1980s. I think some of you here are younger and haven&rsquo;t had that experience of having to code with &ldquo;goto&rdquo;. So, I saw that. I saw C come into play, I saw C++, the object-oriented revolution. I saw functional programming, and now concurrency, and it&rsquo;s amazing that things keep on happening. I think it&rsquo;s a great time to be a developer.</p>
+
+<p>The last thing I want to say is, on the program there was a talk that was just given before lunch, and it was about depression. And that made a big impression on me. I&rsquo;ve taken this moment to come out, as a 43-year-old, as having suffered from major depression, and really for about twenty-five years, I was unable to function. I even had to drop out of school twice, but I overcame that, and I think it&rsquo;s time to stop being afraid to talk about it. We need to share it with our friends and talk about what we&rsquo;ve done to overcome it and how to get help. So that&rsquo;s my final reflection.</p>
+
+<h2>Reactions</h2>
+
+<p>Note that the talk about depression I mentioned was the <a href="http://vimeo.com/72690223">morning talk by Greg Baugues, &ldquo;Developers and Depression&rdquo;</a>.</p>
+
+<p>I was very moved that throughout the rest of the first day of the conference, people came up to me and thanked me for talking about my depression. Some of them said they were currently dealing with depression, or had done so. This only reinforced in my mind Greg&rsquo;s point that there is still a stigma about openly discussing depression.</p>
+
+<h2>Some historical notes on programming</h2>
+
+<p>I regret that I did not keep any of my old COBOL programs. I do have some old data decks of punch cards in my basement, but no code!</p>
+
+<p>I believe that the textbook we used in my high school COBOL class in 1983 was <a href="http://books.google.com/books?id=cE0gAQAAIAAJ">Shelly and Cashman&rsquo;s &ldquo;Introduction to Computer Programming: Structured COBOL&rdquo;</a>. Basically all the programming books of the day for any language boasted of teaching structured programming. Given that, I was amused by the whole &ldquo;object-oriented programming&rdquo; fad in all texts in the 1990s. Marketing never changes.</p>
+
+<h2>To do</h2>
+
+<p>I still haven&rsquo;t told publicly the full story of my struggle with depression that finished its last chapter only late in 2004, when, after six years of therapy, I decided I no longer needed to see my therapist, and told her I was discontinuing my weekly visits to her I had been making since 1998. I expect to gradually roll out this story as I feel ready to tell it.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2013-08-18T21:54:09-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:54 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cobol/'>cobol</a>, <a class='category' href='/blog/categories/conference/'>conference</a>, <a class='category' href='/blog/categories/depression/'>depression</a>, <a class='category' href='/blog/categories/fortran/'>fortran</a>, <a class='category' href='/blog/categories/jcl/'>jcl</a>, <a class='category' href='/blog/categories/pittsburgh/'>pittsburgh</a>, <a class='category' href='/blog/categories/punch-cards/'>punch cards</a>, <a class='category' href='/blog/categories/rsi/'>rsi</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/steel-city-ruby/'>steel city ruby</a>, <a class='category' href='/blog/categories/structured-programming/'>structured programming</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/08/18/steel-city-ruby-2013-my-second-year-and-it-radically-changed-my-life-again-part-1/" title="Previous Post: Steel City Ruby 2013: my second year and it radically changed my life again (part 1)">&laquo; Steel City Ruby 2013: my second year and it radically changed my life again (part 1)</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/08/22/pittsburgh-data-visualization-d3-and-only-d3/" title="Next Post: Pittsburgh Data Visualization: D3 and only D3">Pittsburgh Data Visualization: D3 and only D3 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/07/understanding-cloure-transducers-through-types/">Understanding Clojure Transducers Through Types</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/">Pittsburgh Code and Supply: Programming in Journalism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/">Pittsburgh Scala Meetup: Exploring Type-directed, Test-driven Development Using FizzBuzz (My Practice Talk)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/24/openhack-pittsburgh-working-on-a-private-project/">OpenHack Pittsburgh: Working on a Private Project</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/13/pittsburgh-scala-meetup-implicits/">Pittsburgh Scala Meetup: Implicits</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'FranklinChen',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/+FranklinChen?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - <a href="http://franklinchen.com/">Franklin Chen</a> -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'conscientiousprogrammer';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/';
+        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
