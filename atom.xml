@@ -4,7 +4,7 @@
   <title><![CDATA[The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-09-18T01:08:23-04:00</updated>
+  <updated>2014-11-04T00:42:27-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pittsburgh Code and Supply: Making Music With Overtone in Clojure; Conveying Information Through Sound]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/"/>
+    <updated>2014-10-07T21:10:18-04:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound</id>
+    <content type="html"><![CDATA[<p>I attended <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/202086812">a fine meeting</a> of <a href="http://www.codeandsupply.co/">Pittsburgh Code and Supply</a> dedicated to two related topics: <em>music</em> and <em>sonification</em>. I thought it was a great idea to have presentations on both topics in the same session, thereby giving a broad view of what can be done with <em>sound</em> through computation.</p>
+
+<!--more-->
+
+
+<h2>Erik Swanson on Overtone in Clojure</h2>
+
+<p><a href="http://overtone.github.io/">Overtone</a> is a very interesting environment for programmable music written in Clojure that I&rsquo;d heard of years ago but never gotten around to playing with, simply because my primary interest in music is <a href="http://franklinchen.com/blog/categories/music/">playing music on traditional physical instruments with my own hands, the old-fashioned way</a>. However, I am definitely open to the idea of doing interesting new things with computer aid; it just has not been a priority to explore.</p>
+
+<p>As preparation for the presentation (I don&rsquo;t like feeling completely lost during live demos; I usually do!), I actually finally set up an Overtone project with Leiningen and walked through a tutorial that simply used the Clojure CIDER mode in Emacs to operate in a REPL. I didn&rsquo;t do any real live-coding, however. I just wanted to get a taste.</p>
+
+<p>Erik Swanson gave a great presentation in which he described what he was doing as he live-coded some music with Emacs, incrementally creating instruments and generating pitches. Because of his presentation, I feel more comfortable about the prospect of really digging into Overtone if I ever want to.</p>
+
+<p>Here&rsquo;s a video of his presentation:</p>
+
+<iframe width="560" height="315" src="//www.youtube.com/embed/w7ARayiKBrE" frameborder="0" allowfullscreen></iframe>
+
+
+<h2><a href="https://twitter.com/keithcallenberg">Keith Callenberg</a> on conveying information through sound</h2>
+
+<p>I learned a new word today: <a href="http://en.wikipedia.org/wiki/Sonification">&ldquo;sonification&rdquo;</a>, the use of non-speech audio to convey information.</p>
+
+<p>I may have vaguely encountered sonification before, but never while fully attentive to it. That changed when Keith Callenberg, a computational scientist, gave a fine presentation in which he gave numerous striking examples of sonification. He made the important distinction between music and sonification: music is sound for an aesthetic purpose, but sonification is for information transfer.</p>
+
+<p>He convincingly showed why sonification is useful for data analysis, and also noted that our culture is strangely dominated by the <em>visual</em>, so there remain many opportunities to use sound to understand data. (Also, sonification is used to help the visually impaired.)</p>
+
+<p>One local example he gave was a particulate monitoring study done at CMU.</p>
+
+<h2>David Souther on Web Audio in JavaScript</h2>
+
+<p>I thought we were done for the evening, but David Souther hopped up with an unscheduled lightning talk on using Web Audio in JavaScript.</p>
+
+<h2>Conclusion</h2>
+
+<p>I enjoyed the presentations on music and sound, and got some ideas for stuff I might want to do myself. Another excellent session for Pittsburgh Code and Supply!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Understanding Clojure Transducers Through Types]]></title>
@@ -1956,50 +1999,6 @@
 <h2>Conclusion</h2>
 
 <p>I had a long and tremendously uplifting first day at the 2013 Steel City Ruby conference. My impromptu lightning talk ended up being a lot more personal than I had expected, but seemed to resonate with some people.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pittsburgh Java User Group: Java EE 7, 8, and Beyond; or Done?]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond/"/>
-    <updated>2013-08-13T22:18:11-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond</id>
-    <content type="html"><![CDATA[<p>The Pittsburgh Java User Group has not been meeting regularly for some time now. The <a href="http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">last meeting was almost two months ago</a>. I attended this one with the impression that it might well be my last attendance of the group, and even more, that it might be the end of the group altogether.</p>
-
-<p>The meeting did nothing to change my intuition.</p>
-
-<p><img src="http://ConscientiousProgrammer.com/images/pittjug-2013-08-13/group.jpg"></p>
-
-<!--more-->
-
-
-<h2>Presentation by Reza Rahman</h2>
-
-<p>Reza Rahman of Oracle, a &ldquo;Java EE/GlassFish Evangelist&rdquo; gave the presentation. His goal was to promote the new and exciting things coming up in Java EE, and try to get community feedback into what next.</p>
-
-<p>He gave a retrospective on how surprisingly long ago Java EE came on the scene, a decade ago, and described the evolution over the years to improve developer productivity.</p>
-
-<p><img src="http://ConscientiousProgrammer.com/images/pittjug-2013-08-13/speaker.jpg"></p>
-
-<p>Also it was good to see that the new APIs have improved since the old ones, including &ldquo;fluent&rdquo; APIs, the fact is that everything still seems clunky and &ldquo;old&rdquo;.</p>
-
-<p>Furthermore, the Java community is still stuck with old stuff. He bemoaned the fact that the old J2EE is still most widely used.</p>
-
-<p>And Java developers are still not keeping up to date with developments. He asked the audience how many had heard of WebSocket, and hardly anyone raised their hands. He asked who knew what &ldquo;hypermedia&rdquo; is, and nobody raised their hand. Wow.</p>
-
-<p>The presentation went very long, to two hours. Near the end, he said that they wanted to know what people wanted next, but nobody really responded. He asked, &ldquo;What do we need to do in the cloud?&rdquo;</p>
-
-<h2>Conclusion</h2>
-
-<p>My overall impression was that I was done attending more PittJUG meetings. In any case, the main organizers have long since moved on to other stuff besides Java anyway, and gotten busy, and it has been hard to find speakers. More generally, those who attend have not seemed very excited and proactive about asking for speakers or topics to be covered.</p>
-
-<p>I believe it&rsquo;s the end of an era. After all, I do not write any Java code any more, myself! I came to this talk about Java&rsquo;s future expecting it to be my last, and it did not disappoint.</p>
-
-<h2>(Update of 2014-06-10)</h2>
-
-<p>It&rsquo;s been almost a year since the last PittJUG meeting, as far as I know. So I think the group really is dead.</p>
-
-<p>There has been talk of expanding the group to not just be about Java, but anything JVM-related (such as other languages compiling to the JVM, e.g., Scala, Clojure, JRuby). Nothing seems to have happened of that.</p>
 ]]></content>
   </entry>
   
