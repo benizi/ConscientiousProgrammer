@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "When a computer algebra gives wrong answers"
+title: "When a computer algebra program gives wrong answers"
 date: 2014-11-06 20:20:32 -0500
 comments: true
 categories:
