@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mathematica | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/mathematica/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-11-06T20:43:10-05:00</updated>
+  <updated>2014-11-06T20:46:49-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[When a computer algebra gives wrong answers]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-gives-wrong-answers/"/>
+    <title type="html"><![CDATA[When a computer algebra program gives wrong answers]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/"/>
     <updated>2014-11-06T20:20:32-05:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-gives-wrong-answers</id>
+    <id>http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers</id>
     <content type="html"><![CDATA[<p>I read an interesting and disturbing report, <a href="http://www.ams.org/notices/201410/rnoti-p1249.pdf">&ldquo;The Misfortunes of a Trio of Mathematicians Using Computer Algebra Systems. Can We Trust in Them?&rdquo;</a> published in the Notices of the American Mathematical Society. I feel that all software developers should read this and reflect on the nature of our work, when people who are not programmers depend on it.</p>
 
 <p>This report was about mathematicians accidentally discovering a bug in a major computer algebra system, Mathematica.</p>
