@@ -4,7 +4,7 @@
   <title><![CDATA[The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-11-04T00:42:27-05:00</updated>
+  <updated>2014-11-06T20:43:10-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -12,6 +12,51 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[When a Computer Algebra Gives Wrong Answers]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-gives-wrong-answers/"/>
+    <updated>2014-11-06T20:20:32-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-gives-wrong-answers</id>
+    <content type="html"><![CDATA[<p>I read an interesting and disturbing report, <a href="http://www.ams.org/notices/201410/rnoti-p1249.pdf">&ldquo;The Misfortunes of a Trio of Mathematicians Using Computer Algebra Systems. Can We Trust in Them?&rdquo;</a> published in the Notices of the American Mathematical Society. I feel that all software developers should read this and reflect on the nature of our work, when people who are not programmers depend on it.</p>
+
+<p>This report was about mathematicians accidentally discovering a bug in a major computer algebra system, Mathematica.</p>
+
+<!--more-->
+
+
+<h2>A note about scientists and mathematicians</h2>
+
+<p>Scientists and mathematicians increasingly depend on computer software for their work, to explore data, analyze it, verify hypotheses, etc. It&rsquo;s gotten to the point where we can no longer pretend, for example, that scientists are not writing substantial computer programs, whether or not they are trained programmers (in fact, <a href="http://software-carpentry.org/">Software Carpentry</a> was created by a physicist to fulfill the need ot training scientists in programming).</p>
+
+<h2>The discovery of the bug</h2>
+
+<p>A bunch of mathematicians used Mathematica to generate and test ideas they had about a mathematical hypothesis. They wanted to find counterexamples to their conjectures and found some with integer arithmetic calculations using Mathematica.</p>
+
+<p>One of them happened to also be using Maple, and the results differed, so Mathematica or Maple had to be wrong. They isolated the error by <em>generating random test cases</em> and finding that Mathematica was in error.</p>
+
+<p>In fact, given the <em>same matrix</em> and calling Mathematica&rsquo;s matrix determinant function, Mathematica would return different results!! This was a rather serious bug indeed. They found that Mathematica 7 did not have this bug, but 9 and 10 did.</p>
+
+<h2>Wolfram Research&rsquo;s lack of responsiveness to the problem</h2>
+
+<p>They reported the Mathematica bug to Wolfram Research but got no useful reply, and at the next release of Mathematica, the bug was still not fixed.</p>
+
+<p>There were other bugs they found as well.</p>
+
+<p>Wolfram Research never gave any feedback, and does not publish a list of known bugs.</p>
+
+<h2>Lessons to learn</h2>
+
+<ul>
+<li>When there is a bug in proprietary, closed-source software, you are completely helpless. The bug may not even be acknowledged, much less fixed, and you could not fix it yourself even if you wanted to.</li>
+<li>There is value in having an alternative tool: without independent work using Maple, the bugs in Mathematica may never have been discovered. Diversity is good.</li>
+<li>All scientists should be aware that the tools they use can be buggy, and therefore computational results can only be <em>trusted</em> as much as the specific versions of software they use can be trusted.</li>
+</ul>
+
+
+<p><strong>Does any of this surprise you? For what you rely on, how do you work around the inevitable fact that software has bugs?</strong></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pittsburgh Code and Supply: Making Music With Overtone in Clojure; Conveying Information Through Sound]]></title>
@@ -1865,140 +1910,6 @@
 <h2>To do</h2>
 
 <p>I still haven&rsquo;t told publicly the full story of my struggle with depression that finished its last chapter only late in 2004, when, after six years of therapy, I decided I no longer needed to see my therapist, and told her I was discontinuing my weekly visits to her I had been making since 1998. I expect to gradually roll out this story as I feel ready to tell it.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Steel City Ruby 2013: My Second Year and It Radically Changed My Life Again (Part 1)]]></title>
-    <link href="http://ConscientiousProgrammer.com/blog/2013/08/18/steel-city-ruby-2013-my-second-year-and-it-radically-changed-my-life-again-part-1/"/>
-    <updated>2013-08-18T20:57:27-04:00</updated>
-    <id>http://ConscientiousProgrammer.com/blog/2013/08/18/steel-city-ruby-2013-my-second-year-and-it-radically-changed-my-life-again-part-1</id>
-    <content type="html"><![CDATA[<p>This year, I attended the second <a href="http://steelcityrubyconf.org/">Steel City Ruby Conference</a>, 2013. The first one, last year (2012), was a <a href="http://franklinchen.com/blog/2012/08/07/the-first-steel-city-ruby-conference-an-amazing-experience/">life-changing experience</a> for me. To my surprise, this second one also ended up being another radically transformative experience.</p>
-
-<p>This is part 1 of my report, covering the first day (Friday). Part 2, covering the second day (Saturday), is <a href="http://ConscientiousProgrammer.com/blog/2013/08/18/report-on-the-second-steel-city-ruby-conference-another-life-changing-one-for-me-part-2/">here</a>.</p>
-
-<h2>Videos are up!</h2>
-
-<p>Videos for all of the presentations of Steel City Ruby 2013 are available <a href="http://www.confreaks.com/events/scrc2013">on Confreaks</a>. I am embedding them also in my reports.</p>
-
-<!--more-->
-
-
-<h2>First things</h2>
-
-<h3>I signed up to give a lightning talk</h3>
-
-<p>The very first thing I did, upon arriving Friday morning, was to sign up to give a lightning talk!! This was because I was so inspired by last year&rsquo;s lightning talks. I wasn&rsquo;t sure exactly what I was going to talk about, but I knew I wanted to say something about what I learned in the past year since the first Steel City Ruby, and how my life has changed as a result, so I wanted to write &ldquo;Confessions&rdquo;, but someone had already written down a &ldquo;Confessions&rdquo; lightning talk title, so I changed it to &ldquo;Reflections&rdquo;.</p>
-
-<h3>I signed up for the music jam</h3>
-
-<p>Since I had just recently started learning to play ukulele, I signed up to participate in Jim Weirich&rsquo;s music jam. Last year, I had brought my Irish flute, but was too scared to actually play, and just watched as everyone had fun. I vowed that this year I would actually play with Jim and others.</p>
-
-<h4>(Update of 2013-08-23)</h4>
-
-<p>I wrote in more detail about <a href="http://franklinchen.com/blog/2013/08/23/another-unexpected-life-change-one-month-of-learning-to-play-ukulele/">how and why I took up ukulele and how that has changed my life</a>.</p>
-
-<h2>Carina Zona, &ldquo;Handcrafting Community&rdquo;</h2>
-
-<p>Carina Zona opened by asking &ldquo;What is community?&rdquo;</p>
-
-<p>Good question: I&rsquo;ve been wondering about that myself, since becoming part of various local &ldquo;communities&rdquo; in Pittsburgh in the past couple of years. What&rsquo;s the difference between a mere &ldquo;network&rdquo; and a &ldquo;community&rdquo;?</p>
-
-<p>She noted that she is actually an introvert, so it&rsquo;s been interesting for her to be where she is now.</p>
-
-<p>Carina said the communities involve &ldquo;explicit values&rdquo;. I thought that was a great point. Random people gathering without explicit values don&rsquo;t really make a community.</p>
-
-<p>The part of her talk that really encouraged me was when she urged the cultivation of &ldquo;forkable&rdquo; communities. This means being able to copy what works and take it somewhere else and develop it. I thought this was a great metaphor, because if I want to build a community, it doesn&rsquo;t make sense to just do it from scratch, but it makes sense to learn from what has worked elsewhere. In particular, the <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> that I&rsquo;m part of is still small and not yet, in my mind, the kind of established, explicit community that <a href="http://www.meetup.com/pittsburgh-ruby">Pittsburgh Ruby</a> clearly is. I have been wondering about doing something to build up more of a Pittsburgh Scala community.</p>
-
-<p>I took from this tlak a lot to think about and act upon.</p>
-
-<iframe src="//player.vimeo.com/video/72671955" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
-<h2>Julie Pagano, &ldquo;I am a Front-End Web Dev (And So Can You!)&rdquo;</h2>
-
-<p>Julie gave an interesting talk about front-end development, emphasizing that this is serious stuff. She made certain important points that I totally agree with: HTML and CSS are in fact <em>programming languages</em> in their own right, and should be thought of and used that way, with a mind toward design and <em>semantics</em>, and not just hacking around. CSS being kind of a crappy language, it&rsquo;s good to use something like SASS, which is better (for example, enabling the concept of mixins).</p>
-
-<p>She talked about the asset pipeline, and emphasized that one should learn JavaScript, not just hack jQuery. She listed resources to learn and to adopt good practices.</p>
-
-<p>All good advice for anyone doing front-end work!</p>
-
-<iframe src="//player.vimeo.com/video/72682175" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
-<h2>Greg Baugues, &ldquo;Developers and Depression&rdquo;</h2>
-
-<p>Greg gave a talk that stunned me.</p>
-
-<p>He talked about his personal struggle with depression (type II bipolar, specifically). Please watch his talk, <em>the whole thing</em>, whether you&rsquo;ve dealt with depression or whether you know someone with depression (and learn about the sometimes very subtle signs of it, since as he detailed in his talk, <em>depressed people do what they can to conceal their problem, out of shame</em>).</p>
-
-<p>I made a surprising decision after watching his talk. I decided that in my yet-vaguely-thought-out lightning talk, <strong>I was going to confess to having had a very dark period of depression in my life</strong>, a period that lasted around <em>twenty-five years</em>, robbing me of a vast amount of my life. I did not want Greg&rsquo;s talk to go to waste. I wanted to make sure that people at the conference knew that there are those of us who have these kinds of secrets, and that if anyone is having a problem and needs help, that there is no shame in seeking help, because my life was saved thanks to some important help. I will say more about this later.</p>
-
-<iframe src="//player.vimeo.com/video/72690223" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
-<h2>Lunch</h2>
-
-<p>Before the conference, I had signed up to volunteer (as a Pittsburgh local) to take a group of people to lunch. I did this for two reasons:</p>
-
-<ul>
-<li>I wanted to contribute this year by volunteering to help for lunch.</li>
-<li>Last year, there was some overcrowding as too many people went to the same popular restaurants in the Strip District for lunch.</li>
-<li>Selfishly, I wanted a food option I chose!</li>
-</ul>
-
-
-<p>So I took people to <a href="http://www.iloveindianspices.com/">Indian Spices</a> downtown. It has a reasonable lunch buffet (Abby and I went there once), and more to my taste than getting sandwiches somewhere.</p>
-
-<h2>Lightning talks</h2>
-
-<p>I ended up being scheduled for the last time slot of lightning talks. I was very nervous, had no notes or slides, and decided to simply get up there and try to make some kind of narrative out of various thoughts that had accumulated in my head for the past year, as well as Greg&rsquo;s talk on depression.</p>
-
-<p>Given the anticipation, I confess I could not pay that much attention to the talks that preceded mine!</p>
-
-<p>Here are all of Friday&rsquo;s lightning talks. I&rsquo;ve provided in a separate post a <a href="http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/">transcript of my lightning talk, &ldquo;Reflections&rdquo;</a>.</p>
-
-<iframe src="//player.vimeo.com/video/72703334" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
-<h3>Angela Harms, &ldquo;A Collaborative Approach to Making&rdquo;</h3>
-
-<p>Angela Harms gave a presentation revolving around the distinction she made between &ldquo;cooperation&rdquo; and &ldquo;collaboration&rdquo;.</p>
-
-<p>She led the audience in a short guided meditation before proceeding further.</p>
-
-<p>The important point she made about &ldquo;cooperation&rdquo; was that it is safe, and there is no risk, because you just show up halfway and the other person shows up halfway, and that&rsquo;s all that happens. In &ldquo;collaboration&rdquo; your goal is much higher, to be &ldquo;fully invested&rdquo;.</p>
-
-<p>The rest of the presentation involved quotes and references to authors and books and anecdotes I had seen before. But what resonated with me was this key distinction she made between &ldquo;cooperation&rdquo; and &ldquo;collaboration&rdquo;. I thought of situations in which I have felt ashamed because I only showed up halfway. I have to think about how to change that: either show up all the way, or perhaps if I cannot do that, then step out so that someone else who can do more than me can step in.</p>
-
-<iframe src="//player.vimeo.com/video/72700176" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
-<h2>Ashish Dixit, &ldquo;How to be Productive on a New Team&rdquo;</h2>
-
-<p>Ashish Dixit spoke about transitions as a programmer, bringing in his own story at Groupon. Some tidbits I took away from his talk: &ldquo;learning all the things&rdquo; is overwhelming, and working on bugs is a good way to learn about a system.</p>
-
-<p>It was 3:30 PM. I have to confess that I was getting tired and the day was getting long!</p>
-
-<iframe src="//player.vimeo.com/video/72745494" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
-<h2>Jim Weirich, &ldquo;Friendly Flying Robots with Ruby&rdquo;</h2>
-
-<p>Jim Weirich gave a demo of controlling a personal drone using a Ruby DSL he wrote wrapping around a C API. An elegant use of DSLs, definitely. One of the selling points of Ruby and Ruby culture is the creation of DSLs to make it easier and more fun to do programming that underneath can be doing low-level things, and it&rsquo;s great that people like Jim make maximum use of this capability!</p>
-
-<iframe src="//player.vimeo.com/video/72709097" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-
-<h2>Party</h2>
-
-<p>There was a party held at the <a href="http://www.consolenergycenter.com/">Consol Center</a> after the Friday sessions. I enjoyed socializing and eating appetizer-type food there. I was surprised and touched by how many people privately came up to me and thanked me for speaking up briefly about the depression in my past. Greg himself was present and spoke to me (he had not been present during my lightning talk but had heard from others about it).</p>
-
-<p>I went home hoarse from talking so much with people about all sorts of things, ranging from financial investment (!) to the new programming language (in progress) <a href="http://www.rust-lang.org/">Rust</a> (which Steve Klabnik is all excited about) to my experiences this year having <a href="http://franklinchen.com/blog/2013/01/11/2013-is-my-year-of-scala/">switched to Scala</a> for almost all new work and personal coding.</p>
-
-<h2>Conclusion</h2>
-
-<p>I had a long and tremendously uplifting first day at the 2013 Steel City Ruby conference. My impromptu lightning talk ended up being a lot more personal than I had expected, but seemed to resonate with some people.</p>
 ]]></content>
   </entry>
   

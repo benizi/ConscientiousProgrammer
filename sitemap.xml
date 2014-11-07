@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-gives-wrong-answers/</loc>
+    <lastmod>2014-11-06T20:20:32-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://ConscientiousProgrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/</loc>
     <lastmod>2014-10-07T21:10:18-04:00</lastmod>
     <priority>0.8</priority>
@@ -172,19 +177,19 @@
   </url>
   <url>
     <loc>http://ConscientiousProgrammer.com/blog/archives/</loc>
-    <lastmod>2014-11-04T00:42:27-05:00</lastmod>
+    <lastmod>2014-11-06T20:43:10-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://ConscientiousProgrammer.com/</loc>
-    <lastmod>2014-11-04T00:42:27-05:00</lastmod>
+    <lastmod>2014-11-06T20:43:10-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://ConscientiousProgrammer.com/about/</loc>
-    <lastmod>2014-11-04T00:42:27-05:00</lastmod>
+    <lastmod>2014-11-06T20:43:10-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
