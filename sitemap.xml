@@ -6,6 +6,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>http://ConscientiousProgrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/</loc>
+    <lastmod>2014-12-16T22:23:42-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/</loc>
     <lastmod>2014-11-06T20:20:32-05:00</lastmod>
     <priority>0.8</priority>
@@ -182,19 +187,19 @@
   </url>
   <url>
     <loc>http://ConscientiousProgrammer.com/blog/archives/</loc>
-    <lastmod>2014-12-21T23:28:15-05:00</lastmod>
+    <lastmod>2014-12-22T02:48:27-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://ConscientiousProgrammer.com/</loc>
-    <lastmod>2014-12-21T23:28:15-05:00</lastmod>
+    <lastmod>2014-12-22T02:48:27-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://ConscientiousProgrammer.com/about/</loc>
-    <lastmod>2014-12-21T23:28:15-05:00</lastmod>
+    <lastmod>2014-12-22T02:48:27-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
