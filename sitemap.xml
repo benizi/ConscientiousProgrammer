@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://ConscientiousProgrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/</loc>
+    <lastmod>2014-12-21T14:31:36-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/</loc>
     <lastmod>2014-11-06T20:20:32-05:00</lastmod>
     <priority>0.8</priority>
@@ -177,19 +182,19 @@
   </url>
   <url>
     <loc>http://ConscientiousProgrammer.com/blog/archives/</loc>
-    <lastmod>2014-11-06T20:46:49-05:00</lastmod>
+    <lastmod>2014-12-21T23:24:09-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://ConscientiousProgrammer.com/</loc>
-    <lastmod>2014-11-06T20:46:49-05:00</lastmod>
+    <lastmod>2014-12-21T23:24:09-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://ConscientiousProgrammer.com/about/</loc>
-    <lastmod>2014-11-06T20:46:49-05:00</lastmod>
+    <lastmod>2014-12-21T23:24:09-05:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

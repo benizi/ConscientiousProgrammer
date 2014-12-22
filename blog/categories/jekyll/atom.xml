@@ -4,7 +4,7 @@
   <title><![CDATA[Category: jekyll | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/jekyll/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-11-06T20:46:49-05:00</updated>
+  <updated>2014-12-21T23:24:09-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -248,7 +248,9 @@ I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid:
 
 <p>However, since a sound bite is required in some circumstances, here&rsquo;s what I currently have:</p>
 
-<p><blockquote><p>I am a conscientious computer programmer, committed to designing, building, and testing correct, efficient, documented, maintainable software that meets users&#8217; real needs.</p></blockquote></p>
+<p>{% blockquote %}
+I am a conscientious computer programmer, committed to designing, building, and testing correct, efficient, documented, maintainable software that meets users&#8217; real needs.
+{% endblockquote %}</p>
 
 <p>My material will come from my own experiences (successes and failures, past and present) as well as from those of others. See the <a href="/about/">About page</a> for more sound bites about what this blog will be about.</p>
 

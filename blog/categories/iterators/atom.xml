@@ -4,7 +4,7 @@
   <title><![CDATA[Category: iterators | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/iterators/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-11-06T20:46:49-05:00</updated>
+  <updated>2014-12-21T23:24:09-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -18,7 +18,7 @@
     <link href="http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/"/>
     <updated>2013-06-26T22:50:00-04:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg">http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg</a>&#8221; title=&#8221;Pittsburgh Python User Group&#8221; ></p>
+    <content type="html"><![CDATA[<p>{% img <a href="http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg">http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg</a> Pittsburgh Python User Group %}</p>
 
 <p>The <a href="http://www.meetup.com/pghpython/">Pittsburgh Python User Group</a> had <a href="http://www.meetup.com/pghpython/events/120442102">another &ldquo;favorite module night&rdquo;</a>. I enjoy this format because I get to learn about what people find useful, so that I may perhaps use it myself!</p>
 

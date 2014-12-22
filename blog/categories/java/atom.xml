@@ -4,7 +4,7 @@
   <title><![CDATA[Category: java | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-11-06T20:46:49-05:00</updated>
+  <updated>2014-12-21T23:24:09-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -374,7 +374,11 @@ structure DoMyStuff = DoStuff(MyStuff)
 
 <p>Furthermore, in the case of an ID not found, the URL constructed is <code>http://service.com?id=None</code>. How many of you have seen applications or Web sites or emails in which something was clearly missing and the text contained either an empty space or the string &ldquo;null&rdquo; or &ldquo;nullvalue&rdquo; such as</p>
 
-<p><blockquote><p>Dear NULL,</p></p><p><p>You ordered NULL items.</p></blockquote></p>
+<p>{% blockquote %}
+Dear NULL,</p>
+
+<p>You ordered NULL items.
+{% endblockquote %}</p>
 
 <p>Yup, you guessed it: someone wrote crappy code like what I just showed you, and frightening thing is, <em>it could have been me</em> and <em>it could have been you</em>.</p>
 
@@ -520,7 +524,7 @@ structure DoMyStuff = DoStuff(MyStuff)
     <link href="http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/"/>
     <updated>2013-12-04T22:03:55-05:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review</id>
-    <content type="html"><![CDATA[<p><img class="<a" src="href="http://www.mongodb.com/sites/all/themes/bonsai/logo.png">http://www.mongodb.com/sites/all/themes/bonsai/logo.png</a>&#8221; title=&#8221;MongoDB logo&#8221; ></p>
+    <content type="html"><![CDATA[<p>{% img <a href="http://www.mongodb.com/sites/all/themes/bonsai/logo.png">http://www.mongodb.com/sites/all/themes/bonsai/logo.png</a> MongoDB logo %}</p>
 
 <p>I finally finished a two-month <a href="http://education.mongodb.com/">free online course on MongoDB</a>, given by <a href="http://www.mongodb.com/">MongoDB, Inc</a>.</p>
 

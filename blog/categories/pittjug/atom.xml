@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pittjug | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/pittjug/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-11-06T20:46:49-05:00</updated>
+  <updated>2014-12-21T23:24:09-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -22,7 +22,7 @@
 
 <p>The meeting did nothing to change my intuition.</p>
 
-<p><img src="/images/pittjug-2013-08-13/group.jpg"></p>
+<p>{% img /images/pittjug-2013-08-13/group.jpg %}</p>
 
 <!--more-->
 
@@ -33,7 +33,7 @@
 
 <p>He gave a retrospective on how surprisingly long ago Java EE came on the scene, a decade ago, and described the evolution over the years to improve developer productivity.</p>
 
-<p><img src="/images/pittjug-2013-08-13/speaker.jpg"></p>
+<p>{% img /images/pittjug-2013-08-13/speaker.jpg %}</p>
 
 <p>Also it was good to see that the new APIs have improved since the old ones, including &ldquo;fluent&rdquo; APIs, the fact is that everything still seems clunky and &ldquo;old&rdquo;.</p>
 

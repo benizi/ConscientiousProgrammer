@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: x window system | The Conscientious Programmer]]></title>
+  <link href="http://ConscientiousProgrammer.com/blog/categories/x-window-system/atom.xml" rel="self"/>
+  <link href="http://ConscientiousProgrammer.com/"/>
+  <updated>2014-12-21T23:24:09-05:00</updated>
+  <id>http://ConscientiousProgrammer.com/</id>
+  <author>
+    <name><![CDATA[Franklin Chen]]></name>
+    <email><![CDATA[franklinchen@franklinchen.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How to think about Rust ownership versus C++ unique_ptr]]></title>
+    <link href="http://ConscientiousProgrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/"/>
+    <updated>2014-12-21T14:31:36-05:00</updated>
+    <id>http://ConscientiousProgrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr</id>
+    <content type="html"><![CDATA[<p>The <a href="http://www.rust-lang.org/">Rust</a> programming language, which is nearing its important version 1.0 release, but already seen a lot of use, has many interesting features, the most prominent of which is its <a href="http://doc.rust-lang.org/guide.html#ownership,-borrowing,-and-lifetimes">ownership</a> static type system that prevents certain kinds of bugs common in many programs in C or C++.</p>
+
+<p>For example, it is common in most applications to create graphs of objects pointing to each other, in which it is not clear how many pointers point to a particular object, who is to free the object&rsquo;s memory when it is no longer needed, and what happens to all outstanding pointers to that block. Languages supporting precise <a href="http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29">garbage collection</a> use various algorithms to determine when memory can be freed, and have become particularly popular in the past twenty years, but there are still situations in which garbage collection is not ideal, hence the continued relevance of languages such as C++.</p>
+
+<p>When I was working as a software engineer in the 1990s developing desktop applications with user interfaces for the <a href="http://en.wikipedia.org/wiki/X_Window_System">X Window System</a>, we used frameworks that included C++ <a href="http://en.wikipedia.org/wiki/Smart_pointer">smart pointers</a> that used <a href="http://en.wikipedia.org/wiki/Reference_counting">reference counting</a> to handle graphs of interconnected data. The C++ standard itself lagged behind in standardizing smart pointers; it started with the <a href="http://www.informit.com/articles/article.aspx?p=30642&amp;seqNum=9">terribly flawed and unusable</a> <a href="http://en.wikipedia.org/wiki/Auto_ptr"><code>auto_ptr</code></a> that finally got deprecated in C++11, then moved on finally to <a href="http://en.wikipedia.org/wiki/Smart_pointer#unique_ptr"><code>unique_ptr</code></a> and <a href="http://en.wikipedia.org/wiki/Smart_pointer#shared_ptr_and_weak_ptr"><code>shared_ptr</code> and <code>weak_ptr</code></a>.</p>
+
+<p>When talking with C++ programmers about Rust, I have found that often they have been puzzled about how Rust&rsquo;s ownership system does anything better than what C++ <code>unique_ptr</code> already does. Here is an explanation (I will not be discussing analogues of <code>shared_ptr</code> and <code>weak_ptr</code> here).</p>
+
+<!--more-->
+
+
+<h2>Simplest example: compile-time type-checking vs. run-time segmentation fault</h2>
+
+<p>First, go read Steve Klabnik&rsquo;s <a href="http://www.steveklabnik.com/uniq_ptr_problem/">article about the simplest possible example illustrating what Rust offers over C++ <code>unique_ptr</code></a>.</p>
+
+<p>Basically, in C++, <code>unique_ptr</code> is supposed to be a way to indicate that a given pointer is the unique &ldquo;owner&rdquo; of a piece of data. If you want to transfer ownership from one <code>unique_ptr</code> to another, you have to call <code>move</code> on it. After that, it is an <em>run-time error</em> to try to access the data using the original <code>unique_ptr</code>. This is great, except for two things:</p>
+
+<ul>
+<li>By &ldquo;it&rsquo;s a run-time error&rdquo;, we mean that the original <code>unique_ptr</code>&rsquo;s embedded pointer gets mutated to <code>nullptr</code>, so that you have to perpetually check your <code>unique_ptr</code> for <code>nullptr</code>, otherwise get a segmentation fault.</li>
+<li>In many situations, we&rsquo;d prefer to have a <em>compile-time</em> guarantee that we will never dereference <code>nullptr</code>, so that we don&rsquo;t have hidden memory safety bugs lying around in our code that don&rsquo;t happen until well into a long-running program.</li>
+</ul>
+
+
+<p>Here is Steve&rsquo;s example of an unintended segmentation fault from C++:</p>
+
+<pre><code class="c++">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+using namespace std;
+
+int main ()
+{
+    unique_ptr&lt;int&gt; orig(new int(5));
+
+    cout &lt;&lt; *orig &lt;&lt; endl;
+
+    auto stolen = move(orig);
+
+    cout &lt;&lt; *orig &lt;&lt; endl;
+}
+</code></pre>
+
+<p>Steve shows an &ldquo;equivalent&rdquo; Rust program in which code attempts to move ownership fails to compile because of a type error (I edited to correspond more closely with the C++):</p>
+
+<pre><code class="rust">fn main() {
+    let orig = box 5i;
+
+    println!("{}", *orig);
+
+    let stolen = orig;
+
+    println!("{}", *orig);
+}
+</code></pre>
+
+<h2>Understanding C++ behavior by modeling it in Rust, safely</h2>
+
+<p>But it is not quite accurate to call the Rust program &ldquo;equivalent&rdquo; to the original C++ program. It&rsquo;s really a &ldquo;cleaned up&rdquo; or &ldquo;restricted&rdquo; version of that program (and the argument for using a type-safe language like Rust is that we often like these restrictions, as a tradeoff for safety or efficiency).</p>
+
+<p>Here is a Rust program that more accurately models what the C++ <code>unique_ptr</code> actually does, which happens <em>dynamically</em> at run-time, not at compile time, hence the segmentation fault: the transfer of ownership by <code>move</code> on a <code>unique_ptr</code> is not type-checked at compile-time.</p>
+
+<p>For illustration&rsquo;s sake, we have modeled C++ directly in <em>safe</em> Rust through indirection by treating a C++ pointer to <code>T</code> (C++ pointers can always be <code>nullptr</code>) as an <code>Option&lt;Box&lt;T&gt;&gt;</code>, where <code>nullptr</code> is modeled as <code>None</code> and a non-null pointer is modeled as <code>Some(pointer_nonnull)</code>. This Rust code type-checks, compiles, and simulates a segmentation fault.</p>
+
+<p>You can play with this code <a href="http://is.gd/5kEQA8">at this Rust playground link</a>. (You may find it interesting to examine the assembly code generated.)</p>
+
+<pre><code class="rust">// Simulate a segmentation fault.
+fn seg_fault() {
+    panic!("segmentation fault");
+}
+
+fn main() {
+    // Rough modeling in Rust of C++ unique_ptr&lt;int&gt;
+    // because C++ pointers can always be null.
+    let mut orig: Option&lt;Box&lt;int&gt;&gt; = Some(box 5i);
+
+    match orig {
+        // In C++, deferencing null seg faults.
+        None =&gt; seg_fault(),
+        Some(orig_nonnull) =&gt; {
+            println!("{}", *orig_nonnull);
+
+            // The equivalent of C++ unique_ptr move.
+            let stolen = Some(orig_nonnull);
+            orig = None;
+
+            match orig {
+                // We seg fault after the C++ style move.
+                None =&gt; seg_fault(),
+                Some(orig_nonnull) =&gt; println!("{}", *orig_nonnull)
+            }
+        }
+    }
+}
+</code></pre>
+
+<p>Nobody would ever write this kind of code in Rust, but implicitly, all C++ programs are semantically basically doing this, except that for efficiency, the <code>nullptr</code> checking is not done at the language level but just results in an actual segmentation fault at the operating system level.</p>
+
+<h2>An example of smart pointers inside a collection</h2>
+
+<p>The single most disturbing failure mode of the C++-based software product I worked on in 1995-1997 in C++ was segmentation faults resulting from mysteriously disappearing pointers. What I mean is, behavior like the following, where a container containing smart pointers to objects was meant to <em>own</em> them, but there was no compile-time way to verify this fact, because of the nature of the object graph. If someone didn&rsquo;t play by the uncheckable rules and inadvertently took ownership of (instead of &ldquo;borrowing&rdquo; through a raw pointer) something embedded in the collection, then <code>nullptr</code> appeared, and a segmentation fault happened.</p>
+
+<pre><code class="c++">#include &lt;vector&gt;
+#include &lt;memory&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+int main() {
+    vector&lt;unique_ptr&lt;int&gt;&gt; v;
+    v.push_back(make_unique&lt;int&gt;(5));
+
+    cout &lt;&lt; *v[0] &lt;&lt; endl;
+
+    // C++ happily allows this.
+    auto pointer_to_5 = move(v[0]);
+    cout &lt;&lt; *pointer_to_5 &lt;&lt; endl;
+
+    // Seg fault.
+    cout &lt;&lt; *v[0] &lt;&lt; endl;
+}
+</code></pre>
+
+<p>You can probably guess what some developers did to &ldquo;fix&rdquo; the segmentation fault. They started adding <code>nullptr</code> checks everywhere to prevent crashing, but this only resulted in <em>corrupt user data and documents</em>, because in fact, we lost data in those collections and smart pointers to the data should never have ended up <code>nullptr</code>!!</p>
+
+<p>The complexity of the application and the deadline pressures made it impossible to fully figure out what was going wrong and where. I actually ended up writing an external &ldquo;validation&rdquo; utility program in <a href="http://www.smlnj.org/">Standard ML of New Jersey</a> that parsed serialized object graphs and tried to fix them up in some fashion. This particularly helped the QA team a lot when dealing with old documents that were already corrupted.</p>
+
+<h3>The Rust version will not compile</h3>
+
+<p>The Rust type-checker rejects any attempt to move ownership out of a collection. (Try to compile it in <a href="http://is.gd/Om7wfr">this playground</a>.)</p>
+
+<pre><code class="rust">fn main() {
+    let v = vec![box 5i];
+
+    println!("{}", *v[0]);
+
+    // Attempted move: type error at compile time.
+    let pointer_to_5 = v[0];
+    println!("{}", *pointer_to_5);
+
+    println!("{}", *v[0]);
+}
+</code></pre>
+
+<pre><code class="console">illegal_move_out_of_vector.rs:7:24: 7:28 error: cannot move out of dereference (dereference is implicit, due to indexing)
+illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];
+                                                       ^~~~
+illegal_move_out_of_vector.rs:7:9: 7:21 note: attempting to move value to here
+illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];
+                                        ^~~~~~~~~~~~
+</code></pre>
+
+<h3>Often, you do want to share</h3>
+
+<p>I have to be honest: at first, Rust&rsquo;s ownership type system seems like quite a restriction, and adhering to it strictly would require the restructuring of certain kinds of programs. Static type safety of any kind in any language is always a matter of tradeoffs.</p>
+
+<p>But note that Rust is flexible: you don&rsquo;t have to use Rust&rsquo;s default pointer type! You can use one of Rust&rsquo;s many other pointer types, such as <a href="http://doc.rust-lang.org/guide.html#rc-and-arc"><code>Rc</code> or <code>Arc</code></a>, that allow reference-counted shared ownership (like C++ <code>shared_ptr</code>), if that&rsquo;s what you really want. (<a href="http://is.gd/HNi7SR">Playground here</a>.)</p>
+
+<pre><code class="rust">// Reference-counted smart pointer.
+use std::rc::Rc;
+
+fn main() {
+    let v = vec![Rc::new(5i)];
+
+    println!("{}", *v[0]);
+
+    let pointer_to_5 = v[0].clone();
+    println!("{}", *pointer_to_5);
+
+    println!("{}", *v[0]);
+}
+</code></pre>
+
+<h2>Unsafe</h2>
+
+<p>Finally, Rust does allow you to go all out and write <a href="http://doc.rust-lang.org/guide.html#unsafe">unsafe</a> code, if you truly need to for raw C performance or FFI reasons. Most of the time you do not need to, because the whole point of Rust is to compile down to the same kind of assembly code you would get from C.</p>
+
+<pre><code class="rust">extern crate libc;
+
+use libc::{size_t, malloc};
+use std::mem;
+use std::ptr;
+
+fn main() {
+    // How ugly it is to pretend Rust is unsafe C.
+    unsafe {
+        let mut orig: *mut int = malloc(mem::size_of::&lt;int&gt;() as size_t)
+            as *mut int;
+        ptr::write(&amp;mut *orig, 5i);
+
+        println!("{}", *orig);
+
+        orig = ptr::null::&lt;int&gt;() as *mut int;
+
+        // null pointer crash!
+        println!("{}", *orig);
+    }
+}
+</code></pre>
+
+<h2>Conclusion</h2>
+
+<p>I hope this little article shows a little bit about what Rust&rsquo;s ownership type system can do to make pointer-heavy code memory safe, unlike C++, and also gives you a taste of how Rust&rsquo;s flexibility also allows you to use C++-style reference-counting if desired, and even raw unsafe code. Personally, I am excited about the upcoming 1.0 release of Rust, and although I have not done low-level systems programming for almost two decades, if I ever was to do it again, I would immediately reach out for Rust as a language of choice for the ultimate combination of safety, expressiveness, and performance (in use of time and space).</p>
+
+<p>All code for this article is available in a <a href="https://github.com/FranklinChen/rust-vs-cpp-unique_ptr">GitHub repository</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>
