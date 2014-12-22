@@ -4,7 +4,7 @@
   <title><![CDATA[Category: node | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-12-21T23:24:09-05:00</updated>
+  <updated>2014-12-21T23:28:15-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -18,7 +18,7 @@
     <link href="http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/"/>
     <updated>2013-12-04T22:03:55-05:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review</id>
-    <content type="html"><![CDATA[<p>{% img <a href="http://www.mongodb.com/sites/all/themes/bonsai/logo.png">http://www.mongodb.com/sites/all/themes/bonsai/logo.png</a> MongoDB logo %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://www.mongodb.com/sites/all/themes/bonsai/logo.png">http://www.mongodb.com/sites/all/themes/bonsai/logo.png</a>&#8221; title=&#8221;MongoDB logo&#8221; ></p>
 
 <p>I finally finished a two-month <a href="http://education.mongodb.com/">free online course on MongoDB</a>, given by <a href="http://www.mongodb.com/">MongoDB, Inc</a>.</p>
 

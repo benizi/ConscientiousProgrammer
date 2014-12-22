@@ -9,7 +9,7 @@
   <meta name="author" content="Franklin Chen">
 
   
-  <meta name="description" content="I read an interesting and disturbing report, &ldquo;The Misfortunes of a Trio of Mathematicians Using Computer Algebra Systems. Can We Trust in Them &hellip;">
+  <meta name="description" content="The Rust programming language, which is nearing its important version 1.0 release, but already seen a lot of use, has many interesting features, the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -24,7 +24,7 @@
   <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -62,7 +62,7 @@
   
 <form action="https://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:ConscientiousProgrammer.com" />
+    <input type="hidden" name="sitesearch" value="ConscientiousProgrammer.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -78,6 +78,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">How to Think About Rust Ownership Versus C++ Unique_ptr</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-12-21T14:31:36-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>2:31 pm</span></time>
+        
+           | <a href="/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/#disqus_thread"
+             data-disqus-identifier="http://ConscientiousProgrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The <a href="http://www.rust-lang.org/">Rust</a> programming language, which is nearing its important version 1.0 release, but already seen a lot of use, has many interesting features, the most prominent of which is its <a href="http://doc.rust-lang.org/guide.html#ownership,-borrowing,-and-lifetimes">ownership</a> static type system that prevents certain kinds of bugs common in many programs in C or C++.</p>
+
+<p>For example, it is common in most applications to create graphs of objects pointing to each other, in which it is not clear how many pointers point to a particular object, who is to free the object&rsquo;s memory when it is no longer needed, and what happens to all outstanding pointers to that block. Languages supporting precise <a href="http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29">garbage collection</a> use various algorithms to determine when memory can be freed, and have become particularly popular in the past twenty years, but there are still situations in which garbage collection is not ideal, hence the continued relevance of languages such as C++.</p>
+
+<p>When I was working as a software engineer in the 1990s developing desktop applications with user interfaces for the <a href="http://en.wikipedia.org/wiki/X_Window_System">X Window System</a>, we used frameworks that included C++ <a href="http://en.wikipedia.org/wiki/Smart_pointer">smart pointers</a> that used <a href="http://en.wikipedia.org/wiki/Reference_counting">reference counting</a> to handle graphs of interconnected data. The C++ standard itself lagged behind in standardizing smart pointers; it started with the <a href="http://www.informit.com/articles/article.aspx?p=30642&amp;seqNum=9">terribly flawed and unusable</a> <a href="http://en.wikipedia.org/wiki/Auto_ptr"><code>auto_ptr</code></a> that finally got deprecated in C++11, then moved on finally to <a href="http://en.wikipedia.org/wiki/Smart_pointer#unique_ptr"><code>unique_ptr</code></a> and <a href="http://en.wikipedia.org/wiki/Smart_pointer#shared_ptr_and_weak_ptr"><code>shared_ptr</code> and <code>weak_ptr</code></a>.</p>
+
+<p>When talking with C++ programmers about Rust, I have found that often they have been puzzled about how Rust&rsquo;s ownership system does anything better than what C++ <code>unique_ptr</code> already does. Here is an explanation (I will not be discussing analogues of <code>shared_ptr</code> and <code>weak_ptr</code> here).</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -422,47 +465,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/">Review of the Free Coursera Course &#8220;Principles of Reactive Programming&#8221;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-12-31T21:29:39-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2013</span></span> <span class='time'>9:29 pm</span></time>
-        
-           | <a href="/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/#disqus_thread"
-             data-disqus-identifier="http://ConscientiousProgrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>At long last, I have officially completed the free Coursera course <a href="http://www.coursera.org/course/reactive">&ldquo;Principles of Reactive Programming&rdquo;</a>, receiving my &ldquo;Statement of Accomplishment&rdquo;.</p>
-
-<p>This was an intense course, a lot of work, actually, and made the last two month s of my life (November and December) challenging as I juggled many activities. But it was worth the effort. I would definitely recommend this course to anyone who has completed the introductory course <a href="http://www.coursera.org/course/progfun">&ldquo;Principles of Functional Programming in Scala&rdquo;</a> (or has the equivalent background). (See my <a href="http://franklinchen.com/blog/2012-11-15-review-of-courseras-fall-2012-functional-programming-principles-in-scala/">review of that course as offered in fall of 2012</a>.)</p>
-
-<p>I took this course along with a bunch of local friends who are also members of the <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -478,6 +480,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">How to Think About Rust Ownership Versus C++ Unique_ptr</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/">When a Computer Algebra Program Gives Wrong Answers</a>
       </li>
     
@@ -491,10 +497,6 @@
     
       <li class="post">
         <a href="/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/">Pittsburgh Code and Supply: Programming in Journalism</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/">Pittsburgh Scala Meetup: Exploring Type-directed, Test-driven Development Using FizzBuzz (My Practice Talk)</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: scala | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-12-21T23:24:09-05:00</updated>
+  <updated>2014-12-21T23:28:15-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -67,7 +67,42 @@ whatever, input -&gt; whatever
 
 <p>He also posted some sample Clojure code:</p>
 
-<p>{% gist b5aefa622180681e1c81 %}</p>
+<p><div><script src='https://gist.github.com/b5aefa622180681e1c81.js'></script>
+<noscript><pre><code>(require &#39;[clojure.core.async :as a])
+
+(def xform (comp (map inc)
+              (filter even?)
+              (dedupe)
+              (flatmap range)
+              (partition-all 3)
+              (partition-by #(&lt; (apply + %) 7))
+              (flatmap flatten)
+              (random-sample 1.0)
+              (take-nth 1)
+              (keep #(when (odd? %) (* % %)))
+              (keep-indexed #(when (even? %1) (* %1 %2)))
+              (replace {2 &quot;two&quot; 6 &quot;six&quot; 18 &quot;eighteen&quot;})
+              (take 11)
+              (take-while #(not= 300 %))
+              (drop 1)
+              (drop-while string?)
+              (remove string?)))
+
+(def data (vec (interleave (range 18) (range 20))))
+
+;; lazily transform the data
+(sequence xform data)
+;; reduce with a transformation (no laziness)
+(transduce xform + 0 data)
+;;build one collection from a transformation of another, again no laziness
+(into [] xform data)
+;;create a recipe for a transformation, which can be subsequently sequenced, iterated or reduced
+(iteration xform data)
+;;transform everything that goes through a channel - same transducer stack!
+(let [c (a/chan 1 xform)]
+  (a/thread (a/onto-chan c data))
+  (a/&lt;!! (a/into [] c)))</code></pre></noscript></div>
+</p>
 
 <h2>Second discussion thread I saw</h2>
 

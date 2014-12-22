@@ -4,7 +4,7 @@
   <title><![CDATA[Category: monads | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/monads/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-12-21T23:24:09-05:00</updated>
+  <updated>2014-12-21T23:28:15-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -67,7 +67,42 @@ whatever, input -&gt; whatever
 
 <p>He also posted some sample Clojure code:</p>
 
-<p>{% gist b5aefa622180681e1c81 %}</p>
+<p><div><script src='https://gist.github.com/b5aefa622180681e1c81.js'></script>
+<noscript><pre><code>(require &#39;[clojure.core.async :as a])
+
+(def xform (comp (map inc)
+              (filter even?)
+              (dedupe)
+              (flatmap range)
+              (partition-all 3)
+              (partition-by #(&lt; (apply + %) 7))
+              (flatmap flatten)
+              (random-sample 1.0)
+              (take-nth 1)
+              (keep #(when (odd? %) (* % %)))
+              (keep-indexed #(when (even? %1) (* %1 %2)))
+              (replace {2 &quot;two&quot; 6 &quot;six&quot; 18 &quot;eighteen&quot;})
+              (take 11)
+              (take-while #(not= 300 %))
+              (drop 1)
+              (drop-while string?)
+              (remove string?)))
+
+(def data (vec (interleave (range 18) (range 20))))
+
+;; lazily transform the data
+(sequence xform data)
+;; reduce with a transformation (no laziness)
+(transduce xform + 0 data)
+;;build one collection from a transformation of another, again no laziness
+(into [] xform data)
+;;create a recipe for a transformation, which can be subsequently sequenced, iterated or reduced
+(iteration xform data)
+;;transform everything that goes through a channel - same transducer stack!
+(let [c (a/chan 1 xform)]
+  (a/thread (a/onto-chan c data))
+  (a/&lt;!! (a/into [] c)))</code></pre></noscript></div>
+</p>
 
 <h2>Second discussion thread I saw</h2>
 
@@ -360,7 +395,7 @@ example2 = munge $ V.enumFromN 1 5
     <link href="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"/>
     <updated>2013-07-10T22:37:00-04:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming</id>
-    <content type="html"><![CDATA[<p>{% img <a href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a> Pittsburgh JavaScript %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a>&#8221; title=&#8221;Pittsburgh JavaScript&#8221; ></p>
 
 <p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: string interpolation | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/string-interpolation/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-12-21T23:24:09-05:00</updated>
+  <updated>2014-12-21T23:28:15-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -314,11 +314,7 @@ structure DoMyStuff = DoStuff(MyStuff)
 
 <p>Furthermore, in the case of an ID not found, the URL constructed is <code>http://service.com?id=None</code>. How many of you have seen applications or Web sites or emails in which something was clearly missing and the text contained either an empty space or the string &ldquo;null&rdquo; or &ldquo;nullvalue&rdquo; such as</p>
 
-<p>{% blockquote %}
-Dear NULL,</p>
-
-<p>You ordered NULL items.
-{% endblockquote %}</p>
+<p><blockquote><p>Dear NULL,</p></p><p><p>You ordered NULL items.</p></blockquote></p>
 
 <p>Yup, you guessed it: someone wrote crappy code like what I just showed you, and frightening thing is, <em>it could have been me</em> and <em>it could have been you</em>.</p>
 

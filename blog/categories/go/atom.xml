@@ -4,7 +4,7 @@
   <title><![CDATA[Category: go | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/go/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-12-21T23:24:09-05:00</updated>
+  <updated>2014-12-21T23:28:15-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -372,11 +372,7 @@ structure DoMyStuff = DoStuff(MyStuff)
 
 <p>Furthermore, in the case of an ID not found, the URL constructed is <code>http://service.com?id=None</code>. How many of you have seen applications or Web sites or emails in which something was clearly missing and the text contained either an empty space or the string &ldquo;null&rdquo; or &ldquo;nullvalue&rdquo; such as</p>
 
-<p>{% blockquote %}
-Dear NULL,</p>
-
-<p>You ordered NULL items.
-{% endblockquote %}</p>
+<p><blockquote><p>Dear NULL,</p></p><p><p>You ordered NULL items.</p></blockquote></p>
 
 <p>Yup, you guessed it: someone wrote crappy code like what I just showed you, and frightening thing is, <em>it could have been me</em> and <em>it could have been you</em>.</p>
 
@@ -522,7 +518,7 @@ Dear NULL,</p>
     <link href="http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/"/>
     <updated>2013-10-31T23:38:00-04:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil</id>
-    <content type="html"><![CDATA[<p>{% img <a href="http://golang.org/doc/gopher/frontpage.png">http://golang.org/doc/gopher/frontpage.png</a> Go %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://golang.org/doc/gopher/frontpage.png">http://golang.org/doc/gopher/frontpage.png</a>&#8221; title=&#8221;Go&#8221; ></p>
 
 <p>So I happened to see an <a href="http://tip.golang.org/doc/go1.2">announcement of Go version 1.2</a>. I saw something that disturbed me, having to do with <code>nil</code>, a <a href="/blog/2013/06/29/nil-non-determinism-exceptions/">&ldquo;favorite&rdquo; topic of mine</a>.</p>
 
@@ -549,15 +545,11 @@ Dear NULL,</p>
 
 <p>Before Go 1.2, a chain of code involving a <code>nil</code> could result in behavior of which <a href="http://swtch.com/~rsc/">Russ Cox</a> wrote:</p>
 
-<p>{% blockquote %}
-The current behavior is at best merely historical accident; it was definitely not thought through or discussed.
-{% endblockquote %}</p>
+<p><blockquote><p>The current behavior is at best merely historical accident; it was definitely not thought through or discussed.</p></blockquote></p>
 
 <p>There is also a note about a particular special case:</p>
 
-<p>{% blockquote %}
-(it seemed like a good idea at a time)
-{% endblockquote %}</p>
+<p><blockquote><p>(it seemed like a good idea at a time)</p></blockquote></p>
 
 <p>You can read the <a href="http://docs.google.com/document/d/14DgGJKGQeBTNJDXo3YxnlSwv7ouRqvj7BMmZw17vWV0/pub">whole document about <code>nil</code></a> yourself. You will find that it is still not a formal spec, but more a rationale of various special cases and possible implementation details.</p>
 

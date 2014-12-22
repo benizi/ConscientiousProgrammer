@@ -4,7 +4,7 @@
   <title><![CDATA[Category: error messages | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/error-messages/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-12-21T23:24:09-05:00</updated>
+  <updated>2014-12-21T23:28:15-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -234,9 +234,7 @@ I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid:
     <id>http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user</id>
     <content type="html"><![CDATA[<p>I have a <a href="http://franklinchen.com/blog/2012/03/22/paradox-i-will-observe-the-national-day-of-unplugging-but-just-bought-my-first-smartphone-this-week/">Samsung Galaxy S II smartphone</a>. I recently encountered a problem: auto-updating of apps failed with this terrible error message:</p>
 
-<p>{% blockquote %}
-Application cannot be installed in the default install location.
-{% endblockquote %}</p>
+<p><blockquote><p>Application cannot be installed in the default install location.</p></blockquote></p>
 
 <p>Also, a lot of time and bandwidth was each time spent on re-downloading the app and then failing, with no way to gracefully recover.</p>
 
@@ -259,9 +257,7 @@ Application cannot be installed in the default install location.
 
 <p>So why that terrible error message? Why not just tell the end user exactly what is going on? Why not something like:</p>
 
-<p>{% blockquote %}
-The application X could not be installed at (device storage | SD card storage) because you don&rsquo;t have enough space. You can try clearing more space, or go to your application settings to move it to (SD card storage | device storage).
-{% endblockquote %}</p>
+<p><blockquote><p>The application X could not be installed at (device storage | SD card storage) because you don&rsquo;t have enough space. You can try clearing more space, or go to your application settings to move it to (SD card storage | device storage).</p></blockquote></p>
 
 <p>The application should know exactly what is going on, and not only that, should be able to suggest a course of action based on all the relevant variables, such as how much space there is in different places, how large the application is, etc.</p>
 

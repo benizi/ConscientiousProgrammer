@@ -4,7 +4,7 @@
   <title><![CDATA[Category: functional reactive programming | The Conscientious Programmer]]></title>
   <link href="http://ConscientiousProgrammer.com/blog/categories/functional-reactive-programming/atom.xml" rel="self"/>
   <link href="http://ConscientiousProgrammer.com/"/>
-  <updated>2014-12-21T23:24:09-05:00</updated>
+  <updated>2014-12-21T23:28:15-05:00</updated>
   <id>http://ConscientiousProgrammer.com/</id>
   <author>
     <name><![CDATA[Franklin Chen]]></name>
@@ -18,7 +18,7 @@
     <link href="http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"/>
     <updated>2013-07-10T22:37:00-04:00</updated>
     <id>http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming</id>
-    <content type="html"><![CDATA[<p>{% img <a href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a> Pittsburgh JavaScript %}</p>
+    <content type="html"><![CDATA[<p><img class="<a" src="href="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg">http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg</a>&#8221; title=&#8221;Pittsburgh JavaScript&#8221; ></p>
 
 <p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
 
