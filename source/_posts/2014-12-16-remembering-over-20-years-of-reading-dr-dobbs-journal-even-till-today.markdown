@@ -25,6 +25,10 @@ Of course, it's been years since my last printed copy of [Dr. Dobb's Journal](ht
 
 I was particularly sad when reading of the discontinuation of the publication because I had been following for quite some time Andrew Koenig's multi-part article on binary search. In fact, [I had just read part 9 and was looking forward to the eventual conclusion of the series](http://www.drdobbs.com/cpp/abstractions-for-binary-search-part-9-wh/240169416)! I've been waiting to see his punch line, since every article in this series has ended with a cliff-hanger. Here, he had closed with "Next week, we shall continue building our tests." I wonder if he be able to post the conclusion?
 
+### (Update of 2014-12-22)
+
+Andrew Koenig's article series did conclude, after all, [today](http://www.drdobbs.com/cpp/abstractions-for-binary-search-part-10-p/240169437). I'll comment on his concluded article series in a later blog post.
+
 ## How I started reading DDJ
 
 In 1992, I was unemployed, a physics grad school dropout, and needed a new career. I had studied some math and passed the first two actuarial exams but frankly, had no interest in doing math and insurance for a living. Friends told me computer programming was a good way to go, so although I had not written a single computer program since high school (where I wrote and ran only COBOL and Pascal programs), I decided to learn C and Unix and Lisp, because these were technologies my friends had learned in their first year in college.
