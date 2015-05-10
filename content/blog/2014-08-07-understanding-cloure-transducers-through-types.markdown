@@ -2,6 +2,7 @@
 layout: post
 title: "Understanding Clojure transducers through types"
 date: 2014-08-07T22:58:16-04:00
+url: "blog/2014/08/07/understanding-cloure-transducers-through-types"
 comments: true
 categories: 
 - Clojure

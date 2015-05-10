@@ -2,6 +2,7 @@
 layout: post
 title: "Pittsburgh Scala Meetup: learning by reading Josh's code!"
 date: 2013-10-10T23:09:33-05:00
+url: "blog/2013/10/11/pittsburgh-scala-meetup-learning-by-reading-joshs-code"
 comments: true
 categories: 
 - Scala
