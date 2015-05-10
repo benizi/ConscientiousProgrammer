@@ -4,7 +4,7 @@ title: "Pittsburgh Java User Group: Java EE 7, 8, and beyond; or done?"
 date: 2013-08-13T22:18:11-04:00
 url: "blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond"
 comments: true
-categories: 
+categories:
 - PittJUG
 - Pittsburgh
 - Java
@@ -13,7 +13,7 @@ The Pittsburgh Java User Group has not been meeting regularly for some time now.
 
 The meeting did nothing to change my intuition.
 
-{{< figure src="/images/pittjug-2013-08-13/group.jpg" title="NOTITLE" >}}
+{{< figure src="/images/pittjug-2013-08-13/group.jpg" title="Pittsburgh Java User Group, 2013-08-13" >}}
 
 <!--more-->
 
@@ -23,7 +23,7 @@ Reza Rahman of Oracle, a "Java EE/GlassFish Evangelist" gave the presentation. H
 
 He gave a retrospective on how surprisingly long ago Java EE came on the scene, a decade ago, and described the evolution over the years to improve developer productivity.
 
-{{< figure src="/images/pittjug-2013-08-13/speaker.jpg" title="NOTITLE" >}}
+{{< figure src="/images/pittjug-2013-08-13/speaker.jpg" title="Reza Rahman" >}}
 
 Also it was good to see that the new APIs have improved since the old ones, including "fluent" APIs, the fact is that everything still seems clunky and "old".
 
