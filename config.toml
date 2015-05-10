@@ -1,7 +1,37 @@
-baseurl = "http://ConscientiousProgrammer.com/"
+theme = "hyde-x"
+
+baseurl = "http://ConscientiousProgrammer.com"
 languageCode = "en-us"
 title = "The Conscientious Programmer"
 pygmentsstyle = "default"
+paginate = 10
+disqusShortname = "conscientiousprogrammer"
+
+[author]
+# Seems to be used where title was
+name = "The Conscientious Programmer"
 
 [permalinks]
-  blog = "/blog/:year/:month/:day/:title/"
+post = "/blog/:year/:month/:day/:title/"
+
+[indexes]
+category = "categories"
+
+[params]
+defaultDescription = "Franklin Chen's thoughts about computer programming"
+defaultKeywords = "Franklin Chen, programming, blog"
+
+theme = "theme-base-0c"
+
+highlight = "default"
+tagline = "Humbly exploring what it means to do the right thing."
+
+googleAuthorship = "100967806642012078047"
+googleAnalytics = "UA-41982602-1"
+gravatarHash = "f8a7ccb41af2422d10599464b96cf034"
+
+github = "https://github.com/FranklinChen"
+linkedin = "http://www.linkedin.com/in/franklinchen"
+googleplus = "http://google.com/+FranklinChen"
+facebook = "http://www.facebook.com/franklin.chen"
+twitter = "http://twitter.com/franklinchen"
