@@ -12,7 +12,7 @@ categories:
 - Node
 - JavaScript
 ---
-{% img http://www.mongodb.com/sites/all/themes/bonsai/logo.png MongoDB logo %}
+{{< figure src="http://www.mongodb.com/sites/all/themes/bonsai/logo.png" title="MongoDB logo" >}}
 
 I finally finished a two-month [free online course on MongoDB](http://education.mongodb.com/), given by [MongoDB, Inc](http://www.mongodb.com/).
 

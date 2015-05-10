@@ -38,7 +38,7 @@ Meanwhile, this was all before the Web, so the way to get any new and exciting i
 
 Yes, I did ask, "Who the heck is or was Dr. Dobb?!" It didn't matter. The magazine was great. It covered all kinds of topics, and had code listings you could type in or download (remember [anonymous FTP](http://en.wikipedia.org/wiki/File_Transfer_Protocol#Anonymous_FTP) as the primary way to download stuff?).
 
-{% img http://upload.wikimedia.org/wikipedia/commons/d/d8/Macintosh_classic.jpg Macintosh Classic %}
+{{< figure src="http://upload.wikimedia.org/wikipedia/commons/d/d8/Macintosh_classic.jpg" title="Macintosh Classic" >}}
 
 I got my first job as a software engineer in 1993, after much intense self-study, learning to programm in C on my younger sister's [Macintosh Classic](http://en.wikipedia.org/wiki/Macintosh_Classic) using [THINK C](http://en.wikipedia.org/wiki/THINK_C). What can I say, DDJ was there for me as a useful resource.
 

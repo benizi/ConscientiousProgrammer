@@ -8,7 +8,7 @@ categories:
 - nil
 - C
 ---
-{% img http://golang.org/doc/gopher/frontpage.png Go %}
+{{< figure src="http://golang.org/doc/gopher/frontpage.png" title="Go" >}}
 
 So I happened to see an [announcement of Go version 1.2](http://tip.golang.org/doc/go1.2). I saw something that disturbed me, having to do with `nil`, a ["favorite" topic of mine](/blog/2013/06/29/nil-non-determinism-exceptions/).
 

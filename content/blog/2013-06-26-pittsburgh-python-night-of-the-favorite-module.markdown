@@ -23,7 +23,7 @@ categories:
 - lazy sequences
 - community
 ---
-{% img http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg Pittsburgh Python User Group %}
+{{< figure src="http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg" title="Pittsburgh Python User Group" >}}
 
 The [Pittsburgh Python User Group](http://www.meetup.com/pghpython/) had [another "favorite module night"](http://www.meetup.com/pghpython/events/120442102). I enjoy this format because I get to learn about what people find useful, so that I may perhaps use it myself!
 

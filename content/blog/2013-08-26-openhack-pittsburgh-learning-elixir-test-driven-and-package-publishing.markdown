@@ -35,7 +35,7 @@ What happened was that he asked for feedback about who was planning to work on w
 
 What does that mean?
 
-{% img http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg Franklin working on laptop %}
+{{< figure src="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg" title="Franklin working on laptop" >}}
 
 <!--more-->
 

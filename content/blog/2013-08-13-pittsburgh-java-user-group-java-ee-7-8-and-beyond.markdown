@@ -13,7 +13,7 @@ The Pittsburgh Java User Group has not been meeting regularly for some time now.
 
 The meeting did nothing to change my intuition.
 
-{% img /images/pittjug-2013-08-13/group.jpg %}
+{{< figure src="/images/pittjug-2013-08-13/group.jpg" title="NOTITLE" >}}
 
 <!--more-->
 
@@ -23,7 +23,7 @@ Reza Rahman of Oracle, a "Java EE/GlassFish Evangelist" gave the presentation. H
 
 He gave a retrospective on how surprisingly long ago Java EE came on the scene, a decade ago, and described the evolution over the years to improve developer productivity.
 
-{% img /images/pittjug-2013-08-13/speaker.jpg %}
+{{< figure src="/images/pittjug-2013-08-13/speaker.jpg" title="NOTITLE" >}}
 
 Also it was good to see that the new APIs have improved since the old ones, including "fluent" APIs, the fact is that everything still seems clunky and "old".
 

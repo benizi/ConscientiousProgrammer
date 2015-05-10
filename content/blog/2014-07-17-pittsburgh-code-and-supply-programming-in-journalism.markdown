@@ -19,7 +19,7 @@ categories:
 - OpenRefine
 - D3
 ---
-{% img http://static.squarespace.com/static/538f3cc8e4b00f52172b5560/t/53a4ec76e4b0488fb14c5a29/1403317372203/sign.png?format=500w %}
+{{< figure src="http://static.squarespace.com/static/538f3cc8e4b00f52172b5560/t/53a4ec76e4b0488fb14c5a29/1403317372203/sign.png?format=500w" title="NOTITLE" >}}
 
 I finally attended my first ever [Pittsburgh Code and Supply](http://www.codeandsupply.co/) meeting! The group, which posts its [events on Meetup](http://www.meetup.com/Pittsburgh-Code-Supply/), was created by local Pittsburgh software developer [Justin Reese](https://twitter.com/justinxreese) just a few months ago, in March 2014. His vision is to create a local community that, unlike conventional specific language/technology-based meetups, is much more universal and broad. If you haven't do so already, read more about the [goals of Pittsburgh Code and Supply](http://www.codeandsupply.co/about). I'm very excited about this new group!
 

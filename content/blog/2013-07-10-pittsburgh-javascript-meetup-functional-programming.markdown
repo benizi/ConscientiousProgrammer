@@ -32,7 +32,7 @@ categories:
 - .NET
 - Rx
 ---
-{% img http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg Pittsburgh JavaScript %}
+{{< figure src="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg" title="Pittsburgh JavaScript" >}}
 
 Because the topic of the featured presentation by [Richard Ashkettle](http://idiotcoder.com/) was [functional programming](http://en.wikipedia.org/wiki/Functional_programming), I made sure to attend my first meeting of the newly revived [Pittsburgh JavaScript meetup](http://www.meetup.com/Pittsburgh-JavaScript/). (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn't been able to make it to the first two.)
 
