@@ -21,9 +21,9 @@ Below is video for, and a transcript of, my five-minute lightning talk I gave at
 
 <!--more-->
 
-My 5-minute lightning talk starts at 19:35 and ends at 24:37 in the full video. I have embedded it here to start where I begin:
+My 5-minute lightning talk starts at 19:35 and ends at 24:37 in the full video below. (I [couldn't figure out how to turn off autoplay](https://vimeo.com/forums/topic:546) when I initially tried `#t=19m35s`.)
 
-<iframe src="//player.vimeo.com/video/72703334#t=19m35s" width="500" height="281" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<iframe src="https://player.vimeo.com/video/72703334" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href="https://vimeo.com/72703334">Lightning Talks Day 1</a> from <a href="https://vimeo.com/confbots">Confbots</a> on <a href="https://vimeo.com">Vimeo</a>.</p> <p>Given on August 16 2013 at Steel City Ruby in Pittsburgh, PA</p>
 
 I provide below my best try at transcribing my talk, which was given impromptu without any notes or slides. Unfortunately, I spoke very quickly and I can't figure out every word I said; if you find any glaring omissions or errors, please let me know!
 
