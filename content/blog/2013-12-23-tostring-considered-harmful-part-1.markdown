@@ -38,7 +38,7 @@ My example code is in Scala, but the problem illustrated actually extends to man
 
 Here's the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.
 
-``` scala
+{{< highlight scala >}}
 object Example {
   type Id = Int
 
@@ -64,7 +64,7 @@ object Example {
     // output: http://service.com?id=42
   }
 }
-```
+{{< /highlight >}}
 
 In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.
 
@@ -74,7 +74,7 @@ If you don't know Scala, just note that `s"...$id"` is just Scala's string inter
 
 It turned out that finding an ID could fail, so I changed `findId` to return the type `Option[Id]` instead of `Id`. To get the code to compile, I had to change the type of the parameter to `makeUrl` also:
 
-``` scala
+{{< highlight scala >}}
   /**
     @param name User name to look up
     @return Some(ID of user) if found, else None
@@ -88,7 +88,7 @@ It turned out that finding an ID could fail, so I changed `findId` to return the
 
   // Oops, now this has an unintended bug!
   def makeUrl(id: Option[Id]): String = s"http://service.com?id=$id"
-```
+{{< /highlight >}}
 
 But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: `http://service.com?id=Some(42)` was being requested.
 
@@ -124,7 +124,7 @@ I consider this *global infection* a flaw in object-oriented languages that impo
 
 First step in cleaning up the code: make `toString` explicit:
 
-``` scala
+{{< highlight scala >}}
   /** Only ever use a String to create a URL. */
   def makeUrl(id: String): String = s"http://service.com?id=$id"
 
@@ -132,7 +132,7 @@ First step in cleaning up the code: make `toString` explicit:
     val id = findId("name")
     getUrl(makeUrl(id.toString))
   }
-```
+{{< /highlight >}}
 
 (Later in the post, I will discuss alternatives to this explicit `toString`.)
 
@@ -140,15 +140,15 @@ First step in cleaning up the code: make `toString` explicit:
 
 Another design smell was that of using
 
-``` scala
+{{< highlight scala >}}
 type Id = Int
-```
+{{< /highlight >}}
 
 in the first place. This is a well-known lazy practice called [primitive obsession](http://c2.com/cgi/wiki?PrimitiveObsession). I know better than that.
 
 The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been
 
-``` scala
+{{< highlight scala >}}
   case class Id(id: Int)
 
   /**
@@ -161,7 +161,7 @@ The solution to primitive obsession is easy: create a new wrapper type. Hence, t
     } else {
       Id(0)
     }
-```
+{{< /highlight >}}
 
 Note that this still *would not* have solved the `toString` problem, since the output would simply have been `http://service.com?id=Some(Id(42))` or the dreaded `http://service.com?id=None`!
 
@@ -182,7 +182,7 @@ Instead of piggybacking on `toString`, we should call a spade a spade, and defin
 Let's refactor the code:
 
 
-``` scala
+{{< highlight scala >}}
   // Wrapper class
   case class Id(id: Int) {
     // Special method for turning to URL string fragment
@@ -211,13 +211,13 @@ Let's refactor the code:
     // Will not compile because Option[Id] does not have toUrlString
     //getUrl(makeUrl(id.toUrlString))
   }
-```
+{{< /highlight >}}
 
 Now the code that was creating a junk URL will no longer compile: `id` is of type `Option[Id]` but that type does *not* have a `toUrlString` method. Mission accomplished!
 
 To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:
 
-``` scala
+{{< highlight scala >}}
     // Will not compile because Option[Id] does not have toUrlString
     //getUrl(makeUrl(id.toUrlString))
 
@@ -225,7 +225,7 @@ To fix the code to get it compile, we handle both the case in which the ID is no
       case None => println("No id found!")
       case Some(n) => getUrl(makeUrl(n.toUrlString))
     }
-```
+{{< /highlight >}}
 
 Simple!
 

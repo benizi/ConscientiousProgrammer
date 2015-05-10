@@ -36,7 +36,7 @@ Basically, in C++, `unique_ptr` is supposed to be a way to indicate that a given
 
 Here is Steve's example of an unintended segmentation fault from C++:
 
-```c++
+{{< highlight cpp >}}
 #include <iostream>
 #include <memory>
 
@@ -52,11 +52,11 @@ int main ()
 
     cout << *orig << endl;
 }
-```
+{{< /highlight >}}
 
 Steve shows an "equivalent" Rust program in which code attempts to move ownership fails to compile because of a type error (I edited to correspond more closely with the C++):
 
-```rust
+{{< highlight rust >}}
 fn main() {
     let orig = box 5i;
 
@@ -66,7 +66,7 @@ fn main() {
 
     println!("{}", *orig);
 }
-```
+{{< /highlight >}}
 
 ## Understanding C++ behavior by modeling it in Rust, safely
 
@@ -78,7 +78,7 @@ For illustration's sake, we have modeled C++ directly in *safe* Rust through ind
 
 You can play with this code [at this Rust playground link](http://is.gd/5kEQA8). (You may find it interesting to examine the assembly code generated.)
 
-```rust
+{{< highlight rust >}}
 // Simulate a segmentation fault.
 fn seg_fault() {
     panic!("segmentation fault");
@@ -107,7 +107,7 @@ fn main() {
         }
     }
 }
-```
+{{< /highlight >}}
 
 Nobody would ever write this kind of code in Rust, but implicitly, all C++ programs are semantically basically doing this, except that for efficiency, the `nullptr` checking is not done at the language level but just results in an actual segmentation fault at the operating system level.
 
@@ -115,7 +115,7 @@ Nobody would ever write this kind of code in Rust, but implicitly, all C++ progr
 
 The single most disturbing failure mode of the C++-based software product I worked on in 1995-1997 in C++ was segmentation faults resulting from mysteriously disappearing pointers. What I mean is, behavior like the following, where a container containing smart pointers to objects was meant to *own* them, but there was no compile-time way to verify this fact, because of the nature of the object graph. If someone didn't play by the uncheckable rules and inadvertently took ownership of (instead of "borrowing" through a raw pointer) something embedded in the collection, then `nullptr` appeared, and a segmentation fault happened.
 
-```c++
+{{< highlight cpp >}}
 #include <vector>
 #include <memory>
 #include <iostream>
@@ -135,7 +135,7 @@ int main() {
     // Seg fault.
     cout << *v[0] << endl;
 }
-```
+{{< /highlight >}}
 
 You can probably guess what some developers did to "fix" the segmentation fault. They started adding `nullptr` checks everywhere to prevent crashing, but this only resulted in *corrupt user data and documents*, because in fact, we lost data in those collections and smart pointers to the data should never have ended up `nullptr`!!
 
@@ -145,7 +145,7 @@ The complexity of the application and the deadline pressures made it impossible 
 
 The Rust type-checker rejects any attempt to move ownership out of a collection. (Try to compile it in [this playground](http://is.gd/Om7wfr).)
 
-```rust
+{{< highlight rust >}}
 fn main() {
     let v = vec![box 5i];
 
@@ -157,16 +157,16 @@ fn main() {
 
     println!("{}", *v[0]);
 }
-```
+{{< /highlight >}}
 
-```console
+{{< highlight console >}}
 illegal_move_out_of_vector.rs:7:24: 7:28 error: cannot move out of dereference (dereference is implicit, due to indexing)
 illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];
                                                        ^~~~
 illegal_move_out_of_vector.rs:7:9: 7:21 note: attempting to move value to here
 illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];
                                         ^~~~~~~~~~~~
-```
+{{< /highlight >}}
 
 ### Often, you do want to share
 
@@ -174,7 +174,7 @@ I have to be honest: at first, Rust's ownership type system seems like quite a r
 
 But note that Rust is flexible: you don't have to use Rust's default pointer type! You can use one of Rust's many other pointer types, such as [`Rc` or `Arc`](http://doc.rust-lang.org/guide.html#rc-and-arc), that allow reference-counted shared ownership (like C++ `shared_ptr`), if that's what you really want. ([Playground here](http://is.gd/HNi7SR).)
 
-```rust
+{{< highlight rust >}}
 // Reference-counted smart pointer.
 use std::rc::Rc;
 
@@ -188,13 +188,13 @@ fn main() {
 
     println!("{}", *v[0]);
 }
-```
+{{< /highlight >}}
 
 ## Unsafe
 
 Finally, Rust does allow you to go all out and write [unsafe](http://doc.rust-lang.org/guide.html#unsafe) code, if you truly need to for raw C performance or FFI reasons. Most of the time you do not need to, because the whole point of Rust is to compile down to the same kind of assembly code you would get from C.
 
-```rust
+{{< highlight rust >}}
 extern crate libc;
 
 use libc::{size_t, malloc};
@@ -216,7 +216,7 @@ fn main() {
         println!("{}", *orig);
     }
 }
-```
+{{< /highlight >}}
 
 ## Conclusion
 

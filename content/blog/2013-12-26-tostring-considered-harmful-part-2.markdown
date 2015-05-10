@@ -32,20 +32,20 @@ In part 2, we look at advanced ways to organize "stringable" data, using either 
 
 The fix presented was in *object-oriented* style, adding a method `toUrlString` to a class. The other solution is the *functional* style, leaving the `Id` class alone, and writing an external function instead:
 
-```scala
+{{< highlight scala >}}
   case class Id(id: Int)
 
   def toUrlString(id: Id) = id.toString
-```
+{{< /highlight >}}
 
 with
 
-```scala
+{{< highlight scala >}}
     id match {
       case None => println("No id found!")
       case Some(n) => getUrl(makeUrl(toUrlString(n)))
     }
-```
+{{< /highlight >}}
 
 There are advantages and disadvantages to either solution.
 
@@ -53,7 +53,7 @@ There are advantages and disadvantages to either solution.
 
 It would be very natural, given a whole set of domain classes in addition to `Id`, to want all of them to have a `toUrlString`. Then the natural thing to do is to create a mini-universe (parallel to the `toString` universe) by creating a hierarchy:
 
-```scala
+{{< highlight scala >}}
   trait UrlString {
     def toUrlString: String
   }
@@ -65,7 +65,7 @@ It would be very natural, given a whole set of domain classes in addition to `Id
   case class ...(...) extends UrlString {
     override def toUrlString = ...
   }
-```
+{{< /highlight >}}
 
 ## Advanced string interpolation with OO
 
@@ -73,7 +73,7 @@ In fact, Scala and other languages with advanced string interpolation facilities
 
 Below we define a string interpolator that only operates on objects of classes that implement the trait `UrlString`, and therefore does away with an explicit call to `toUrlString`:
 
-```scala
+{{< highlight scala >}}
   implicit class UrlHelper(val sc: StringContext) extends AnyVal {
     def url(args: UrlString*): String = {
       val strings = sc.parts.iterator
@@ -89,16 +89,16 @@ Below we define a string interpolator that only operates on objects of classes t
 
   /** Only ever use UrlString to create a URL. */
   def makeUrl(id: UrlString): String = url"http://service.com?id=$id"
-```
+{{< /highlight >}}
 
 with
 
-```scala
+{{< highlight scala >}}
     id match {
       case None => println("No id found!")
       case Some(n) => getUrl(makeUrl(n))
     }
-```
+{{< /highlight >}}
 
 This may or may not be overengineering.
 
@@ -106,7 +106,7 @@ This may or may not be overengineering.
 
 The functional approach doesn't like inheritance in the domain classes. We can implement it with [type classes](http://en.wikipedia.org/wiki/Type_class) (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement `toUrlString` outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does *not* depend on an inheritance hierarchy. If you're used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.
 
-```scala
+{{< highlight scala >}}
   // A type class
   trait UrlString[A] {
     def toUrlString(a: A): String
@@ -135,7 +135,7 @@ The functional approach doesn't like inheritance in the domain classes. We can i
 
   /** Anything "viewable" as UrlString can be used to create a URL. */
   def makeUrl[A: UrlString](id: A): String = url"http://service.com?id=$id"
-```
+{{< /highlight >}}
 
 ## The final string gotcha
 

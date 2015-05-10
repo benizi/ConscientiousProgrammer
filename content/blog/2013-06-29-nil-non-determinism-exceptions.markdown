@@ -40,9 +40,9 @@ The problem arose when I tried to generate [my personal blog](http://franklinche
 
 Here's the error message (I have omitted the 46-line stack trace):
 
-``` console
+{{< highlight console >}}
       Generating... Liquid Exception: undefined method `sub' for nil:NilClass in atom.xml
-```
+{{< /highlight >}}
 
 This is, unfortunately, an example of an error message that is next to useless, and should *never* appear. I have stated that [we as programmers should not generate useless end user error messages](/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/), and of course, in context, I am an end user of the blog generating software I use.
 
@@ -54,7 +54,7 @@ It turns out that Octopress uses Jekyll, which uses [pygments.rb](https://github
 
 The bug is that the code in Jekyll that does syntax highlighting using Pygments makes an assumption that the return value of `Pygments.highlight()` is never `nil`:
 
-``` ruby
+{{< highlight ruby >}}
               @renderer ||= Class.new(Redcarpet::Render::HTML) do
                 def block_code(code, lang)
                   lang = lang && lang.split.first || "text"
@@ -69,7 +69,7 @@ The bug is that the code in Jekyll that does syntax highlighting using Pygments 
                   code = code.sub(/<\/pre>/,"</code></pre>")
                 end
               end
-```
+{{< /highlight >}}
 
 Well, it *can* be `nil` and was for me, and therefore `add_code_tags` was calling `code.sub()` with `code` being `nil`.
 
@@ -91,7 +91,7 @@ In this case, it is surprising that a syntax highlighter for some text could ret
 Unfortunately, the documentation of the Pygments API was incomplete in `lib/pygments/popen.rb`, where `highlight` is defined:
 
 
-``` ruby
+{{< highlight ruby >}}
     # Public: Highlight code.
     #
     # Takes a first-position argument of the code to be highlighted, and a
@@ -112,7 +112,7 @@ Unfortunately, the documentation of the Pygments API was incomplete in `lib/pygm
       str.force_encoding(opts[:options][:outencoding]) if str.respond_to?(:force_encoding)
       str
     end
-```
+{{< /highlight >}}
 
 ## A problem with dynamically typed language culture
 
@@ -122,15 +122,15 @@ The documentation doesn't actually fully specify what the arguments can be, and 
 
 In code in a statically typed language such as OCaml (or Haskell or Scala), I would expect to see:
 
-``` ocaml
+{{< highlight ocaml >}}
 let highlight (code : string) (opts : my_map) : string = //...
-```
+{{< /highlight >}}
 
 and expect that the return value should be a `String`, or
 
-``` ocaml
+{{< highlight ocaml >}}
 let highlight (code : string) (opts : my_map) : string option = //...
-```
+{{< /highlight >}}
 
 to indicate that the return value could be either `Some(formatted_code)` or `None`.
 
@@ -138,11 +138,11 @@ to indicate that the return value could be either `Some(formatted_code)` or `Non
 
 Reading the Ruby code, I saw that the situation is even more complex than I thought:
 
-``` ruby
+{{< highlight ruby >}}
       # If the caller didn't give us any code, we have nothing to do,
       # so return right away.
       return code if code.nil? || code.empty?
-```
+{{< /highlight >}}
 
 Wow: `code` can be `nil`, in which case `nil` is returned.
 
@@ -154,7 +154,7 @@ Furthermore, it turns out that `mentos()` can return `nil` on a non-`nil` code s
 
 `mentos()` is not very well documented. Until I read this code, I didn't realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In `lib/pygments/popen.rb`:
 
-``` ruby
+{{< highlight ruby >}}
     # Our 'rpc'-ish request to mentos. Requires a method name, and then optional
     # args, kwargs, code.
     def mentos(method, args=[], kwargs={}, original_code=nil)
@@ -178,7 +178,7 @@ Furthermore, it turns out that `mentos()` can return `nil` on a non-`nil` code s
     stop "EPIPE"
     raise MentosError, "EPIPE"
     end
-```
+{{< /highlight >}}
 
 It turns out that fundamental problem is not `nil` so much as *non-determinism*: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for `nil` to end up being returned. This non-determinism is worse than `nil`. I think that in a situation like this, an *exception* is called for. `highlight()` should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return `nil` (or if using a statically typed language, a `None`).
 
@@ -186,26 +186,26 @@ I was also disappointed that logging was used in this code, indicating that it w
 
 Amusingly, upon discovering the logging code, I used it, setting the magic environment variable `MENTOS_LOG` (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:
 
-``` console
+{{< highlight console >}}
 # Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
 I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.
 I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Out header: {"method":"highlight","args":null,"kwargs":{"lexer":"console","options":{"encoding":"utf-8","outencoding":"utf-8"},"fd":10,"id":"TVQSJNBV","bytes":147}}
 E, [2013-06-29 10:26 #13799] ERROR -- : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call
 I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.
 I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting
-```
+{{< /highlight >}}
 
 ## Testing
 
 It turns out that there *is* a place where the intended behavior is in a sense documented: the unit tests in `test_pygments.rb`:
 
-``` ruby
+{{< highlight ruby >}}
   def test_returns_nil_on_timeout
     large_code = REDIS_CODE * 300
     code = P.highlight(large_code) # a 30 mb highlight request will timeout
     assert_equal nil, code
   end
-```
+{{< /highlight >}}
 
 The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be `nil`!
 

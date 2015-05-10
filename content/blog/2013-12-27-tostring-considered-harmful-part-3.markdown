@@ -57,7 +57,7 @@ Furthermore, Standard ML, as a rather opinionated and ["purist" language](http:/
 
 The best you can do is write something that is functorized, but then you have to apply it in a statically known context:
 
-```sml
+{{< highlight sml >}}
 signature TO_STRING =
   sig
     type t
@@ -82,14 +82,14 @@ structure MyStuff : TO_STRING =
   end
 
 structure DoMyStuff = DoStuff(MyStuff)
-```
+{{< /highlight >}}
 
 with
 
-```sml
+{{< highlight sml >}}
 DoMyStuff.doubleString (42, true)
 (* result is the string "(42, true)(42, true)" *)
-```
+{{< /highlight >}}
 
 Since the Standard ML ecosystem is so minimalist, it's hard to fall into the `toString` trap, because you would have to set it all up yourself.
 
@@ -101,12 +101,12 @@ There is a [pre-processor for OCaml](http://en.wikipedia.org/wiki/Camlp4) that c
 
 Of course, one could also use the [object-oriented part of OCaml](http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html) to make a generic "to string" hierarchy starting with a suitable interface:
 
-```ocaml
+{{< highlight ocaml >}}
 class type convert_to_string =
   object
     method to_string : string
   end
-```
+{{< /highlight >}}
 
 But I don't actually know many people who use the object-oriented features of OCaml!
 

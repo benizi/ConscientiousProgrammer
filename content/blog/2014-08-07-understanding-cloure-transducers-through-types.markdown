@@ -27,13 +27,13 @@ I have a confession to make, which I have made before: I find it very difficult 
 
 Rich informally gave some type signatures in his blog post:
 
-```text
+{{< highlight text >}}
 ;;reducing function signature
 whatever, input -> whatever
 
 ;;transducer signature
 (whatever, input -> whatever) -> (whatever, input -> whatever)
-```
+{{< /highlight >}}
 
 This was, unfortunately, not very helpful. It is hard to make sense of this pseudo-notation for types. What is quantified over what? And what is bound to what? I'll explain later what I mean by these questions.
 
@@ -49,20 +49,20 @@ But what I wanted was to understand transducers *as they are*, before even think
 
 Rich Hickey [informally offered some types](https://news.ycombinator.com/item?id=8144385) (which he said were "a la Haskell") to try to help out:
 
-```text
+{{< highlight text >}}
     ;;reducing fn
     x->a->x
 
     ;;transducer fn
     (x->a->x)->(x->b->x)
-```
+{{< /highlight >}}
 
 OK, by using type variables `a`, `b`, and `x`, that indicates what is bound to what. The blog post should have used this notation rather than
 
-```text
+{{< highlight text >}}
 ;;transducer signature
 (whatever, input -> whatever) -> (whatever, input -> whatever)
-```
+{{< /highlight >}}
 
 ### Sample Clojure code
 

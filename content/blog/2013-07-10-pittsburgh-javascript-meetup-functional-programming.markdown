@@ -102,7 +102,7 @@ It's amazing, but I claim that this is JavaScript's one Good Part, its killer fe
 
 JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented "interference" from the conventional class-based object-oriented world, which is mostly based not on functions, but on [methods](https://en.wikipedia.org/wiki/Method_%28computer_programming%29) that interference with functions because they are meant to *replace* functions (since according to "pure" object-oriented thinking, functions are evil and computation should involve method calls on objects). *JavaScript does not (really) have methods*; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use [Ember](http://emberjs.com), the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of `function`s: `valueWillChange` and `valudDidChange` are just functions. They are not special things, "methods".
 
-``` javascript
+{{< highlight javascript >}}
 App.PersonView = Ember.View.extend({
   valueWillChange: function (obj, keyName, value) {
     this.changingFrom = value;
@@ -115,7 +115,7 @@ App.PersonView = Ember.View.extend({
       }
   }.observes('content.value')
 });
-```
+{{< /highlight >}}
 
 ### Examples
 

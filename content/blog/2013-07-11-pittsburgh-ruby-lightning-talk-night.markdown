@@ -48,15 +48,15 @@ Also, now there is `Invariant`, which I think is a great addition to `RSpec`, en
 
 Finally, I love the new natural assertions, the ability to write stuff like
 
-``` ruby
+{{< highlight ruby >}}
 Then { stack.top == :second_item }
-```
+{{< /highlight >}}
 
 instead of
 
-``` ruby
+{{< highlight ruby >}}
 Then { expect(stack.top).to eq(:second_item) }
-```
+{{< /highlight >}}
 
 while `RSpec` automatically generates useful messages on failure.
 
