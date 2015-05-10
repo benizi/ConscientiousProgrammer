@@ -94,11 +94,11 @@ But this resulted in a bug (thankfully caught by my test suite that actually wen
 
 Furthermore, in the case of an ID not found, the URL constructed is `http://service.com?id=None`. How many of you have seen applications or Web sites or emails in which something was clearly missing and the text contained either an empty space or the string "null" or "nullvalue" such as
 
-{% blockquote %}
+<blockquote>
 Dear NULL,
 
 You ordered NULL items.
-{% endblockquote %}
+</blockquote>
 
 Yup, you guessed it: someone wrote crappy code like what I just showed you, and frightening thing is, *it could have been me* and *it could have been you*.
 

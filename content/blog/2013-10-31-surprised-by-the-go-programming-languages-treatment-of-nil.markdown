@@ -34,15 +34,15 @@ Read that again: until Go 1.2, you could get *silent* bad behavior, an *unusable
 
 Before Go 1.2, a chain of code involving a `nil` could result in behavior of which [Russ Cox](http://swtch.com/~rsc/) wrote:
 
-{% blockquote %}
+<blockquote>
 The current behavior is at best merely historical accident; it was definitely not thought through or discussed.
-{% endblockquote %}
+</blockquote>
 
 There is also a note about a particular special case:
 
-{% blockquote %}
+<blockquote>
 (it seemed like a good idea at a time)
-{% endblockquote %}
+</blockquote>
 
 You can read the [whole document about `nil`](http://docs.google.com/document/d/14DgGJKGQeBTNJDXo3YxnlSwv7ouRqvj7BMmZw17vWV0/pub) yourself. You will find that it is still not a formal spec, but more a rationale of various special cases and possible implementation details.
 

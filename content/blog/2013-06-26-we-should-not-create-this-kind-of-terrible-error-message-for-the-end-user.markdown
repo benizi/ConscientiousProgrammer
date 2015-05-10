@@ -13,9 +13,9 @@ categories:
 ---
 I have a [Samsung Galaxy S II smartphone](http://franklinchen.com/blog/2012/03/22/paradox-i-will-observe-the-national-day-of-unplugging-but-just-bought-my-first-smartphone-this-week/). I recently encountered a problem: auto-updating of apps failed with this terrible error message:
 
-{% blockquote %}
+<blockquote>
 Application cannot be installed in the default install location.
-{% endblockquote %}
+</blockquote>
 
 Also, a lot of time and bandwidth was each time spent on re-downloading the app and then failing, with no way to gracefully recover.
 
@@ -37,9 +37,9 @@ Clearing some space and also moving a large app to SD card storage solved my pro
 
 So why that terrible error message? Why not just tell the end user exactly what is going on? Why not something like:
 
-{% blockquote %}
+<blockquote>
 The application X could not be installed at (device storage | SD card storage) because you don't have enough space. You can try clearing more space, or go to your application settings to move it to (SD card storage | device storage).
-{% endblockquote %}
+</blockquote>
 
 The application should know exactly what is going on, and not only that, should be able to suggest a course of action based on all the relevant variables, such as how much space there is in different places, how large the application is, etc.
 

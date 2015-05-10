@@ -28,9 +28,9 @@ It is impossible to summarize in a sound bite what I mean by the term, so I have
 
 However, since a sound bite is required in some circumstances, here's what I currently have:
 
-{% blockquote %}
+<blockquote>
 I am a conscientious computer programmer, committed to designing, building, and testing correct, efficient, documented, maintainable software that meets users' real needs.
-{% endblockquote %}
+</blockquote>
 
 My material will come from my own experiences (successes and failures, past and present) as well as from those of others. See the [About page](/about/) for more sound bites about what this blog will be about.
 
