@@ -1,6 +1,7 @@
 baseurl = "http://ConscientiousProgrammer.com/"
 languageCode = "en-us"
 title = "The Conscientious Programmer"
+pygmentsstyle = "default"
 
 [permalinks]
   blog = "/blog/:year/:month/:day/:title/"
