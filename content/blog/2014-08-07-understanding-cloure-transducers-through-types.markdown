@@ -4,7 +4,7 @@ title: "Understanding Clojure transducers through types"
 date: 2014-08-07T22:58:16-04:00
 url: "blog/2014/08/07/understanding-cloure-transducers-through-types"
 comments: true
-categories: 
+categories:
 - Clojure
 - transducers
 - types
@@ -68,7 +68,7 @@ OK, by using type variables `a`, `b`, and `x`, that indicates what is bound to w
 
 He also posted some sample Clojure code:
 
-{% gist b5aefa622180681e1c81 %}
+{{% gist b5aefa622180681e1c81 %}}
 
 ## Second discussion thread I saw
 
@@ -78,7 +78,7 @@ Then today, I saw a discussion thread on Reddit, titled ["Clojure's Transducers 
 
 Rich finally posted some actual [type-checked, runnable Haskell code](http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/)!
 
-```haskell
+{{< highlight haskell >}}
 -- Transducers in Haskell
 
 mapping :: (a -> b) -> (r -> b -> r) -> (r -> a -> r)
@@ -99,7 +99,7 @@ xlist xf = foldl (xf conj) []
 
 -- build any old list function with its transducer, all the same way
 xmap :: (a -> b) -> [a] -> [b]
-xmap f = xlist $ mapping f 
+xmap f = xlist $ mapping f
 
 xfilter :: (a -> Bool) -> [a] -> [a]
 xfilter p = xlist $ filtering p
@@ -107,7 +107,7 @@ xfilter p = xlist $ filtering p
 xflatmap :: (a -> [b]) -> [a] -> [b]
 xflatmap f = xlist $ flatmapping f
 
--- again, not interesting for lists, but the same transform 
+-- again, not interesting for lists, but the same transform
 -- can be put to use wherever there's a step fn
 
 xform :: (r -> Integer -> r) -> (r -> Integer -> r)
@@ -116,7 +116,8 @@ xform = mapping (+ 1) . filtering even . flatmapping (\x -> [0 .. x])
 
 print $ xlist xform [1..5]
 -- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]
-```
+{{< /highlight >}}
+
 
 After this post, I knew it would not take me long to figure out transducers.
 
@@ -129,40 +130,44 @@ Two things to notice about the original code:
 
 ### Type synonyms and higher-rank types
 
-Defining lots and lots of types (whether synonyms or [newtypes](http://www.haskell.org/haskellwiki/Newtype) is standard practice when programming in a modern typed language. OK, so I defined a type synonym 
+Defining lots and lots of types (whether synonyms or [newtypes](http://www.haskell.org/haskellwiki/Newtype) is standard practice when programming in a modern typed language. OK, so I defined a type synonym
 
-```haskell
+{{< highlight haskell >}}
 -- Left reduce
 type Reducer a r = r -> a -> r
-```
+{{< /highlight >}}
+
 
 But what about transducer? This is trickier.
 
 An *invalid* attempt at a type would be
 
-```haskell
+{{< highlight haskell >}}
 -- Illegal!
 type Transducer a b = Reducer a r -> Reducer b r
-```
+{{< /highlight >}}
+
 
 because the type variable `r` is not bound in the type definition. And it would be incorrect to just randomly add `r` on the left hand side as an extra parameter to the `Transducer` type, because in fact it is *critical* that a transducer *does not care* about the underlying reducer's return type `r`. How do we write the desired type?
 
 It turns out you need [higher-rank types](http://www.haskell.org/haskellwiki/Rank-N_types). Rank-1 types are not sufficient; we need a rank-2 type to quantify `r`, to say that a transducer from `a` to `b` is a transformation that takes a reducer to a specific `r` and returns another reducer to the *same* `r`.
 
-```haskell
+{{< highlight haskell >}}
 -- Here's where the rank-2 type is needed
 type Transducer a b = forall r . Reducer a r -> Reducer b r
-```
+{{< /highlight >}}
+
 
 Now we can see more clearly some *completely generic* ways to create a transducer:
 
-```haskell
+{{< highlight haskell >}}
 mapping :: (a -> b) -> Transducer b a
 mapping f xf r a = xf r (f a)
 
 filtering :: (a -> Bool) -> Transducer a a
 filtering p xf r a = if p a then xf r a else r
-```
+{{< /highlight >}}
+
 
 #### A bit of history
 
@@ -177,7 +182,7 @@ So I abstracted away from the hardcoded list-oriented functions and values in Ri
 - `foldl` abstracted to a `class Foldable`
 - `conj` and empty list `[]` abstracted to a `class Conjable`
 
-```haskell
+{{< highlight haskell >}}
 -- Left fold
 class Foldable f where
   fold :: Transducer a (f a)
@@ -185,7 +190,8 @@ class Foldable f where
 class Conjable f where
   empty :: f a
   conj :: Reducer a (f a)
-```
+{{< /highlight >}}
+
 
 Note our reliance on transducing and reducing from one type `a` to another, `f a`.
 
@@ -193,16 +199,17 @@ Note our reliance on transducing and reducing from one type `a` to another, `f a
 
 Unlike `mapping` and `filtering`, `flatmapping` is *not completely generic*, because it depends on something being `Foldable` (implementing a `fold`):
 
-```haskell
+{{< highlight haskell >}}
 flatmapping :: Foldable f => (a -> f b) -> Transducer b a
 flatmapping f xf r a = fold xf r (f a)
-```
+{{< /highlight >}}
+
 
 #### `Conjable` constraint
 
 Finally, here's the originally list-specific code that now depends only on `Foldable` and `Conjable`:
 
-```haskell
+{{< highlight haskell >}}
 -- I changed Rich Hickey's code to be more general than just list
 -- but accept anything Conjable
 xlist :: (Foldable f, Conjable f) => Transducer b a -> f a -> f b
@@ -210,20 +217,21 @@ xlist xf = fold (xf conj) empty
 
 -- build any old Foldable function with its transducer, all the same way
 xmap :: (Foldable f, Conjable f) => (a -> b) -> f a -> f b
-xmap f = xlist $ mapping f 
+xmap f = xlist $ mapping f
 
 xfilter :: (Foldable f, Conjable f) => (a -> Bool) -> f a -> f a
 xfilter p = xlist $ filtering p
 
 xflatmap :: (Foldable f, Conjable f) => (a -> f b) -> f a -> f b
 xflatmap f = xlist $ flatmapping f
-```
+{{< /highlight >}}
+
 
 ### List-specific stuff
 
 Here is the list-specific code:
 
-```haskell
+{{< highlight haskell >}}
 -- Stuff specialized to lists.
 -- To use another type, just make it a Foldable and Conjable.
 instance Foldable [] where
@@ -243,7 +251,8 @@ xform = mapping (+ 1) . filtering even . flatmapping (\x -> [0 .. x])
 -- Again, this can munge anything Foldable and Conjable, not just a list.
 munge :: (Foldable f, Conjable f) => f Integer -> f Integer
 munge = xlist xform
-```
+{{< /highlight >}}
+
 
 Notice some very important properties of this code:
 
@@ -252,18 +261,19 @@ Notice some very important properties of this code:
 
 Example:
 
-```haskell
+{{< highlight haskell >}}
 -- munge a list
 -- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]
 example1 :: [Integer]
 example1 = munge [1..5]
-```
+{{< /highlight >}}
+
 
 ### Implementing another type to illustrate the genericity of transducers
 
 To illustrate Rich Hickey's main point, I implemented instances of `Foldable` and `Conjable` for a standard Haskell `Vector` library as an alternate "collection-like" type.
 
-```haskell
+{{< highlight haskell >}}
 -- For example using Vector instead of list
 import qualified Data.Vector as V
 
@@ -274,16 +284,18 @@ instance Foldable V.Vector where
 instance Conjable V.Vector where
   empty = V.empty
   conj = V.snoc
-```
+{{< /highlight >}}
+
 
 And we can run `munge` directly on a vector instead of a list, *without making any changes*:
 
-```haskell
+{{< highlight haskell >}}
 -- return a vector rather than a list; note the fact that munge actually
 -- internally uses a list
 example2 :: V.Vector Integer
 example2 = munge $ V.enumFromN 1 5
-```
+{{< /highlight >}}
+
 
 This is *code reuse* at its best.
 
