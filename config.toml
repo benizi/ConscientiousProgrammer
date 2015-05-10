@@ -1,3 +1,6 @@
-baseurl = "http://replace-this-with-your-hugo-site.com/"
+baseurl = "http://ConscientiousProgrammer.com/"
 languageCode = "en-us"
-title = "My New Hugo Site"
+title = "The Conscientious Programmer"
+
+[permalinks]
+  post = "/blog/:year/:month/:day/:title/"
