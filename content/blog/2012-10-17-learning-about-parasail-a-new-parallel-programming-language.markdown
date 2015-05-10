@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Learning about Parasail: a new parallel programming language"
-date: 2012-10-17 20:39:15 -0400
+date: 2012-10-17T20:39:15-04:00
 comments: true
 categories:
 - Parasail

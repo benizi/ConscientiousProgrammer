@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Data Visualization: D3 and R"
-date: 2013-08-07 22:19:55 -0400
+date: 2013-08-07T22:19:55-04:00
 comments: true
 categories: 
 - visualization

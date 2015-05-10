@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "OpenHack Pittsburgh: learning Elixir test-driven and package-publishing"
-date: 2013-08-26 22:09
+date: 2013-08-26T22:09:00
 comments: true
 categories: 
 - OpenHack

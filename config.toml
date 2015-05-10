@@ -3,4 +3,4 @@ languageCode = "en-us"
 title = "The Conscientious Programmer"
 
 [permalinks]
-  post = "/blog/:year/:month/:day/:title/"
+  blog = "/blog/:year/:month/:day/:title/"

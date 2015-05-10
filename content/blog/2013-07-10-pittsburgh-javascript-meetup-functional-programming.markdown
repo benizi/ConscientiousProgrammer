@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh JavaScript meetup: functional programming"
-date: 2013-07-10 22:37
+date: 2013-07-10T22:37:00
 comments: true
 categories: 
 - Pittsburgh

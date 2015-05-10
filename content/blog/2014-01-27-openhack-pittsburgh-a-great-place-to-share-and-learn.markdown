@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "OpenHack Pittsburgh: a great place to share and learn"
-date: 2014-01-27 22:38:48 -0500
+date: 2014-01-27T22:38:48-05:00
 comments: true
 categories: 
 - OpenHack

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Node Meetup: Optimizing development workflow with Grunt"
-date: 2013-07-31 21:29:45 -0400
+date: 2013-07-31T21:29:45-04:00
 comments: true
 categories: 
 - Node

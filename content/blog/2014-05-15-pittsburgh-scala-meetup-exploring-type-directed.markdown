@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Scala Meetup: Exploring type-directed, test-driven development using FizzBuzz (my practice talk)"
-date: 2014-05-15 22:49:48 -0400
+date: 2014-05-15T22:49:48-04:00
 comments: true
 categories: 
 - Scala

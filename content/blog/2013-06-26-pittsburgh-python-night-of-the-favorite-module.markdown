@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Python: night of the favorite module"
-date: 2013-06-26 22:50
+date: 2013-06-26T22:50:00
 comments: true
 categories: 
 - Pittsburgh

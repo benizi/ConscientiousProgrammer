@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "We should not create this kind of terrible error message for the end user"
-date: 2013-06-26 23:44
+date: 2013-06-26T23:44:00
 comments: true
 categories: 
 - error messages

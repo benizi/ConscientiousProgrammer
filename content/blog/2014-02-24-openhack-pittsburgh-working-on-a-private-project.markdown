@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "OpenHack Pittsburgh: working on a private project"
-date: 2014-02-24 18:46:39 -0500
+date: 2014-02-24T18:46:39-05:00
 comments: true
 categories: 
 - OpenHack

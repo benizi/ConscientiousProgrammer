@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Scala Meetup: code walk through tic-tac-toe with Play"
-date: 2013-12-05 22:15:52 -0500
+date: 2013-12-05T22:15:52-05:00
 comments: true
 categories: 
 - Scala

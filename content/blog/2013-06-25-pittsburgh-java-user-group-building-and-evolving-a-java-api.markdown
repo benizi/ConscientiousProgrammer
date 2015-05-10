@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Java User Group: Building and Evolving a Java API"
-date: 2013-06-25 21:49
+date: 2013-06-25T21:49:00
 comments: true
 categories: 
 - PittJUG

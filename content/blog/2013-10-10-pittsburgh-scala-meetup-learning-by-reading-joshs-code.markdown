@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Scala Meetup: learning by reading Josh's code!"
-date: 2013-10-10 23:09:33 -0500
+date: 2013-10-10T23:09:33-05:00
 comments: true
 categories: 
 - Scala

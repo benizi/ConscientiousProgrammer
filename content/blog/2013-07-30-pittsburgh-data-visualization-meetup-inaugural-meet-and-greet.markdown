@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Data Visualization Meetup: inaugural meet and greet"
-date: 2013-07-30 23:42:33 -0400
+date: 2013-07-30T23:42:33-04:00
 comments: true
 categories: 
 - visualization

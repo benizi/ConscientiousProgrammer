@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Surprised by the Go programming language's treatment of nil"
-date: 2013-10-31 23:38
+date: 2013-10-31T23:38:00
 comments: true
 categories: 
 - Go

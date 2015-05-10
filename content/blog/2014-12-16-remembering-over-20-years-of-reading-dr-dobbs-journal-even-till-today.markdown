@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Remembering over 20 years of reading Dr. Dobb's Journal even till today"
-date: 2014-12-16 22:23:42 -0500
+date: 2014-12-16T22:23:42-05:00
 comments: true
 categories:
 - Dr. Dobb's Journal

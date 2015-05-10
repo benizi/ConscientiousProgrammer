@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Data Visualization: D3 and only D3"
-date: 2013-08-22 22:01:22 -0400
+date: 2013-08-22T22:01:22-04:00
 comments: true
 categories: 
 - visualization

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Scala Meetup: Introduction to Reactive"
-date: 2014-01-09 21:29:20 -0500
+date: 2014-01-09T21:29:20-05:00
 comments: true
 categories: 
 - Scala

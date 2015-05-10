@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Code and Supply: Programming in journalism"
-date: 2014-07-17 21:21:19 -0400
+date: 2014-07-17T21:21:19-04:00
 comments: true
 categories: 
 - Pittsburgh Code and Supply

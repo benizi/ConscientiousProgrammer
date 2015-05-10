@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Review of the free Coursera course \"Principles of Reactive Programming\""
-date: 2013-12-31 21:29:39 -0500
+date: 2013-12-31T21:29:39-05:00
 comments: true
 categories: 
 - reactive

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Code and Supply: Making music with Overtone in Clojure; Conveying information through sound"
-date: 2014-10-07 21:10:18 -0400
+date: 2014-10-07T21:10:18-04:00
 comments: true
 categories:
 - Pittsburgh Code and Supply

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Steel City Ruby 2013: my second year and it radically changed my life again (part 1)"
-date: 2013-08-18 20:57:27 -0400
+date: 2013-08-18T20:57:27-04:00
 comments: true
 categories:
 - conference

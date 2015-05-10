@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Introducing this new programming blog"
-date: 2013-06-24 09:40
+date: 2013-06-24T09:40:00
 comments: true
 categories: 
 - bikeshedding

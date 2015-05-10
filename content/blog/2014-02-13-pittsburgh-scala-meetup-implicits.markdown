@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Scala Meetup: Implicits"
-date: 2014-02-13 21:45:59 -0500
+date: 2014-02-13T21:45:59-05:00
 comments: true
 categories: 
 - Scala

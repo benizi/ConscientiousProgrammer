@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "nil, non-determinism, exceptions: a journey in debugging the software that generates my blog"
-date: 2013-06-29 18:15
+date: 2013-06-29T18:15:00
 comments: true
 categories:
 - error handling

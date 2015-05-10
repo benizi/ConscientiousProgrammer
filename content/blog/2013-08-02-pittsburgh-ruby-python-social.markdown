@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Ruby/Python social and some observations about our polyglot world"
-date: 2013-08-02 22:17:42 -0400
+date: 2013-08-02T22:17:42-04:00
 comments: true
 categories: 
 - Ruby

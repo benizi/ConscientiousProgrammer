@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "toString considered harmful, part 1"
-date: 2013-12-23 23:54
+date: 2013-12-23T23:54:00
 comments: true
 categories: 
 - Scala

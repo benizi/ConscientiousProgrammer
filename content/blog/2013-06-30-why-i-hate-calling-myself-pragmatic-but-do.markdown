@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Why I hate calling myself \"pragmatic\" but do"
-date: 2013-06-30 23:34
+date: 2013-06-30T23:34:00
 comments: true
 categories:
 - pragmatism

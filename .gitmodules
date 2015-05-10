@@ -2,3 +2,6 @@
 	path = public
 	url = git@github.com:FranklinChen/ConscientiousProgrammer.git
 	branch = gh-pages
+[submodule "themes"]
+	path = themes
+	url = https://github.com/spf13/hugoThemes

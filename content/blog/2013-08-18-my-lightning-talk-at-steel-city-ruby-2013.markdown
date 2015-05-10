@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "My lightning talk at Steel City Ruby 2013: \"Reflections\""
-date: 2013-08-18 21:54:09 -0400
+date: 2013-08-18T21:54:09-04:00
 comments: true
 categories:
 - conference

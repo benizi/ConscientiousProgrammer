@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant"
-date: 2013-07-11 20:53
+date: 2013-07-11T20:53:00
 comments: true
 categories: 
 - Pittsburgh
