@@ -2,7 +2,7 @@
 layout: post
 title: "Remembering over 20 years of reading Dr. Dobb's Journal even till today"
 date: 2014-12-16T22:23:42-05:00
-url: "blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today"
+url: "blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/"
 comments: true
 categories:
 - Dr. Dobb's Journal
