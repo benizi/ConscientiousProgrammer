@@ -21,6 +21,8 @@ category = "categories"
 defaultDescription = "Franklin Chen's thoughts about computer programming"
 defaultKeywords = "Franklin Chen, programming, blog"
 
+gravatarHash = "f8a7ccb41af2422d10599464b96cf034"
+
 theme = "theme-base-0e"
 
 highlight = "default"
@@ -28,7 +30,6 @@ tagline = "Humbly exploring what it means to do the right thing."
 
 googleAuthorship = "100967806642012078047"
 googleAnalytics = "UA-41982602-1"
-gravatarHash = "f8a7ccb41af2422d10599464b96cf034"
 
 github = "https://github.com/FranklinChen"
 linkedin = "http://www.linkedin.com/in/franklinchen"
