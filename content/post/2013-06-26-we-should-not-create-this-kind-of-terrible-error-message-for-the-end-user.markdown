@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "We should not create this kind of terrible error message for the end user"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/"
 date: 2013-06-26T23:44:00
 comments: true
 categories: 

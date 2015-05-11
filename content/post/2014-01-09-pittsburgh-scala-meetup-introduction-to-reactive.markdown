@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh Scala Meetup: Introduction to Reactive"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/"
 date: 2014-01-09T21:29:20-05:00
 comments: true
 categories: 

@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "When a computer algebra program gives wrong answers"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/"
 date: 2014-11-06T20:20:32-05:00
 comments: true
 categories:

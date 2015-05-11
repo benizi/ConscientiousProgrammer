@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh Node Meetup: Optimizing development workflow with Grunt"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/07/31/pittsburgh-node-meetup-optimizing-development-workflow-with-grunt/"
 date: 2013-07-31T21:29:45-04:00
 comments: true
 categories: 

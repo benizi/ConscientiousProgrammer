@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh Code and Supply: Making music with Overtone in Clojure; Conveying information through sound"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/"
 date: 2014-10-07T21:10:18-04:00
 comments: true
 categories:

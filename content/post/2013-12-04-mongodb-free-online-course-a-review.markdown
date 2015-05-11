@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "MongoDB free online course: a review"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/"
 date: 2013-12-04T22:03:55-05:00
 comments: true
 categories: 

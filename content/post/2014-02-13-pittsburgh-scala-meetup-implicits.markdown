@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh Scala Meetup: Implicits"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits/"
 date: 2014-02-13T21:45:59-05:00
 comments: true
 categories: 

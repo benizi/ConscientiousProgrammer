@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "OpenHack Pittsburgh: working on a private project"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2014/02/24/openhack-pittsburgh-working-on-a-private-project/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2014/02/24/openhack-pittsburgh-working-on-a-private-project/"
 date: 2014-02-24T18:46:39-05:00
 comments: true
 categories: 

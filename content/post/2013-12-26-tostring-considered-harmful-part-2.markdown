@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "toString considered harmful, part 2"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/"
 date: 2013-12-26T22:03:00
 comments: true
 categories: 

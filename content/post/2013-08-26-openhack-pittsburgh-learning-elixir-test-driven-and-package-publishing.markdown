@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "OpenHack Pittsburgh: learning Elixir test-driven and package-publishing"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/"
 date: 2013-08-26T22:09:00
 comments: true
 categories: 

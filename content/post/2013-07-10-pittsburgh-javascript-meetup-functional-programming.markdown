@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh JavaScript meetup: functional programming"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/"
 date: 2013-07-10T22:37:00
 comments: true
 categories: 

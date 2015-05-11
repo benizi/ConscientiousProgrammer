@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh Java User Group: Building and Evolving a Java API"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/"
 date: 2013-06-25T21:49:00
 comments: true
 categories: 

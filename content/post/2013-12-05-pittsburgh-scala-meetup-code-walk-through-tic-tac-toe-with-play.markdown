@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh Scala Meetup: code walk through tic-tac-toe with Play"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play/"
 date: 2013-12-05T22:15:52-05:00
 comments: true
 categories: 

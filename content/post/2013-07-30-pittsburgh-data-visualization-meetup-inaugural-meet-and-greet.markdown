@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh Data Visualization Meetup: inaugural meet and greet"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/07/30/pittsburgh-data-visualization-meetup-inaugural-meet-and-greet/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/07/30/pittsburgh-data-visualization-meetup-inaugural-meet-and-greet/"
 date: 2013-07-30T23:42:33-04:00
 comments: true
 categories: 

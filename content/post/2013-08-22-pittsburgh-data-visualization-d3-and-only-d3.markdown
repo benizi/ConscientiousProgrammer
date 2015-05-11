@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh Data Visualization: D3 and only D3"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/08/22/pittsburgh-data-visualization-d3-and-only-d3/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/08/22/pittsburgh-data-visualization-d3-and-only-d3/"
 date: 2013-08-22T22:01:22-04:00
 comments: true
 categories: 

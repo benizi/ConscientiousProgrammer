@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "OpenHack Pittsburgh: a great place to share and learn"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/"
 date: 2014-01-27T22:38:48-05:00
 comments: true
 categories: 

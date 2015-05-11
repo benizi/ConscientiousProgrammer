@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh Code and Supply: Programming in journalism"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/"
 date: 2014-07-17T21:21:19-04:00
 comments: true
 categories:

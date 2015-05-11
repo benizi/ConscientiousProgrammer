@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Pittsburgh Python: night of the favorite module"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/"
 date: 2013-06-26T22:50:00
 comments: true
 categories: 

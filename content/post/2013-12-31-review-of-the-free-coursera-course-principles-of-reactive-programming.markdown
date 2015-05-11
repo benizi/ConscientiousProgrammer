@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Review of the free Coursera course \"Principles of Reactive Programming\""
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/"
 date: 2013-12-31T21:29:39-05:00
 comments: true
 categories: 

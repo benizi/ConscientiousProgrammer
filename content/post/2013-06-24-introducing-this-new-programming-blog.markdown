@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Introducing this new programming blog"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/"
 date: 2013-06-24T09:40:00
 comments: true
 categories: 

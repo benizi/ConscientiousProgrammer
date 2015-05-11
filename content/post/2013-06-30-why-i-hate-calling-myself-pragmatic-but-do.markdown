@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Why I hate calling myself \"pragmatic\" but do"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/"
 date: 2013-06-30T23:34:00
 comments: true
 categories:

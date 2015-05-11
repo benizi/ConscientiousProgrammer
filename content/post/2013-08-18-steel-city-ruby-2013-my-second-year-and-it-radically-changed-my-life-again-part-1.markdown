@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Steel City Ruby 2013: my second year and it radically changed my life again (part 1)"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/08/18/steel-city-ruby-2013-my-second-year-and-it-radically-changed-my-life-again-part-1/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/08/18/steel-city-ruby-2013-my-second-year-and-it-radically-changed-my-life-again-part-1/"
 date: 2013-08-18T20:57:27-04:00
 comments: true
 categories:

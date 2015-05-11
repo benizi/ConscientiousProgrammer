@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Surprised by the Go programming language's treatment of nil"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/"
 date: 2013-10-31T23:38:00
 comments: true
 categories: 

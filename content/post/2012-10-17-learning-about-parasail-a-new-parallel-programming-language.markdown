@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Learning about Parasail: a new parallel programming language"
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2012/10/17/learning-about-parasail-a-new-parallel-programming-language/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2012/10/17/learning-about-parasail-a-new-parallel-programming-language/"
 date: 2012-10-17T20:39:15-04:00
 comments: true
 categories:
