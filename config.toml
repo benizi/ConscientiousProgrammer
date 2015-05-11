@@ -21,7 +21,7 @@ category = "categories"
 defaultDescription = "Franklin Chen's thoughts about computer programming"
 defaultKeywords = "Franklin Chen, programming, blog"
 
-theme = "theme-base-0c"
+theme = "theme-base-0e"
 
 highlight = "default"
 tagline = "Humbly exploring what it means to do the right thing."
