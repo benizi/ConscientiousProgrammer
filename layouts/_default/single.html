@@ -3,6 +3,7 @@
   <div class="post">
     <h1>{{ .Title }}</h1>
     {{ .Content }}
+    {{ template "_internal/disqus.html" . }}
   </div>
 </div>
 {{ partial "foot.html" . }}
