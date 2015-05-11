@@ -7,7 +7,7 @@ footer: true
 ---
 ## Me
 
-{% img http://www.gravatar.com/avatar/f8a7ccb41af2422d10599464b96cf034.png?size=200 Photo of Franklin Chen %}
+{{< figure src="http://www.gravatar.com/avatar/f8a7ccb41af2422d10599464b96cf034.png?size=200" title="Franklin Chen" >}}
 
 My name is Franklin Chen. I live in lovely Pittsburgh, Pennsylvania.
 
