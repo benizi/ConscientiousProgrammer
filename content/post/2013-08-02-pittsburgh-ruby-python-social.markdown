@@ -2,6 +2,8 @@
 layout: post
 title: "Pittsburgh Ruby/Python social and some observations about our polyglot world"
 date: 2013-08-02T22:17:42-04:00
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/"
 url: "blog/2013/08/02/pittsburgh-ruby-python-social/"
 comments: true
 categories: 

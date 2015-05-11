@@ -2,6 +2,8 @@
 layout: post
 title: "nil, non-determinism, exceptions: a journey in debugging the software that generates my blog"
 date: 2013-06-29T18:15:00
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/"
 url: "blog/2013/06/29/nil-non-determinism-exceptions/"
 comments: true
 categories:

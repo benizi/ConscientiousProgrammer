@@ -2,6 +2,8 @@
 layout: post
 title: "Pittsburgh Java User Group: Java EE 7, 8, and beyond; or done?"
 date: 2013-08-13T22:18:11-04:00
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond/"
 url: "blog/2013/08/13/pittsburgh-java-user-group-java-ee-7-8-and-beyond/"
 comments: true
 categories:

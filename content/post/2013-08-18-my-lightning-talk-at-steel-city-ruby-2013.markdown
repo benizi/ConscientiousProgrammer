@@ -2,6 +2,8 @@
 layout: post
 title: "My lightning talk at Steel City Ruby 2013: \"Reflections\""
 date: 2013-08-18T21:54:09-04:00
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/"
 url: "blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/"
 comments: true
 categories:

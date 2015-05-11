@@ -2,6 +2,8 @@
 layout: post
 title: "Pittsburgh Scala Meetup: Exploring type-directed, test-driven development using FizzBuzz (my practice talk)"
 date: 2014-05-15T22:49:48-04:00
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/"
 url: "blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/"
 comments: true
 categories: 

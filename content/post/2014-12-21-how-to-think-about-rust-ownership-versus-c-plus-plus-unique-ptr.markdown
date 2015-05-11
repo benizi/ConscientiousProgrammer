@@ -2,6 +2,8 @@
 layout: post
 title: "How to think about Rust ownership versus C++ unique_ptr"
 date: 2014-12-21T14:31:36-05:00
+disqus_identifier: "http://ConscientiousProgrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/"
+disqus_url: "http://ConscientiousProgrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/"
 url: "blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/"
 comments: true
 categories:
