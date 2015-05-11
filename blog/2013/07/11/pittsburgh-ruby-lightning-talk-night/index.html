@@ -1,127 +1,94 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>Pittsburgh Ruby Lightning Talk Night: RVM, Business Logic With Rails, IRC, Rspec-given, Vagrant - The Conscientious Programmer</title>
-  <meta name="author" content="Franklin Chen">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
-  <meta name="description" content="The Pittsburgh Ruby meetup held a lightning talks session. Originally, I was not going to present anything, since I did not feel that I had anything &hellip;">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant &middot; The Conscientious Programmer</title>
 
   
-  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/highlight/default.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
   <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+
   
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-41982602-1']);
-    _gaq.push(['_trackPageview']);
+  
+  
+  
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
 </head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>The Conscientious Programmer</h1>
+      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">The Conscientious Programmer</a></h1>
-  
-    <h2>Humbly exploring what it means to do the right thing.</h2>
-  
-</hgroup>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://conscientiousprogrammer.com">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="/about/">About</a></li>
+      
+    </ul>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="ConscientiousProgrammer.com">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/about">About</a></li>
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+      
+      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+      </li>
+    </ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant</h1>
     
-      <h1 class="entry-title">Pittsburgh Ruby Lightning Talk Night: RVM, Business Logic With Rails, IRC, Rspec-given, Vagrant</h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-<time class='entry-date' datetime='2013-07-11T20:53:00-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:53 pm</span></time>
-        
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>The <a href="http://www.meetup.com/pittsburgh-ruby">Pittsburgh Ruby meetup</a> held a <a href="http://www.meetup.com/pittsburgh-ruby/events/120200102">lightning talks session</a>.</p>
+<p>The <a href="http://www.meetup.com/pittsburgh-ruby">Pittsburgh Ruby meetup</a> held a <a href="http://www.meetup.com/pittsburgh-ruby/events/120200102">lightning talks session</a>.</p>
 
 <p>Originally, I was not going to present anything, since I did not feel that I had anything exciting to quickly share (I have not been doing much Ruby programming lately at all other than <a href="/blog/2013/06/29/nil-non-determinism-exceptions">debugging my Octopress-generated blog</a>), and don&rsquo;t like talking just to talk.</p>
 
 <p>But at the very last minute, just half an hour before the meeting, I noticed some developments in the world of <a href="http://rspec.info/">RSpec</a> announced on Twitter by Jim Weirich, and I got excited enough that I decided to talk about his <a href="https://github.com/jimweirich/rspec-given"><code>rspec-given</code></a>, which was just released at version 3.0.0.</p>
 
-<!--more-->
-
-
-<h2>Colin, on <code>rvm_recommended_ruby</code></h2>
+<h2 id="colin-on-rvm-recommended-ruby:10aacb954ea38f2656dfead3895e9b85">Colin, on <code>rvm_recommended_ruby</code></h2>
 
 <p>Colin briefly talked about how he likes to automate things, and therefore, in the context of using <a href="https://rvm.io/">RVM</a>, created <a href="https://github.com/wayneeseguin/rvm/pull/1074"><code>rvm_recommended_ruby</code></a>.</p>
 
-<h2>Jon, on business logic in pure Ruby</h2>
+<h2 id="jon-on-business-logic-in-pure-ruby:10aacb954ea38f2656dfead3895e9b85">Jon, on business logic in pure Ruby</h2>
 
 <p>Jon gave a short summary of his <a href="http://jonathandean.com/2013/07/business-logic-in-pure-ruby/">blog post</a> on not putting all business logic into Rails models, but instead, decoupling from <code>ActiveRecord</code> and Rails altogether. This is a theme that has risen a lot in recent years in the Rails community.</p>
 
-<h2>Carol, on how to use IRC to get help</h2>
+<h2 id="carol-on-how-to-use-irc-to-get-help:10aacb954ea38f2656dfead3895e9b85">Carol, on how to use IRC to get help</h2>
 
 <p>Carol talked about how to use IRC to get help when working on projects.</p>
 
-<h2>Me, on <code>rspec-given</code></h2>
+<h2 id="me-on-rspec-given:10aacb954ea38f2656dfead3895e9b85">Me, on <code>rspec-given</code></h2>
 
 <p>I talked about cool features in <a href="https://github.com/jimweirich/rspec-given"><code>rspec-given</code></a>.</p>
 
@@ -133,21 +100,19 @@
 
 <p>Finally, I love the new natural assertions, the ability to write stuff like</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Then</span> <span class="p">{</span> <span class="n">stack</span><span class="o">.</span><span class="n">top</span> <span class="o">==</span> <span class="ss">:second_item</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #880000">Then</span> { stack<span style="color: #666666">.</span>top <span style="color: #666666">==</span> <span style="color: #19177C">:second_item</span> }
+</pre></div>
+</p>
 
 <p>instead of</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Then</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">stack</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span><span class="p">(</span><span class="ss">:second_item</span><span class="p">)</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #880000">Then</span> { expect(stack<span style="color: #666666">.</span>top)<span style="color: #666666">.</span>to eq(<span style="color: #19177C">:second_item</span>) }
+</pre></div>
+</p>
 
 <p>while <code>RSpec</code> automatically generates useful messages on failure.</p>
 
-<h2>Colin again, on Vagrant</h2>
+<h2 id="colin-again-on-vagrant:10aacb954ea38f2656dfead3895e9b85">Colin again, on Vagrant</h2>
 
 <p>Since all the lightning talks were done in less than half an hour, Carol called for more volunteers to talk about something. Colin ended up impromptu talking about his use of <a href="http://www.vagrantup.com/">Vagrant</a> to create development environments.</p>
 
@@ -155,211 +120,35 @@
 
 <p>Vagrant is great. Use it.</p>
 
-<h2>Ruby meets Python</h2>
+<h2 id="ruby-meets-python:10aacb954ea38f2656dfead3895e9b85">Ruby meets Python</h2>
 
 <p>Carol reminded everyone that coming up is a Ruby/Python joint social.</p>
 
-<h2>Conclusion</h2>
+<h2 id="conclusion:10aacb954ea38f2656dfead3895e9b85">Conclusion</h2>
 
 <p>A relatively short Pittsburgh Ruby meetup, and with a smaller crowd than some others in the past, but a fun and instructive one.</p>
 
 <p>Don&rsquo;t forget, <a href="http://steelcityruby.org/">Steel City Ruby Conference 2013</a> is in a month! I&rsquo;m <a href="http://franklinchen.com/blog/2012/08/07/the-first-steel-city-ruby-conference-an-amazing-experience/">excited to attend again</a>.</p>
-</div>
 
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
-
-      
-
-
-
-
-<time class='entry-date' datetime='2013-07-11T20:53:00-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:53 pm</span></time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/irc/'>irc</a>, <a class='category' href='/blog/categories/jim-weirich/'>jim weirich</a>, <a class='category' href='/blog/categories/pittsburgh/'>pittsburgh</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/rvm/'>rvm</a>, <a class='category' href='/blog/categories/steel-city-ruby/'>steel city ruby</a>, <a class='category' href='/blog/categories/vagrant/'>vagrant</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/" title="Previous Post: Pittsburgh JavaScript meetup: functional programming">&laquo; Pittsburgh JavaScript meetup: functional programming</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/07/30/pittsburgh-data-visualization-meetup-inaugural-meet-and-greet/" title="Next Post: Pittsburgh Data Visualization Meetup: inaugural meet and greet">Pittsburgh Data Visualization Meetup: inaugural meet and greet &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">How to Think About Rust Ownership Versus C++ Unique_ptr</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/">Remembering Over 20 Years of Reading Dr. Dobb&#8217;s Journal Even Till Today</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/">When a Computer Algebra Program Gives Wrong Answers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/">Pittsburgh Code and Supply: Making Music With Overtone in Clojure; Conveying Information Through Sound</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/07/understanding-cloure-transducers-through-types/">Understanding Clojure Transducers Through Types</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'FranklinChen',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/+FranklinChen?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - <a href="http://franklinchen.com/">Franklin Chen</a> -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-      var disqus_shortname = 'conscientiousprogrammer';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/';
-        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2013\/07\/11\/pittsburgh-ruby-lightning-talk-night';
+    var disqus_title = 'Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2013\/07\/11\/pittsburgh-ruby-lightning-talk-night';
 
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
     (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 </body>
 </html>

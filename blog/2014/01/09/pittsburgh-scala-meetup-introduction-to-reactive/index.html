@@ -1,127 +1,94 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>Pittsburgh Scala Meetup: Introduction to Reactive - The Conscientious Programmer</title>
-  <meta name="author" content="Franklin Chen">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
-  <meta name="description" content="The Pittsburgh Scala Meetup met with Josh presenting an &ldquo;Introduction to Reactive&rdquo;. It was great. Pre-meetup dinner A couple of us ( &hellip;">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pittsburgh Scala Meetup: Introduction to Reactive &middot; The Conscientious Programmer</title>
 
   
-  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/highlight/default.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
   <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+
   
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-41982602-1']);
-    _gaq.push(['_trackPageview']);
+  
+  
+  
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
 </head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>The Conscientious Programmer</h1>
+      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">The Conscientious Programmer</a></h1>
-  
-    <h2>Humbly exploring what it means to do the right thing.</h2>
-  
-</hgroup>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://conscientiousprogrammer.com">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="/about/">About</a></li>
+      
+    </ul>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="ConscientiousProgrammer.com">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/about">About</a></li>
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+      
+      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+      </li>
+    </ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Pittsburgh Scala Meetup: Introduction to Reactive</h1>
     
-      <h1 class="entry-title">Pittsburgh Scala Meetup: Introduction to Reactive</h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-<time class='entry-date' datetime='2014-01-09T21:29:20-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:29 pm</span></time>
-        
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met with Josh presenting an <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581352/">&ldquo;Introduction to Reactive&rdquo;</a>.</p>
+<p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met with Josh presenting an <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581352/">&ldquo;Introduction to Reactive&rdquo;</a>.</p>
 
 <p>It was great.</p>
 
-<!--more-->
-
-
-<h2>Pre-meetup dinner</h2>
+<h2 id="pre-meetup-dinner:1fbca7bab37ee55bb74190d8ff39e5b7">Pre-meetup dinner</h2>
 
 <p>A couple of us (Justin, Josh, Chris, me) had an early dinner at Everyday Noodles before the meetup. Very filling!</p>
 
-<h2>Turnout</h2>
+<h2 id="turnout:1fbca7bab37ee55bb74190d8ff39e5b7">Turnout</h2>
 
 <p>Ten of us showed up for this meeting.</p>
 
-<h2>Presentation</h2>
+<h2 id="presentation:1fbca7bab37ee55bb74190d8ff39e5b7">Presentation</h2>
 
-<h3>What is &ldquo;reactive&rdquo; anyway?</h3>
+<h3 id="what-is-reactive-anyway:1fbca7bab37ee55bb74190d8ff39e5b7">What is &ldquo;reactive&rdquo; anyway?</h3>
 
 <p>In case you didn&rsquo;t hear about it in the media, the term &ldquo;reactive&rdquo; has been popularized in recent months, and I <a href="/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/">reviewed the free Coursera course &ldquo;Principles of Reactive Programming&rdquo;</a> that some of us in the Pittsburgh Scala group just completed, so check out my post for more on &ldquo;reactive&rdquo;.</p>
 
-<h3>Futures</h3>
+<h3 id="futures:1fbca7bab37ee55bb74190d8ff39e5b7">Futures</h3>
 
 <p>Josh did a live SBT session reviewing futures and promises.</p>
 
@@ -131,15 +98,15 @@
 
 <p>It turns out, according to Josh, that Typesafe is working on precisely this problem! Nice. He&rsquo;ll tell us more when it comes out.</p>
 
-<h4>(Update of 2014-07-10)</h4>
+<h4 id="update-of-2014-07-10:1fbca7bab37ee55bb74190d8ff39e5b7">(Update of 2014-07-10)</h4>
 
 <p>Half a year later, the promise was realized, as the Pittsburgh Scala Meetup had Josh <a href="/blog/2014/07/10/pittsburgh-scala-meetup-reactive-streams/">gave a talk on the new API called Reactive Streams</a>!</p>
 
-<h3>Play</h3>
+<h3 id="play:1fbca7bab37ee55bb74190d8ff39e5b7">Play</h3>
 
 <p>Josh demonstrated <a href="http://typesafe.com/activator">Typesafe Activator</a>, the cool new Web browser-based platform for using Scala. He showed an app using Play that looks at blogs simultaneously and uses <code>recoverWith</code>.</p>
 
-<h2>Random other questions and discussions</h2>
+<h2 id="random-other-questions-and-discussions:1fbca7bab37ee55bb74190d8ff39e5b7">Random other questions and discussions</h2>
 
 <p>What I like about the Pittsburgh Scala Meetup is that even when we have a presentation, discussion often wanders off to related topics (or unrelated topics). Anything goes, and I usually learn a lot.</p>
 
@@ -147,205 +114,29 @@
 
 <p>Someone asked about how to connect <a href="http://www.playframework.com/documentation/2.0/Iteratees">iteratees</a> with actors. Josh said, you can feed from an iteratee to an actor, and then just let the actor do stuff. However, there is some controversy about the whole iteratee thing in Play.</p>
 
-<h2>Conclusion</h2>
+<h2 id="conclusion:1fbca7bab37ee55bb74190d8ff39e5b7">Conclusion</h2>
 
 <p>This was a great Pittsburgh Scala Meetup session. I felt that a lot of questions that had built up in my mind after having gotten into reactive programming are being addressed with continuing work.</p>
-</div>
 
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
-
-      
-
-
-
-
-<time class='entry-date' datetime='2014-01-09T21:29:20-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:29 pm</span></time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/actors/'>actors</a>, <a class='category' href='/blog/categories/akka/'>akka</a>, <a class='category' href='/blog/categories/back-pressure/'>back pressure</a>, <a class='category' href='/blog/categories/channels/'>channels</a>, <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/core-dot-async/'>core.async</a>, <a class='category' href='/blog/categories/futures/'>futures</a>, <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/iteratees/'>iteratees</a>, <a class='category' href='/blog/categories/m-star-modal/'>m*modal</a>, <a class='category' href='/blog/categories/pittsburgh/'>pittsburgh</a>, <a class='category' href='/blog/categories/play/'>play</a>, <a class='category' href='/blog/categories/reactive/'>reactive</a>, <a class='category' href='/blog/categories/sbt/'>sbt</a>, <a class='category' href='/blog/categories/scala/'>scala</a>, <a class='category' href='/blog/categories/typesafe-activator/'>typesafe activator</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/" title="Previous Post: Review of the free Coursera course "Principles of Reactive Programming"">&laquo; Review of the free Coursera course &#8220;Principles of Reactive Programming&#8221;</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/" title="Next Post: OpenHack Pittsburgh: a great place to share and learn">OpenHack Pittsburgh: a great place to share and learn &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">How to Think About Rust Ownership Versus C++ Unique_ptr</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/">Remembering Over 20 Years of Reading Dr. Dobb&#8217;s Journal Even Till Today</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/">When a Computer Algebra Program Gives Wrong Answers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/">Pittsburgh Code and Supply: Making Music With Overtone in Clojure; Conveying Information Through Sound</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/07/understanding-cloure-transducers-through-types/">Understanding Clojure Transducers Through Types</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'FranklinChen',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/+FranklinChen?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - <a href="http://franklinchen.com/">Franklin Chen</a> -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-      var disqus_shortname = 'conscientiousprogrammer';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/';
-        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2014\/01\/09\/pittsburgh-scala-meetup-introduction-to-reactive\/';
+    var disqus_title = 'Pittsburgh Scala Meetup: Introduction to Reactive';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2014\/01\/09\/pittsburgh-scala-meetup-introduction-to-reactive\/';
 
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
     (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 </body>
 </html>

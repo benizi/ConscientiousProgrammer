@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Memory Safety on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/memory-safety/</link>
+    <description>Recent content in Memory Safety on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 21 Dec 2014 14:31:36 -0500</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/memory-safety/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>How to think about Rust ownership versus C&#43;&#43; unique_ptr</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr</link>
+      <pubDate>Sun, 21 Dec 2014 14:31:36 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr</guid>
+      <description>
+
+&lt;p&gt;The &lt;a href=&#34;http://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt; programming language, which is nearing its important version 1.0 release, but already seen a lot of use, has many interesting features, the most prominent of which is its &lt;a href=&#34;http://doc.rust-lang.org/guide.html#ownership,-borrowing,-and-lifetimes&#34;&gt;ownership&lt;/a&gt; static type system that prevents certain kinds of bugs common in many programs in C or C++.&lt;/p&gt;
+
+&lt;p&gt;For example, it is common in most applications to create graphs of objects pointing to each other, in which it is not clear how many pointers point to a particular object, who is to free the object&amp;rsquo;s memory when it is no longer needed, and what happens to all outstanding pointers to that block. Languages supporting precise &lt;a href=&#34;http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29&#34;&gt;garbage collection&lt;/a&gt; use various algorithms to determine when memory can be freed, and have become particularly popular in the past twenty years, but there are still situations in which garbage collection is not ideal, hence the continued relevance of languages such as C++.&lt;/p&gt;
+
+&lt;p&gt;When I was working as a software engineer in the 1990s developing desktop applications with user interfaces for the &lt;a href=&#34;http://en.wikipedia.org/wiki/X_Window_System&#34;&gt;X Window System&lt;/a&gt;, we used frameworks that included C++ &lt;a href=&#34;http://en.wikipedia.org/wiki/Smart_pointer&#34;&gt;smart pointers&lt;/a&gt; that used &lt;a href=&#34;http://en.wikipedia.org/wiki/Reference_counting&#34;&gt;reference counting&lt;/a&gt; to handle graphs of interconnected data. The C++ standard itself lagged behind in standardizing smart pointers; it started with the &lt;a href=&#34;http://www.informit.com/articles/article.aspx?p=30642&amp;amp;seqNum=9&#34;&gt;terribly flawed and unusable&lt;/a&gt; &lt;a href=&#34;http://en.wikipedia.org/wiki/Auto_ptr&#34;&gt;&lt;code&gt;auto_ptr&lt;/code&gt;&lt;/a&gt; that finally got deprecated in C++11, then moved on finally to &lt;a href=&#34;http://en.wikipedia.org/wiki/Smart_pointer#unique_ptr&#34;&gt;&lt;code&gt;unique_ptr&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;http://en.wikipedia.org/wiki/Smart_pointer#shared_ptr_and_weak_ptr&#34;&gt;&lt;code&gt;shared_ptr&lt;/code&gt; and &lt;code&gt;weak_ptr&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;When talking with C++ programmers about Rust, I have found that often they have been puzzled about how Rust&amp;rsquo;s ownership system does anything better than what C++ &lt;code&gt;unique_ptr&lt;/code&gt; already does. Here is an explanation (I will not be discussing analogues of &lt;code&gt;shared_ptr&lt;/code&gt; and &lt;code&gt;weak_ptr&lt;/code&gt; here).&lt;/p&gt;
+
+&lt;h2 id=&#34;simplest-example-compile-time-type-checking-vs-run-time-segmentation-fault:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Simplest example: compile-time type-checking vs. run-time segmentation fault&lt;/h2&gt;
+
+&lt;p&gt;First, go read Steve Klabnik&amp;rsquo;s &lt;a href=&#34;http://www.steveklabnik.com/uniq_ptr_problem/&#34;&gt;article about the simplest possible example illustrating what Rust offers over C++ &lt;code&gt;unique_ptr&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Basically, in C++, &lt;code&gt;unique_ptr&lt;/code&gt; is supposed to be a way to indicate that a given pointer is the unique &amp;ldquo;owner&amp;rdquo; of a piece of data. If you want to transfer ownership from one &lt;code&gt;unique_ptr&lt;/code&gt; to another, you have to call &lt;code&gt;move&lt;/code&gt; on it. After that, it is an &lt;em&gt;run-time error&lt;/em&gt; to try to access the data using the original &lt;code&gt;unique_ptr&lt;/code&gt;. This is great, except for two things:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;By &amp;ldquo;it&amp;rsquo;s a run-time error&amp;rdquo;, we mean that the original &lt;code&gt;unique_ptr&lt;/code&gt;&amp;rsquo;s embedded pointer gets mutated to &lt;code&gt;nullptr&lt;/code&gt;, so that you have to perpetually check your &lt;code&gt;unique_ptr&lt;/code&gt; for &lt;code&gt;nullptr&lt;/code&gt;, otherwise get a segmentation fault.&lt;/li&gt;
+&lt;li&gt;In many situations, we&amp;rsquo;d prefer to have a &lt;em&gt;compile-time&lt;/em&gt; guarantee that we will never dereference &lt;code&gt;nullptr&lt;/code&gt;, so that we don&amp;rsquo;t have hidden memory safety bugs lying around in our code that don&amp;rsquo;t happen until well into a long-running program.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is Steve&amp;rsquo;s example of an unintended segmentation fault from C++:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;iostream&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;memory&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;namespace&lt;/span&gt; std;
+
+&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt; ()
+{
+    unique_ptr&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; orig(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;));
+
+    cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;auto&lt;/span&gt; stolen &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; move(orig);
+
+    cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Steve shows an &amp;ldquo;equivalent&amp;rdquo; Rust program in which code attempts to move ownership fails to compile because of a type error (I edited to correspond more closely with the C++):&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;box&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;stolen&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;understanding-c-behavior-by-modeling-it-in-rust-safely:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Understanding C++ behavior by modeling it in Rust, safely&lt;/h2&gt;
+
+&lt;p&gt;But it is not quite accurate to call the Rust program &amp;ldquo;equivalent&amp;rdquo; to the original C++ program. It&amp;rsquo;s really a &amp;ldquo;cleaned up&amp;rdquo; or &amp;ldquo;restricted&amp;rdquo; version of that program (and the argument for using a type-safe language like Rust is that we often like these restrictions, as a tradeoff for safety or efficiency).&lt;/p&gt;
+
+&lt;p&gt;Here is a Rust program that more accurately models what the C++ &lt;code&gt;unique_ptr&lt;/code&gt; actually does, which happens &lt;em&gt;dynamically&lt;/em&gt; at run-time, not at compile time, hence the segmentation fault: the transfer of ownership by &lt;code&gt;move&lt;/code&gt; on a &lt;code&gt;unique_ptr&lt;/code&gt; is not type-checked at compile-time.&lt;/p&gt;
+
+&lt;p&gt;For illustration&amp;rsquo;s sake, we have modeled C++ directly in &lt;em&gt;safe&lt;/em&gt; Rust through indirection by treating a C++ pointer to &lt;code&gt;T&lt;/code&gt; (C++ pointers can always be &lt;code&gt;nullptr&lt;/code&gt;) as an &lt;code&gt;Option&amp;lt;Box&amp;lt;T&amp;gt;&amp;gt;&lt;/code&gt;, where &lt;code&gt;nullptr&lt;/code&gt; is modeled as &lt;code&gt;None&lt;/code&gt; and a non-null pointer is modeled as &lt;code&gt;Some(pointer_nonnull)&lt;/code&gt;. This Rust code type-checks, compiles, and simulates a segmentation fault.&lt;/p&gt;
+
+&lt;p&gt;You can play with this code &lt;a href=&#34;http://is.gd/5kEQA8&#34;&gt;at this Rust playground link&lt;/a&gt;. (You may find it interesting to examine the assembly code generated.)&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Simulate a segmentation fault.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;seg_fault()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;panic&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;segmentation fault&amp;quot;&lt;/span&gt;);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Rough modeling in Rust of C++ unique_ptr&amp;lt;int&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// because C++ pointers can always be null.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;Box&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;Some&lt;/span&gt;(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;box&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// In C++, deferencing null seg faults.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;None&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;seg_fault(),&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;Some&lt;/span&gt;(orig_nonnull)&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig_nonnull);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// The equivalent of C++ unique_ptr move.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;stolen&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;Some&lt;/span&gt;(orig_nonnull);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;None&lt;/span&gt;;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;                &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// We seg fault after the C++ style move.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;                &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;None&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;seg_fault(),&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;                &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;Some&lt;/span&gt;(orig_nonnull)&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig_nonnull)&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Nobody would ever write this kind of code in Rust, but implicitly, all C++ programs are semantically basically doing this, except that for efficiency, the &lt;code&gt;nullptr&lt;/code&gt; checking is not done at the language level but just results in an actual segmentation fault at the operating system level.&lt;/p&gt;
+
+&lt;h2 id=&#34;an-example-of-smart-pointers-inside-a-collection:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;An example of smart pointers inside a collection&lt;/h2&gt;
+
+&lt;p&gt;The single most disturbing failure mode of the C++-based software product I worked on in 1995-1997 in C++ was segmentation faults resulting from mysteriously disappearing pointers. What I mean is, behavior like the following, where a container containing smart pointers to objects was meant to &lt;em&gt;own&lt;/em&gt; them, but there was no compile-time way to verify this fact, because of the nature of the object graph. If someone didn&amp;rsquo;t play by the uncheckable rules and inadvertently took ownership of (instead of &amp;ldquo;borrowing&amp;rdquo; through a raw pointer) something embedded in the collection, then &lt;code&gt;nullptr&lt;/code&gt; appeared, and a segmentation fault happened.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;vector&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;memory&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;iostream&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;namespace&lt;/span&gt; std;
+
+&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt;() {
+    vector&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;unique_ptr&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt; v;
+    v.push_back(make_unique&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;));
+
+    cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// C++ happily allows this.&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;auto&lt;/span&gt; pointer_to_5 &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; move(v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);
+    cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;pointer_to_5 &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Seg fault.&lt;/span&gt;
+    cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;You can probably guess what some developers did to &amp;ldquo;fix&amp;rdquo; the segmentation fault. They started adding &lt;code&gt;nullptr&lt;/code&gt; checks everywhere to prevent crashing, but this only resulted in &lt;em&gt;corrupt user data and documents&lt;/em&gt;, because in fact, we lost data in those collections and smart pointers to the data should never have ended up &lt;code&gt;nullptr&lt;/code&gt;!!&lt;/p&gt;
+
+&lt;p&gt;The complexity of the application and the deadline pressures made it impossible to fully figure out what was going wrong and where. I actually ended up writing an external &amp;ldquo;validation&amp;rdquo; utility program in &lt;a href=&#34;http://www.smlnj.org/&#34;&gt;Standard ML of New Jersey&lt;/a&gt; that parsed serialized object graphs and tried to fix them up in some fashion. This particularly helped the QA team a lot when dealing with old documents that were already corrupted.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-rust-version-will-not-compile:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;The Rust version will not compile&lt;/h3&gt;
+
+&lt;p&gt;The Rust type-checker rejects any attempt to move ownership out of a collection. (Try to compile it in &lt;a href=&#34;http://is.gd/Om7wfr&#34;&gt;this playground&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;v&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;vec&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;[&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;box&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i];&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Attempted move: type error at compile time.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;pointer_to_5&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;];&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;pointer_to_5);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7:24: 7:28 error: cannot move out of dereference (dereference is implicit, due to indexing)&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;                                                       ^~~~&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7:9: 7:21 note: attempting to move value to here&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;                                        ^~~~~~~~~~~~&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;often-you-do-want-to-share:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Often, you do want to share&lt;/h3&gt;
+
+&lt;p&gt;I have to be honest: at first, Rust&amp;rsquo;s ownership type system seems like quite a restriction, and adhering to it strictly would require the restructuring of certain kinds of programs. Static type safety of any kind in any language is always a matter of tradeoffs.&lt;/p&gt;
+
+&lt;p&gt;But note that Rust is flexible: you don&amp;rsquo;t have to use Rust&amp;rsquo;s default pointer type! You can use one of Rust&amp;rsquo;s many other pointer types, such as &lt;a href=&#34;http://doc.rust-lang.org/guide.html#rc-and-arc&#34;&gt;&lt;code&gt;Rc&lt;/code&gt; or &lt;code&gt;Arc&lt;/code&gt;&lt;/a&gt;, that allow reference-counted shared ownership (like C++ &lt;code&gt;shared_ptr&lt;/code&gt;), if that&amp;rsquo;s what you really want. (&lt;a href=&#34;http://is.gd/HNi7SR&#34;&gt;Playground here&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Reference-counted smart pointer.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;std&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;rc&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;Rc;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;v&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;vec&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;[Rc&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;new(&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i)];&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;pointer_to_5&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;].clone();&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;pointer_to_5);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;unsafe:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Unsafe&lt;/h2&gt;
+
+&lt;p&gt;Finally, Rust does allow you to go all out and write &lt;a href=&#34;http://doc.rust-lang.org/guide.html#unsafe&#34;&gt;unsafe&lt;/a&gt; code, if you truly need to for raw C performance or FFI reasons. Most of the time you do not need to, because the whole point of Rust is to compile down to the same kind of assembly code you would get from C.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extern&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;crate&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;libc;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;libc&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;{size_t,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;malloc};&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;std&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;mem;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;std&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;ptr;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// How ugly it is to pretend Rust is unsafe C.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;unsafe&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;malloc(mem&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;size_of&lt;span style=&#34;color: #666666&#34;&gt;::&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt;()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;size_t)&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;ptr&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;write(&lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;ptr&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;null&lt;span style=&#34;color: #666666&#34;&gt;::&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt;()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// null pointer crash!&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I hope this little article shows a little bit about what Rust&amp;rsquo;s ownership type system can do to make pointer-heavy code memory safe, unlike C++, and also gives you a taste of how Rust&amp;rsquo;s flexibility also allows you to use C++-style reference-counting if desired, and even raw unsafe code. Personally, I am excited about the upcoming 1.0 release of Rust, and although I have not done low-level systems programming for almost two decades, if I ever was to do it again, I would immediately reach out for Rust as a language of choice for the ultimate combination of safety, expressiveness, and performance (in use of time and space).&lt;/p&gt;
+
+&lt;p&gt;All code for this article is available in a &lt;a href=&#34;https://github.com/FranklinChen/rust-vs-cpp-unique_ptr&#34;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

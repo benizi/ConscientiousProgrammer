@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Conference on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/conference/</link>
+    <description>Recent content in Conference on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 18 Aug 2013 21:54:09 -0400</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/conference/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>My lightning talk at Steel City Ruby 2013: &#34;Reflections&#34;</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013</link>
+      <pubDate>Sun, 18 Aug 2013 21:54:09 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013</guid>
+      <description>
+
+&lt;p&gt;Below is video for, and a transcript of, my five-minute lightning talk I gave at Steel City Ruby 2013, which I reported on &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/08/18/report-on-the-second-steel-city-ruby-conference-another-life-changing-one-for-me-part-1/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;My 5-minute lightning talk starts at 19:35 and ends at 24:37 in the full video below. (I &lt;a href=&#34;https://vimeo.com/forums/topic:546&#34;&gt;couldn&amp;rsquo;t figure out how to turn off autoplay&lt;/a&gt; when I initially tried &lt;code&gt;#t=19m35s&lt;/code&gt;.)&lt;/p&gt;
+
+&lt;p&gt;&lt;iframe src=&#34;https://player.vimeo.com/video/72703334&#34; width=&#34;500&#34; height=&#34;281&#34; frameborder=&#34;0&#34; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt; &lt;p&gt;&lt;a href=&#34;https://vimeo.com/72703334&#34;&gt;Lightning Talks Day 1&lt;/a&gt; from &lt;a href=&#34;https://vimeo.com/confbots&#34;&gt;Confbots&lt;/a&gt; on &lt;a href=&#34;https://vimeo.com&#34;&gt;Vimeo&lt;/a&gt;.&lt;/p&gt; &lt;p&gt;Given on August 16 2013 at Steel City Ruby in Pittsburgh, PA&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;I provide below my best try at transcribing my talk, which was given impromptu without any notes or slides. Unfortunately, I spoke very quickly and I can&amp;rsquo;t figure out every word I said; if you find any glaring omissions or errors, please let me know!&lt;/p&gt;
+
+&lt;h2 id=&#34;transcript:7d0cb30036e685f934a73910cb455d4d&#34;&gt;Transcript&lt;/h2&gt;
+
+&lt;p&gt;Hi, my name is Franklin, and I&amp;rsquo;ve lived in Pittsburgh fifteen years, and this is the largest audience of front of which I&amp;rsquo;ve ever spoken in my life! (Applause.)&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m an extreme introvert, and I&amp;rsquo;m also shy, but last year, I came to Steel City Ruby Conf, and I saw people giving talks, lightning talks, and I was inspired, so I started talking at local meetup groups, and I decided I had to speak here, and the question was, what was I going to talk about?&lt;/p&gt;
+
+&lt;p&gt;Originally, I was going to title my lightning talk &amp;ldquo;Confessions&amp;rdquo;, but somebody already had &amp;ldquo;Confessions&amp;rdquo;, so I changed it to &amp;ldquo;Reflections&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;So, how many of you have had RSI? How many of you have had RSI from spending too much time at a &lt;a href=&#34;http://en.wikipedia.org/wiki/Keypunch&#34;&gt;keypunch&lt;/a&gt; machine? (I raise my hand. Laughter.) Yes, well, the first programming course I actually took, I coded on &lt;a href=&#34;http://en.wikipedia.org/wiki/Punched_card&#34;&gt;punch cards&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I sat at IBM keypunch machines and typed, and got RSI. And I&amp;rsquo;m telling you this because I may not look that old, but I&amp;rsquo;ve been around for some time (laughter). I punched cards, I wrote &lt;a href=&#34;http://en.wikipedia.org/wiki/COBOL&#34;&gt;COBOL&lt;/a&gt; programs, FORTRAN programs. We used cards and had to sort them, had to put in the compiler as well as the &lt;a href=&#34;http://en.wikipedia.org/wiki/Job_Control_Language&#34;&gt;Job Control Language&lt;/a&gt; cards, put them in a deck, ship them off to some place where my teacher took them, and that&amp;rsquo;s how we coded.&lt;/p&gt;
+
+&lt;p&gt;So, I have some reflections on that, given how long I&amp;rsquo;ve been doing this stuff. I still don&amp;rsquo;t know what programming really is. And that&amp;rsquo;s why I come to places like Steel City Ruby Conf, and go to programming meetups, and I do this for many different programming languages. I try to do things better, and what I like about the Ruby community is that people are open and welcome, and they are care about quality, about different ideas. And also about things that relate to living, not just about coding.&lt;/p&gt;
+
+&lt;p&gt;And so when I was looking at the program for this year&amp;rsquo;s conference, I was thinking, &amp;ldquo;how can I contribute here?&amp;rdquo; I&amp;rsquo;m not primarily a Ruby developer. But it turns out that programming is about much more than particular programming languages. In fact, I like that at lunch today, and last year, I met people who talked about Clojure, about Python, about Scala, and other languages, and it&amp;rsquo;s really great to have these conversations.&lt;/p&gt;
+
+&lt;p&gt;So, I&amp;rsquo;ve seen code using &amp;ldquo;goto&amp;rdquo;, and seen books on &lt;a href=&#34;http://en.wikipedia.org/wiki/Structured_programming&#34;&gt;&amp;ldquo;structured programming&amp;rdquo;&lt;/a&gt; from the 60s, when I was writing COBOL in the early 1980s. I think some of you here are younger and haven&amp;rsquo;t had that experience of having to code with &amp;ldquo;goto&amp;rdquo;. So, I saw that. I saw C come into play, I saw C++, the object-oriented revolution. I saw functional programming, and now concurrency, and it&amp;rsquo;s amazing that things keep on happening. I think it&amp;rsquo;s a great time to be a developer.&lt;/p&gt;
+
+&lt;p&gt;The last thing I want to say is, on the program there was a talk that was just given before lunch, and it was about depression. And that made a big impression on me. I&amp;rsquo;ve taken this moment to come out, as a 43-year-old, as having suffered from major depression, and really for about twenty-five years, I was unable to function. I even had to drop out of school twice, but I overcame that, and I think it&amp;rsquo;s time to stop being afraid to talk about it. We need to share it with our friends and talk about what we&amp;rsquo;ve done to overcome it and how to get help. So that&amp;rsquo;s my final reflection.&lt;/p&gt;
+
+&lt;h2 id=&#34;reactions:7d0cb30036e685f934a73910cb455d4d&#34;&gt;Reactions&lt;/h2&gt;
+
+&lt;p&gt;Note that the talk about depression I mentioned was the &lt;a href=&#34;http://vimeo.com/72690223&#34;&gt;morning talk by Greg Baugues, &amp;ldquo;Developers and Depression&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I was very moved that throughout the rest of the first day of the conference, people came up to me and thanked me for talking about my depression. Some of them said they were currently dealing with depression, or had done so. This only reinforced in my mind Greg&amp;rsquo;s point that there is still a stigma about openly discussing depression.&lt;/p&gt;
+
+&lt;h2 id=&#34;some-historical-notes-on-programming:7d0cb30036e685f934a73910cb455d4d&#34;&gt;Some historical notes on programming&lt;/h2&gt;
+
+&lt;p&gt;I regret that I did not keep any of my old COBOL programs. I do have some old data decks of punch cards in my basement, but no code!&lt;/p&gt;
+
+&lt;p&gt;I believe that the textbook we used in my high school COBOL class in 1983 was &lt;a href=&#34;http://books.google.com/books?id=cE0gAQAAIAAJ&#34;&gt;Shelly and Cashman&amp;rsquo;s &amp;ldquo;Introduction to Computer Programming: Structured COBOL&amp;rdquo;&lt;/a&gt;. Basically all the programming books of the day for any language boasted of teaching structured programming. Given that, I was amused by the whole &amp;ldquo;object-oriented programming&amp;rdquo; fad in all texts in the 1990s. Marketing never changes.&lt;/p&gt;
+
+&lt;h2 id=&#34;to-do:7d0cb30036e685f934a73910cb455d4d&#34;&gt;To do&lt;/h2&gt;
+
+&lt;p&gt;I still haven&amp;rsquo;t told publicly the full story of my struggle with depression that finished its last chapter only late in 2004, when, after six years of therapy, I decided I no longer needed to see my therapist, and told her I was discontinuing my weekly visits to her I had been making since 1998. I expect to gradually roll out this story as I feel ready to tell it.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Steel City Ruby 2013: my second year and it radically changed my life again (part 1)</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/08/18/steel-city-ruby-2013-my-second-year-and-it-radically-changed-my-life-again-part-1/</link>
+      <pubDate>Sun, 18 Aug 2013 20:57:27 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/08/18/steel-city-ruby-2013-my-second-year-and-it-radically-changed-my-life-again-part-1/</guid>
+      <description>
+
+&lt;p&gt;This year, I attended the second &lt;a href=&#34;http://steelcityrubyconf.org/&#34;&gt;Steel City Ruby Conference&lt;/a&gt;, 2013. The first one, last year (2012), was a &lt;a href=&#34;http://franklinchen.com/blog/2012/08/07/the-first-steel-city-ruby-conference-an-amazing-experience/&#34;&gt;life-changing experience&lt;/a&gt; for me. To my surprise, this second one also ended up being another radically transformative experience.&lt;/p&gt;
+
+&lt;p&gt;This is part 1 of my report, covering the first day (Friday). Part 2, covering the second day (Saturday), is &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/08/18/report-on-the-second-steel-city-ruby-conference-another-life-changing-one-for-me-part-2/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;videos-are-up:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Videos are up!&lt;/h2&gt;
+
+&lt;p&gt;Videos for all of the presentations of Steel City Ruby 2013 are available &lt;a href=&#34;http://www.confreaks.com/events/scrc2013&#34;&gt;on Confreaks&lt;/a&gt;. I am embedding them also in my reports.&lt;/p&gt;
+
+&lt;h2 id=&#34;first-things:7e56a4d62ab96641f590de12053f21b0&#34;&gt;First things&lt;/h2&gt;
+
+&lt;h3 id=&#34;i-signed-up-to-give-a-lightning-talk:7e56a4d62ab96641f590de12053f21b0&#34;&gt;I signed up to give a lightning talk&lt;/h3&gt;
+
+&lt;p&gt;The very first thing I did, upon arriving Friday morning, was to sign up to give a lightning talk!! This was because I was so inspired by last year&amp;rsquo;s lightning talks. I wasn&amp;rsquo;t sure exactly what I was going to talk about, but I knew I wanted to say something about what I learned in the past year since the first Steel City Ruby, and how my life has changed as a result, so I wanted to write &amp;ldquo;Confessions&amp;rdquo;, but someone had already written down a &amp;ldquo;Confessions&amp;rdquo; lightning talk title, so I changed it to &amp;ldquo;Reflections&amp;rdquo;.&lt;/p&gt;
+
+&lt;h3 id=&#34;i-signed-up-for-the-music-jam:7e56a4d62ab96641f590de12053f21b0&#34;&gt;I signed up for the music jam&lt;/h3&gt;
+
+&lt;p&gt;Since I had just recently started learning to play ukulele, I signed up to participate in Jim Weirich&amp;rsquo;s music jam. Last year, I had brought my Irish flute, but was too scared to actually play, and just watched as everyone had fun. I vowed that this year I would actually play with Jim and others.&lt;/p&gt;
+
+&lt;h4 id=&#34;update-of-2013-08-23:7e56a4d62ab96641f590de12053f21b0&#34;&gt;(Update of 2013-08-23)&lt;/h4&gt;
+
+&lt;p&gt;I wrote in more detail about &lt;a href=&#34;http://franklinchen.com/blog/2013/08/23/another-unexpected-life-change-one-month-of-learning-to-play-ukulele/&#34;&gt;how and why I took up ukulele and how that has changed my life&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;carina-zona-handcrafting-community:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Carina Zona, &amp;ldquo;Handcrafting Community&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;Carina Zona opened by asking &amp;ldquo;What is community?&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;Good question: I&amp;rsquo;ve been wondering about that myself, since becoming part of various local &amp;ldquo;communities&amp;rdquo; in Pittsburgh in the past couple of years. What&amp;rsquo;s the difference between a mere &amp;ldquo;network&amp;rdquo; and a &amp;ldquo;community&amp;rdquo;?&lt;/p&gt;
+
+&lt;p&gt;She noted that she is actually an introvert, so it&amp;rsquo;s been interesting for her to be where she is now.&lt;/p&gt;
+
+&lt;p&gt;Carina said the communities involve &amp;ldquo;explicit values&amp;rdquo;. I thought that was a great point. Random people gathering without explicit values don&amp;rsquo;t really make a community.&lt;/p&gt;
+
+&lt;p&gt;The part of her talk that really encouraged me was when she urged the cultivation of &amp;ldquo;forkable&amp;rdquo; communities. This means being able to copy what works and take it somewhere else and develop it. I thought this was a great metaphor, because if I want to build a community, it doesn&amp;rsquo;t make sense to just do it from scratch, but it makes sense to learn from what has worked elsewhere. In particular, the &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/&#34;&gt;Pittsburgh Scala Meetup&lt;/a&gt; that I&amp;rsquo;m part of is still small and not yet, in my mind, the kind of established, explicit community that &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby&#34;&gt;Pittsburgh Ruby&lt;/a&gt; clearly is. I have been wondering about doing something to build up more of a Pittsburgh Scala community.&lt;/p&gt;
+
+&lt;p&gt;I took from this tlak a lot to think about and act upon.&lt;/p&gt;
+
+&lt;iframe src=&#34;//player.vimeo.com/video/72671955&#34; width=&#34;500&#34; height=&#34;281&#34; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&#34;julie-pagano-i-am-a-front-end-web-dev-and-so-can-you:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Julie Pagano, &amp;ldquo;I am a Front-End Web Dev (And So Can You!)&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;Julie gave an interesting talk about front-end development, emphasizing that this is serious stuff. She made certain important points that I totally agree with: HTML and CSS are in fact &lt;em&gt;programming languages&lt;/em&gt; in their own right, and should be thought of and used that way, with a mind toward design and &lt;em&gt;semantics&lt;/em&gt;, and not just hacking around. CSS being kind of a crappy language, it&amp;rsquo;s good to use something like SASS, which is better (for example, enabling the concept of mixins).&lt;/p&gt;
+
+&lt;p&gt;She talked about the asset pipeline, and emphasized that one should learn JavaScript, not just hack jQuery. She listed resources to learn and to adopt good practices.&lt;/p&gt;
+
+&lt;p&gt;All good advice for anyone doing front-end work!&lt;/p&gt;
+
+&lt;iframe src=&#34;//player.vimeo.com/video/72682175&#34; width=&#34;500&#34; height=&#34;281&#34; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&#34;greg-baugues-developers-and-depression:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Greg Baugues, &amp;ldquo;Developers and Depression&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;Greg gave a talk that stunned me.&lt;/p&gt;
+
+&lt;p&gt;He talked about his personal struggle with depression (type II bipolar, specifically). Please watch his talk, &lt;em&gt;the whole thing&lt;/em&gt;, whether you&amp;rsquo;ve dealt with depression or whether you know someone with depression (and learn about the sometimes very subtle signs of it, since as he detailed in his talk, &lt;em&gt;depressed people do what they can to conceal their problem, out of shame&lt;/em&gt;).&lt;/p&gt;
+
+&lt;p&gt;I made a surprising decision after watching his talk. I decided that in my yet-vaguely-thought-out lightning talk, &lt;strong&gt;I was going to confess to having had a very dark period of depression in my life&lt;/strong&gt;, a period that lasted around &lt;em&gt;twenty-five years&lt;/em&gt;, robbing me of a vast amount of my life. I did not want Greg&amp;rsquo;s talk to go to waste. I wanted to make sure that people at the conference knew that there are those of us who have these kinds of secrets, and that if anyone is having a problem and needs help, that there is no shame in seeking help, because my life was saved thanks to some important help. I will say more about this later.&lt;/p&gt;
+
+&lt;iframe src=&#34;//player.vimeo.com/video/72690223&#34; width=&#34;500&#34; height=&#34;281&#34; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&#34;lunch:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Lunch&lt;/h2&gt;
+
+&lt;p&gt;Before the conference, I had signed up to volunteer (as a Pittsburgh local) to take a group of people to lunch. I did this for two reasons:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;I wanted to contribute this year by volunteering to help for lunch.&lt;/li&gt;
+&lt;li&gt;Last year, there was some overcrowding as too many people went to the same popular restaurants in the Strip District for lunch.&lt;/li&gt;
+&lt;li&gt;Selfishly, I wanted a food option I chose!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So I took people to &lt;a href=&#34;http://www.iloveindianspices.com/&#34;&gt;Indian Spices&lt;/a&gt; downtown. It has a reasonable lunch buffet (Abby and I went there once), and more to my taste than getting sandwiches somewhere.&lt;/p&gt;
+
+&lt;h2 id=&#34;lightning-talks:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Lightning talks&lt;/h2&gt;
+
+&lt;p&gt;I ended up being scheduled for the last time slot of lightning talks. I was very nervous, had no notes or slides, and decided to simply get up there and try to make some kind of narrative out of various thoughts that had accumulated in my head for the past year, as well as Greg&amp;rsquo;s talk on depression.&lt;/p&gt;
+
+&lt;p&gt;Given the anticipation, I confess I could not pay that much attention to the talks that preceded mine!&lt;/p&gt;
+
+&lt;p&gt;Here are all of Friday&amp;rsquo;s lightning talks. I&amp;rsquo;ve provided in a separate post a &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/&#34;&gt;transcript of my lightning talk, &amp;ldquo;Reflections&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;iframe src=&#34;//player.vimeo.com/video/72703334&#34; width=&#34;500&#34; height=&#34;281&#34; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h3 id=&#34;angela-harms-a-collaborative-approach-to-making:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Angela Harms, &amp;ldquo;A Collaborative Approach to Making&amp;rdquo;&lt;/h3&gt;
+
+&lt;p&gt;Angela Harms gave a presentation revolving around the distinction she made between &amp;ldquo;cooperation&amp;rdquo; and &amp;ldquo;collaboration&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;She led the audience in a short guided meditation before proceeding further.&lt;/p&gt;
+
+&lt;p&gt;The important point she made about &amp;ldquo;cooperation&amp;rdquo; was that it is safe, and there is no risk, because you just show up halfway and the other person shows up halfway, and that&amp;rsquo;s all that happens. In &amp;ldquo;collaboration&amp;rdquo; your goal is much higher, to be &amp;ldquo;fully invested&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;The rest of the presentation involved quotes and references to authors and books and anecdotes I had seen before. But what resonated with me was this key distinction she made between &amp;ldquo;cooperation&amp;rdquo; and &amp;ldquo;collaboration&amp;rdquo;. I thought of situations in which I have felt ashamed because I only showed up halfway. I have to think about how to change that: either show up all the way, or perhaps if I cannot do that, then step out so that someone else who can do more than me can step in.&lt;/p&gt;
+
+&lt;iframe src=&#34;//player.vimeo.com/video/72700176&#34; width=&#34;500&#34; height=&#34;281&#34; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&#34;ashish-dixit-how-to-be-productive-on-a-new-team:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Ashish Dixit, &amp;ldquo;How to be Productive on a New Team&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;Ashish Dixit spoke about transitions as a programmer, bringing in his own story at Groupon. Some tidbits I took away from his talk: &amp;ldquo;learning all the things&amp;rdquo; is overwhelming, and working on bugs is a good way to learn about a system.&lt;/p&gt;
+
+&lt;p&gt;It was 3:30 PM. I have to confess that I was getting tired and the day was getting long!&lt;/p&gt;
+
+&lt;iframe src=&#34;//player.vimeo.com/video/72745494&#34; width=&#34;500&#34; height=&#34;281&#34; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&#34;jim-weirich-friendly-flying-robots-with-ruby:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Jim Weirich, &amp;ldquo;Friendly Flying Robots with Ruby&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;Jim Weirich gave a demo of controlling a personal drone using a Ruby DSL he wrote wrapping around a C API. An elegant use of DSLs, definitely. One of the selling points of Ruby and Ruby culture is the creation of DSLs to make it easier and more fun to do programming that underneath can be doing low-level things, and it&amp;rsquo;s great that people like Jim make maximum use of this capability!&lt;/p&gt;
+
+&lt;iframe src=&#34;//player.vimeo.com/video/72709097&#34; width=&#34;500&#34; height=&#34;281&#34; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&#34;party:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Party&lt;/h2&gt;
+
+&lt;p&gt;There was a party held at the &lt;a href=&#34;http://www.consolenergycenter.com/&#34;&gt;Consol Center&lt;/a&gt; after the Friday sessions. I enjoyed socializing and eating appetizer-type food there. I was surprised and touched by how many people privately came up to me and thanked me for speaking up briefly about the depression in my past. Greg himself was present and spoke to me (he had not been present during my lightning talk but had heard from others about it).&lt;/p&gt;
+
+&lt;p&gt;I went home hoarse from talking so much with people about all sorts of things, ranging from financial investment (!) to the new programming language (in progress) &lt;a href=&#34;http://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt; (which Steve Klabnik is all excited about) to my experiences this year having &lt;a href=&#34;http://franklinchen.com/blog/2013/01/11/2013-is-my-year-of-scala/&#34;&gt;switched to Scala&lt;/a&gt; for almost all new work and personal coding.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I had a long and tremendously uplifting first day at the 2013 Steel City Ruby conference. My impromptu lightning talk ended up being a lot more personal than I had expected, but seemed to resonate with some people.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

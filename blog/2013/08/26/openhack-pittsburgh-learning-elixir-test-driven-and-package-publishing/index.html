@@ -1,106 +1,76 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>OpenHack Pittsburgh: Learning Elixir Test-driven and Package-publishing - The Conscientious Programmer</title>
-  <meta name="author" content="Franklin Chen">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
-  <meta name="description" content="It&rsquo;s been a long time since I went to an OpenHack Pittsburgh meeting. The last time was five months ago. On June 24, there was an OpenHack &hellip;">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenHack Pittsburgh: learning Elixir test-driven and package-publishing &middot; The Conscientious Programmer</title>
 
   
-  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/highlight/default.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
   <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+
   
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-41982602-1']);
-    _gaq.push(['_trackPageview']);
+  
+  
+  
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
 </head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>The Conscientious Programmer</h1>
+      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">The Conscientious Programmer</a></h1>
-  
-    <h2>Humbly exploring what it means to do the right thing.</h2>
-  
-</hgroup>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://conscientiousprogrammer.com">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="/about/">About</a></li>
+      
+    </ul>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="ConscientiousProgrammer.com">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/about">About</a></li>
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+      
+      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+      </li>
+    </ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>OpenHack Pittsburgh: learning Elixir test-driven and package-publishing</h1>
     
-      <h1 class="entry-title">OpenHack Pittsburgh: Learning Elixir Test-driven and Package-publishing</h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-<time class='entry-date' datetime='2013-08-26T22:09:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:09 pm</span></time>
-        
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>It&rsquo;s been a long time since I went to an <a href="http://openhack.github.io/pittsburgh/">OpenHack Pittsburgh</a> meeting. The last time was <a href="http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/">five months ago</a>. On June 24, there was an <a href="http://www.meetup.com/pittsburgh-ruby/events/120200292/">OpenHack Pittsburgh</a> held at <a href="http://www.4moms.com/">4moms</a>, but I really needed to stay home and take it easy that evening, because of my busy schedule later in the week, including attending a <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">PittJUG meeting</a> and preparing a <a href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">Pittsburgh Python talk</a>.</p>
+<p>It&rsquo;s been a long time since I went to an <a href="http://openhack.github.io/pittsburgh/">OpenHack Pittsburgh</a> meeting. The last time was <a href="http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/">five months ago</a>. On June 24, there was an <a href="http://www.meetup.com/pittsburgh-ruby/events/120200292/">OpenHack Pittsburgh</a> held at <a href="http://www.4moms.com/">4moms</a>, but I really needed to stay home and take it easy that evening, because of my busy schedule later in the week, including attending a <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">PittJUG meeting</a> and preparing a <a href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">Pittsburgh Python talk</a>.</p>
 
 <p><a href="http://www.meetup.com/pittsburgh-ruby/events/120201842/">This August meeting of OpenHack Pittsburgh</a> was held at <a href="http://www.modcloth.com/">ModCloth</a>, which I had never been to. It&rsquo;s in Crafton, which is a place I&rsquo;ve never been before, nearly half an hour drive from Pittsburgh. Because of worries about driving there near rush hour after work, I probably would not have signed up to attend had it not been for <a href="http://justinxreese.com/">Justin</a>, the organizer of OpenHack Pittsburgh.</p>
 
@@ -108,12 +78,21 @@
 
 <p>What does that mean?</p>
 
-<p><img src="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg" title="Franklin working on laptop" ></p>
+<p>
+<figure >
+    
+        <img src="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg" />
+    
+    
+    <figcaption>
+        <h4>Franklin working on laptop</h4>
+        
+    </figcaption>
+    
+</figure>
+</p>
 
-<!--more-->
-
-
-<h2>How to learn a programming language</h2>
+<h2 id="how-to-learn-a-programming-language:1ce2624ff25ef568d351a0712ca69fa2">How to learn a programming language</h2>
 
 <p>I have written code in probably around fifty (50) programming languages. I&rsquo;m not kidding, and I&rsquo;m not proud, but this is simply a fact of my having done programming since 1982, thirty-one (31!!) years ago. Let&rsquo;s face it: languages come and go. I have personally sat at an IBM <a href="http://en.wikipedia.org/wiki/Keypunch">keypunch</a> machine punching out cards for my COBOL and Fortran code.</p>
 
@@ -125,7 +104,7 @@
 
 <p>Without seeing the biggest possible picture, one usually gets a horribly inaccurate picture of what it is like to program in a particular language ecosystem. (I will be writing more about this subject of pedagogy later.)</p>
 
-<h2>My proposal</h2>
+<h2 id="my-proposal:1ce2624ff25ef568d351a0712ca69fa2">My proposal</h2>
 
 <p>The last couple of languages I have learned in recent years, I slowly came to work with in a more efficient way than in the past, because I focused on matters such as testability. In particular, as I grew to wholly adopt TDD when writing any code at all in any language, it became clear to me that the best way to learn a new language must be in a test-driven way.</p>
 
@@ -137,9 +116,9 @@
 
 <p>That it should be <em>publishable</em> is vital because it means adhering to standards of testing, of discovery through metadata, and enabling easy use by a client.</p>
 
-<h2>My concrete example with learning Elixir tonight</h2>
+<h2 id="my-concrete-example-with-learning-elixir-tonight:1ce2624ff25ef568d351a0712ca69fa2">My concrete example with learning Elixir tonight</h2>
 
-<h3>Prior background in Erlang and Elixir</h3>
+<h3 id="prior-background-in-erlang-and-elixir:1ce2624ff25ef568d351a0712ca69fa2">Prior background in Erlang and Elixir</h3>
 
 <p>I went to OpenHack Pittsburgh <em>never</em> having yet read any Elixir language material, never having written Elixir code, not even &ldquo;hello, world&rdquo;. The only things I had done before tonight:</p>
 
@@ -151,8 +130,7 @@
 <li>I made a note of a free online book <a href="http://chimera.labs.oreilly.com/books/1234000001642">&ldquo;Etudes for Elixir&rdquo;</a> and checked out the GitHub repository, but did not look at the book or code.</li>
 </ul>
 
-
-<h3>Find a testing framework</h3>
+<h3 id="find-a-testing-framework:1ce2624ff25ef568d351a0712ca69fa2">Find a testing framework</h3>
 
 <p>Upon arrival at ModCloth, getting pizza to eat, and plugging in my MacBook and connecting to the guest WiFi, the first thing I did was search for a testing framework for Elixir.</p>
 
@@ -170,12 +148,11 @@
 <li>Racket: <a href="http://docs.racket-lang.org/rackunit/">RackUnit</a></li>
 </ul>
 
-
 <p>Well, first Web search hit for Elixir and unit testing was <a href="http://elixir-lang.org/getting_started/ex_unit/1.html">ExUnit</a>, so that was encouraging.</p>
 
 <p>Justin was still stuck installing Elixir, so we started exploring Elixir together off my laptop.</p>
 
-<h3>One test file</h3>
+<h3 id="one-test-file:1ce2624ff25ef568d351a0712ca69fa2">One test file</h3>
 
 <p>The first thing I did after discovering ExUnit was to copy and paste the code for a sample test into Emacs and save it into a file <code>test_hello.exs</code>, see that the Elixir mode was working (with syntax highlighting), and figure out how to run the test: <code>$ elixir test_hello.exs</code>.</p>
 
@@ -187,7 +164,7 @@
 
 <p>We saw in the documentation for ExUnit that there was a way to mark a test case as being OK to run concurrently with others. Great! These days there is no excuse not to be able to run tests concurrently. So I wrote another test case, which I put in the same source file (for the moment), and I wanted to see for myself that concurrency was happening. I wanted to call some kind of &ldquo;sleep&rdquo; function. To do that, I did a Web search, and found that Erlang comes with <code>sleep</code> in the <code>timer</code> module. I found out how to call Erlang from Elixir, and it worked!</p>
 
-<h3>More than one source file</h3>
+<h3 id="more-than-one-source-file:1ce2624ff25ef568d351a0712ca69fa2">More than one source file</h3>
 
 <p>The next obvious step was to write a test for code that did not yet exist, but was to be written outside the test source file. For that, I had to figure out how to define a module and import it. OK, but then there&rsquo;s the question of file organization. Hmm.</p>
 
@@ -199,7 +176,7 @@
 
 <p>Running tests is very easy once you are using Mix. Just <code>$ mix test</code> does it.</p>
 
-<h3>Packaging for publshing</h3>
+<h3 id="packaging-for-publshing:1ce2624ff25ef568d351a0712ca69fa2">Packaging for publshing</h3>
 
 <p>At this point, I decided I wanted to create an actual Elixir package to publish.</p>
 
@@ -215,13 +192,13 @@
 
 <p>Oh, and I committed my project in Git and pushed <a href="https://github.com/franklinchen/tau">to GitHub</a>.</p>
 
-<h2>Some Haskell stuff</h2>
+<h2 id="some-haskell-stuff:1ce2624ff25ef568d351a0712ca69fa2">Some Haskell stuff</h2>
 
 <p>Steve McCarthy of <a href="http://www.spacefinity.com/">Spacefinity</a> had announced, in the introduction at the beginning of the evening when each of us stood up to say what we planned to work on, that he wanted to do more with the <a href="http://www.haskell.org/cabal/">Cabal</a> package manager for Haskell, so I spent a little bit of time getting him going by pointing him toward a sample Haskell code repository I initially <a href="http://franklinchen.com/blog/2012/11/05/the-start-of-a-local-haskell-study-group.markdown/">set up last year when some friends were interested in getting into Haskell</a>; sadly, we&rsquo;ve all been too busy for Haskell, so I&rsquo;ve let the project rot, in the sense that my configuration file is not optimally organized and also there have been updates in the test framework world in Haskell since then.</p>
 
 <p>Anyway, here&rsquo;s my <a href="https://github.com/FranklinChen/project-euler-haskell">&ldquo;Project Euler in Haskell&rdquo; repository</a>. I plan to get around to improving it.</p>
 
-<h2>Thanks</h2>
+<h2 id="thanks:1ce2624ff25ef568d351a0712ca69fa2">Thanks</h2>
 
 <p>Thanks to ModCloth for providing the space, pizza, cookies, and WiFi!</p>
 
@@ -229,213 +206,37 @@
 
 <p>And thanks to Steve McCarthy for getting me to drag up an old Haskell project and making me think that I should soon update it to be a better example.</p>
 
-<h2>Conclusion</h2>
+<h2 id="conclusion:1ce2624ff25ef568d351a0712ca69fa2">Conclusion</h2>
 
 <p>Tonight was the first time I ever started learning a new programming language, wrote unit tests right off the bat with proper project organization and also published a library immediately.</p>
 
 <p>Of course, there is much more to go in actually really learning and using Elixir, but as a first step in showing that Elixir has a viable ecosystem, I think the experiment was a success. My next steps in continuing to learn Elixir would include writing tests in conjunction with a deep dive into the actual semantics of the language. There is no substitute for the latter; the alternative is dangerously making assumptions based on superficial syntactic similarity with other languages (such as Ruby).</p>
 
-<h3>(Update of 2013-08-27)</h3>
+<h3 id="update-of-2013-08-27:1ce2624ff25ef568d351a0712ca69fa2">(Update of 2013-08-27)</h3>
 
 <p>One thing I didn&rsquo;t get around to was setting up <a href="http://travis-ci.org/">Travis</a> continuous integration. I believe this should also be part of the story in getting up and running in a new programming language environment.</p>
 
 <p>So I did a Web search and figured out how to create a suitable <code>.travis.yml</code>. I committed and pushed to GitHub, flipped the switch in my Travis account, and you can see its <a href="https://travis-ci.org/FranklinChen/tau">passing status</a>.</p>
-</div>
 
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
-
-      
-
-
-
-
-<time class='entry-date' datetime='2013-08-26T22:09:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:09 pm</span></time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/asynchronous/'>asynchronous</a>, <a class='category' href='/blog/categories/c-plus-plus/'>c++</a>, <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/concurrency/'>concurrency</a>, <a class='category' href='/blog/categories/continuous-integration/'>continuous integration</a>, <a class='category' href='/blog/categories/elixir/'>elixir</a>, <a class='category' href='/blog/categories/erlang/'>erlang</a>, <a class='category' href='/blog/categories/haskell/'>haskell</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/macros/'>macros</a>, <a class='category' href='/blog/categories/openhack/'>openhack</a>, <a class='category' href='/blog/categories/perl/'>perl</a>, <a class='category' href='/blog/categories/pi/'>pi</a>, <a class='category' href='/blog/categories/pittsburgh/'>pittsburgh</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/racket/'>racket</a>, <a class='category' href='/blog/categories/scala/'>scala</a>, <a class='category' href='/blog/categories/tau/'>tau</a>, <a class='category' href='/blog/categories/tdd/'>tdd</a>, <a class='category' href='/blog/categories/testing/'>testing</a>, <a class='category' href='/blog/categories/travis/'>travis</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/08/22/pittsburgh-data-visualization-d3-and-only-d3/" title="Previous Post: Pittsburgh Data Visualization: D3 and only D3">&laquo; Pittsburgh Data Visualization: D3 and only D3</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/10/11/pittsburgh-scala-meetup-learning-by-reading-joshs-code/" title="Next Post: Pittsburgh Scala Meetup: learning by reading Josh's code!">Pittsburgh Scala Meetup: learning by reading Josh&#8217;s code! &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">How to Think About Rust Ownership Versus C++ Unique_ptr</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/">Remembering Over 20 Years of Reading Dr. Dobb&#8217;s Journal Even Till Today</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/">When a Computer Algebra Program Gives Wrong Answers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/">Pittsburgh Code and Supply: Making Music With Overtone in Clojure; Conveying Information Through Sound</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/07/understanding-cloure-transducers-through-types/">Understanding Clojure Transducers Through Types</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'FranklinChen',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/+FranklinChen?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - <a href="http://franklinchen.com/">Franklin Chen</a> -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-      var disqus_shortname = 'conscientiousprogrammer';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/';
-        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2013\/08\/26\/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing\/';
+    var disqus_title = 'OpenHack Pittsburgh: learning Elixir test-driven and package-publishing';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2013\/08\/26\/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing\/';
 
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
     (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 </body>
 </html>

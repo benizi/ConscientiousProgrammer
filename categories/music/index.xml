@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Music on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/music/</link>
+    <description>Recent content in Music on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 07 Oct 2014 21:10:18 -0400</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/music/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Pittsburgh Code and Supply: Making music with Overtone in Clojure; Conveying information through sound</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/</link>
+      <pubDate>Tue, 07 Oct 2014 21:10:18 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/</guid>
+      <description>
+
+&lt;p&gt;I attended &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/events/202086812&#34;&gt;a fine meeting&lt;/a&gt; of &lt;a href=&#34;http://www.codeandsupply.co/&#34;&gt;Pittsburgh Code and Supply&lt;/a&gt; dedicated to two related topics: &lt;em&gt;music&lt;/em&gt; and &lt;em&gt;sonification&lt;/em&gt;. I thought it was a great idea to have presentations on both topics in the same session, thereby giving a broad view of what can be done with &lt;em&gt;sound&lt;/em&gt; through computation.&lt;/p&gt;
+
+&lt;h2 id=&#34;erik-swanson-on-overtone-in-clojure:eae2c8db91585e112346d13d734d08c3&#34;&gt;Erik Swanson on Overtone in Clojure&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://overtone.github.io/&#34;&gt;Overtone&lt;/a&gt; is a very interesting environment for programmable music written in Clojure that I&amp;rsquo;d heard of years ago but never gotten around to playing with, simply because my primary interest in music is &lt;a href=&#34;http://franklinchen.com/blog/categories/music/&#34;&gt;playing music on traditional physical instruments with my own hands, the old-fashioned way&lt;/a&gt;. However, I am definitely open to the idea of doing interesting new things with computer aid; it just has not been a priority to explore.&lt;/p&gt;
+
+&lt;p&gt;As preparation for the presentation (I don&amp;rsquo;t like feeling completely lost during live demos; I usually do!), I actually finally set up an Overtone project with Leiningen and walked through a tutorial that simply used the Clojure CIDER mode in Emacs to operate in a REPL. I didn&amp;rsquo;t do any real live-coding, however. I just wanted to get a taste.&lt;/p&gt;
+
+&lt;p&gt;Erik Swanson gave a great presentation in which he described what he was doing as he live-coded some music with Emacs, incrementally creating instruments and generating pitches. Because of his presentation, I feel more comfortable about the prospect of really digging into Overtone if I ever want to.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a video of his presentation:&lt;/p&gt;
+
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;//www.youtube.com/embed/w7ARayiKBrE&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&#34;keith-callenberg-https-twitter-com-keithcallenberg-on-conveying-information-through-sound:eae2c8db91585e112346d13d734d08c3&#34;&gt;&lt;a href=&#34;https://twitter.com/keithcallenberg&#34;&gt;Keith Callenberg&lt;/a&gt; on conveying information through sound&lt;/h2&gt;
+
+&lt;p&gt;I learned a new word today: &lt;a href=&#34;http://en.wikipedia.org/wiki/Sonification&#34;&gt;&amp;ldquo;sonification&amp;rdquo;&lt;/a&gt;, the use of non-speech audio to convey information.&lt;/p&gt;
+
+&lt;p&gt;I may have vaguely encountered sonification before, but never while fully attentive to it. That changed when Keith Callenberg, a computational scientist, gave a fine presentation in which he gave numerous striking examples of sonification. He made the important distinction between music and sonification: music is sound for an aesthetic purpose, but sonification is for information transfer.&lt;/p&gt;
+
+&lt;p&gt;He convincingly showed why sonification is useful for data analysis, and also noted that our culture is strangely dominated by the &lt;em&gt;visual&lt;/em&gt;, so there remain many opportunities to use sound to understand data. (Also, sonification is used to help the visually impaired.)&lt;/p&gt;
+
+&lt;p&gt;One local example he gave was a particulate monitoring study done at CMU.&lt;/p&gt;
+
+&lt;h2 id=&#34;david-souther-on-web-audio-in-javascript:eae2c8db91585e112346d13d734d08c3&#34;&gt;David Souther on Web Audio in JavaScript&lt;/h2&gt;
+
+&lt;p&gt;I thought we were done for the evening, but David Souther hopped up with an unscheduled lightning talk on using Web Audio in JavaScript.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:eae2c8db91585e112346d13d734d08c3&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I enjoyed the presentations on music and sound, and got some ideas for stuff I might want to do myself. Another excellent session for Pittsburgh Code and Supply!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

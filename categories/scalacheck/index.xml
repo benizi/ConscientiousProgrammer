@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Scalacheck on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/scalacheck/</link>
+    <description>Recent content in Scalacheck on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 15 May 2014 22:49:48 -0400</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/scalacheck/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Pittsburgh Scala Meetup: Exploring type-directed, test-driven development using FizzBuzz (my practice talk)</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed</link>
+      <pubDate>Thu, 15 May 2014 22:49:48 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed</guid>
+      <description>
+
+&lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/&#34;&gt;Pittsburgh Scala Meetup&lt;/a&gt; met, with me presenting a &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581402/&#34;&gt;practice talk&lt;/a&gt; for &amp;ldquo;Exploring type-directed, test-driven development using FizzBuzz&amp;rdquo;, which I am presenting at the upcoming local &lt;a href=&#34;http://pghtechfest.com/&#34;&gt;Pittsburgh TechFest&lt;/a&gt; conference.&lt;/p&gt;
+
+&lt;h2 id=&#34;presentation:0ca97438327f3bcfe743d5a186e4af3e&#34;&gt;Presentation&lt;/h2&gt;
+
+&lt;p&gt;I have only recently completed the slides and code for my talk, and had not actually given the talk yet, so this was a practice talk that did not go so well, unfortunately.&lt;/p&gt;
+
+&lt;p&gt;I spoke too quickly and had too much material to cover, and also got lost in some of my own slides. Oops. I think reaction to my talk was mixed. Some enjoyed it, while others seemed lost at places.&lt;/p&gt;
+
+&lt;p&gt;After going home, I frankly felt that I had &lt;em&gt;failed&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;But I believe I can do much better. I have plenty of time to do a thorough revision before Pittsburgh TechFest in three weeks. I need to cut out material that is not needed for the core of what I am trying to achieve and make some things clearer (especially for the intended Pittsburgh TechFest audience, which I do not expect to even know Scala).&lt;/p&gt;
+
+&lt;h2 id=&#34;supporting-material:0ca97438327f3bcfe743d5a186e4af3e&#34;&gt;Supporting material&lt;/h2&gt;
+
+&lt;p&gt;Here is the &lt;a href=&#34;https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz&#34;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I don&amp;rsquo;t recommend looking at them, but for historical purposes, here are slides of the presentation &lt;a href=&#34;https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/meetup/doc/presentation.pdf&#34;&gt;as it was given in the first draft&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;update-of-2014-05-16:0ca97438327f3bcfe743d5a186e4af3e&#34;&gt;(Update of 2014-05-16)&lt;/h2&gt;
+
+&lt;p&gt;One day makes a difference in my confidence and determination! I noticed that the new &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/&#34;&gt;Pittsburgh Code and Supply&lt;/a&gt; group (which I have not yet attended) is soon having its inaugural &lt;a href=&#34;http://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt; &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/events/181773312/&#34;&gt;soon&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So I decided to offer to do a version of my talk for Pittsburgh Code and Supply using Rust as the programming language (rather than Scala). I want to spread the news about how to effectively use a sufficiently typed programming language, whether it&amp;rsquo;s Scala or Rust or anything else sufficiently derived from the ML family of type systems.&lt;/p&gt;
+
+&lt;p&gt;Justin will schedule it for some time in July. That should give me enough time, after Pittsburgh TechFest in early June, to learn enough Rust to convert my Scala code over properly!&lt;/p&gt;
+
+&lt;h2 id=&#34;update-of-2014-06-07:0ca97438327f3bcfe743d5a186e4af3e&#34;&gt;(Update of 2014-06-07)&lt;/h2&gt;
+
+&lt;p&gt;I much improved the presentation for Pittsburgh TechFest, which I &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2014/06/07/report-on-the-2014-pittsburgh-techfest-my-third-year/&#34;&gt;attended for the third year&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I recommend reading the &lt;a href=&#34;https://github.com/FranklinChen/talk-on-type-directed-tdd-using-fizzbuzz/blob/master/doc/article.pdf&#34;&gt;article version of the presentation&lt;/a&gt;, rather than the slides. This is the first time I&amp;rsquo;ve created both an article version of a presentation and slides for use during the live presentation. I will do this in the future as well. Slides are not meant to stand alone or even be read alone, but in case you really want to see them, they are here:&lt;/p&gt;
+
+&lt;p&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/37257104&#34; width=&#34;427&#34; height=&#34;356&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;https://www.slideshare.net/FranklinChen/presentation-37257104&#34; title=&#34;Exploring type-directed, test-driven development: a case study using FizzBuzz&#34; target=&#34;_blank&#34;&gt;Exploring type-directed, test-driven development: a case study using FizzBuzz&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&#34;http://www.slideshare.net/FranklinChen&#34; target=&#34;_blank&#34;&gt;Franklin Chen&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;update-of-2014-07-17:0ca97438327f3bcfe743d5a186e4af3e&#34;&gt;(Update of 2014-07-17)&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s crunch time. My Rust version of the talk, &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/events/183483622/&#34;&gt;&amp;ldquo;Type-Directed TDD in Rust&amp;rdquo;&lt;/a&gt; is coming next week.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Review of the free Coursera course &#34;Principles of Reactive Programming&#34;</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/</link>
+      <pubDate>Tue, 31 Dec 2013 21:29:39 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/</guid>
+      <description>
+
+&lt;p&gt;At long last, I have officially completed the free Coursera course &lt;a href=&#34;http://www.coursera.org/course/reactive&#34;&gt;&amp;ldquo;Principles of Reactive Programming&amp;rdquo;&lt;/a&gt;, receiving my &amp;ldquo;Statement of Accomplishment&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;This was an intense course, a lot of work, actually, and made the last two month s of my life (November and December) challenging as I juggled many activities. But it was worth the effort. I would definitely recommend this course to anyone who has completed the introductory course &lt;a href=&#34;http://www.coursera.org/course/progfun&#34;&gt;&amp;ldquo;Principles of Functional Programming in Scala&amp;rdquo;&lt;/a&gt; (or has the equivalent background). (See my &lt;a href=&#34;http://franklinchen.com/blog/2012-11-15-review-of-courseras-fall-2012-functional-programming-principles-in-scala/&#34;&gt;review of that course as offered in fall of 2012&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;I took this course along with a bunch of local friends who are also members of the &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/&#34;&gt;Pittsburgh Scala Meetup&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-is-reactive:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;What is &amp;ldquo;Reactive&amp;rdquo;?&lt;/h2&gt;
+
+&lt;p&gt;&amp;ldquo;Reactive&amp;rdquo; is a fairly new buzzword, popularized recently by the &lt;a href=&#34;http://www.reactivemanifesto.org/&#34;&gt;Reactive Manifesto&lt;/a&gt; to urge consideration of four traits modern applications may need to have:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;responsive&lt;/li&gt;
+&lt;li&gt;scalable&lt;/li&gt;
+&lt;li&gt;resilient&lt;/li&gt;
+&lt;li&gt;event-driven&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;instructors-and-topics:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Instructors and topics&lt;/h2&gt;
+
+&lt;p&gt;Each instructor was responsible for covering a key technology.&lt;/p&gt;
+
+&lt;h3 id=&#34;martin-odersky:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Martin Odersky&lt;/h3&gt;
+
+&lt;p&gt;Martin Oderksy, the inventor of Scala and instructor for the previously mentioned &amp;ldquo;Principles of Functional Programming in Scala&amp;rdquo; course, focused on covering more advanced usage of Scala.&lt;/p&gt;
+
+&lt;p&gt;He immediately introduced monads, which are key to many of the concepts and libraries used throughout this course. Scala&amp;rsquo;s support for monads through the syntax of for-comprehensions is very helpful. He introduced the property-based testing framework &lt;a href=&#34;http://www.scalacheck.org/&#34;&gt;ScalaCheck&lt;/a&gt; (which uses monads for generation of data), and the first assignment involved working with the framework. (By the way, I gave a &lt;a href=&#34;http://franklinchen.com/blog/2013/04/11/my-pittsburgh-scala-meetup-talk-on-property-based-testing-using-scalacheck/&#34;&gt;talk on property-based testing using ScalaCheck&lt;/a&gt; eight months ago.)&lt;/p&gt;
+
+&lt;p&gt;Then he discussed modeling event simulation in Scala using mutable objects. I felt that this unit was not in the spirit of the others, because there was so much uncontrolled mutable state running around. My friends and I agreed that the assignment for this unit was burdensome and not really useful. I thought to myself, in fact, that I would never solve the problems in this way.&lt;/p&gt;
+
+&lt;h3 id=&#34;erik-meijer:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Erik Meijer&lt;/h3&gt;
+
+&lt;p&gt;Erik Meijer is a very energetic and humorous speaker. I really enjoyed his lectures.&lt;/p&gt;
+
+&lt;p&gt;In his first unit, he introduced asynchronous programming using Scala&amp;rsquo;s &lt;a href=&#34;http://docs.scala-lang.org/overviews/core/futures.html&#34;&gt;&lt;code&gt;Future&lt;/code&gt; monad (backed by a &lt;code&gt;Promise&lt;/code&gt;)&lt;/a&gt;, as well as the cool new &lt;a href=&#34;https://github.com/scala/async&#34;&gt;macro-based &lt;code&gt;async&lt;/code&gt;/&lt;code&gt;await&lt;/code&gt; library&lt;/a&gt;, which greatly simplifies writing code. Our assignment, which was instructive and interesting, was to implement a baby version of Node.js in Scala, ha!&lt;/p&gt;
+
+&lt;p&gt;Then he introduced &lt;a href=&#34;https://rxscala.github.io/&#34;&gt;&lt;code&gt;RxScala&lt;/code&gt;&lt;/a&gt;, a Scala adaptor for &lt;a href=&#34;https://github.com/Netflix/RxJava&#34;&gt;&lt;code&gt;RxJava&lt;/code&gt;&lt;/a&gt;, which is a Java port of Microsoft&amp;rsquo;s &amp;ldquo;reactive extensions&amp;rdquo; &lt;code&gt;Rx&lt;/code&gt; framework. I enjoyed this unit a lot, and appreciated the great documentation available (the &amp;ldquo;marble diagrams&amp;rdquo; are particularly useful). One nitpick I suppose I must have with his presentation is that I&amp;rsquo;m not sure that, for a non-theory-oriented audience, the discussions of &amp;ldquo;duality&amp;rdquo; were necessary. The assignment was very practically-oriented, gathering data asynchronously and displaying it and allowing user interaction. It was enjoyable and showcased the power of using a framework like Rx.&lt;/p&gt;
+
+&lt;h3 id=&#34;roland-kuhn:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Roland Kuhn&lt;/h3&gt;
+
+&lt;p&gt;Roland Kuhn covered the most complex section of the course, introducing actors by means of the &lt;a href=&#34;http://akka.io/&#34;&gt;Akka&lt;/a&gt; framework.&lt;/p&gt;
+
+&lt;p&gt;The first assignment was fairly straightforward, on implemented a distributed binary tree with actors.&lt;/p&gt;
+
+&lt;p&gt;The second assignment I found quite difficult, and not only because it was crunch time at the end of December before holiday season! It was a distributed key-value store with multiple levels of possible failure. There is no way I would have successfully and correctly completed this assignment without the helpful discussions I found on the online Coursera forums. To really figure out what was going on required (for me) turning on logging in various places and writing a lot of tests using Akka&amp;rsquo;s &lt;a href=&#34;http://doc.akka.io/docs/akka/snapshot/scala/testing.html&#34;&gt;&lt;code&gt;TestKit&lt;/code&gt;&lt;/a&gt;. I realized eventually that my code was ugly and not entirely clean and idiomatic, but it was definitely a worthwhile learning experience on a realistic problem to solve.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I learned quite a lot from this course. It is a very practical course on &amp;ldquo;reactive&amp;rdquo; programming. I felt after completing this course that I was ready to use the concepts and technologies covered in real problems. I am grateful to the instructors (who were active on the forums, by the way) for sharing their theoretical and practical knowledge as a free Coursera course.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Pittsburgh Python: night of the favorite module</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/</link>
+      <pubDate>Wed, 26 Jun 2013 22:50:00 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/</guid>
+      <description>
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Pittsburgh Python User Group&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/pghpython/&#34;&gt;Pittsburgh Python User Group&lt;/a&gt; had &lt;a href=&#34;http://www.meetup.com/pghpython/events/120442102&#34;&gt;another &amp;ldquo;favorite module night&amp;rdquo;&lt;/a&gt;. I enjoy this format because I get to learn about what people find useful, so that I may perhaps use it myself!&lt;/p&gt;
+
+&lt;h2 id=&#34;how-i-benefited-in-the-past:453716912359e60848a46333431abedc&#34;&gt;How I benefited in the past&lt;/h2&gt;
+
+&lt;p&gt;For example, &lt;a href=&#34;http://franklinchen.com/blog/2012/08/23/pittsburgh-python-meetup-i-gave-my-first-lightning-talk-ever-the-topic-was-scons/&#34;&gt;one of these &amp;ldquo;favorite module night&amp;rdquo; sessions&lt;/a&gt; was where I learned about Kenneth Reitz&amp;rsquo;s &lt;code&gt;requests&lt;/code&gt; library. Very often it is easy to not be aware of the rapidly changing ecology of very useful libraries in a programming language ecosystem outside of the official &amp;ldquo;standard library&amp;rdquo;, especially when using a language that is &lt;em&gt;not&lt;/em&gt; one&amp;rsquo;s primary working language. For example, Python has never been one of my primary working languages, so I&amp;rsquo;m not as up to date on what all the best tools are to use. But just a couple of weeks ago, I had to do some work with Python, and &lt;code&gt;requests&lt;/code&gt; came in very handy.&lt;/p&gt;
+
+&lt;h2 id=&#34;ipython-notebook-http-ipython-org-notebook-html:453716912359e60848a46333431abedc&#34;&gt;&lt;a href=&#34;http://ipython.org/notebook.html&#34;&gt;IPython Notebook&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Josh Adelman opened the show-and-tell with a demo of &lt;a href=&#34;http://ipython.org/notebook.html&#34;&gt;IPython Notebook&lt;/a&gt;. This is a truly fantastic interactive environment for developing code while creating a full document for publication and sharing. He uses it not only for research but also for his students to use in his teaching.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;ve used Mathematica, the concept is similar to that environment.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m also excited that IPython Notebook has been the direct inspiration for similar projects for other languages, e.g., &lt;a href=&#34;https://github.com/Bridgewater/scala-notebook&#34;&gt;Scala Notebook&lt;/a&gt; for Scala in development.&lt;/p&gt;
+
+&lt;p&gt;Josh gave a link to this &lt;a href=&#34;http://jakevdp.github.io/&#34;&gt;cool blog that uses IPython Notebook&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;sentry-https-getsentry-com-welcome-and-raven-http-raven-readthedocs-org-en-latest:453716912359e60848a46333431abedc&#34;&gt;&lt;a href=&#34;https://getsentry.com/welcome/&#34;&gt;Sentry&lt;/a&gt; and &lt;a href=&#34;http://raven.readthedocs.org/en/latest/&#34;&gt;Raven&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Nick Sloan presented on Sentry, a service for collecting errors in your program and notifying you of them, and Raven, the official Python client for Sentry. Sentry is actually open source, so you could host it yourself, but paying for the hosted service provides conveniences.&lt;/p&gt;
+
+&lt;p&gt;Using Sentry is no more than using ordinary Python logging after calling a setup function. The ease of use made it sound like a winner.&lt;/p&gt;
+
+&lt;h2 id=&#34;docopt-http-docopt-org:453716912359e60848a46333431abedc&#34;&gt;&lt;a href=&#34;http://docopt.org/&#34;&gt;docopt&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Joe Esposito presented on &lt;code&gt;docopt&lt;/code&gt;, a library for command line parsing. The interesting thing about it is that it implements an &lt;em&gt;external&lt;/em&gt; domain-specific language for describing command lines: you write a usage message, as a string, and &lt;code&gt;docopt&lt;/code&gt; parses it in order to deduce what the expectations and constraints are. This is a very ambitious approach, contrary to the usual internal API-based approaches, some of which are sophisticated and implement an &lt;em&gt;internal&lt;/em&gt; domain-specific language.&lt;/p&gt;
+
+&lt;p&gt;Of course, Joe contrasted this library with one of the standard command line parsing libraries for Python, &lt;code&gt;argparse&lt;/code&gt;, which is lower-level so that when you use it, the high-level end user usage is not as immediately readable.&lt;/p&gt;
+
+&lt;p&gt;There were a lot of good questions about &lt;code&gt;docopt&lt;/code&gt; since it seemed magical. I&amp;rsquo;ve decided to write more about all this in a separate blog post about command line parsers.&lt;/p&gt;
+
+&lt;h2 id=&#34;hypothesis-https-pypi-python-org-pypi-hypothesis:453716912359e60848a46333431abedc&#34;&gt;&lt;a href=&#34;https://pypi.python.org/pypi/hypothesis&#34;&gt;hypothesis&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;I gave a short 5-minute presentation on &lt;code&gt;hypothesis&lt;/code&gt;, a library in development for doing property-based testing, inspired by QuickCheck and ScalaCheck. As I have done recently when giving a much longer &lt;a href=&#34;http://franklinchen.com/blog/2013/04/11/my-pittsburgh-scala-meetup-talk-on-property-based-testing-using-scalacheck/&#34;&gt;talk on property-based testing using ScalaCheck&lt;/a&gt;, I focused on motivating the use of property-based testing as an addition to example-based testing.&lt;/p&gt;
+
+&lt;p&gt;Materials for my lightning talk are &lt;a href=&#34;https://github.com/franklinchen/lightning-talk-on-hypothesis&#34;&gt;here&lt;/a&gt;, and my few slides are below:&lt;/p&gt;
+
+&lt;p&gt;&lt;iframe src=&#34;http://www.slideshare.net/slideshow/embed_code/23548866&#34; width=&#34;427&#34; height=&#34;356&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px&#34; allowfullscreen webkitallowfullscreen mozallowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;http://www.slideshare.net/FranklinChen/handout-23548866&#34; title=&#34;5-minute intro to property-based testing in Python with hypothesis&#34; target=&#34;_blank&#34;&gt;5-minute intro to property-based testing in Python with hypothesis&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&#34;http://www.slideshare.net/FranklinChen&#34; target=&#34;_blank&#34;&gt;Franklin Chen&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;itertools-http-docs-python-org-2-library-itertools-html:453716912359e60848a46333431abedc&#34;&gt;&lt;a href=&#34;http://docs.python.org/2/library/itertools.html&#34;&gt;&lt;code&gt;itertools&lt;/code&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Tim Lesher talked about &lt;code&gt;itertools&lt;/code&gt;, a very useful part of the standard library that provides support for efficient functional programming idioms. Part of the efficiency comes from the use of iterators in order to avoid constructing intermediate lists; this is a way of simulating the lazy sequences that are standard in languages such as ML, Haskell, Scala, and Clojure.&lt;/p&gt;
+
+&lt;p&gt;Tim noted that although &lt;code&gt;itertools&lt;/code&gt; is powerful, &amp;ldquo;don&amp;rsquo;t be stupid&amp;rdquo;: don&amp;rsquo;t write obscure-looking code with it just because you can.&lt;/p&gt;
+
+&lt;p&gt;Josh noted that the documentation for &lt;code&gt;itertools&lt;/code&gt; is great, with recipes that show you not only how to do things, and also with code for the equivalent more complicated code that you would have to write if you didn&amp;rsquo;t use &lt;code&gt;itertools&lt;/code&gt;. I agree that the documentation for &lt;code&gt;itertools&lt;/code&gt; is a model of high-quality documentation for a library. Check it out, and use it!&lt;/p&gt;
+
+&lt;h2 id=&#34;argparse-http-docs-python-org-dev-library-argparse-html:453716912359e60848a46333431abedc&#34;&gt;&lt;a href=&#34;http://docs.python.org/dev/library/argparse.html&#34;&gt;&lt;code&gt;argparse&lt;/code&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Craig gave a little presentation on &lt;code&gt;argparse&lt;/code&gt;, the aforementioned standard library for command line parsing. He noted it was ironic that he had prepared to speak on it before Joe independently decided to talk about &lt;code&gt;docopt&lt;/code&gt;. (Actually, I like &lt;code&gt;argparse&lt;/code&gt; and had considered talking about it before Craig submitted it already.)&lt;/p&gt;
+
+&lt;p&gt;One feature he uses from &lt;code&gt;argparse&lt;/code&gt; is the ability to create mutually exclusive groups. There was a question of whether this is supported in &lt;code&gt;docopt&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;As mentioned earlier, I&amp;rsquo;ll write more about both &lt;code&gt;argparse&lt;/code&gt; and &lt;code&gt;docopt&lt;/code&gt; in a separate blog post.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-python-standard-library-by-example-http-doughellmann-com-python-standard-library-by-example:453716912359e60848a46333431abedc&#34;&gt;&lt;a href=&#34;http://doughellmann.com/python-standard-library-by-example&#34;&gt;The Python Standard Library by Example&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Someone shared not a &amp;ldquo;favorite module&amp;rdquo;, but a favorite book, &amp;ldquo;The Python Standard Library by Example&amp;rdquo;. I&amp;rsquo;m happy he did, because it is in fact an excellent reference for anyone using the Python standard library, with concrete examples that you can take and use. Too often, I have found that standard documentation is too terse.&lt;/p&gt;
+
+&lt;p&gt;The book is based on &lt;a href=&#34;http://pymotw.com/2/&#34;&gt;&amp;ldquo;Python Module of the Week&amp;rdquo;&lt;/a&gt;, which is a great online resource.&lt;/p&gt;
+
+&lt;h2 id=&#34;introductions-for-new-people:453716912359e60848a46333431abedc&#34;&gt;Introductions for new people&lt;/h2&gt;
+
+&lt;p&gt;An important part of the vibe of the Pittsburgh Python User Group is how it tries to get everyone actively involved in the local Python community.&lt;/p&gt;
+
+&lt;p&gt;There is a tradition of periodically having everyone introduce themselves, to counter the tendency sometimes in these kinds of groups for people to attend a meeting out of curiosity and then silently leave and perhaps not come back, out of intimidation or not knowing how to benefit or contribute. I know I have done that before, especially when attending the meeting of a group where I didn&amp;rsquo;t really know anybody ahead of time and still knew very little about the topics discussed by the group (such as when I joined the Pittsburgh Ruby group as one who had barely used any Ruby).&lt;/p&gt;
+
+&lt;p&gt;Since so many people showed up, and a lot seemed to be new faces, we had a round of introductions. I hope we&amp;rsquo;ll continue to see some of these new faces in the future!&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:453716912359e60848a46333431abedc&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Thanks again to Google Pittsburgh for hosting the Pittsburgh Python User Group meeting, and Steve Gross of Google for being the guy who makes it able for us to meet there!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

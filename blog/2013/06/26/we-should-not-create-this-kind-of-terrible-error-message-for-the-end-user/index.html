@@ -1,109 +1,80 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>We Should Not Create This Kind of Terrible Error Message for the End User - The Conscientious Programmer</title>
-  <meta name="author" content="Franklin Chen">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
-  <meta name="description" content="I have a Samsung Galaxy S II smartphone. I recently encountered a problem: auto-updating of apps failed with this terrible error message: Application &hellip;">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>We should not create this kind of terrible error message for the end user &middot; The Conscientious Programmer</title>
 
   
-  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/highlight/default.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
   <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+
   
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-41982602-1']);
-    _gaq.push(['_trackPageview']);
+  
+  
+  
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
 </head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>The Conscientious Programmer</h1>
+      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">The Conscientious Programmer</a></h1>
-  
-    <h2>Humbly exploring what it means to do the right thing.</h2>
-  
-</hgroup>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://conscientiousprogrammer.com">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="/about/">About</a></li>
+      
+    </ul>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="ConscientiousProgrammer.com">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/about">About</a></li>
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+      
+      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+      </li>
+    </ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>We should not create this kind of terrible error message for the end user</h1>
     
-      <h1 class="entry-title">We Should Not Create This Kind of Terrible Error Message for the End User</h1>
-    
-    
-      <p class="meta">
-        
 
+<p>I have a <a href="http://franklinchen.com/blog/2012/03/22/paradox-i-will-observe-the-national-day-of-unplugging-but-just-bought-my-first-smartphone-this-week/">Samsung Galaxy S II smartphone</a>. I recently encountered a problem: auto-updating of apps failed with this terrible error message:</p>
 
-
-
-<time class='entry-date' datetime='2013-06-26T23:44:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>11:44 pm</span></time>
-        
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>I have a <a href="http://franklinchen.com/blog/2012/03/22/paradox-i-will-observe-the-national-day-of-unplugging-but-just-bought-my-first-smartphone-this-week/">Samsung Galaxy S II smartphone</a>. I recently encountered a problem: auto-updating of apps failed with this terrible error message:</p>
-
-<blockquote><p>Application cannot be installed in the default install location.</p></blockquote>
-
+<blockquote>
+Application cannot be installed in the default install location.
+</blockquote>
 
 <p>Also, a lot of time and bandwidth was each time spent on re-downloading the app and then failing, with no way to gracefully recover.</p>
 
@@ -111,14 +82,11 @@
 
 <p>I feel pretty bad about this situation, both as a programmer and as an end user.</p>
 
-<!--more-->
-
-
-<h2>As an end user</h2>
+<h2 id="as-an-end-user:e84e5720ba1a79447557437f40b64c27">As an end user</h2>
 
 <p>As an end user, I know very little about smartphones. I am not currently a mobile-device developer. I just want things to work, and I have never read the huge manual that came with my phone. If there is an error in my operation of the phone, I want some kind of useful guidance (ideally very specific and tailored to a common use case known by the vendor), not a mysterious generic error message.</p>
 
-<h2>As a programmer</h2>
+<h2 id="as-a-programmer:e84e5720ba1a79447557437f40b64c27">As a programmer</h2>
 
 <p>It turns out that there is internal device storage and SD card storage, and if you run out of space somewhere, an error can happen, and that there is a default install location for apps. The gory details for developers are <a href="https://developer.android.com/guide/topics/data/install-location.html">here</a>.</p>
 
@@ -126,12 +94,13 @@
 
 <p>So why that terrible error message? Why not just tell the end user exactly what is going on? Why not something like:</p>
 
-<blockquote><p>The application X could not be installed at (device storage | SD card storage) because you don&#8217;t have enough space. You can try clearing more space, or go to your application settings to move it to (SD card storage | device storage).</p></blockquote>
-
+<blockquote>
+The application X could not be installed at (device storage | SD card storage) because you don't have enough space. You can try clearing more space, or go to your application settings to move it to (SD card storage | device storage).
+</blockquote>
 
 <p>The application should know exactly what is going on, and not only that, should be able to suggest a course of action based on all the relevant variables, such as how much space there is in different places, how large the application is, etc.</p>
 
-<h3>Why?</h3>
+<h3 id="why:e84e5720ba1a79447557437f40b64c27">Why?</h3>
 
 <p>I haven&rsquo;t seen the source code that generates the existing error message, but as a programmer, I can guess what might be happening.</p>
 
@@ -142,220 +111,43 @@
 <li>Not handling an exception close to where useful recovery can actually happen</li>
 </ul>
 
-
 <p>It is superficially &ldquo;more work&rdquo; to throw an exception that includes all relevant information, and for handlers to also do something intelligent rather than just pass the buck all the way to some top level catch-all handler.</p>
 
 <p>Also, why should the phone download the whole app and then fail, if there is actually enough information to guess that the whole update might fail? Surely there is information about how big the app is, before downloading it?</p>
 
 <p>And what&rsquo;s with the default concurrent downloads of many updates at the same time, which greatly increases the probability of failure of all of them, when serializing the downloads results in less use of temporary space?</p>
 
-<h2>Conclusion</h2>
+<h2 id="conclusion:e84e5720ba1a79447557437f40b64c27">Conclusion</h2>
 
 <p>We programmers clearly are not conscientious enough about error handling and reporting. I believe that today, more than ever, we have a responsibility to <em>handle failure gracefully</em> in software. I believe that failure should even be considered to be the <em>default</em> expectation, rather than success, in order to create reliable software. As <a href="http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/">Dick Wall said at the recent 2013 Pittsburgh TechFest</a>, it&rsquo;s not enough to design and code and test primarily for the &ldquo;happy path&rdquo;.</p>
 
 <p>There are ways to do error handling better, but they require serious thinking up front. This is a large topic we will be exploring in depth on this blog.</p>
 
-<h3>(Update of 2013-06-27)</h3>
+<h3 id="update-of-2013-06-27:e84e5720ba1a79447557437f40b64c27">(Update of 2013-06-27)</h3>
 
 <p>By sheer coincidence, a great <a href="http://programming.oreilly.com/2013/06/human-centered-design-may-be-what-makes-your-app-stand-out.html">interview on <em>human-centered design</em></a> arrived in my RSS feed. Check it out.</p>
 
 <p>I will be the first to admit that I don&rsquo;t know much about UX or human-centered design. I just have some intuitions as an end user. I think we developers should learn more about this stuff in a more formal, serious way. And it&rsquo;s just a matter of thinking about the ultimate end user. Even if we are not programming for the ultimate end user, we are at least programming for other programmers. If we are writing an API, the principles that guide human behavior must still be valid, even if programmers are an unusual subset of human beings! We write code <em>not</em> primarily for computers but for other human beings (including our future selves).</p>
-</div>
 
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
-
-      
-
-
-
-
-<time class='entry-date' datetime='2013-06-26T23:44:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>11:44 pm</span></time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/android/'>android</a>, <a class='category' href='/blog/categories/end-user/'>end user</a>, <a class='category' href='/blog/categories/error-handling/'>error handling</a>, <a class='category' href='/blog/categories/error-messages/'>error messages</a>, <a class='category' href='/blog/categories/human-centered-design/'>human-centered design</a>, <a class='category' href='/blog/categories/ux/'>ux</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/" title="Previous Post: Pittsburgh Python: night of the favorite module">&laquo; Pittsburgh Python: night of the favorite module</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/06/29/nil-non-determinism-exceptions/" title="Next Post: nil, non-determinism, exceptions: a journey in debugging the software that generates my blog">nil, non-determinism, exceptions: a journey in debugging the software that generates my blog &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">How to Think About Rust Ownership Versus C++ Unique_ptr</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/">Remembering Over 20 Years of Reading Dr. Dobb&#8217;s Journal Even Till Today</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/">When a Computer Algebra Program Gives Wrong Answers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/">Pittsburgh Code and Supply: Making Music With Overtone in Clojure; Conveying Information Through Sound</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/07/understanding-cloure-transducers-through-types/">Understanding Clojure Transducers Through Types</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'FranklinChen',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/+FranklinChen?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - <a href="http://franklinchen.com/">Franklin Chen</a> -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-      var disqus_shortname = 'conscientiousprogrammer';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/';
-        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2013\/06\/26\/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user\/';
+    var disqus_title = 'We should not create this kind of terrible error message for the end user';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2013\/06\/26\/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user\/';
 
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
     (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 </body>
 </html>

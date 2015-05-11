@@ -1,115 +1,94 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>MongoDB Free Online Course: A Review - The Conscientious Programmer</title>
-  <meta name="author" content="Franklin Chen">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
-  <meta name="description" content="I finally finished a two-month free online course on MongoDB, given by MongoDB, Inc. This is a review of the specific course numbered M101J, &ldquo; &hellip;">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MongoDB free online course: a review &middot; The Conscientious Programmer</title>
 
   
-  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/highlight/default.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
   <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+
   
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-41982602-1']);
-    _gaq.push(['_trackPageview']);
+  
+  
+  
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
 </head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>The Conscientious Programmer</h1>
+      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">The Conscientious Programmer</a></h1>
-  
-    <h2>Humbly exploring what it means to do the right thing.</h2>
-  
-</hgroup>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://conscientiousprogrammer.com">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="/about/">About</a></li>
+      
+    </ul>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="ConscientiousProgrammer.com">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/about">About</a></li>
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+      
+      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+      </li>
+    </ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>MongoDB free online course: a review</h1>
     
-      <h1 class="entry-title">MongoDB Free Online Course: A Review</h1>
+
+<p>
+<figure >
+    
+        <img src="http://www.mongodb.com/sites/all/themes/bonsai/logo.png" />
     
     
-      <p class="meta">
+    <figcaption>
+        <h4>MongoDB logo</h4>
         
-
-
-
-
-<time class='entry-date' datetime='2013-12-04T22:03:55-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:03 pm</span></time>
-        
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
-        
-      </p>
+    </figcaption>
     
-  </header>
-
-
-<div class="entry-content"><p><img src="http://www.mongodb.com/sites/all/themes/bonsai/logo.png" title="MongoDB logo" ></p>
+</figure>
+</p>
 
 <p>I finally finished a two-month <a href="http://education.mongodb.com/">free online course on MongoDB</a>, given by <a href="http://www.mongodb.com/">MongoDB, Inc</a>.</p>
 
 <p>This is a review of the specific course numbered M101J, &ldquo;MongoDB for Java Developers&rdquo;, but it should apply to all thee introductory developer courses on MongoDB in any language, because actually, I had originally signed up months earlier for their original course (in JavaScript), and the content is largely the same (I had gotten busy and dropped that course).</p>
 
-<!--more-->
-
-
-<h2>Why learn MongoDB?</h2>
+<h2 id="why-learn-mongodb:0d4164e2dd5b7ba3716ef93bdba00ac4">Why learn MongoDB?</h2>
 
 <p>I had first heard of MongoDB over two years ago, at a meeting of the (now defunct) <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers/">original Pittsburgh JavaScript meetup group</a>, <a href="http://www.meetup.com/Pittsburgh-JavaScript-Developers/events/25229441/">&ldquo;In-depth look at Node.js and NoSQL&rdquo;</a>.</p>
 
@@ -117,11 +96,11 @@
 
 <p>I took this course in part to expose myself to some NoSQL technology and also in part because I anticipated needing to use something like it. In fact, it turns out <a href="/blog/2013/08/02/pittsburgh-ruby-python-social/">I did use it</a>, heavily, in exactly the kind of use case that works fine with it.</p>
 
-<h2>Why did I take the Java version of the course?</h2>
+<h2 id="why-did-i-take-the-java-version-of-the-course:0d4164e2dd5b7ba3716ef93bdba00ac4">Why did I take the Java version of the course?</h2>
 
 <p>I took the &ldquo;M101J: MongoDB for Java Developers&rdquo; version of the course because I anticipated writing code in Scala to access MongoDB. In fact, during the course, I ended up using the official Scala driver <a href="https://github.com/mongodb/casbah">Casbah</a> when possible.</p>
 
-<h2>Summary of the course</h2>
+<h2 id="summary-of-the-course:0d4164e2dd5b7ba3716ef93bdba00ac4">Summary of the course</h2>
 
 <p>A lot of the course actually involved using the JavaScript-based MongoDB shell, which makes sense because it is easy to explore data that way. Since everything is JSON-like, there&rsquo;s no real escaping JavaScript if you&rsquo;re working with MongoDB.</p>
 
@@ -139,209 +118,33 @@
 
 <p>Finally, the sections on replication and sharding were particularly problematic. The lectures kept mentioning that various defaults and APIs were a moving target. Furthermore, actual hardcoded numbers even showed up that we were supposed to use to specify policies. Wow.</p>
 
-<h2>Conclusion</h2>
+<h2 id="conclusion:0d4164e2dd5b7ba3716ef93bdba00ac4">Conclusion</h2>
 
 <p>The lectures and quizzes were well-designed (until the final portion of the course that seemed particularly ad hoc). The assignments were sometimes rather tricky, with not much of a hint, but offered a decent variety of realistic query formation.</p>
 
 <p>I would recommend this course as an overview to anyone who is committed to using MongoDB to its full extent.</p>
 
 <p>However, although I got my &ldquo;certificate&rdquo; for completing the course, and appreciate that MongoDB, Inc offers this training for free, I felt that there was a lot of ad hoc stuff going on in the evolving design of MongoDB, and embedded in the API design as well. For what I needed to know for my work, I didn&rsquo;t really need the whole course.</p>
-</div>
 
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
-
-      
-
-
-
-
-<time class='entry-date' datetime='2013-12-04T22:03:55-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:03 pm</span></time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/casbah/'>casbah</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/mongodb/'>mongodb</a>, <a class='category' href='/blog/categories/node/'>node</a>, <a class='category' href='/blog/categories/nosql/'>nosql</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/" title="Previous Post: Surprised by the Go programming language's treatment of nil">&laquo; Surprised by the Go programming language&#8217;s treatment of nil</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play/" title="Next Post: Pittsburgh Scala Meetup: code walk through tic-tac-toe with Play">Pittsburgh Scala Meetup: code walk through tic-tac-toe with Play &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">How to Think About Rust Ownership Versus C++ Unique_ptr</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/">Remembering Over 20 Years of Reading Dr. Dobb&#8217;s Journal Even Till Today</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/">When a Computer Algebra Program Gives Wrong Answers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/">Pittsburgh Code and Supply: Making Music With Overtone in Clojure; Conveying Information Through Sound</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/07/understanding-cloure-transducers-through-types/">Understanding Clojure Transducers Through Types</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'FranklinChen',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/+FranklinChen?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - <a href="http://franklinchen.com/">Franklin Chen</a> -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-      var disqus_shortname = 'conscientiousprogrammer';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/';
-        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2013\/12\/04\/mongodb-free-online-course-a-review\/';
+    var disqus_title = 'MongoDB free online course: a review';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2013\/12\/04\/mongodb-free-online-course-a-review\/';
 
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
     (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 </body>
 </html>

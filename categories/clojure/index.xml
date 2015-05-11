@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Clojure on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/clojure/</link>
+    <description>Recent content in Clojure on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 07 Oct 2014 21:10:18 -0400</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/clojure/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Pittsburgh Code and Supply: Making music with Overtone in Clojure; Conveying information through sound</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/</link>
+      <pubDate>Tue, 07 Oct 2014 21:10:18 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/</guid>
+      <description>
+
+&lt;p&gt;I attended &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/events/202086812&#34;&gt;a fine meeting&lt;/a&gt; of &lt;a href=&#34;http://www.codeandsupply.co/&#34;&gt;Pittsburgh Code and Supply&lt;/a&gt; dedicated to two related topics: &lt;em&gt;music&lt;/em&gt; and &lt;em&gt;sonification&lt;/em&gt;. I thought it was a great idea to have presentations on both topics in the same session, thereby giving a broad view of what can be done with &lt;em&gt;sound&lt;/em&gt; through computation.&lt;/p&gt;
+
+&lt;h2 id=&#34;erik-swanson-on-overtone-in-clojure:eae2c8db91585e112346d13d734d08c3&#34;&gt;Erik Swanson on Overtone in Clojure&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://overtone.github.io/&#34;&gt;Overtone&lt;/a&gt; is a very interesting environment for programmable music written in Clojure that I&amp;rsquo;d heard of years ago but never gotten around to playing with, simply because my primary interest in music is &lt;a href=&#34;http://franklinchen.com/blog/categories/music/&#34;&gt;playing music on traditional physical instruments with my own hands, the old-fashioned way&lt;/a&gt;. However, I am definitely open to the idea of doing interesting new things with computer aid; it just has not been a priority to explore.&lt;/p&gt;
+
+&lt;p&gt;As preparation for the presentation (I don&amp;rsquo;t like feeling completely lost during live demos; I usually do!), I actually finally set up an Overtone project with Leiningen and walked through a tutorial that simply used the Clojure CIDER mode in Emacs to operate in a REPL. I didn&amp;rsquo;t do any real live-coding, however. I just wanted to get a taste.&lt;/p&gt;
+
+&lt;p&gt;Erik Swanson gave a great presentation in which he described what he was doing as he live-coded some music with Emacs, incrementally creating instruments and generating pitches. Because of his presentation, I feel more comfortable about the prospect of really digging into Overtone if I ever want to.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a video of his presentation:&lt;/p&gt;
+
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;//www.youtube.com/embed/w7ARayiKBrE&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&#34;keith-callenberg-https-twitter-com-keithcallenberg-on-conveying-information-through-sound:eae2c8db91585e112346d13d734d08c3&#34;&gt;&lt;a href=&#34;https://twitter.com/keithcallenberg&#34;&gt;Keith Callenberg&lt;/a&gt; on conveying information through sound&lt;/h2&gt;
+
+&lt;p&gt;I learned a new word today: &lt;a href=&#34;http://en.wikipedia.org/wiki/Sonification&#34;&gt;&amp;ldquo;sonification&amp;rdquo;&lt;/a&gt;, the use of non-speech audio to convey information.&lt;/p&gt;
+
+&lt;p&gt;I may have vaguely encountered sonification before, but never while fully attentive to it. That changed when Keith Callenberg, a computational scientist, gave a fine presentation in which he gave numerous striking examples of sonification. He made the important distinction between music and sonification: music is sound for an aesthetic purpose, but sonification is for information transfer.&lt;/p&gt;
+
+&lt;p&gt;He convincingly showed why sonification is useful for data analysis, and also noted that our culture is strangely dominated by the &lt;em&gt;visual&lt;/em&gt;, so there remain many opportunities to use sound to understand data. (Also, sonification is used to help the visually impaired.)&lt;/p&gt;
+
+&lt;p&gt;One local example he gave was a particulate monitoring study done at CMU.&lt;/p&gt;
+
+&lt;h2 id=&#34;david-souther-on-web-audio-in-javascript:eae2c8db91585e112346d13d734d08c3&#34;&gt;David Souther on Web Audio in JavaScript&lt;/h2&gt;
+
+&lt;p&gt;I thought we were done for the evening, but David Souther hopped up with an unscheduled lightning talk on using Web Audio in JavaScript.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:eae2c8db91585e112346d13d734d08c3&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I enjoyed the presentations on music and sound, and got some ideas for stuff I might want to do myself. Another excellent session for Pittsburgh Code and Supply!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Understanding Clojure transducers through types</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types</link>
+      <pubDate>Thu, 07 Aug 2014 22:58:16 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types</guid>
+      <description>
+
+&lt;p&gt;Yesterday, Rich Hickey published a blog post, &lt;a href=&#34;http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming&#34;&gt;&amp;ldquo;Transducers are Coming&amp;rdquo;&lt;/a&gt;, which attracted a lot of attention.&lt;/p&gt;
+
+&lt;p&gt;I have a confession to make, which I have made before: I find it very difficult to understand ideas or code not presented with &lt;em&gt;types&lt;/em&gt;. So I decided that the only way I could possibly understand what &amp;ldquo;transducers&amp;rdquo; are would be to actually implement them in a typed language. I ended up doing so and am sharing my findings here.&lt;/p&gt;
+
+&lt;h2 id=&#34;vague-types-in-the-original-blog-post:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Vague types in the original blog post&lt;/h2&gt;
+
+&lt;p&gt;Rich informally gave some type signatures in his blog post:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;;;reducing function signature
+whatever, input -&amp;gt; whatever
+
+;;transducer signature
+(whatever, input -&amp;gt; whatever) -&amp;gt; (whatever, input -&amp;gt; whatever)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This was, unfortunately, not very helpful. It is hard to make sense of this pseudo-notation for types. What is quantified over what? And what is bound to what? I&amp;rsquo;ll explain later what I mean by these questions.&lt;/p&gt;
+
+&lt;h2 id=&#34;first-discussion-thread-i-saw:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;First discussion thread I saw&lt;/h2&gt;
+
+&lt;p&gt;There was much tweeting online about transducers after Rich Hickey&amp;rsquo;s initial announcement; the tweets did not help me, except for links posted to discussion elsewhere.&lt;/p&gt;
+
+&lt;p&gt;One of them was &lt;a href=&#34;https://news.ycombinator.com/item?id=8143905&#34;&gt;on Hacker News&lt;/a&gt;. I browsed through it but found it mostly not useful. The problem was that although a lot of interesting Haskell code was thrown around, it tended to be &lt;em&gt;related&lt;/em&gt; to transducers but not an &lt;em&gt;exact&lt;/em&gt; translation of the concept. I already had my own intuitions about transducers being related to well-known types such as &lt;a href=&#34;http://www.haskell.org/haskellwiki/Foldable_and_Traversable&#34;&gt;foldables&lt;/a&gt;, &lt;a href=&#34;http://en.wikipedia.org/wiki/Iteratee&#34;&gt;iteratees&lt;/a&gt;, &lt;a href=&#34;https://lens.github.io/&#34;&gt;lenses&lt;/a&gt;, etc. That &amp;ldquo;ordinary function composition&amp;rdquo; was involved immediately suggested the connections, because function composition is huge in these existing Haskell libraries.&lt;/p&gt;
+
+&lt;p&gt;But what I wanted was to understand transducers &lt;em&gt;as they are&lt;/em&gt;, before even thinking about generalizations and comparisons.&lt;/p&gt;
+
+&lt;h3 id=&#34;what-are-the-types:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;What are the types?&lt;/h3&gt;
+
+&lt;p&gt;Rich Hickey &lt;a href=&#34;https://news.ycombinator.com/item?id=8144385&#34;&gt;informally offered some types&lt;/a&gt; (which he said were &amp;ldquo;a la Haskell&amp;rdquo;) to try to help out:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    ;;reducing fn
+    x-&amp;gt;a-&amp;gt;x
+
+    ;;transducer fn
+    (x-&amp;gt;a-&amp;gt;x)-&amp;gt;(x-&amp;gt;b-&amp;gt;x)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;OK, by using type variables &lt;code&gt;a&lt;/code&gt;, &lt;code&gt;b&lt;/code&gt;, and &lt;code&gt;x&lt;/code&gt;, that indicates what is bound to what. The blog post should have used this notation rather than&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;;;transducer signature
+(whatever, input -&amp;gt; whatever) -&amp;gt; (whatever, input -&amp;gt; whatever)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;sample-clojure-code:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Sample Clojure code&lt;/h3&gt;
+
+&lt;p&gt;He also posted some sample Clojure code:&lt;/p&gt;
+
+&lt;p&gt;&lt;script src=&#34;https://gist.github.com/b5aefa622180681e1c81.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;second-discussion-thread-i-saw:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Second discussion thread I saw&lt;/h2&gt;
+
+&lt;p&gt;Then today, I saw a discussion thread on Reddit, titled &lt;a href=&#34;http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/&#34;&gt;&amp;ldquo;Clojure&amp;rsquo;s Transducers are Perverse Lenses&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;actual-runnable-haskell-code:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Actual runnable Haskell code&lt;/h3&gt;
+
+&lt;p&gt;Rich finally posted some actual &lt;a href=&#34;http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/&#34;&gt;type-checked, runnable Haskell code&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Transducers in Haskell&lt;/span&gt;
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Original was (b -&amp;gt; a) -&amp;gt; (r -&amp;gt; a -&amp;gt; r) -&amp;gt; (r -&amp;gt; b -&amp;gt; r)&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- but Michael O&amp;#39;Keefe in comment pointed out this is misleading&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xf r (f a)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
+&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; p xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; p a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; xf r a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; r
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
+&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl xf r (f a)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- for exposition only, yes, conj is gross for lazy lists&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- in Clojure conj and left folds dominate&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;conj&lt;/span&gt; xs x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xs &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; [x]
+&lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; xf &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl (xf conj) &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- build any old list function with its transducer, all the same way&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]
+&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; mapping f
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a]
+&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; p &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; filtering p
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]
+&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; flatmapping f
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- again, not interesting for lists, but the same transform&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- can be put to use wherever there&amp;#39;s a step fn&lt;/span&gt;
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
+&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; mapping (&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; filtering even &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; flatmapping (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt; x])
+
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; xlist xform [&lt;span style=&#34;color: #666666&#34;&gt;1..5&lt;/span&gt;]
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;After this post, I knew it would not take me long to figure out transducers.&lt;/p&gt;
+
+&lt;h2 id=&#34;refactoring-his-haskell-code:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Refactoring his Haskell code&lt;/h2&gt;
+
+&lt;p&gt;Two things to notice about the original code:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;It has long, low-level function types rather than types that actually &lt;em&gt;name&lt;/em&gt; the concepts being discussed (&lt;em&gt;reducers&lt;/em&gt; and &lt;em&gt;transducers&lt;/em&gt;).&lt;/li&gt;
+&lt;li&gt;It uses hardcoded list types &lt;code&gt;[a]&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;type-synonyms-and-higher-rank-types:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Type synonyms and higher-rank types&lt;/h3&gt;
+
+&lt;p&gt;Defining lots and lots of types (whether synonyms or &lt;a href=&#34;http://www.haskell.org/haskellwiki/Newtype&#34;&gt;newtypes&lt;/a&gt; is standard practice when programming in a modern typed language. OK, so I defined a type synonym&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left reduce&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;But what about transducer? This is trickier.&lt;/p&gt;
+
+&lt;p&gt;An &lt;em&gt;invalid&lt;/em&gt; attempt at a type would be&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Illegal!&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; b r
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;because the type variable &lt;code&gt;r&lt;/code&gt; is not bound in the type definition. And it would be incorrect to just randomly add &lt;code&gt;r&lt;/code&gt; on the left hand side as an extra parameter to the &lt;code&gt;Transducer&lt;/code&gt; type, because in fact it is &lt;em&gt;critical&lt;/em&gt; that a transducer &lt;em&gt;does not care&lt;/em&gt; about the underlying reducer&amp;rsquo;s return type &lt;code&gt;r&lt;/code&gt;. How do we write the desired type?&lt;/p&gt;
+
+&lt;p&gt;It turns out you need &lt;a href=&#34;http://www.haskell.org/haskellwiki/Rank-N_types&#34;&gt;higher-rank types&lt;/a&gt;. Rank-1 types are not sufficient; we need a rank-2 type to quantify &lt;code&gt;r&lt;/code&gt;, to say that a transducer from &lt;code&gt;a&lt;/code&gt; to &lt;code&gt;b&lt;/code&gt; is a transformation that takes a reducer to a specific &lt;code&gt;r&lt;/code&gt; and returns another reducer to the &lt;em&gt;same&lt;/em&gt; &lt;code&gt;r&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Here&amp;#39;s where the rank-2 type is needed&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; forall r &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; b r
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Now we can see more clearly some &lt;em&gt;completely generic&lt;/em&gt; ways to create a transducer:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
+&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xf r (f a)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a a
+&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; p xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; p a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; xf r a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; r
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;a-bit-of-history:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;A bit of history&lt;/h4&gt;
+
+&lt;p&gt;Higher-rank types are a powerful technique for expressing &amp;ldquo;hiding&amp;rdquo; of unnecessary details about types going on somewhere. My first recollection of the real world use of rank-2 types is from 1994 (the year I started using Haskell, although I did not actually use it in my work as a software engineer until 1995), when I was excited to read a paper by John Launchbury and Simon Peyton Jones that solved, using a rank-2 type, a specific, important, practical problem, &lt;a href=&#34;http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.3299&#34;&gt;&amp;ldquo;Lazy Functional State Threads&amp;rdquo;&lt;/a&gt;; twenty years later, their &lt;a href=&#34;http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad-ST.html&#34;&gt;ST monad&lt;/a&gt; is still part of the standard library!&lt;/p&gt;
+
+&lt;h3 id=&#34;introducing-type-classes:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Introducing type classes&lt;/h3&gt;
+
+&lt;p&gt;Clojure uses &lt;a href=&#34;http://clojure.org/protocols&#34;&gt;protocols&lt;/a&gt; as an abstraction mechanism, and the &amp;ldquo;magic&amp;rdquo; of transducers uses protocols. In Haskell, type classes are the major abstraction mechanism (this is true of Scala also).&lt;/p&gt;
+
+&lt;p&gt;So I abstracted away from the hardcoded list-oriented functions and values in Rich Hickey&amp;rsquo;s Haskell code:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;foldl&lt;/code&gt; abstracted to a &lt;code&gt;class Foldable&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;conj&lt;/code&gt; and empty list &lt;code&gt;[]&lt;/code&gt; abstracted to a &lt;code&gt;class Conjable&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left fold&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a (f a)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; f a
+  conj &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a (f a)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note our reliance on transducing and reducing from one type &lt;code&gt;a&lt;/code&gt; to another, &lt;code&gt;f a&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;foldable-constraint:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;&lt;code&gt;Foldable&lt;/code&gt; constraint&lt;/h4&gt;
+
+&lt;p&gt;Unlike &lt;code&gt;mapping&lt;/code&gt; and &lt;code&gt;filtering&lt;/code&gt;, &lt;code&gt;flatmapping&lt;/code&gt; is &lt;em&gt;not completely generic&lt;/em&gt;, because it depends on something being &lt;code&gt;Foldable&lt;/code&gt; (implementing a &lt;code&gt;fold&lt;/code&gt;):&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
+&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fold xf r (f a)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;conjable-constraint:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;&lt;code&gt;Conjable&lt;/code&gt; constraint&lt;/h4&gt;
+
+&lt;p&gt;Finally, here&amp;rsquo;s the originally list-specific code that now depends only on &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- I changed Rich Hickey&amp;#39;s code to be more general than just list&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- but accept anything Conjable&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
+&lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; xf &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fold (xf conj) empty
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- build any old Foldable function with its transducer, all the same way&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
+&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; mapping f
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a
+&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; p &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; filtering p
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
+&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; flatmapping f
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;list-specific-stuff:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;List-specific stuff&lt;/h3&gt;
+
+&lt;p&gt;Here is the list-specific code:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Stuff specialized to lists.&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- To use another type, just make it a Foldable and Conjable.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- for exposition only, yes, conj is gross for lazy lists&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- in Clojure conj and left folds dominate&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt;
+  conj xs x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xs &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; [x]
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Note: the type does not say anything about Foldable or Conjable,&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- even though the implementation just happens to use a list!&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; mapping (&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; filtering even &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; flatmapping (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt; x])
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Again, this can munge anything Foldable and Conjable, not just a list.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;munge&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; f &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;munge&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist xform
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Notice some very important properties of this code:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;xform&lt;/code&gt; has a type that does not mention lists at all, even though it is implemented using a list and cannot compile without the list &lt;code&gt;instance&lt;/code&gt; implementations.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;munge&lt;/code&gt; also does not mention lists, and can transform anything that is &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- munge a list&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;example1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;]
+&lt;span style=&#34;color: #0000FF&#34;&gt;example1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; munge [&lt;span style=&#34;color: #666666&#34;&gt;1..5&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;implementing-another-type-to-illustrate-the-genericity-of-transducers:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Implementing another type to illustrate the genericity of transducers&lt;/h3&gt;
+
+&lt;p&gt;To illustrate Rich Hickey&amp;rsquo;s main point, I implemented instances of &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt; for a standard Haskell &lt;code&gt;Vector&lt;/code&gt; library as an alternate &amp;ldquo;collection-like&amp;rdquo; type.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- For example using Vector instead of list&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; V
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Implement Foldable, Conjable type classes for Vector&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;foldl
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;empty
+  conj &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;snoc
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;And we can run &lt;code&gt;munge&lt;/code&gt; directly on a vector instead of a list, &lt;em&gt;without making any changes&lt;/em&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- return a vector rather than a list; note the fact that munge actually&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- internally uses a list&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;example2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;example2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; munge &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;enumFromN &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This is &lt;em&gt;code reuse&lt;/em&gt; at its best.&lt;/p&gt;
+
+&lt;p&gt;Note that there is nothing that ties transducers to any concrete &amp;ldquo;collection&amp;rdquo; type. We could write instances of &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt; for some kind of &amp;ldquo;channel&amp;rdquo; abstraction, for example, and instantaneously be able to munge data coming from it and to another. In fact, this is already what is done in the real world, where Haskell and Scala are used in production at places like Facebook and Twitter to efficiently handle large amounts of data.&lt;/p&gt;
+
+&lt;h2 id=&#34;my-code-repository:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;My code repository&lt;/h2&gt;
+
+&lt;p&gt;My complete code is available &lt;a href=&#34;https://github.com/FranklinChen/clojure-transducers-in-haskell&#34;&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;It was pretty exciting to see the announcement of the transducers library for Clojure, because it represents a level of abstraction that I think has not been expressed much in the world of dynamically typed languages, although the techniques are two decades old in the Haskell community in a statically typed setting. And I hope that I was able to convey the sheer elegance of Haskell as a way to express interesting types with practical ramifications for abstraction and pluggability.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Pittsburgh Scala Meetup: Introduction to Reactive</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/</link>
+      <pubDate>Thu, 09 Jan 2014 21:29:20 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/</guid>
+      <description>
+
+&lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/&#34;&gt;Pittsburgh Scala Meetup&lt;/a&gt; met with Josh presenting an &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581352/&#34;&gt;&amp;ldquo;Introduction to Reactive&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;It was great.&lt;/p&gt;
+
+&lt;h2 id=&#34;pre-meetup-dinner:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Pre-meetup dinner&lt;/h2&gt;
+
+&lt;p&gt;A couple of us (Justin, Josh, Chris, me) had an early dinner at Everyday Noodles before the meetup. Very filling!&lt;/p&gt;
+
+&lt;h2 id=&#34;turnout:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Turnout&lt;/h2&gt;
+
+&lt;p&gt;Ten of us showed up for this meeting.&lt;/p&gt;
+
+&lt;h2 id=&#34;presentation:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Presentation&lt;/h2&gt;
+
+&lt;h3 id=&#34;what-is-reactive-anyway:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;What is &amp;ldquo;reactive&amp;rdquo; anyway?&lt;/h3&gt;
+
+&lt;p&gt;In case you didn&amp;rsquo;t hear about it in the media, the term &amp;ldquo;reactive&amp;rdquo; has been popularized in recent months, and I &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/&#34;&gt;reviewed the free Coursera course &amp;ldquo;Principles of Reactive Programming&amp;rdquo;&lt;/a&gt; that some of us in the Pittsburgh Scala group just completed, so check out my post for more on &amp;ldquo;reactive&amp;rdquo;.&lt;/p&gt;
+
+&lt;h3 id=&#34;futures:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Futures&lt;/h3&gt;
+
+&lt;p&gt;Josh did a live SBT session reviewing futures and promises.&lt;/p&gt;
+
+&lt;p&gt;He noted that futures have limitations as a component of reactive systems. (This had become apparent when &lt;a href=&#34;http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/&#34;&gt;I started using futures last year in my personal projects&lt;/a&gt; and then &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/&#34;&gt;for work&lt;/a&gt;.) By themselves, futures do not support cancellation or &lt;a href=&#34;http://en.wikipedia.org/wiki/Back_pressure&#34;&gt;back pressure&lt;/a&gt;. Futures are a low-level, limited mechanism that are the right tool only if you have a pipeline all the way through forward, no back channel.&lt;/p&gt;
+
+&lt;p&gt;An alternative to futures, of course, is to go all out and use Akka actors. But the drawback I&amp;rsquo;ve found with that is that this is a heavyweight mechanism for problems that don&amp;rsquo;t need the full power of actors. I&amp;rsquo;ve wanted something more structured and lightweight than using actors directly. I find it tricky to program using actors, because it is very easy to start writing spaghetti code that is spread out everywhere (which is what happened to me in the final project for the Coursera course).&lt;/p&gt;
+
+&lt;p&gt;It turns out, according to Josh, that Typesafe is working on precisely this problem! Nice. He&amp;rsquo;ll tell us more when it comes out.&lt;/p&gt;
+
+&lt;h4 id=&#34;update-of-2014-07-10:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;(Update of 2014-07-10)&lt;/h4&gt;
+
+&lt;p&gt;Half a year later, the promise was realized, as the Pittsburgh Scala Meetup had Josh &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2014/07/10/pittsburgh-scala-meetup-reactive-streams/&#34;&gt;gave a talk on the new API called Reactive Streams&lt;/a&gt;!&lt;/p&gt;
+
+&lt;h3 id=&#34;play:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Play&lt;/h3&gt;
+
+&lt;p&gt;Josh demonstrated &lt;a href=&#34;http://typesafe.com/activator&#34;&gt;Typesafe Activator&lt;/a&gt;, the cool new Web browser-based platform for using Scala. He showed an app using Play that looks at blogs simultaneously and uses &lt;code&gt;recoverWith&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;random-other-questions-and-discussions:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Random other questions and discussions&lt;/h2&gt;
+
+&lt;p&gt;What I like about the Pittsburgh Scala Meetup is that even when we have a presentation, discussion often wanders off to related topics (or unrelated topics). Anything goes, and I usually learn a lot.&lt;/p&gt;
+
+&lt;p&gt;Someone asked about support for channels as in Go or Clojure&amp;rsquo;s &lt;a href=&#34;https://github.com/clojure/core.async&#34;&gt;&lt;code&gt;core.async&lt;/code&gt;&lt;/a&gt;. Josh said they&amp;rsquo;re working on this sort of thing with support for back pressure.&lt;/p&gt;
+
+&lt;p&gt;Someone asked about how to connect &lt;a href=&#34;http://www.playframework.com/documentation/2.0/Iteratees&#34;&gt;iteratees&lt;/a&gt; with actors. Josh said, you can feed from an iteratee to an actor, and then just let the actor do stuff. However, there is some controversy about the whole iteratee thing in Play.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;This was a great Pittsburgh Scala Meetup session. I felt that a lot of questions that had built up in my mind after having gotten into reactive programming are being addressed with continuing work.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>OpenHack Pittsburgh: learning Elixir test-driven and package-publishing</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/</link>
+      <pubDate>Mon, 26 Aug 2013 22:09:00 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/</guid>
+      <description>
+
+&lt;p&gt;It&amp;rsquo;s been a long time since I went to an &lt;a href=&#34;http://openhack.github.io/pittsburgh/&#34;&gt;OpenHack Pittsburgh&lt;/a&gt; meeting. The last time was &lt;a href=&#34;http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/&#34;&gt;five months ago&lt;/a&gt;. On June 24, there was an &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby/events/120200292/&#34;&gt;OpenHack Pittsburgh&lt;/a&gt; held at &lt;a href=&#34;http://www.4moms.com/&#34;&gt;4moms&lt;/a&gt;, but I really needed to stay home and take it easy that evening, because of my busy schedule later in the week, including attending a &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/&#34;&gt;PittJUG meeting&lt;/a&gt; and preparing a &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/&#34;&gt;Pittsburgh Python talk&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby/events/120201842/&#34;&gt;This August meeting of OpenHack Pittsburgh&lt;/a&gt; was held at &lt;a href=&#34;http://www.modcloth.com/&#34;&gt;ModCloth&lt;/a&gt;, which I had never been to. It&amp;rsquo;s in Crafton, which is a place I&amp;rsquo;ve never been before, nearly half an hour drive from Pittsburgh. Because of worries about driving there near rush hour after work, I probably would not have signed up to attend had it not been for &lt;a href=&#34;http://justinxreese.com/&#34;&gt;Justin&lt;/a&gt;, the organizer of OpenHack Pittsburgh.&lt;/p&gt;
+
+&lt;p&gt;What happened was that he asked for feedback about who was planning to work on what, and said he planned to learn some &lt;a href=&#34;http://elixir-lang.org/&#34;&gt;Elixir&lt;/a&gt;, a fairly new programming language built on top of the &lt;a href=&#34;http://www.erlang.org/&#34;&gt;Erlang&lt;/a&gt; runtime. Since this language had been on my list of things to look into, I decided that learning loves company, so I proposed to learn some Elixir in a test-driven way!&lt;/p&gt;
+
+&lt;p&gt;What does that mean?&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Franklin working on laptop&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;how-to-learn-a-programming-language:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;How to learn a programming language&lt;/h2&gt;
+
+&lt;p&gt;I have written code in probably around fifty (50) programming languages. I&amp;rsquo;m not kidding, and I&amp;rsquo;m not proud, but this is simply a fact of my having done programming since 1982, thirty-one (31!!) years ago. Let&amp;rsquo;s face it: languages come and go. I have personally sat at an IBM &lt;a href=&#34;http://en.wikipedia.org/wiki/Keypunch&#34;&gt;keypunch&lt;/a&gt; machine punching out cards for my COBOL and Fortran code.&lt;/p&gt;
+
+&lt;p&gt;As with human languages, the fact is that to be truly productive in a language requires much more than learning some syntax and semantics. It requires actually writing and running and fixing code, and in the context of a realistic project.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve learned through trial and error that the most common ways of learning a programming language, like the most common ways of learning human languages (other than one&amp;rsquo;s first language), are terribly inefficient and misleading, resulting in minimal competence. I mean, reading through books, typing into a REPL, submitting a single file to a compiler or interpreter, etc.&lt;/p&gt;
+
+&lt;p&gt;I feel that we should learn programming languages using a variety of approaches. Yes, the academic bottom-up semantics-based approach is critical in the long run, to avoid wasting a lot of time on pointless misunderstandings. Exploration in a REPL can be very rewarding. But I think what is often missing is the &lt;em&gt;biggest possible picture&lt;/em&gt;: immediately seeing how to write a program that is integrated with a test framework, uses libraries, is exportable and publishable publicly as a library, can be submitted to a continuous integration server, is editable in a decent editor or IDE, etc.&lt;/p&gt;
+
+&lt;p&gt;Without seeing the biggest possible picture, one usually gets a horribly inaccurate picture of what it is like to program in a particular language ecosystem. (I will be writing more about this subject of pedagogy later.)&lt;/p&gt;
+
+&lt;h2 id=&#34;my-proposal:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;My proposal&lt;/h2&gt;
+
+&lt;p&gt;The last couple of languages I have learned in recent years, I slowly came to work with in a more efficient way than in the past, because I focused on matters such as testability. In particular, as I grew to wholly adopt TDD when writing any code at all in any language, it became clear to me that the best way to learn a new language must be in a test-driven way.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s an analogy: I believe the best way to learn a human language is to dive into how to be able to converse in some coherent way right off the bat. &lt;a href=&#34;http://www.fluentin3months.com/4-hour/&#34;&gt;Tim Ferriss and others&lt;/a&gt; have exploited this idea to &lt;em&gt;drive&lt;/em&gt; the learning of what is most relevant in &lt;a href=&#34;http://www.fourhourworkweek.com/blog/2007/11/07/how-to-learn-but-not-master-any-language-in-1-hour-plus-a-favor/&#34;&gt;grammar&lt;/a&gt; and &lt;a href=&#34;http://www.fourhourworkweek.com/blog/2009/01/20/learning-language/&#34;&gt;vocabulary&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the past, I learned human languages in a terrible way, taking lots of courses, but never actually getting fluent in everyday use. This is how we tend to learn &amp;ldquo;foreign&amp;rdquo; programming languages. My proposal is that learning a new programming language should involve getting as quickly as possible up to speed on a &lt;em&gt;minimum viable publishable library&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;That the software artifact should be a &lt;em&gt;library&lt;/em&gt;, and not just some executable program, is vital, because it means having to adhere by whatever standards apply to real-world API design in the language ecosystem, producing something that client code can import and call.&lt;/p&gt;
+
+&lt;p&gt;That it should be &lt;em&gt;publishable&lt;/em&gt; is vital because it means adhering to standards of testing, of discovery through metadata, and enabling easy use by a client.&lt;/p&gt;
+
+&lt;h2 id=&#34;my-concrete-example-with-learning-elixir-tonight:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;My concrete example with learning Elixir tonight&lt;/h2&gt;
+
+&lt;h3 id=&#34;prior-background-in-erlang-and-elixir:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Prior background in Erlang and Elixir&lt;/h3&gt;
+
+&lt;p&gt;I went to OpenHack Pittsburgh &lt;em&gt;never&lt;/em&gt; having yet read any Elixir language material, never having written Elixir code, not even &amp;ldquo;hello, world&amp;rdquo;. The only things I had done before tonight:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;I first heard of Erlang nearly two decades ago, and when I saw it, I was turned off by the Prolog-style syntax, and it didn&amp;rsquo;t seem relevant to anything I was doing at the time, so I ignored it.&lt;/li&gt;
+&lt;li&gt;I intended to learn some Erlang earlier this year, but made little progress before putting it aside: I went to the free book &lt;a href=&#34;http://learnyousomeerlang.com/&#34;&gt;&amp;ldquo;Learn You Some Erlang for Great Good!&amp;rdquo;&lt;/a&gt; and downloaded the code and &lt;a href=&#34;https://github.com/FranklinChen/learn-you-some-erlang&#34;&gt;got it to compile&lt;/a&gt;, but did not proceed any further.&lt;/li&gt;
+&lt;li&gt;I installed Elixir on my Mac &lt;a href=&#34;http://elixir-lang.org/getting_started/1.html&#34;&gt;using Homebrew&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;I installed an &lt;a href=&#34;https://github.com/elixir-lang/emacs-elixir&#34;&gt;Emacs Elixir mode&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;I made a note of a free online book &lt;a href=&#34;http://chimera.labs.oreilly.com/books/1234000001642&#34;&gt;&amp;ldquo;Etudes for Elixir&amp;rdquo;&lt;/a&gt; and checked out the GitHub repository, but did not look at the book or code.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;find-a-testing-framework:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Find a testing framework&lt;/h3&gt;
+
+&lt;p&gt;Upon arrival at ModCloth, getting pizza to eat, and plugging in my MacBook and connecting to the guest WiFi, the first thing I did was search for a testing framework for Elixir.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s 2013, not 1993, so it is hard to convince me to invest any time at all in learning to operate in a language ecosystem that does not have at least a de facto standard testing framework. For every language that I currently actively use for writing serious programs, I operate with TDD. Some examples of languages and the test frameworks I currently use for them:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;C/C++: &lt;a href=&#34;https://code.google.com/p/googletest/&#34;&gt;googletest&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Clojure: &lt;a href=&#34;https://github.com/marick/Midje&#34;&gt;Midje&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Haskell: &lt;a href=&#34;http://hspec.github.io/&#34;&gt;HSpec&lt;/a&gt; and &lt;a href=&#34;http://www.haskell.org/haskellwiki/Introduction_to_QuickCheck2&#34;&gt;QuickCheck&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Java or Scala: &lt;a href=&#34;http://specs2.org/&#34;&gt;Specs2&lt;/a&gt; and &lt;a href=&#34;http://www.scalacheck.org/&#34;&gt;ScalaCheck&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;JavaScript: &lt;a href=&#34;http://pivotal.github.io/jasmine/&#34;&gt;Jasmine&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Perl: &lt;a href=&#34;http://search.cpan.org/~mschwern/Test-Simple-0.98/lib/Test/More.pm&#34;&gt;Test::More&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Python: &lt;a href=&#34;http://pytest.org/&#34;&gt;pytest&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Ruby: &lt;a href=&#34;http://rspec.info/&#34;&gt;RSpec&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Racket: &lt;a href=&#34;http://docs.racket-lang.org/rackunit/&#34;&gt;RackUnit&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Well, first Web search hit for Elixir and unit testing was &lt;a href=&#34;http://elixir-lang.org/getting_started/ex_unit/1.html&#34;&gt;ExUnit&lt;/a&gt;, so that was encouraging.&lt;/p&gt;
+
+&lt;p&gt;Justin was still stuck installing Elixir, so we started exploring Elixir together off my laptop.&lt;/p&gt;
+
+&lt;h3 id=&#34;one-test-file:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;One test file&lt;/h3&gt;
+
+&lt;p&gt;The first thing I did after discovering ExUnit was to copy and paste the code for a sample test into Emacs and save it into a file &lt;code&gt;test_hello.exs&lt;/code&gt;, see that the Elixir mode was working (with syntax highlighting), and figure out how to run the test: &lt;code&gt;$ elixir test_hello.exs&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;It worked!&lt;/p&gt;
+
+&lt;p&gt;Then we explored adding more tests, changing some assertions, and learning as went, by looking up the Elixir documentation. For example, Elixir uses an interesting callback mechanism for cleanly passing &amp;ldquo;setup&amp;rdquo; state to tests inside a single test case. Also, &lt;code&gt;assert&lt;/code&gt; and &lt;code&gt;test&lt;/code&gt; are &lt;a href=&#34;http://en.wikipedia.org/wiki/Macro_%28computer_science%29#Syntactic_macros&#34;&gt;syntactic macros&lt;/a&gt;, enabling them to do magic to analyze expressions, hence the support of natural assertion syntax (which &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/&#34;&gt;I like a lot better than special syntax&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;After writing some failing tests involving arithmetic and making them pass, I wrote a division by zero test. I was intrigued that not only did it fail, as expected, but also the compiler warned ahead of time that an exception was going to be raised. Nice. In any case, I learned how to make an assertion of the raising of an exception. This is very important. We should always pay attention to &lt;a href=&#34;http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/&#34;&gt;testing the sad paths&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We saw in the documentation for ExUnit that there was a way to mark a test case as being OK to run concurrently with others. Great! These days there is no excuse not to be able to run tests concurrently. So I wrote another test case, which I put in the same source file (for the moment), and I wanted to see for myself that concurrency was happening. I wanted to call some kind of &amp;ldquo;sleep&amp;rdquo; function. To do that, I did a Web search, and found that Erlang comes with &lt;code&gt;sleep&lt;/code&gt; in the &lt;code&gt;timer&lt;/code&gt; module. I found out how to call Erlang from Elixir, and it worked!&lt;/p&gt;
+
+&lt;h3 id=&#34;more-than-one-source-file:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;More than one source file&lt;/h3&gt;
+
+&lt;p&gt;The next obvious step was to write a test for code that did not yet exist, but was to be written outside the test source file. For that, I had to figure out how to define a module and import it. OK, but then there&amp;rsquo;s the question of file organization. Hmm.&lt;/p&gt;
+
+&lt;p&gt;At this point, the only reasonable thing to do (and which in retrospect should have been done first) was to find out what the &amp;ldquo;standard&amp;rdquo; way of organizing a project&amp;rsquo;s source files is supposed to be, and what the standard way to build everything is.&lt;/p&gt;
+
+&lt;p&gt;A Web search quickly came up with &lt;a href=&#34;http://elixir-lang.org/getting_started/mix/1.html&#34;&gt;Mix&lt;/a&gt;. Awesome, the Elixir people are serious about real software development! Mix turns out to be inspired by Clojure&amp;rsquo;s &lt;a href=&#34;https://github.com/technomancy/leiningen&#34;&gt;Leiningen&lt;/a&gt;, which of course I use to start any new Clojure project. &lt;code&gt;$ mix new hello&lt;/code&gt; did the trick, creating the scaffolding for a new Elixir project.&lt;/p&gt;
+
+&lt;p&gt;I refactored our existing &lt;code&gt;test_hello.exs&lt;/code&gt; file into two files (one for each test case) in the &lt;code&gt;test&lt;/code&gt; directory, then wrote a module &lt;code&gt;hello.ex&lt;/code&gt; into &lt;code&gt;lib&lt;/code&gt;. A failed test, then making it succeed, and finally I wrote my first non-test code in Elixir!&lt;/p&gt;
+
+&lt;p&gt;Running tests is very easy once you are using Mix. Just &lt;code&gt;$ mix test&lt;/code&gt; does it.&lt;/p&gt;
+
+&lt;h3 id=&#34;packaging-for-publshing:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Packaging for publshing&lt;/h3&gt;
+
+&lt;p&gt;At this point, I decided I wanted to create an actual Elixir package to publish.&lt;/p&gt;
+
+&lt;p&gt;So I did a Web search to find out whether there was a standard repository and how to publish to it.&lt;/p&gt;
+
+&lt;p&gt;Here we go, &lt;a href=&#34;http://expm.co/&#34;&gt;Expm&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;I installed the package manager, set up my user name and password, and went to work on a simple package to publish.&lt;/p&gt;
+
+&lt;p&gt;I saw that nobody had yet contributed an implementation of &lt;a href=&#34;http://franklinchen.com/blog/2012/03/14/for-real-geeks-today-is-not-pi-day-but-half-tau-day/&#34;&gt;tau&lt;/a&gt;, so I quickly created a tau library with Mix, did &lt;code&gt;$ expm new&lt;/code&gt; to create a &lt;code&gt;package.exs&lt;/code&gt; template, filled it out, wrote an ExUnit test that passed, completed the &lt;code&gt;README.md&lt;/code&gt;, and just as OpenHack Pittsburgh was officially closing for the evening, I successfully published &lt;a href=&#34;http://expm.co/tau&#34;&gt;my tau package&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;Actually, I accidentally screwed up the first time, forgetting to change all the fields of the template &lt;code&gt;package.exs&lt;/code&gt; and ending up published &lt;code&gt;yourlib&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Oh, and I committed my project in Git and pushed &lt;a href=&#34;https://github.com/franklinchen/tau&#34;&gt;to GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;some-haskell-stuff:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Some Haskell stuff&lt;/h2&gt;
+
+&lt;p&gt;Steve McCarthy of &lt;a href=&#34;http://www.spacefinity.com/&#34;&gt;Spacefinity&lt;/a&gt; had announced, in the introduction at the beginning of the evening when each of us stood up to say what we planned to work on, that he wanted to do more with the &lt;a href=&#34;http://www.haskell.org/cabal/&#34;&gt;Cabal&lt;/a&gt; package manager for Haskell, so I spent a little bit of time getting him going by pointing him toward a sample Haskell code repository I initially &lt;a href=&#34;http://franklinchen.com/blog/2012/11/05/the-start-of-a-local-haskell-study-group.markdown/&#34;&gt;set up last year when some friends were interested in getting into Haskell&lt;/a&gt;; sadly, we&amp;rsquo;ve all been too busy for Haskell, so I&amp;rsquo;ve let the project rot, in the sense that my configuration file is not optimally organized and also there have been updates in the test framework world in Haskell since then.&lt;/p&gt;
+
+&lt;p&gt;Anyway, here&amp;rsquo;s my &lt;a href=&#34;https://github.com/FranklinChen/project-euler-haskell&#34;&gt;&amp;ldquo;Project Euler in Haskell&amp;rdquo; repository&lt;/a&gt;. I plan to get around to improving it.&lt;/p&gt;
+
+&lt;h2 id=&#34;thanks:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Thanks&lt;/h2&gt;
+
+&lt;p&gt;Thanks to ModCloth for providing the space, pizza, cookies, and WiFi!&lt;/p&gt;
+
+&lt;p&gt;A big thank-you to Justin for providing the inspiration for me to try this experiment in learning!&lt;/p&gt;
+
+&lt;p&gt;And thanks to Steve McCarthy for getting me to drag up an old Haskell project and making me think that I should soon update it to be a better example.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Tonight was the first time I ever started learning a new programming language, wrote unit tests right off the bat with proper project organization and also published a library immediately.&lt;/p&gt;
+
+&lt;p&gt;Of course, there is much more to go in actually really learning and using Elixir, but as a first step in showing that Elixir has a viable ecosystem, I think the experiment was a success. My next steps in continuing to learn Elixir would include writing tests in conjunction with a deep dive into the actual semantics of the language. There is no substitute for the latter; the alternative is dangerously making assumptions based on superficial syntactic similarity with other languages (such as Ruby).&lt;/p&gt;
+
+&lt;h3 id=&#34;update-of-2013-08-27:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;(Update of 2013-08-27)&lt;/h3&gt;
+
+&lt;p&gt;One thing I didn&amp;rsquo;t get around to was setting up &lt;a href=&#34;http://travis-ci.org/&#34;&gt;Travis&lt;/a&gt; continuous integration. I believe this should also be part of the story in getting up and running in a new programming language environment.&lt;/p&gt;
+
+&lt;p&gt;So I did a Web search and figured out how to create a suitable &lt;code&gt;.travis.yml&lt;/code&gt;. I committed and pushed to GitHub, flipped the switch in my Travis account, and you can see its &lt;a href=&#34;https://travis-ci.org/FranklinChen/tau&#34;&gt;passing status&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

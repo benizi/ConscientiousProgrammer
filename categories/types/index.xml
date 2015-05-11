@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Types on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/types/</link>
+    <description>Recent content in Types on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 21 Dec 2014 14:31:36 -0500</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/types/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>How to think about Rust ownership versus C&#43;&#43; unique_ptr</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr</link>
+      <pubDate>Sun, 21 Dec 2014 14:31:36 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr</guid>
+      <description>
+
+&lt;p&gt;The &lt;a href=&#34;http://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt; programming language, which is nearing its important version 1.0 release, but already seen a lot of use, has many interesting features, the most prominent of which is its &lt;a href=&#34;http://doc.rust-lang.org/guide.html#ownership,-borrowing,-and-lifetimes&#34;&gt;ownership&lt;/a&gt; static type system that prevents certain kinds of bugs common in many programs in C or C++.&lt;/p&gt;
+
+&lt;p&gt;For example, it is common in most applications to create graphs of objects pointing to each other, in which it is not clear how many pointers point to a particular object, who is to free the object&amp;rsquo;s memory when it is no longer needed, and what happens to all outstanding pointers to that block. Languages supporting precise &lt;a href=&#34;http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29&#34;&gt;garbage collection&lt;/a&gt; use various algorithms to determine when memory can be freed, and have become particularly popular in the past twenty years, but there are still situations in which garbage collection is not ideal, hence the continued relevance of languages such as C++.&lt;/p&gt;
+
+&lt;p&gt;When I was working as a software engineer in the 1990s developing desktop applications with user interfaces for the &lt;a href=&#34;http://en.wikipedia.org/wiki/X_Window_System&#34;&gt;X Window System&lt;/a&gt;, we used frameworks that included C++ &lt;a href=&#34;http://en.wikipedia.org/wiki/Smart_pointer&#34;&gt;smart pointers&lt;/a&gt; that used &lt;a href=&#34;http://en.wikipedia.org/wiki/Reference_counting&#34;&gt;reference counting&lt;/a&gt; to handle graphs of interconnected data. The C++ standard itself lagged behind in standardizing smart pointers; it started with the &lt;a href=&#34;http://www.informit.com/articles/article.aspx?p=30642&amp;amp;seqNum=9&#34;&gt;terribly flawed and unusable&lt;/a&gt; &lt;a href=&#34;http://en.wikipedia.org/wiki/Auto_ptr&#34;&gt;&lt;code&gt;auto_ptr&lt;/code&gt;&lt;/a&gt; that finally got deprecated in C++11, then moved on finally to &lt;a href=&#34;http://en.wikipedia.org/wiki/Smart_pointer#unique_ptr&#34;&gt;&lt;code&gt;unique_ptr&lt;/code&gt;&lt;/a&gt; and &lt;a href=&#34;http://en.wikipedia.org/wiki/Smart_pointer#shared_ptr_and_weak_ptr&#34;&gt;&lt;code&gt;shared_ptr&lt;/code&gt; and &lt;code&gt;weak_ptr&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;When talking with C++ programmers about Rust, I have found that often they have been puzzled about how Rust&amp;rsquo;s ownership system does anything better than what C++ &lt;code&gt;unique_ptr&lt;/code&gt; already does. Here is an explanation (I will not be discussing analogues of &lt;code&gt;shared_ptr&lt;/code&gt; and &lt;code&gt;weak_ptr&lt;/code&gt; here).&lt;/p&gt;
+
+&lt;h2 id=&#34;simplest-example-compile-time-type-checking-vs-run-time-segmentation-fault:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Simplest example: compile-time type-checking vs. run-time segmentation fault&lt;/h2&gt;
+
+&lt;p&gt;First, go read Steve Klabnik&amp;rsquo;s &lt;a href=&#34;http://www.steveklabnik.com/uniq_ptr_problem/&#34;&gt;article about the simplest possible example illustrating what Rust offers over C++ &lt;code&gt;unique_ptr&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Basically, in C++, &lt;code&gt;unique_ptr&lt;/code&gt; is supposed to be a way to indicate that a given pointer is the unique &amp;ldquo;owner&amp;rdquo; of a piece of data. If you want to transfer ownership from one &lt;code&gt;unique_ptr&lt;/code&gt; to another, you have to call &lt;code&gt;move&lt;/code&gt; on it. After that, it is an &lt;em&gt;run-time error&lt;/em&gt; to try to access the data using the original &lt;code&gt;unique_ptr&lt;/code&gt;. This is great, except for two things:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;By &amp;ldquo;it&amp;rsquo;s a run-time error&amp;rdquo;, we mean that the original &lt;code&gt;unique_ptr&lt;/code&gt;&amp;rsquo;s embedded pointer gets mutated to &lt;code&gt;nullptr&lt;/code&gt;, so that you have to perpetually check your &lt;code&gt;unique_ptr&lt;/code&gt; for &lt;code&gt;nullptr&lt;/code&gt;, otherwise get a segmentation fault.&lt;/li&gt;
+&lt;li&gt;In many situations, we&amp;rsquo;d prefer to have a &lt;em&gt;compile-time&lt;/em&gt; guarantee that we will never dereference &lt;code&gt;nullptr&lt;/code&gt;, so that we don&amp;rsquo;t have hidden memory safety bugs lying around in our code that don&amp;rsquo;t happen until well into a long-running program.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is Steve&amp;rsquo;s example of an unintended segmentation fault from C++:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;iostream&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;memory&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;namespace&lt;/span&gt; std;
+
+&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt; ()
+{
+    unique_ptr&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; orig(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;));
+
+    cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;auto&lt;/span&gt; stolen &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; move(orig);
+
+    cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Steve shows an &amp;ldquo;equivalent&amp;rdquo; Rust program in which code attempts to move ownership fails to compile because of a type error (I edited to correspond more closely with the C++):&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;box&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;stolen&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;understanding-c-behavior-by-modeling-it-in-rust-safely:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Understanding C++ behavior by modeling it in Rust, safely&lt;/h2&gt;
+
+&lt;p&gt;But it is not quite accurate to call the Rust program &amp;ldquo;equivalent&amp;rdquo; to the original C++ program. It&amp;rsquo;s really a &amp;ldquo;cleaned up&amp;rdquo; or &amp;ldquo;restricted&amp;rdquo; version of that program (and the argument for using a type-safe language like Rust is that we often like these restrictions, as a tradeoff for safety or efficiency).&lt;/p&gt;
+
+&lt;p&gt;Here is a Rust program that more accurately models what the C++ &lt;code&gt;unique_ptr&lt;/code&gt; actually does, which happens &lt;em&gt;dynamically&lt;/em&gt; at run-time, not at compile time, hence the segmentation fault: the transfer of ownership by &lt;code&gt;move&lt;/code&gt; on a &lt;code&gt;unique_ptr&lt;/code&gt; is not type-checked at compile-time.&lt;/p&gt;
+
+&lt;p&gt;For illustration&amp;rsquo;s sake, we have modeled C++ directly in &lt;em&gt;safe&lt;/em&gt; Rust through indirection by treating a C++ pointer to &lt;code&gt;T&lt;/code&gt; (C++ pointers can always be &lt;code&gt;nullptr&lt;/code&gt;) as an &lt;code&gt;Option&amp;lt;Box&amp;lt;T&amp;gt;&amp;gt;&lt;/code&gt;, where &lt;code&gt;nullptr&lt;/code&gt; is modeled as &lt;code&gt;None&lt;/code&gt; and a non-null pointer is modeled as &lt;code&gt;Some(pointer_nonnull)&lt;/code&gt;. This Rust code type-checks, compiles, and simulates a segmentation fault.&lt;/p&gt;
+
+&lt;p&gt;You can play with this code &lt;a href=&#34;http://is.gd/5kEQA8&#34;&gt;at this Rust playground link&lt;/a&gt;. (You may find it interesting to examine the assembly code generated.)&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Simulate a segmentation fault.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;seg_fault()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;panic&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;segmentation fault&amp;quot;&lt;/span&gt;);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Rough modeling in Rust of C++ unique_ptr&amp;lt;int&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// because C++ pointers can always be null.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;Box&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;Some&lt;/span&gt;(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;box&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// In C++, deferencing null seg faults.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;None&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;seg_fault(),&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;Some&lt;/span&gt;(orig_nonnull)&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig_nonnull);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// The equivalent of C++ unique_ptr move.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;stolen&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;Some&lt;/span&gt;(orig_nonnull);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;None&lt;/span&gt;;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;                &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// We seg fault after the C++ style move.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;                &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;None&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;seg_fault(),&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;                &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;Some&lt;/span&gt;(orig_nonnull)&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig_nonnull)&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Nobody would ever write this kind of code in Rust, but implicitly, all C++ programs are semantically basically doing this, except that for efficiency, the &lt;code&gt;nullptr&lt;/code&gt; checking is not done at the language level but just results in an actual segmentation fault at the operating system level.&lt;/p&gt;
+
+&lt;h2 id=&#34;an-example-of-smart-pointers-inside-a-collection:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;An example of smart pointers inside a collection&lt;/h2&gt;
+
+&lt;p&gt;The single most disturbing failure mode of the C++-based software product I worked on in 1995-1997 in C++ was segmentation faults resulting from mysteriously disappearing pointers. What I mean is, behavior like the following, where a container containing smart pointers to objects was meant to &lt;em&gt;own&lt;/em&gt; them, but there was no compile-time way to verify this fact, because of the nature of the object graph. If someone didn&amp;rsquo;t play by the uncheckable rules and inadvertently took ownership of (instead of &amp;ldquo;borrowing&amp;rdquo; through a raw pointer) something embedded in the collection, then &lt;code&gt;nullptr&lt;/code&gt; appeared, and a segmentation fault happened.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;vector&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;memory&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;iostream&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;namespace&lt;/span&gt; std;
+
+&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt;() {
+    vector&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;unique_ptr&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt; v;
+    v.push_back(make_unique&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;));
+
+    cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// C++ happily allows this.&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;auto&lt;/span&gt; pointer_to_5 &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; move(v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);
+    cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;pointer_to_5 &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Seg fault.&lt;/span&gt;
+    cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;You can probably guess what some developers did to &amp;ldquo;fix&amp;rdquo; the segmentation fault. They started adding &lt;code&gt;nullptr&lt;/code&gt; checks everywhere to prevent crashing, but this only resulted in &lt;em&gt;corrupt user data and documents&lt;/em&gt;, because in fact, we lost data in those collections and smart pointers to the data should never have ended up &lt;code&gt;nullptr&lt;/code&gt;!!&lt;/p&gt;
+
+&lt;p&gt;The complexity of the application and the deadline pressures made it impossible to fully figure out what was going wrong and where. I actually ended up writing an external &amp;ldquo;validation&amp;rdquo; utility program in &lt;a href=&#34;http://www.smlnj.org/&#34;&gt;Standard ML of New Jersey&lt;/a&gt; that parsed serialized object graphs and tried to fix them up in some fashion. This particularly helped the QA team a lot when dealing with old documents that were already corrupted.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-rust-version-will-not-compile:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;The Rust version will not compile&lt;/h3&gt;
+
+&lt;p&gt;The Rust type-checker rejects any attempt to move ownership out of a collection. (Try to compile it in &lt;a href=&#34;http://is.gd/Om7wfr&#34;&gt;this playground&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;v&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;vec&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;[&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;box&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i];&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Attempted move: type error at compile time.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;pointer_to_5&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;];&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;pointer_to_5);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7:24: 7:28 error: cannot move out of dereference (dereference is implicit, due to indexing)&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;                                                       ^~~~&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7:9: 7:21 note: attempting to move value to here&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;                                        ^~~~~~~~~~~~&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;often-you-do-want-to-share:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Often, you do want to share&lt;/h3&gt;
+
+&lt;p&gt;I have to be honest: at first, Rust&amp;rsquo;s ownership type system seems like quite a restriction, and adhering to it strictly would require the restructuring of certain kinds of programs. Static type safety of any kind in any language is always a matter of tradeoffs.&lt;/p&gt;
+
+&lt;p&gt;But note that Rust is flexible: you don&amp;rsquo;t have to use Rust&amp;rsquo;s default pointer type! You can use one of Rust&amp;rsquo;s many other pointer types, such as &lt;a href=&#34;http://doc.rust-lang.org/guide.html#rc-and-arc&#34;&gt;&lt;code&gt;Rc&lt;/code&gt; or &lt;code&gt;Arc&lt;/code&gt;&lt;/a&gt;, that allow reference-counted shared ownership (like C++ &lt;code&gt;shared_ptr&lt;/code&gt;), if that&amp;rsquo;s what you really want. (&lt;a href=&#34;http://is.gd/HNi7SR&#34;&gt;Playground here&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Reference-counted smart pointer.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;std&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;rc&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;Rc;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;v&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;vec&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;[Rc&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;new(&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i)];&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;pointer_to_5&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;].clone();&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;pointer_to_5);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;unsafe:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Unsafe&lt;/h2&gt;
+
+&lt;p&gt;Finally, Rust does allow you to go all out and write &lt;a href=&#34;http://doc.rust-lang.org/guide.html#unsafe&#34;&gt;unsafe&lt;/a&gt; code, if you truly need to for raw C performance or FFI reasons. Most of the time you do not need to, because the whole point of Rust is to compile down to the same kind of assembly code you would get from C.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extern&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;crate&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;libc;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;libc&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;{size_t,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;malloc};&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;std&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;mem;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;std&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;ptr;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// How ugly it is to pretend Rust is unsafe C.&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;unsafe&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;malloc(mem&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;size_of&lt;span style=&#34;color: #666666&#34;&gt;::&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt;()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;size_t)&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;            &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;ptr&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;write(&lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;ptr&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;null&lt;span style=&#34;color: #666666&#34;&gt;::&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt;()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;mut&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// null pointer crash!&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I hope this little article shows a little bit about what Rust&amp;rsquo;s ownership type system can do to make pointer-heavy code memory safe, unlike C++, and also gives you a taste of how Rust&amp;rsquo;s flexibility also allows you to use C++-style reference-counting if desired, and even raw unsafe code. Personally, I am excited about the upcoming 1.0 release of Rust, and although I have not done low-level systems programming for almost two decades, if I ever was to do it again, I would immediately reach out for Rust as a language of choice for the ultimate combination of safety, expressiveness, and performance (in use of time and space).&lt;/p&gt;
+
+&lt;p&gt;All code for this article is available in a &lt;a href=&#34;https://github.com/FranklinChen/rust-vs-cpp-unique_ptr&#34;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Remembering over 20 years of reading Dr. Dobb&#39;s Journal even till today</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today</link>
+      <pubDate>Tue, 16 Dec 2014 22:23:42 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today</guid>
+      <description>
+
+&lt;p&gt;It was with sadness, but not surprise, that I read today about the &lt;a href=&#34;http://www.drdobbs.com/architecture-and-design/farewell-dr-dobbs/240169421&#34;&gt;end of Dr. Dobb&amp;rsquo;s Journal&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve been reading this magazine for &lt;em&gt;twenty-two years&lt;/em&gt;! I haven&amp;rsquo;t read any other magazine on any topic for this long.&lt;/p&gt;
+
+&lt;h2 id=&#34;rss:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;RSS&lt;/h2&gt;
+
+&lt;p&gt;Of course, it&amp;rsquo;s been years since my last printed copy of &lt;a href=&#34;http://en.wikipedia.org/wiki/Dr._Dobb%27s_Journal&#34;&gt;Dr. Dobb&amp;rsquo;s Journal&lt;/a&gt; (DDJ) entered my mailbox. At some point I was simply regularly reading content from its online &lt;a href=&#34;http://drdobbs.com/rss/all&#34;&gt;RSS feed&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I was particularly sad when reading of the discontinuation of the publication because I had been following for quite some time Andrew Koenig&amp;rsquo;s multi-part article on binary search. In fact, &lt;a href=&#34;http://www.drdobbs.com/cpp/abstractions-for-binary-search-part-9-wh/240169416&#34;&gt;I had just read part 9 and was looking forward to the eventual conclusion of the series&lt;/a&gt;! I&amp;rsquo;ve been waiting to see his punch line, since every article in this series has ended with a cliff-hanger. Here, he had closed with &amp;ldquo;Next week, we shall continue building our tests.&amp;rdquo; I wonder if he be able to post the conclusion?&lt;/p&gt;
+
+&lt;h3 id=&#34;update-of-2014-12-22:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;(Update of 2014-12-22)&lt;/h3&gt;
+
+&lt;p&gt;Andrew Koenig&amp;rsquo;s article series did conclude, after all, &lt;a href=&#34;http://www.drdobbs.com/cpp/abstractions-for-binary-search-part-10-p/240169437&#34;&gt;today&lt;/a&gt;. I&amp;rsquo;ll comment on his concluded article series in a later blog post.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-i-started-reading-ddj:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;How I started reading DDJ&lt;/h2&gt;
+
+&lt;p&gt;In 1992, I was unemployed, a physics grad school dropout, and needed a new career. I had studied some math and passed the first two actuarial exams but frankly, had no interest in doing math and insurance for a living. Friends told me computer programming was a good way to go, so although I had not written a single computer program since high school (where I wrote and ran only COBOL and Pascal programs), I decided to learn C and Unix and Lisp, because these were technologies my friends had learned in their first year in college.&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, this was all before the Web, so the way to get any new and exciting information was from Usenet or from printed magazines. I got some recommendations to check out two magazines in particular: Dr. Dobb&amp;rsquo;s Journal and the &lt;a href=&#34;http://en.wikipedia.org/wiki/C/C%2B%2B_Users_Journal&#34;&gt;C Users Journal&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Yes, I did ask, &amp;ldquo;Who the heck is or was Dr. Dobb?!&amp;rdquo; It didn&amp;rsquo;t matter. The magazine was great. It covered all kinds of topics, and had code listings you could type in or download (remember &lt;a href=&#34;http://en.wikipedia.org/wiki/File_Transfer_Protocol#Anonymous_FTP&#34;&gt;anonymous FTP&lt;/a&gt; as the primary way to download stuff?).&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/d/d8/Macintosh_classic.jpg&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Macintosh Classic&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I got my first job as a software engineer in 1993, after much intense self-study, learning to programm in C on my younger sister&amp;rsquo;s &lt;a href=&#34;http://en.wikipedia.org/wiki/Macintosh_Classic&#34;&gt;Macintosh Classic&lt;/a&gt; using &lt;a href=&#34;http://en.wikipedia.org/wiki/THINK_C&#34;&gt;THINK C&lt;/a&gt;. What can I say, DDJ was there for me as a useful resource.&lt;/p&gt;
+
+&lt;h2 id=&#34;continuing-to-read-ddj-learning-new-languages:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Continuing to read DDJ; learning new languages&lt;/h2&gt;
+
+&lt;p&gt;Today I was intrigued to read &lt;a href=&#34;https://twitter.com/bodil/status/545009243272003585&#34;&gt;Bodil Stokke&amp;rsquo;s tweet&lt;/a&gt;, &amp;ldquo;I read about both Haskell and Dylan in Dr Dobbs 1994-ish and was itching to learn both, but couldn&amp;rsquo;t find Amiga impls for either.&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I did learn both Haskell and Dylan in 1994, but don&amp;rsquo;t remember whether it was because of mention in DDJ or because of other sources! I do remember that I downloaded quite a bit of &amp;ldquo;freeware&amp;rdquo; and &amp;ldquo;shareware&amp;rdquo; through FTP or bought through CD-ROMs in 1992-1994, before the birth of the &lt;a href=&#34;http://en.wikipedia.org/wiki/World_Wide_Web&#34;&gt;World Wide Web&lt;/a&gt;, which I started using excitedly in 1995.&lt;/p&gt;
+
+&lt;p&gt;1994 was a particularly important year for me, because I discovered and experimented with writing and running programs in a huge variety of programming languages that year.&lt;/p&gt;
+
+&lt;h3 id=&#34;haskell:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Haskell&lt;/h3&gt;
+
+&lt;p&gt;The most important new language I learned in 1994 was &lt;a href=&#34;http://caml.inria.fr/caml-light/&#34;&gt;Caml Light&lt;/a&gt;, which I came across and learned and used on my Mac SE/30 in 1994, at &lt;a href=&#34;http://caml.inria.fr/pub/old_caml_site/caml-list-ar/0136.html&#34;&gt;version 0.6&lt;/a&gt;. I still remember just finishing working through the &lt;a href=&#34;http://caml.inria.fr/pub/docs/fpcl/&#34;&gt;tutorial&lt;/a&gt; when version 0.7 came out and a lot of stuff changed, annoying me.  How Caml changed the course of my life is the subject of another article.&lt;/p&gt;
+
+&lt;p&gt;I also discovered Haskell in 1994. That took longer for me to get a feel for. It was the dialect &lt;a href=&#34;http://en.wikipedia.org/wiki/Gofer_%28programming_language%29&#34;&gt;Gofer&lt;/a&gt; that I first downloaded and copied to a floppy disk, in the form of &lt;a href=&#34;http://web.cecs.pdx.edu/~mpj/goferarc/macgofer/index.html&#34;&gt;MacGofer&lt;/a&gt;. Later, in 1996, I used &lt;a href=&#34;https://www.haskell.org/ghc/&#34;&gt;GHC&lt;/a&gt; briefly for a small internal utility at work in 1996. I see that DDJ &lt;a href=&#34;http://www.drdobbs.com/programming-paradigms/184409831&#34;&gt;mentioned Haskell in February 1996&lt;/a&gt;, but given that I learned it earlier, I don&amp;rsquo;t know if there was any earlier DDJ mention (not Web-searchable currently) that could have influenced me to try Gofer in the first place. (More on the history of my Haskell usage is the subject of another article; Haskell is the only programming language I am still using active twenty years after first learning it.)&lt;/p&gt;
+
+&lt;h3 id=&#34;dylan:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Dylan&lt;/h3&gt;
+
+&lt;p&gt;I see that there was a &lt;a href=&#34;http://www.drdobbs.com/tools/the-dylan-programming-language/184409404&#34;&gt;DDJ article on Dylan in January 1994&lt;/a&gt;. &amp;ldquo;Dylan, an object-oriented dynamic language developed by Apple Computer, is designed to replace existing static languages for the development of large software systems, yet remains small and efficient enough for the next generation of portable computers. Dylan was developed from the language Scheme, augmented with the Common-Lisp Object System (CLOS).&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I was very excited about &lt;a href=&#34;http://en.wikipedia.org/wiki/Dylan_%28programming_language%29&#34;&gt;Dylan&lt;/a&gt; when I learned about it, because of its ambitions to simultaneously&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;have all the nice features of Scheme&lt;/li&gt;
+&lt;li&gt;remain dynamically typed, but offer optional typing as a standard part of the language&lt;/li&gt;
+&lt;li&gt;provide an object system with multimethods (in 1994, I felt that conventional single-receiver OO was a dead end in the history of programming languages, as evidenced by the horrible &lt;a href=&#34;http://en.wikipedia.org/wiki/Visitor_pattern&#34;&gt;visitor pattern&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Up until I discovered Caml, my favorite language was Scheme, which I had learned in 1992 while working through (the first edition of) &lt;a href=&#34;http://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs&#34;&gt;&amp;ldquo;The Structure and Interpretation of Computer Programs&amp;rdquo;&lt;/a&gt; (SICP), so I felt totally at home in Dylan. In fact, I remember this very article as convincing me to switch from Scheme to Dylan: &lt;a href=&#34;http://www.drdobbs.com/tools/the-dylan-programming-language/184409404#0272_00e9&#34;&gt;Example 5&lt;/a&gt; in the article presented a code snippet from SICP translated into Dylan! Note that this was when Dylan was still using an S-expression syntax carried over from Scheme. Later, Dylan acquired an infix syntax, which I was a big fan of, actually, since I viscerally dislike the parentheses of Lisp languages. I played around with various implementations of Dylan before &lt;a href=&#34;http://en.wikipedia.org/wiki/Apple_Dylan&#34;&gt;Apple&amp;rsquo;s project&lt;/a&gt; was &lt;a href=&#34;http://web.archive.org/web/20060101181134/http://apple.computerhistory.org/discuss/msgReader$186?mode=day&#34;&gt;killed in 1995&lt;/a&gt;. That was a shocker. The news got to me late. I had acquired the Apple Dylan implementation and manual, and it was all for nothing. It was one of the greatest disappointments of my life (topic of another article).&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve appreciated Dr. Dobb&amp;rsquo;s Journal for over two decades because of the timely information it has brought on all kinds of topics involving software development, from C and assembly code listings to surveys of new languages, libraries, algorithms, etc. It was particularly exciting rediscovering an important article on Dylan that exposed me to a sadly short-lived language, Dylan (although some are trying to revive it as &lt;a href=&#34;http://opendylan.org/&#34;&gt;Open Dylan&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Some nostalgia and detective work have opened up memories and questions of &amp;ldquo;what could have been&amp;rdquo; that I&amp;rsquo;ll explore in later articles.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What is your relationship to Dr. Dobb&amp;rsquo;s Journal? Have you ever been a loyal reader of it? What did you get from it?&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Understanding Clojure transducers through types</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types</link>
+      <pubDate>Thu, 07 Aug 2014 22:58:16 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types</guid>
+      <description>
+
+&lt;p&gt;Yesterday, Rich Hickey published a blog post, &lt;a href=&#34;http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming&#34;&gt;&amp;ldquo;Transducers are Coming&amp;rdquo;&lt;/a&gt;, which attracted a lot of attention.&lt;/p&gt;
+
+&lt;p&gt;I have a confession to make, which I have made before: I find it very difficult to understand ideas or code not presented with &lt;em&gt;types&lt;/em&gt;. So I decided that the only way I could possibly understand what &amp;ldquo;transducers&amp;rdquo; are would be to actually implement them in a typed language. I ended up doing so and am sharing my findings here.&lt;/p&gt;
+
+&lt;h2 id=&#34;vague-types-in-the-original-blog-post:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Vague types in the original blog post&lt;/h2&gt;
+
+&lt;p&gt;Rich informally gave some type signatures in his blog post:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;;;reducing function signature
+whatever, input -&amp;gt; whatever
+
+;;transducer signature
+(whatever, input -&amp;gt; whatever) -&amp;gt; (whatever, input -&amp;gt; whatever)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This was, unfortunately, not very helpful. It is hard to make sense of this pseudo-notation for types. What is quantified over what? And what is bound to what? I&amp;rsquo;ll explain later what I mean by these questions.&lt;/p&gt;
+
+&lt;h2 id=&#34;first-discussion-thread-i-saw:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;First discussion thread I saw&lt;/h2&gt;
+
+&lt;p&gt;There was much tweeting online about transducers after Rich Hickey&amp;rsquo;s initial announcement; the tweets did not help me, except for links posted to discussion elsewhere.&lt;/p&gt;
+
+&lt;p&gt;One of them was &lt;a href=&#34;https://news.ycombinator.com/item?id=8143905&#34;&gt;on Hacker News&lt;/a&gt;. I browsed through it but found it mostly not useful. The problem was that although a lot of interesting Haskell code was thrown around, it tended to be &lt;em&gt;related&lt;/em&gt; to transducers but not an &lt;em&gt;exact&lt;/em&gt; translation of the concept. I already had my own intuitions about transducers being related to well-known types such as &lt;a href=&#34;http://www.haskell.org/haskellwiki/Foldable_and_Traversable&#34;&gt;foldables&lt;/a&gt;, &lt;a href=&#34;http://en.wikipedia.org/wiki/Iteratee&#34;&gt;iteratees&lt;/a&gt;, &lt;a href=&#34;https://lens.github.io/&#34;&gt;lenses&lt;/a&gt;, etc. That &amp;ldquo;ordinary function composition&amp;rdquo; was involved immediately suggested the connections, because function composition is huge in these existing Haskell libraries.&lt;/p&gt;
+
+&lt;p&gt;But what I wanted was to understand transducers &lt;em&gt;as they are&lt;/em&gt;, before even thinking about generalizations and comparisons.&lt;/p&gt;
+
+&lt;h3 id=&#34;what-are-the-types:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;What are the types?&lt;/h3&gt;
+
+&lt;p&gt;Rich Hickey &lt;a href=&#34;https://news.ycombinator.com/item?id=8144385&#34;&gt;informally offered some types&lt;/a&gt; (which he said were &amp;ldquo;a la Haskell&amp;rdquo;) to try to help out:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    ;;reducing fn
+    x-&amp;gt;a-&amp;gt;x
+
+    ;;transducer fn
+    (x-&amp;gt;a-&amp;gt;x)-&amp;gt;(x-&amp;gt;b-&amp;gt;x)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;OK, by using type variables &lt;code&gt;a&lt;/code&gt;, &lt;code&gt;b&lt;/code&gt;, and &lt;code&gt;x&lt;/code&gt;, that indicates what is bound to what. The blog post should have used this notation rather than&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;;;transducer signature
+(whatever, input -&amp;gt; whatever) -&amp;gt; (whatever, input -&amp;gt; whatever)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;sample-clojure-code:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Sample Clojure code&lt;/h3&gt;
+
+&lt;p&gt;He also posted some sample Clojure code:&lt;/p&gt;
+
+&lt;p&gt;&lt;script src=&#34;https://gist.github.com/b5aefa622180681e1c81.js&#34;&gt;&lt;/script&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;second-discussion-thread-i-saw:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Second discussion thread I saw&lt;/h2&gt;
+
+&lt;p&gt;Then today, I saw a discussion thread on Reddit, titled &lt;a href=&#34;http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/&#34;&gt;&amp;ldquo;Clojure&amp;rsquo;s Transducers are Perverse Lenses&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;actual-runnable-haskell-code:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Actual runnable Haskell code&lt;/h3&gt;
+
+&lt;p&gt;Rich finally posted some actual &lt;a href=&#34;http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/&#34;&gt;type-checked, runnable Haskell code&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Transducers in Haskell&lt;/span&gt;
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Original was (b -&amp;gt; a) -&amp;gt; (r -&amp;gt; a -&amp;gt; r) -&amp;gt; (r -&amp;gt; b -&amp;gt; r)&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- but Michael O&amp;#39;Keefe in comment pointed out this is misleading&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xf r (f a)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
+&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; p xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; p a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; xf r a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; r
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
+&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl xf r (f a)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- for exposition only, yes, conj is gross for lazy lists&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- in Clojure conj and left folds dominate&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;conj&lt;/span&gt; xs x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xs &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; [x]
+&lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; xf &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl (xf conj) &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- build any old list function with its transducer, all the same way&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]
+&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; mapping f
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a]
+&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; p &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; filtering p
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]
+&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; flatmapping f
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- again, not interesting for lists, but the same transform&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- can be put to use wherever there&amp;#39;s a step fn&lt;/span&gt;
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
+&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; mapping (&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; filtering even &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; flatmapping (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt; x])
+
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; xlist xform [&lt;span style=&#34;color: #666666&#34;&gt;1..5&lt;/span&gt;]
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;After this post, I knew it would not take me long to figure out transducers.&lt;/p&gt;
+
+&lt;h2 id=&#34;refactoring-his-haskell-code:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Refactoring his Haskell code&lt;/h2&gt;
+
+&lt;p&gt;Two things to notice about the original code:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;It has long, low-level function types rather than types that actually &lt;em&gt;name&lt;/em&gt; the concepts being discussed (&lt;em&gt;reducers&lt;/em&gt; and &lt;em&gt;transducers&lt;/em&gt;).&lt;/li&gt;
+&lt;li&gt;It uses hardcoded list types &lt;code&gt;[a]&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;type-synonyms-and-higher-rank-types:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Type synonyms and higher-rank types&lt;/h3&gt;
+
+&lt;p&gt;Defining lots and lots of types (whether synonyms or &lt;a href=&#34;http://www.haskell.org/haskellwiki/Newtype&#34;&gt;newtypes&lt;/a&gt; is standard practice when programming in a modern typed language. OK, so I defined a type synonym&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left reduce&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;But what about transducer? This is trickier.&lt;/p&gt;
+
+&lt;p&gt;An &lt;em&gt;invalid&lt;/em&gt; attempt at a type would be&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Illegal!&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; b r
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;because the type variable &lt;code&gt;r&lt;/code&gt; is not bound in the type definition. And it would be incorrect to just randomly add &lt;code&gt;r&lt;/code&gt; on the left hand side as an extra parameter to the &lt;code&gt;Transducer&lt;/code&gt; type, because in fact it is &lt;em&gt;critical&lt;/em&gt; that a transducer &lt;em&gt;does not care&lt;/em&gt; about the underlying reducer&amp;rsquo;s return type &lt;code&gt;r&lt;/code&gt;. How do we write the desired type?&lt;/p&gt;
+
+&lt;p&gt;It turns out you need &lt;a href=&#34;http://www.haskell.org/haskellwiki/Rank-N_types&#34;&gt;higher-rank types&lt;/a&gt;. Rank-1 types are not sufficient; we need a rank-2 type to quantify &lt;code&gt;r&lt;/code&gt;, to say that a transducer from &lt;code&gt;a&lt;/code&gt; to &lt;code&gt;b&lt;/code&gt; is a transformation that takes a reducer to a specific &lt;code&gt;r&lt;/code&gt; and returns another reducer to the &lt;em&gt;same&lt;/em&gt; &lt;code&gt;r&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Here&amp;#39;s where the rank-2 type is needed&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; forall r &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; b r
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Now we can see more clearly some &lt;em&gt;completely generic&lt;/em&gt; ways to create a transducer:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
+&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xf r (f a)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a a
+&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; p xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; p a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; xf r a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; r
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;a-bit-of-history:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;A bit of history&lt;/h4&gt;
+
+&lt;p&gt;Higher-rank types are a powerful technique for expressing &amp;ldquo;hiding&amp;rdquo; of unnecessary details about types going on somewhere. My first recollection of the real world use of rank-2 types is from 1994 (the year I started using Haskell, although I did not actually use it in my work as a software engineer until 1995), when I was excited to read a paper by John Launchbury and Simon Peyton Jones that solved, using a rank-2 type, a specific, important, practical problem, &lt;a href=&#34;http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.3299&#34;&gt;&amp;ldquo;Lazy Functional State Threads&amp;rdquo;&lt;/a&gt;; twenty years later, their &lt;a href=&#34;http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad-ST.html&#34;&gt;ST monad&lt;/a&gt; is still part of the standard library!&lt;/p&gt;
+
+&lt;h3 id=&#34;introducing-type-classes:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Introducing type classes&lt;/h3&gt;
+
+&lt;p&gt;Clojure uses &lt;a href=&#34;http://clojure.org/protocols&#34;&gt;protocols&lt;/a&gt; as an abstraction mechanism, and the &amp;ldquo;magic&amp;rdquo; of transducers uses protocols. In Haskell, type classes are the major abstraction mechanism (this is true of Scala also).&lt;/p&gt;
+
+&lt;p&gt;So I abstracted away from the hardcoded list-oriented functions and values in Rich Hickey&amp;rsquo;s Haskell code:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;foldl&lt;/code&gt; abstracted to a &lt;code&gt;class Foldable&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;conj&lt;/code&gt; and empty list &lt;code&gt;[]&lt;/code&gt; abstracted to a &lt;code&gt;class Conjable&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left fold&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a (f a)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; f a
+  conj &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a (f a)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note our reliance on transducing and reducing from one type &lt;code&gt;a&lt;/code&gt; to another, &lt;code&gt;f a&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;foldable-constraint:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;&lt;code&gt;Foldable&lt;/code&gt; constraint&lt;/h4&gt;
+
+&lt;p&gt;Unlike &lt;code&gt;mapping&lt;/code&gt; and &lt;code&gt;filtering&lt;/code&gt;, &lt;code&gt;flatmapping&lt;/code&gt; is &lt;em&gt;not completely generic&lt;/em&gt;, because it depends on something being &lt;code&gt;Foldable&lt;/code&gt; (implementing a &lt;code&gt;fold&lt;/code&gt;):&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
+&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fold xf r (f a)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;conjable-constraint:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;&lt;code&gt;Conjable&lt;/code&gt; constraint&lt;/h4&gt;
+
+&lt;p&gt;Finally, here&amp;rsquo;s the originally list-specific code that now depends only on &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- I changed Rich Hickey&amp;#39;s code to be more general than just list&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- but accept anything Conjable&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
+&lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; xf &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fold (xf conj) empty
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- build any old Foldable function with its transducer, all the same way&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
+&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; mapping f
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a
+&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; p &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; filtering p
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
+&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; flatmapping f
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;list-specific-stuff:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;List-specific stuff&lt;/h3&gt;
+
+&lt;p&gt;Here is the list-specific code:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Stuff specialized to lists.&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- To use another type, just make it a Foldable and Conjable.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- for exposition only, yes, conj is gross for lazy lists&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- in Clojure conj and left folds dominate&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt;
+  conj xs x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xs &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; [x]
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Note: the type does not say anything about Foldable or Conjable,&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- even though the implementation just happens to use a list!&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; mapping (&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; filtering even &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; flatmapping (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt; x])
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Again, this can munge anything Foldable and Conjable, not just a list.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;munge&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; f &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;munge&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist xform
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Notice some very important properties of this code:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;xform&lt;/code&gt; has a type that does not mention lists at all, even though it is implemented using a list and cannot compile without the list &lt;code&gt;instance&lt;/code&gt; implementations.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;munge&lt;/code&gt; also does not mention lists, and can transform anything that is &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- munge a list&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;example1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;]
+&lt;span style=&#34;color: #0000FF&#34;&gt;example1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; munge [&lt;span style=&#34;color: #666666&#34;&gt;1..5&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;implementing-another-type-to-illustrate-the-genericity-of-transducers:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Implementing another type to illustrate the genericity of transducers&lt;/h3&gt;
+
+&lt;p&gt;To illustrate Rich Hickey&amp;rsquo;s main point, I implemented instances of &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt; for a standard Haskell &lt;code&gt;Vector&lt;/code&gt; library as an alternate &amp;ldquo;collection-like&amp;rdquo; type.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- For example using Vector instead of list&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; V
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Implement Foldable, Conjable type classes for Vector&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;foldl
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;empty
+  conj &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;snoc
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;And we can run &lt;code&gt;munge&lt;/code&gt; directly on a vector instead of a list, &lt;em&gt;without making any changes&lt;/em&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- return a vector rather than a list; note the fact that munge actually&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- internally uses a list&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;example2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;example2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; munge &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;enumFromN &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This is &lt;em&gt;code reuse&lt;/em&gt; at its best.&lt;/p&gt;
+
+&lt;p&gt;Note that there is nothing that ties transducers to any concrete &amp;ldquo;collection&amp;rdquo; type. We could write instances of &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt; for some kind of &amp;ldquo;channel&amp;rdquo; abstraction, for example, and instantaneously be able to munge data coming from it and to another. In fact, this is already what is done in the real world, where Haskell and Scala are used in production at places like Facebook and Twitter to efficiently handle large amounts of data.&lt;/p&gt;
+
+&lt;h2 id=&#34;my-code-repository:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;My code repository&lt;/h2&gt;
+
+&lt;p&gt;My complete code is available &lt;a href=&#34;https://github.com/FranklinChen/clojure-transducers-in-haskell&#34;&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;It was pretty exciting to see the announcement of the transducers library for Clojure, because it represents a level of abstraction that I think has not been expressed much in the world of dynamically typed languages, although the techniques are two decades old in the Haskell community in a statically typed setting. And I hope that I was able to convey the sheer elegance of Haskell as a way to express interesting types with practical ramifications for abstraction and pluggability.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Pittsburgh Java User Group: Building and Evolving a Java API</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/</link>
+      <pubDate>Tue, 25 Jun 2013 21:49:00 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/</guid>
+      <description>
+
+&lt;p&gt;The topic for the featured presentation at the &lt;a href=&#34;http://java.net/projects/pittjug/&#34;&gt;Pittsburgh Java User Group&lt;/a&gt; (PittJUG) was &amp;ldquo;Building and Evolving a Java API&amp;rdquo;, presented by Eric Stein of &lt;a href=&#34;http://www.fulminatus.com/&#34;&gt;Fulminatus Consulting&lt;/a&gt;. I was excited to attend because API design is difficult but important, and today more than ever, because of the trend toward integrating many services to build an application, and toward providing such services (both externally and internally).&lt;/p&gt;
+
+&lt;p&gt;(For past reports of mine on PittJUG, see the &lt;a href=&#34;http://franklinchen.com/blog/categories/pittjug/&#34;&gt;PittJUG archives in my other blog&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;The presentation was very good. (Eric&amp;rsquo;s slides are available &lt;a href=&#34;http://www.fulminatus.com/presentations/PittJUG%20API%20Presentation.pdf&#34;&gt;here&lt;/a&gt;, but as always with slides, be aware that it is just an outline, as good slides really should be, and the actual presentation and group discussion had all the substance.) Note that although some of the specific recommendations and examples are Java-specific, the entire area of good API design is &lt;em&gt;general&lt;/em&gt; and is applicable no matter what programming language you are using.&lt;/p&gt;
+
+&lt;p&gt;However, the presentation also filled me with a combination of &lt;em&gt;sadness&lt;/em&gt;, because our computing profession could have done better up front to make good API design much easier in various ways. On the positive side, it&amp;rsquo;s better late than never.&lt;/p&gt;
+
+&lt;p&gt;A report on the presentation, with my commentary:&lt;/p&gt;
+
+&lt;h2 id=&#34;api-design-for-whom:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;API design for whom?&lt;/h2&gt;
+
+&lt;p&gt;Whenever doing something at all, the question &amp;ldquo;for whom?&amp;rdquo; should always be asked and answered. Eric observed that APIs must meet the different needs of different users, so it&amp;rsquo;s useful to identify three specific end users with different needs, and look at the situation from each of their points of view:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;API owner&lt;/li&gt;
+&lt;li&gt;specification owner&lt;/li&gt;
+&lt;li&gt;logging owner&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;His inclusion of the &amp;ldquo;logging owner&amp;rdquo; was intriguing because the point of view from someone whose job it is to wade through logs is often slighted. But in light of ever more complex applications as well as errors and the need for recovery and quick turnaround in fixing them, I believe that Eric is right to argue that logging should be seriously designed, to &amp;ldquo;tell a consistent story&amp;rdquo;. I am taking this advice to heart.&lt;/p&gt;
+
+&lt;h2 id=&#34;design-process:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Design process&lt;/h2&gt;
+
+&lt;p&gt;Eric advised that design should start with use cases. And client code, from the perspective of the end user, as well as tests, should be written up front. He didn&amp;rsquo;t use the term, but this is &lt;a href=&#34;http://en.wikipedia.org/wiki/Test-driven_development&#34;&gt;test-driven development&lt;/a&gt; (TDD), which in my mind has been an unfortunate term, because it is really &lt;em&gt;test-driven design&lt;/em&gt;, which happens to have the nice effect of kick-starting development as well. (I&amp;rsquo;ll be writing more later on this blog about TDD; I no longer start a new project without a TDD mentality and process, so productive and efficient I have found it.)&lt;/p&gt;
+
+&lt;p&gt;One thing that Eric said was to start with the &lt;em&gt;most important&lt;/em&gt; cases first, not the easy cases. Very good advice: I have learned the hard way that it is easy to pat yourself on the back and start with easy cases to feel like you&amp;rsquo;re making progress, but this often leads to hitting a block when getting to the hard cases, and then having to do some major redesign at that point. I&amp;rsquo;ve found that if something is really important, it needs to be addressed immediately, and often will drive the design of the components required to make the important hard case work. (I&amp;rsquo;ll be writing more later on this blog about &amp;ldquo;the hard case&amp;rdquo;, especially in the context of &amp;ldquo;sad paths&amp;rdquo; that are critical.)&lt;/p&gt;
+
+&lt;h2 id=&#34;stability:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Stability&lt;/h2&gt;
+
+&lt;p&gt;Stability is the big difficulty in API design. It&amp;rsquo;s really daunting, actually, to think of the idea of &amp;ldquo;write once, support forever&amp;rdquo;, but people get very unhappy, rightfully, if they start using your API and then things break on them after it changes.&lt;/p&gt;
+
+&lt;h2 id=&#34;simplicity:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Simplicity&lt;/h2&gt;
+
+&lt;p&gt;Eric argued that a good API should be easy to read as well as easy to write. This is all about human psychology.&lt;/p&gt;
+
+&lt;p&gt;Also, he noted that a side effect of his recommendation to write client code and tests first is that you get to see the point of view of the client, and can use this experience to weed out, for example, APIs that require a lot of annoying boilerplate code.&lt;/p&gt;
+
+&lt;h2 id=&#34;subclassing:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Subclassing&lt;/h2&gt;
+
+&lt;p&gt;There was a lot of good material covered about the dangers of exposing or mandating or allowing subclassing.&lt;/p&gt;
+
+&lt;p&gt;I agree with Eric about the &lt;em&gt;dangers of subclassing&lt;/em&gt;. The ability to subclass existing classes is the single most abused feature of object-oriented languages, and when it comes to API design, the problems are even more magnified because of the needs for API security and evolution. Almost always, you want to use composition, not subclassing. I&amp;rsquo;m pretty annoyed that composition, which was well-understood in the 1960s and 1970s, ended up being &amp;ldquo;forgotten&amp;rdquo; in some circles. Eric gave the classic example of a totally disastrous API resulting from the Java library originally coming with a &lt;code&gt;Properties&lt;/code&gt; class that was a subclass of &lt;code&gt;Hashtable&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;immutability:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Immutability&lt;/h2&gt;
+
+&lt;p&gt;Immutable objects have huge advantages over mutable objects.&lt;/p&gt;
+
+&lt;p&gt;This is something has been known by the &lt;a href=&#34;http://en.wikipedia.org/wiki/Functional_programming&#34;&gt;functional programming&lt;/a&gt; community since Lisp in the 1950s and &lt;a href=&#34;http://en.wikipedia.org/wiki/ML_(programming_language)&#34;&gt;ML&lt;/a&gt; in the 1970s and &lt;a href=&#34;http://en.wikipedia.org/wiki/Haskell_(programming_language)&#34;&gt;Haskell&lt;/a&gt; and &lt;a href=&#34;http://en.wikipedia.org/wiki/Erlang_(programming_language)&#34;&gt;Erlang&lt;/a&gt; in the 1980s.&lt;/p&gt;
+
+&lt;p&gt;But better late than never.&lt;/p&gt;
+
+&lt;h3 id=&#34;my-example-apache-http-components:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;My example: Apache HTTP Components&lt;/h3&gt;
+
+&lt;p&gt;I have observed that APIs in such languages as Java and Ruby have more and more gravitated toward the use of immutable objects. A very good pattern I have seen is to use a builder (which has internal mutable state) to finally build an instance of an immutable object. Just recently, I was using the &lt;a href=&#34;http://hc.apache.org/httpcomponents-client-ga/&#34;&gt;Java Apache HTTP Components library&lt;/a&gt; and moved from the stable version (4.2.5) to the &lt;a href=&#34;http://hc.apache.org/httpcomponents-client-dev/&#34;&gt;beta version&lt;/a&gt; (4.3-beta2) (because of bugs in the stable version), and happened to notice that a whole slew of methods I was calling were deprecated in favor of a &lt;a href=&#34;http://www.apache.org/dist/httpcomponents/httpclient/RELEASE_NOTES.txt&#34;&gt;new builder-based API&lt;/a&gt;. Excerpts from the release notes of the beta:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Support for Java 7 try-with-resources&lt;/li&gt;
+&lt;li&gt;Added fluent Builder classes&lt;/li&gt;
+&lt;li&gt;Deprecation of preference and configuration API based on HttpParams interface in favor of constructor injection and plain configuration objects&lt;/li&gt;
+&lt;li&gt;Reliance on object immutability instead of access synchronization for thread safety&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It was very good to see that decades-old lessons about good design are finally making it into important Java libraries!&lt;/p&gt;
+
+&lt;h2 id=&#34;types:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Types&lt;/h2&gt;
+
+&lt;p&gt;A lot of what Eric talked about had to do with types: type safety as well as the ramifications of types when evolving an API.&lt;/p&gt;
+
+&lt;h3 id=&#34;null:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;&lt;code&gt;null&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Several of his examples (see his slides) involved the problem of &lt;code&gt;null&lt;/code&gt;, &lt;a href=&#34;http://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare&#34;&gt;Hoare&amp;rsquo;s billion-dollar mistake&lt;/a&gt;, which I gave a little &lt;a href=&#34;http://franklinchen.com/blog/2012/09/06/my-pittsburgh-ruby-talk-nil/&#34;&gt;talk about last year&lt;/a&gt;. Basically, &lt;code&gt;null&lt;/code&gt; is a hole in a type system, and as a result, in Java one has to compensate by documenting in comments (but not having type checked) when and where something could be null or could not be, so that API clients know what to pass into methods and what to expect in return.&lt;/p&gt;
+
+&lt;p&gt;Java is not hopelessly behind: Java 8 has the &lt;a href=&#34;http://download.java.net/jdk8/docs/api/java/util/Optional.html&#34;&gt;&lt;code&gt;Optional&amp;lt;T&amp;gt;&lt;/code&gt; class&lt;/a&gt; to help programmers transition away from using &lt;code&gt;null&lt;/code&gt;. C++14 has a &lt;a href=&#34;http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2013/n3527.html&#34;&gt;proposal to add to the standard library &lt;code&gt;std::optional&amp;lt;T&amp;gt;&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Admittedly, these are late patches that do not actually prevent continued use of &lt;code&gt;null&lt;/code&gt; (ideally, a programming language should simply not even have it; languages such as ML and Haskell from the 1970s and 1980s happily did without this terrible construct), but these are definitely steps forward. New languages being designed and implemented today from a clean slate have no excuse to perpetuate this billion-dollar error: for example, &lt;a href=&#34;http://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt; does not have &lt;code&gt;null&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;strings:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Strings&lt;/h3&gt;
+
+&lt;p&gt;Eric noted that use a string is throwing away type safety.&lt;/p&gt;
+
+&lt;p&gt;I think the use of strings everywhere is a disaster second to that of using &lt;code&gt;null&lt;/code&gt;. The problem is that strings have to be parsed for information. And many people do not actually correctly do such parsing and validation, hence the prevalence of &lt;a href=&#34;http://en.wikipedia.org/wiki/SQL_injection&#34;&gt;injection attacks&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Even apart from security, the manipulation of strings that actually are supposed to have an intended structure is a major cause of late-caught runtime errors, and of programmer confusion. For example, &lt;a href=&#34;http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding&#34;&gt;this report on URLs&lt;/a&gt; has been recirculating lately, because of errors in both libraries and client code when dealing with URLs as strings rather than as strongly typed data.&lt;/p&gt;
+
+&lt;h3 id=&#34;booleans:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Booleans&lt;/h3&gt;
+
+&lt;p&gt;Eric observed that even booleans are an API design smell: booleans are a special case of an enumeration of possible states. What happens if you want to add a new state but your old API used booleans?&lt;/p&gt;
+
+&lt;h3 id=&#34;exceptions:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Exceptions&lt;/h3&gt;
+
+&lt;p&gt;Eric recommended &lt;em&gt;unchecked&lt;/em&gt; over Java&amp;rsquo;s &lt;a href=&#34;http://en.wikipedia.org/wiki/Exception_handling#Checked_exceptions&#34;&gt;&lt;em&gt;checked&lt;/em&gt; exceptions&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Sadly, in my Java programming in the past decade, I&amp;rsquo;ve had to deal with the fact that Java made a big mistake by introducing checked exceptions in the first place; the ramifications were not thought out then. Note that C++11 has finally deprecated exception specifiers, and exceptions in ML have always been unchecked since the introduction in the 1970s, while Java ignored two decades of experience and went ahead and bolted on checked exceptions.&lt;/p&gt;
+
+&lt;h4 id=&#34;not-strings:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Not strings!&lt;/h4&gt;
+
+&lt;p&gt;Eric advised that all failure data should be included in a thrown exception. Too often, we see exception throwing code that just throws a string message. Then the catcher has to try to parse this message for important data (which may not even be present in the string). If you&amp;rsquo;re going to throw an exception, write a class and stash away important information, not a string message.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-short-note-on-primitive-obsession:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;A short note on primitive obsession&lt;/h2&gt;
+
+&lt;p&gt;My friend Adam who also attended the PittJUG meeting noted that what we&amp;rsquo;re basically talking about is &lt;a href=&#34;http://c2.com/cgi/wiki?PrimitiveObsession&#34;&gt;primitive obsession&lt;/a&gt;. The larger lesson here is that when designing robust, clear, and safe APIs, using primitives is often a mistake. Everything in the problem domain should really be modeled as its own type, not as a primitive.&lt;/p&gt;
+
+&lt;h2 id=&#34;evolution-of-an-api:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Evolution of an API&lt;/h2&gt;
+
+&lt;p&gt;The trickiest thing to get right is making an API so that it can evolve in the future without breaking backwards &lt;em&gt;compatibility&lt;/em&gt;. This compatibility can be of different forms:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;behavioral&lt;/li&gt;
+&lt;li&gt;binary&lt;/li&gt;
+&lt;li&gt;source&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Eric talked a lot about weakening or strengthening contracts. There is a lot of hairy stuff involved, including knowledge of Java compiler internals. I think this is a space where more research is needed for the future in order to get the formal semantics of API evolution done right.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://code.google.com/p/japi-checker/&#34;&gt;japi-checker&lt;/a&gt; was mentioned as one tool that one can use for Java.&lt;/p&gt;
+
+&lt;h2 id=&#34;resources:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Resources&lt;/h2&gt;
+
+&lt;p&gt;In the context of software development in Java, it is impossible to avoid mentioning &lt;a href=&#34;http://en.wikipedia.org/wiki/Joshua_Bloch&#34;&gt;Joshua Bloch&lt;/a&gt;&amp;rsquo;s early book (subsequently revised for a second edition), &amp;ldquo;Effective Java&amp;rdquo;. It is a daunting book, over 300 pages long, but it is an indispensable reference for anyone caring about good programming in Java. Eric called it the &amp;ldquo;gold standard&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Check out his links to other resources on his slides.&lt;/p&gt;
+
+&lt;h2 id=&#34;package-design:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Package design&lt;/h2&gt;
+
+&lt;p&gt;A question came up about Eric&amp;rsquo;s recommendation of using package-private visibility and his observation that a lot of people don&amp;rsquo;t know about package-private, and don&amp;rsquo;t design packages.&lt;/p&gt;
+
+&lt;h3 id=&#34;modules:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Modules&lt;/h3&gt;
+
+&lt;p&gt;My observation is that people don&amp;rsquo;t design packages because they&amp;rsquo;re not actually modules. &lt;em&gt;Java was invented without a module system&lt;/em&gt;, although Java 8 originally was slated to finally include a module system in the form of Jigsaw, which was, however, &lt;a href=&#34;http://www.infoworld.com/d/application-development/project-jigsaw-delayed-until-java-9-198007&#34;&gt;delayed to Java 9&lt;/a&gt;. Meanwhile, there is &lt;a href=&#34;http://en.wikipedia.org/wiki/OSGi&#34;&gt;OSGi&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I don&amp;rsquo;t like sounding like a broken record, but &lt;a href=&#34;http://en.wikipedia.org/wiki/Standard_ML&#34;&gt;Standard ML came with a module system in the 1980s&lt;/a&gt;, and there has been further work in the area of module systems, including first-class module systems that go beyond stratified module systems. The reality is that Java was born in the 1990s an &amp;ldquo;old&amp;rdquo; language, with no positive technical innovations, that feels more like a language from the 1960s.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Eric Stein gave an excellent talk about API design, both from the broadest perspective, focused on human beings and clients, and down and dirty with Java language features to avoid or use carefully.&lt;/p&gt;
+
+&lt;h2 id=&#34;addendum-my-involvement-with-java:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;Addendum: my involvement with Java&lt;/h2&gt;
+
+&lt;p&gt;I had a chance to review some of my feelings I have had about programming in Java myself. I&amp;rsquo;ve been a member of PittJUG for well over a decade now. I first signed up on the PittJUG mailing list in June 1999. I have not always been a regular attendee of the meetings: after some initial years of interest, I stopped attending for some years, and became regular again in 2009. So I&amp;rsquo;ve been around Java since it was a very young language, and all the while knowing of all the problems with the language. So why did I chose it as my main programming language a decade ago, and why have I stuck with it for so long, until last last year, when &lt;a href=&#34;http://franklinchen.com/blog/2013/01/11/2013-is-my-year-of-scala/&#34;&gt;I decided to write no &lt;em&gt;new&lt;/em&gt; Java code, and move on to Scala&lt;/a&gt;? I will explain my decision-making in a forthcoming blog post.&lt;/p&gt;
+
+&lt;h2 id=&#34;update-of-2013-07-05:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;(Update of 2013-07-05)&lt;/h2&gt;
+
+&lt;p&gt;An interesting &lt;a href=&#34;http://www.infoq.com/presentations/enterprise-api&#34;&gt;presentation on APIs in the enterprise&lt;/a&gt; came my way.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Learning about Parasail: a new parallel programming language</title>
+      <link>http://conscientiousprogrammer.com/blog/2012/10/17/learning-about-parasail-a-new-parallel-programming-language/</link>
+      <pubDate>Wed, 17 Oct 2012 20:39:15 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2012/10/17/learning-about-parasail-a-new-parallel-programming-language/</guid>
+      <description>
+
+&lt;p&gt;I noticed an announcement for a talk to be given at CMU for the &lt;a href=&#34;http://www.isri.cmu.edu/&#34;&gt;ISR&lt;/a&gt; by visitor Tucker Taft, &lt;a href=&#34;http://www.cs.cmu.edu/afs/.cs.cmu.edu/Web/copetas/Posters/ISR-Taft12.pdf&#34;&gt;&amp;ldquo;ParaSail: A Pointer-Free Path to Object-Oriented Parallel Programming&amp;rdquo;&lt;/a&gt;, and decided to attend.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;d recognized &lt;a href=&#34;http://en.wikipedia.org/wiki/User:Optikos/S._Tucker_Taft&#34;&gt;Tucker Taft&lt;/a&gt;&amp;rsquo;s name because decades ago (and &lt;a href=&#34;http://www.adacore.com/company/about/executive-team/&#34;&gt;now still&lt;/a&gt;), he was a very prominent member of the &lt;a href=&#34;http://en.wikipedia.org/wiki/Ada_%28programming_language%29&#34;&gt;Ada programming language&lt;/a&gt; community, being one of the primary designers of the extensions to the original Ada 83. I never actually used Ada 95, but was following it a little bit because in 1995 I had to maintain some Ada 83 code at work, so I was curious where Ada was going. (I haven&amp;rsquo;t used Ada since leaving that job in 1997.)&lt;/p&gt;
+
+&lt;p&gt;So I was curious what an Ada guy had in mind as for one of the next steps in programming language design (parallelism), and why a new language and how it would be informed by an Ada mindset.&lt;/p&gt;
+
+&lt;h2 id=&#34;parasail-and-why-a-new-language-anyway:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Parasail, and why a new language anyway?&lt;/h2&gt;
+
+&lt;p&gt;The new language Taft has been working on is called Parasail and &lt;a href=&#34;http://parasail-programming-language.blogspot.com/&#34;&gt;its Web site is really a blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Why a new language, and not, say, libraries and idioms to bolt onto an existing language? Because to make parallelism &amp;ldquo;easy&amp;rdquo; to program, and correctly, language support is the way to go, leveraging types and compiler knowledge to help programmers.&lt;/p&gt;
+
+&lt;p&gt;This is not a new thought, of course. Parallel languages have been designed and implemented for decades. But none can be said to have truly caught on universally in practice. For example, as a graduate student in the late 1990s, I learned and used &lt;a href=&#34;http://www.cs.cmu.edu/~guyb/&#34;&gt;Guy Blelloch&lt;/a&gt;&amp;rsquo;s &lt;a href=&#34;http://www.cs.cmu.edu/~scandal/nesl.html&#34;&gt;NESL&lt;/a&gt;, based on the functional language &lt;a href=&#34;http://en.wikipedia.org/wiki/Standard_ML&#34;&gt;Standard ML&lt;/a&gt;, and I briefly participated in exploring bringing the ideas from NESL back into ML itself, as part of the &lt;a href=&#34;https://www.cs.cmu.edu/~pscico/&#34;&gt;PSciCo project&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.haskell.org/haskellwiki/GHC/Data_Parallel_Haskell&#34;&gt;Data Parallel Haskell&lt;/a&gt; is another example of an attempt at a very high level parallel programming language.&lt;/p&gt;
+
+&lt;p&gt;But these languages all come from the functional programming world.&lt;/p&gt;
+
+&lt;h2 id=&#34;mutation:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Mutation&lt;/h2&gt;
+
+&lt;p&gt;Apparently the goal of Parasail is to not force programmers to go all out into functional programming. For both style and efficiency, it may be desirable to program imperatively, with mutation. So how does Parasail try to cope with all the potential problems caused by mutation?&lt;/p&gt;
+
+&lt;p&gt;Parasail bans pointers, hiding them from the programmer by using types. In particular, assignment is by copy, but move and swap semantics are used underneath.&lt;/p&gt;
+
+&lt;h2 id=&#34;memory-management:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Memory management&lt;/h2&gt;
+
+&lt;p&gt;Furthermore, garbage collection is avoided through &lt;a href=&#34;http://en.wikipedia.org/wiki/Region-based_memory_management&#34;&gt;region-based memory management&lt;/a&gt;. This is an old idea, of course: I remember experimenting with using MLKit from the 1990s by Tofte and Talpin when it was hot off the press.&lt;/p&gt;
+
+&lt;h2 id=&#34;code-examples:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Code examples&lt;/h2&gt;
+
+&lt;p&gt;Taft gave some code examples to illustrate paralellization in Parasail. For example, quicksort is important because of its use of mutation.&lt;/p&gt;
+
+&lt;h2 id=&#34;other-features:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Other features&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;return&lt;/code&gt; is intentionally a sync point that introduces nondeterminism. Also, underneath, work stealing is used to handle the threads used underneath.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;It was interesting to see new work on parallel programming languages. Check out Parasail&amp;rsquo;s Web site if you&amp;rsquo;re interested in learning more.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

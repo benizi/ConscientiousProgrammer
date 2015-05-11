@@ -1,491 +1,217 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>toString Considered Harmful, Part 2 - The Conscientious Programmer</title>
-  <meta name="author" content="Franklin Chen">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   
-  <meta name="description" content="This is part 2 of a series of articles, &ldquo;toString considered harmful&rdquo;. [Part 1] introduced the problem in the context of a common design &hellip;">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>toString considered harmful, part 2 &middot; The Conscientious Programmer</title>
 
   
-  <link rel="canonical" href="http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/highlight/default.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
   <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="The Conscientious Programmer" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link type="text/plain" rel="author" href="http://franklinchen.com/humans.txt" />
+
   
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-41982602-1']);
-    _gaq.push(['_trackPageview']);
+  
+  
+  
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
 </head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>The Conscientious Programmer</h1>
+      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">The Conscientious Programmer</a></h1>
-  
-    <h2>Humbly exploring what it means to do the right thing.</h2>
-  
-</hgroup>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item"><a href="http://conscientiousprogrammer.com">Blog</a></li>
+      
+      <li class="sidebar-nav-item"><a href="/about/">About</a></li>
+      
+    </ul>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="ConscientiousProgrammer.com">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/about">About</a></li>
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+      
+      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+      </li>
+    </ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>toString considered harmful, part 2</h1>
     
-      <h1 class="entry-title">toString Considered Harmful, Part 2</h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-<time class='entry-date' datetime='2013-12-26T22:03:00-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:03 pm</span></time>
-        
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://ConscientiousProgrammer.com">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>This is part 2 of a series of articles, &ldquo;<code>toString</code> considered harmful&rdquo;. [Part 1] introduced the problem in the context of a common design flaw present in object-oriented languages, and proposed a simple workaround.</p>
+<p>This is part 2 of a series of articles, &ldquo;<code>toString</code> considered harmful&rdquo;. [Part 1] introduced the problem in the context of a common design flaw present in object-oriented languages, and proposed a simple workaround.</p>
 
 <p>In part 2, we look at advanced ways to organize &ldquo;stringable&rdquo; data, using either an object-oriented or functional style. Examples are in Scala because it equally supports either style.</p>
 
-<!--more-->
-
-
-<h2>Object-oriented vs. functional</h2>
+<h2 id="object-oriented-vs-functional:61f4feb9ec203761b1ad81e849476dfd">Object-oriented vs. functional</h2>
 
 <p>The fix presented was in <em>object-oriented</em> style, adding a method <code>toUrlString</code> to a class. The other solution is the <em>functional</em> style, leaving the <code>Id</code> class alone, and writing an external function instead:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="n">toUrlString</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Id</span><span class="o">)</span> <span class="k">=</span> <span class="n">id</span><span class="o">.</span><span class="n">toString</span>
-</span></code></pre></td></tr></table></div></figure>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span>
 
+  <span style="color: #008000; font-weight: bold">def</span> toUrlString<span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Id</span><span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">=</span> id<span style="color: #666666">.</span>toString
+</pre></div>
+</p>
 
 <p>with</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">id</span> <span class="k">match</span> <span class="o">{</span>
-</span><span class='line'>  <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;No id found!&quot;</span><span class="o">)</span>
-</span><span class='line'>  <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">getUrl</span><span class="o">(</span><span class="n">makeUrl</span><span class="o">(</span><span class="n">toUrlString</span><span class="o">(</span><span class="n">n</span><span class="o">)))</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    id <span style="color: #008000; font-weight: bold">match</span> <span style="color: #666666">{</span>
+      <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">None</span> <span style="color: #008000; font-weight: bold">=&gt;</span> println<span style="color: #666666">(</span><span style="color: #BA2121">&quot;No id found!&quot;</span><span style="color: #666666">)</span>
+      <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">Some</span><span style="color: #666666">(</span>n<span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">=&gt;</span> getUrl<span style="color: #666666">(</span>makeUrl<span style="color: #666666">(</span>toUrlString<span style="color: #666666">(</span>n<span style="color: #666666">)))</span>
+    <span style="color: #666666">}</span>
+</pre></div>
+</p>
 
 <p>There are advantages and disadvantages to either solution.</p>
 
-<h2>More advanced OO</h2>
+<h2 id="more-advanced-oo:61f4feb9ec203761b1ad81e849476dfd">More advanced OO</h2>
 
 <p>It would be very natural, given a whole set of domain classes in addition to <code>Id</code>, to want all of them to have a <code>toUrlString</code>. Then the natural thing to do is to create a mini-universe (parallel to the <code>toString</code> universe) by creating a hierarchy:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">trait</span> <span class="nc">UrlString</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">def</span> <span class="n">toUrlString</span><span class="k">:</span> <span class="kt">String</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">UrlString</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">override</span> <span class="k">def</span> <span class="n">toUrlString</span> <span class="k">=</span> <span class="n">id</span><span class="o">.</span><span class="n">toString</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="err">...</span><span class="o">(...)</span> <span class="k">extends</span> <span class="nc">UrlString</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">override</span> <span class="k">def</span> <span class="n">toUrlString</span> <span class="k">=</span> <span class="o">...</span>
-</span><span class='line'>  <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">trait</span> <span style="color: #0000FF; font-weight: bold">UrlString</span> <span style="color: #666666">{</span>
+    <span style="color: #008000; font-weight: bold">def</span> toUrlString<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span>
+  <span style="color: #666666">}</span>
 
+  <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #0000FF; font-weight: bold">UrlString</span> <span style="color: #666666">{</span>
+    <span style="color: #008000; font-weight: bold">override</span> <span style="color: #008000; font-weight: bold">def</span> toUrlString <span style="color: #008000; font-weight: bold">=</span> id<span style="color: #666666">.</span>toString
+  <span style="color: #666666">}</span>
 
-<h2>Advanced string interpolation with OO</h2>
+  <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="border: 1px solid #FF0000">...</span><span style="color: #666666">(...)</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #0000FF; font-weight: bold">UrlString</span> <span style="color: #666666">{</span>
+    <span style="color: #008000; font-weight: bold">override</span> <span style="color: #008000; font-weight: bold">def</span> toUrlString <span style="color: #008000; font-weight: bold">=</span> <span style="color: #666666">...</span>
+  <span style="color: #666666">}</span>
+</pre></div>
+</p>
+
+<h2 id="advanced-string-interpolation-with-oo:61f4feb9ec203761b1ad81e849476dfd">Advanced string interpolation with OO</h2>
 
 <p>In fact, Scala and other languages with advanced string interpolation facilities allow yet another refactoring by making sure that what gets into a URL isn&rsquo;t just an arbitrary string in the first place!</p>
 
 <p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">implicit</span> <span class="k">class</span> <span class="nc">UrlHelper</span><span class="o">(</span><span class="k">val</span> <span class="n">sc</span><span class="k">:</span> <span class="kt">StringContext</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">AnyVal</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">def</span> <span class="n">url</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">UrlString*</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
-</span><span class='line'>      <span class="k">val</span> <span class="n">strings</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">iterator</span>
-</span><span class='line'>      <span class="k">val</span> <span class="n">expressions</span> <span class="k">=</span> <span class="n">args</span><span class="o">.</span><span class="n">iterator</span>
-</span><span class='line'>      <span class="k">val</span> <span class="n">buf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">StringBuffer</span><span class="o">(</span><span class="n">strings</span><span class="o">.</span><span class="n">next</span><span class="o">)</span>
-</span><span class='line'>      <span class="k">while</span> <span class="o">(</span><span class="n">strings</span><span class="o">.</span><span class="n">hasNext</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">buf</span> <span class="n">append</span> <span class="n">expressions</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">toUrlString</span>
-</span><span class='line'>        <span class="n">buf</span> <span class="n">append</span> <span class="n">strings</span><span class="o">.</span><span class="n">next</span>
-</span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>      <span class="n">buf</span><span class="o">.</span><span class="n">toString</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/** Only ever use UrlString to create a URL. */</span>
-</span><span class='line'>  <span class="k">def</span> <span class="n">makeUrl</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">UrlString</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">url</span><span class="s">&quot;http://service.com?id=$id&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">implicit</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">UrlHelper</span><span style="color: #666666">(</span><span style="color: #008000; font-weight: bold">val</span> sc<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">StringContext</span><span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #0000FF; font-weight: bold">AnyVal</span> <span style="color: #666666">{</span>
+    <span style="color: #008000; font-weight: bold">def</span> url<span style="color: #666666">(</span>args<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">UrlString*</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> <span style="color: #666666">{</span>
+      <span style="color: #008000; font-weight: bold">val</span> strings <span style="color: #008000; font-weight: bold">=</span> sc<span style="color: #666666">.</span>parts<span style="color: #666666">.</span>iterator
+      <span style="color: #008000; font-weight: bold">val</span> expressions <span style="color: #008000; font-weight: bold">=</span> args<span style="color: #666666">.</span>iterator
+      <span style="color: #008000; font-weight: bold">val</span> buf <span style="color: #008000; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">new</span> <span style="color: #0000FF; font-weight: bold">StringBuffer</span><span style="color: #666666">(</span>strings<span style="color: #666666">.</span>next<span style="color: #666666">)</span>
+      <span style="color: #008000; font-weight: bold">while</span> <span style="color: #666666">(</span>strings<span style="color: #666666">.</span>hasNext<span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        buf append expressions<span style="color: #666666">.</span>next<span style="color: #666666">.</span>toUrlString
+        buf append strings<span style="color: #666666">.</span>next
+      <span style="color: #666666">}</span>
+      buf<span style="color: #666666">.</span>toString
+    <span style="color: #666666">}</span>
+  <span style="color: #666666">}</span>
 
+  <span style="color: #408080; font-style: italic">/** Only ever use UrlString to create a URL. */</span>
+  <span style="color: #008000; font-weight: bold">def</span> makeUrl<span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">UrlString</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> url<span style="color: #BA2121">&quot;http://service.com?id=$id&quot;</span>
+</pre></div>
+</p>
 
 <p>with</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">id</span> <span class="k">match</span> <span class="o">{</span>
-</span><span class='line'>  <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">&quot;No id found!&quot;</span><span class="o">)</span>
-</span><span class='line'>  <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">n</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">getUrl</span><span class="o">(</span><span class="n">makeUrl</span><span class="o">(</span><span class="n">n</span><span class="o">))</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    id <span style="color: #008000; font-weight: bold">match</span> <span style="color: #666666">{</span>
+      <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">None</span> <span style="color: #008000; font-weight: bold">=&gt;</span> println<span style="color: #666666">(</span><span style="color: #BA2121">&quot;No id found!&quot;</span><span style="color: #666666">)</span>
+      <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">Some</span><span style="color: #666666">(</span>n<span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">=&gt;</span> getUrl<span style="color: #666666">(</span>makeUrl<span style="color: #666666">(</span>n<span style="color: #666666">))</span>
+    <span style="color: #666666">}</span>
+</pre></div>
+</p>
 
 <p>This may or may not be overengineering.</p>
 
-<h2>Advanced string interpolation with FP</h2>
+<h2 id="advanced-string-interpolation-with-fp:61f4feb9ec203761b1ad81e849476dfd">Advanced string interpolation with FP</h2>
 
 <p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="c1">// A type class</span>
-</span><span class='line'>  <span class="k">trait</span> <span class="nc">UrlString</span><span class="o">[</span><span class="kt">A</span><span class="o">]</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">def</span> <span class="n">toUrlString</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// Wrapper class</span>
-</span><span class='line'>  <span class="k">case</span> <span class="k">class</span> <span class="nc">Id</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// Implement the type class UrlString for Id</span>
-</span><span class='line'>  <span class="k">implicit</span> <span class="k">object</span> <span class="nc">IdToUrlString</span> <span class="k">extends</span> <span class="nc">UrlString</span><span class="o">[</span><span class="kt">Id</span><span class="o">]</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">override</span> <span class="k">def</span> <span class="n">toUrlString</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">Id</span><span class="o">)</span> <span class="k">=</span> <span class="n">a</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">toString</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">implicit</span> <span class="k">class</span> <span class="nc">UrlHelper</span><span class="o">(</span><span class="k">val</span> <span class="n">sc</span><span class="k">:</span> <span class="kt">StringContext</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">AnyVal</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">def</span> <span class="n">url</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">UrlString</span><span class="o">](</span><span class="n">args</span><span class="k">:</span> <span class="kt">A*</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
-</span><span class='line'>      <span class="k">val</span> <span class="n">strings</span> <span class="k">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">iterator</span>
-</span><span class='line'>      <span class="k">val</span> <span class="n">expressions</span> <span class="k">=</span> <span class="n">args</span><span class="o">.</span><span class="n">iterator</span>
-</span><span class='line'>      <span class="k">val</span> <span class="n">buf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">StringBuffer</span><span class="o">(</span><span class="n">strings</span><span class="o">.</span><span class="n">next</span><span class="o">)</span>
-</span><span class='line'>      <span class="k">while</span> <span class="o">(</span><span class="n">strings</span><span class="o">.</span><span class="n">hasNext</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">buf</span> <span class="n">append</span> <span class="n">implicitly</span><span class="o">[</span><span class="kt">UrlString</span><span class="o">[</span><span class="kt">A</span><span class="o">]].</span><span class="n">toUrlString</span><span class="o">(</span><span class="n">expressions</span><span class="o">.</span><span class="n">next</span><span class="o">)</span>
-</span><span class='line'>        <span class="n">buf</span> <span class="n">append</span> <span class="n">strings</span><span class="o">.</span><span class="n">next</span>
-</span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>      <span class="n">buf</span><span class="o">.</span><span class="n">toString</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/** Anything &quot;viewable&quot; as UrlString can be used to create a URL. */</span>
-</span><span class='line'>  <span class="k">def</span> <span class="n">makeUrl</span><span class="o">[</span><span class="kt">A:</span> <span class="kt">UrlString</span><span class="o">](</span><span class="n">id</span><span class="k">:</span> <span class="kt">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="n">url</span><span class="s">&quot;http://service.com?id=$id&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">// A type class</span>
+  <span style="color: #008000; font-weight: bold">trait</span> <span style="color: #0000FF; font-weight: bold">UrlString</span><span style="color: #666666">[</span><span style="color: #B00040">A</span><span style="color: #666666">]</span> <span style="color: #666666">{</span>
+    <span style="color: #008000; font-weight: bold">def</span> toUrlString<span style="color: #666666">(</span>a<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">A</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span>
+  <span style="color: #666666">}</span>
 
+  <span style="color: #408080; font-style: italic">// Wrapper class</span>
+  <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span>
 
-<h2>The final string gotcha</h2>
+  <span style="color: #408080; font-style: italic">// Implement the type class UrlString for Id</span>
+  <span style="color: #008000; font-weight: bold">implicit</span> <span style="color: #008000; font-weight: bold">object</span> <span style="color: #0000FF; font-weight: bold">IdToUrlString</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #0000FF; font-weight: bold">UrlString</span><span style="color: #666666">[</span><span style="color: #B00040">Id</span><span style="color: #666666">]</span> <span style="color: #666666">{</span>
+    <span style="color: #008000; font-weight: bold">override</span> <span style="color: #008000; font-weight: bold">def</span> toUrlString<span style="color: #666666">(</span>a<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Id</span><span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">=</span> a<span style="color: #666666">.</span>id<span style="color: #666666">.</span>toString
+  <span style="color: #666666">}</span>
+
+  <span style="color: #008000; font-weight: bold">implicit</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">UrlHelper</span><span style="color: #666666">(</span><span style="color: #008000; font-weight: bold">val</span> sc<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">StringContext</span><span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #0000FF; font-weight: bold">AnyVal</span> <span style="color: #666666">{</span>
+    <span style="color: #008000; font-weight: bold">def</span> url<span style="color: #666666">[</span><span style="color: #B00040">A:</span> <span style="color: #B00040">UrlString</span><span style="color: #666666">](</span>args<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">A*</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> <span style="color: #666666">{</span>
+      <span style="color: #008000; font-weight: bold">val</span> strings <span style="color: #008000; font-weight: bold">=</span> sc<span style="color: #666666">.</span>parts<span style="color: #666666">.</span>iterator
+      <span style="color: #008000; font-weight: bold">val</span> expressions <span style="color: #008000; font-weight: bold">=</span> args<span style="color: #666666">.</span>iterator
+      <span style="color: #008000; font-weight: bold">val</span> buf <span style="color: #008000; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">new</span> <span style="color: #0000FF; font-weight: bold">StringBuffer</span><span style="color: #666666">(</span>strings<span style="color: #666666">.</span>next<span style="color: #666666">)</span>
+      <span style="color: #008000; font-weight: bold">while</span> <span style="color: #666666">(</span>strings<span style="color: #666666">.</span>hasNext<span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        buf append implicitly<span style="color: #666666">[</span><span style="color: #B00040">UrlString</span><span style="color: #666666">[</span><span style="color: #B00040">A</span><span style="color: #666666">]].</span>toUrlString<span style="color: #666666">(</span>expressions<span style="color: #666666">.</span>next<span style="color: #666666">)</span>
+        buf append strings<span style="color: #666666">.</span>next
+      <span style="color: #666666">}</span>
+      buf<span style="color: #666666">.</span>toString
+    <span style="color: #666666">}</span>
+  <span style="color: #666666">}</span>
+
+  <span style="color: #408080; font-style: italic">/** Anything &quot;viewable&quot; as UrlString can be used to create a URL. */</span>
+  <span style="color: #008000; font-weight: bold">def</span> makeUrl<span style="color: #666666">[</span><span style="color: #B00040">A:</span> <span style="color: #B00040">UrlString</span><span style="color: #666666">](</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">A</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> url<span style="color: #BA2121">&quot;http://service.com?id=$id&quot;</span>
+</pre></div>
+</p>
+
+<h2 id="the-final-string-gotcha:61f4feb9ec203761b1ad81e849476dfd">The final string gotcha</h2>
 
 <p>You may have noticed that there is still primitive obsession in this sample code: URLs are presented as <code>String</code> for simplicity. In real life, I use builders such as <code>URIBuilder</code> and <code>HttpGet</code> (Java <a href="http://hc.apache.org/">Apache HttpComponents</a>) or more sophisticated Scala-specific libraries such as <a href="http://spray.io/">Spray</a>.</p>
 
-<h2>Conclusion</h2>
+<h2 id="conclusion:61f4feb9ec203761b1ad81e849476dfd">Conclusion</h2>
 
 <p>I thought it would useful to compare an object-oriented and a functional approach to unifying data that share a domain-consistent notion of conversion to a string. Scala is a language that allows easy expression of both.</p>
 
 <p>In part 3, we will look at languages that just don&rsquo;t have the <code>toString</code> problem at all.</p>
-</div>
 
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Franklin Chen</span></span>
-
-      
-
-
-
-
-<time class='entry-date' datetime='2013-12-26T22:03:00-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:03 pm</span></time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/c/'>c</a>, <a class='category' href='/blog/categories/c-number/'>c#</a>, <a class='category' href='/blog/categories/c-plus-plus/'>c++</a>, <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/haskell/'>haskell</a>, <a class='category' href='/blog/categories/implicits/'>implicits</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/lisp/'>lisp</a>, <a class='category' href='/blog/categories/object-oriented/'>object-oriented</a>, <a class='category' href='/blog/categories/ocaml/'>ocaml</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/scala/'>scala</a>, <a class='category' href='/blog/categories/scheme/'>scheme</a>, <a class='category' href='/blog/categories/standard-ml/'>standard ml</a>, <a class='category' href='/blog/categories/string-interpolation/'>string interpolation</a>, <a class='category' href='/blog/categories/type-classes/'>type classes</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/" data-via="FranklinChen" data-counturl="http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/12/23/tostring-considered-harmful-part-1/" title="Previous Post: toString considered harmful, part 1">&laquo; toString considered harmful, part 1</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/12/27/tostring-considered-harmful-part-3/" title="Next Post: toString considered harmful, part 3">toString considered harmful, part 3 &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">How to Think About Rust Ownership Versus C++ Unique_ptr</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/">Remembering Over 20 Years of Reading Dr. Dobb&#8217;s Journal Even Till Today</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/">When a Computer Algebra Program Gives Wrong Answers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/">Pittsburgh Code and Supply: Making Music With Overtone in Clojure; Conveying Information Through Sound</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/07/understanding-cloure-transducers-through-types/">Understanding Clojure Transducers Through Types</a>
-      </li>
-    
-  </ul>
-</section>
-
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/FranklinChen">@FranklinChen</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'FranklinChen',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/+FranklinChen?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - <a href="http://franklinchen.com/">Franklin Chen</a> -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
+    <div id="disqus_thread"></div>
 <script type="text/javascript">
-      var disqus_shortname = 'conscientiousprogrammer';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/';
-        var disqus_url = 'http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2013\/12\/26\/tostring-considered-harmful-part-2\/';
+    var disqus_title = 'toString considered harmful, part 2';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2013\/12\/26\/tostring-considered-harmful-part-2\/';
 
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
     (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 </body>
 </html>
