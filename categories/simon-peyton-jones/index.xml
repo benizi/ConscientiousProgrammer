@@ -11,10 +11,10 @@
     
     <item>
       <title>Understanding Clojure transducers through types</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types</link>
+      <link>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/</link>
       <pubDate>Thu, 07 Aug 2014 22:58:16 -0400</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/</guid>
       <description>
 
 &lt;p&gt;Yesterday, Rich Hickey published a blog post, &lt;a href=&#34;http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming&#34;&gt;&amp;ldquo;Transducers are Coming&amp;rdquo;&lt;/a&gt;, which attracted a lot of attention.&lt;/p&gt;

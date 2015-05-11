@@ -597,10 +597,10 @@ The current behavior is at best merely historical accident; it was definitely no
     
     <item>
       <title>nil, non-determinism, exceptions: a journey in debugging the software that generates my blog</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions</link>
+      <link>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/</link>
       <pubDate>Sat, 29 Jun 2013 18:15:00 +0000</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/</guid>
       <description>
 
 &lt;p&gt;I mentioned in my &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/&#34;&gt;initial post for this blog&lt;/a&gt; that I have had some problems with the software I use to generate my personal blog, &lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt;, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.&lt;/p&gt;

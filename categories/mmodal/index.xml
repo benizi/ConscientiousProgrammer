@@ -11,10 +11,10 @@
     
     <item>
       <title>Pittsburgh Scala Meetup: Exploring type-directed, test-driven development using FizzBuzz (my practice talk)</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed</link>
+      <link>http://conscientiousprogrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/</link>
       <pubDate>Thu, 15 May 2014 22:49:48 -0400</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/</guid>
       <description>
 
 &lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/&#34;&gt;Pittsburgh Scala Meetup&lt;/a&gt; met, with me presenting a &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581402/&#34;&gt;practice talk&lt;/a&gt; for &amp;ldquo;Exploring type-directed, test-driven development using FizzBuzz&amp;rdquo;, which I am presenting at the upcoming local &lt;a href=&#34;http://pghtechfest.com/&#34;&gt;Pittsburgh TechFest&lt;/a&gt; conference.&lt;/p&gt;
@@ -174,10 +174,10 @@
     
     <item>
       <title>Pittsburgh Scala Meetup: learning by reading Josh&#39;s code!</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/10/11/pittsburgh-scala-meetup-learning-by-reading-joshs-code</link>
+      <link>http://conscientiousprogrammer.com/blog/2013/10/11/pittsburgh-scala-meetup-learning-by-reading-joshs-code/</link>
       <pubDate>Thu, 10 Oct 2013 23:09:33 -0500</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2013/10/11/pittsburgh-scala-meetup-learning-by-reading-joshs-code</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2013/10/11/pittsburgh-scala-meetup-learning-by-reading-joshs-code/</guid>
       <description>
 
 &lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/&#34;&gt;Pittsburgh Scala Meetup&lt;/a&gt; met to &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/events/135567132/&#34;&gt;learn by hacking&lt;/a&gt;. There was a change of plan because Josh couldn&amp;rsquo;t make it to the meeting, so instead of a presentation by him, we got a link to his GitHub repository for an implementation of an &lt;a href=&#34;https://github.com/jsuereth/tic-tac-toe&#34;&gt;interactive Web-based tic-tac-toe game using Play&lt;/a&gt;.&lt;/p&gt;

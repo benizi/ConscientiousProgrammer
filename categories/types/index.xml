@@ -11,10 +11,10 @@
     
     <item>
       <title>How to think about Rust ownership versus C&#43;&#43; unique_ptr</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr</link>
+      <link>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/</link>
       <pubDate>Sun, 21 Dec 2014 14:31:36 -0500</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/</guid>
       <description>
 
 &lt;p&gt;The &lt;a href=&#34;http://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt; programming language, which is nearing its important version 1.0 release, but already seen a lot of use, has many interesting features, the most prominent of which is its &lt;a href=&#34;http://doc.rust-lang.org/guide.html#ownership,-borrowing,-and-lifetimes&#34;&gt;ownership&lt;/a&gt; static type system that prevents certain kinds of bugs common in many programs in C or C++.&lt;/p&gt;
@@ -230,10 +230,10 @@
     
     <item>
       <title>Remembering over 20 years of reading Dr. Dobb&#39;s Journal even till today</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today</link>
+      <link>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/</link>
       <pubDate>Tue, 16 Dec 2014 22:23:42 -0500</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/</guid>
       <description>
 
 &lt;p&gt;It was with sadness, but not surprise, that I read today about the &lt;a href=&#34;http://www.drdobbs.com/architecture-and-design/farewell-dr-dobbs/240169421&#34;&gt;end of Dr. Dobb&amp;rsquo;s Journal&lt;/a&gt;.&lt;/p&gt;
@@ -314,10 +314,10 @@
     
     <item>
       <title>Understanding Clojure transducers through types</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types</link>
+      <link>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/</link>
       <pubDate>Thu, 07 Aug 2014 22:58:16 -0400</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/</guid>
       <description>
 
 &lt;p&gt;Yesterday, Rich Hickey published a blog post, &lt;a href=&#34;http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming&#34;&gt;&amp;ldquo;Transducers are Coming&amp;rdquo;&lt;/a&gt;, which attracted a lot of attention.&lt;/p&gt;

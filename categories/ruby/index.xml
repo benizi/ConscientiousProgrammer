@@ -473,10 +473,10 @@ You ordered NULL items.
     
     <item>
       <title>My lightning talk at Steel City Ruby 2013: &#34;Reflections&#34;</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013</link>
+      <link>http://conscientiousprogrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/</link>
       <pubDate>Sun, 18 Aug 2013 21:54:09 -0400</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/</guid>
       <description>
 
 &lt;p&gt;Below is video for, and a transcript of, my five-minute lightning talk I gave at Steel City Ruby 2013, which I reported on &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/08/18/report-on-the-second-steel-city-ruby-conference-another-life-changing-one-for-me-part-1/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
@@ -653,10 +653,10 @@ You ordered NULL items.
     
     <item>
       <title>Pittsburgh Ruby/Python social and some observations about our polyglot world</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social</link>
+      <link>http://conscientiousprogrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/</link>
       <pubDate>Fri, 02 Aug 2013 22:17:42 -0400</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2013/08/02/pittsburgh-ruby-python-social/</guid>
       <description>
 
 &lt;p&gt;Programming meetups aren&amp;rsquo;t just about presentations and coding. Abby and I joined others in meeting up for dinner for a &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby/events/120201652/&#34;&gt;joint Pittsburgh Ruby and Pittsburgh Python social&lt;/a&gt; and enjoyed relaxing and socializing outdoors in Bakery Square. Although it perpetually looked like it was going to rain, it turned out we weren&amp;rsquo;t really rained on.&lt;/p&gt;
@@ -701,10 +701,10 @@ You ordered NULL items.
     
     <item>
       <title>Pittsburgh Ruby lightning talk night: RVM, business logic with Rails, IRC, rspec-given, Vagrant</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night</link>
+      <link>http://conscientiousprogrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/</link>
       <pubDate>Thu, 11 Jul 2013 20:53:00 +0000</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/</guid>
       <description>
 
 &lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby&#34;&gt;Pittsburgh Ruby meetup&lt;/a&gt; held a &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby/events/120200102&#34;&gt;lightning talks session&lt;/a&gt;.&lt;/p&gt;
@@ -948,10 +948,10 @@ You ordered NULL items.
     
     <item>
       <title>nil, non-determinism, exceptions: a journey in debugging the software that generates my blog</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions</link>
+      <link>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/</link>
       <pubDate>Sat, 29 Jun 2013 18:15:00 +0000</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/</guid>
       <description>
 
 &lt;p&gt;I mentioned in my &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/&#34;&gt;initial post for this blog&lt;/a&gt; that I have had some problems with the software I use to generate my personal blog, &lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt;, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.&lt;/p&gt;

@@ -11,10 +11,10 @@
     
     <item>
       <title>How to think about Rust ownership versus C&#43;&#43; unique_ptr</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr</link>
+      <link>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/</link>
       <pubDate>Sun, 21 Dec 2014 14:31:36 -0500</pubDate>
       
-      <guid>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr</guid>
+      <guid>http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/</guid>
       <description>
 
 &lt;p&gt;The &lt;a href=&#34;http://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt; programming language, which is nearing its important version 1.0 release, but already seen a lot of use, has many interesting features, the most prominent of which is its &lt;a href=&#34;http://doc.rust-lang.org/guide.html#ownership,-borrowing,-and-lifetimes&#34;&gt;ownership&lt;/a&gt; static type system that prevents certain kinds of bugs common in many programs in C or C++.&lt;/p&gt;
