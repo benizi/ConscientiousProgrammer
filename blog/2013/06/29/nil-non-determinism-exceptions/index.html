@@ -20,8 +20,8 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
-  <link href="/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../apple-touch-icon-144-precomposed.png">
+  <link href="../../../../../favicon.png" rel="icon">
 
   
   
@@ -44,7 +44,7 @@
     <ul class="sidebar-nav">
       <li class="sidebar-nav-item"><a href="http://conscientiousprogrammer.com">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="../../../../../about/">About</a></li>
       
     </ul>
 
@@ -70,7 +70,7 @@
     <h1>nil, non-determinism, exceptions: a journey in debugging the software that generates my blog</h1>
     
 
-<p>I mentioned in my <a href="/blog/2013/06/24/introducing-this-new-programming-blog/">initial post for this blog</a> that I have had some problems with the software I use to generate my personal blog, <a href="http://octopress.org/">Octopress</a>, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.</p>
+<p>I mentioned in my <a href="../../../../../blog/2013/06/24/introducing-this-new-programming-blog/">initial post for this blog</a> that I have had some problems with the software I use to generate my personal blog, <a href="http://octopress.org/">Octopress</a>, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.</p>
 
 <p>Here I report on how I figured out the problem and begin a conversation about the nature of error handling and API design.</p>
 
@@ -88,7 +88,7 @@
 </pre></div>
 </p>
 
-<p>This is, unfortunately, an example of an error message that is next to useless, and should <em>never</em> appear. I have stated that <a href="/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/">we as programmers should not generate useless end user error messages</a>, and of course, in context, I am an end user of the blog generating software I use.</p>
+<p>This is, unfortunately, an example of an error message that is next to useless, and should <em>never</em> appear. I have stated that <a href="../../../../../blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/">we as programmers should not generate useless end user error messages</a>, and of course, in context, I am an end user of the blog generating software I use.</p>
 
 <h2 id="debugging-and-finding-the-root-cause:08c2e7a867293a37060f4f671511a7f1">Debugging and finding the root cause</h2>
 

@@ -19,7 +19,7 @@
 
 &lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby&#34;&gt;Pittsburgh Ruby meetup&lt;/a&gt; held a &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby/events/120200102&#34;&gt;lightning talks session&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Originally, I was not going to present anything, since I did not feel that I had anything exciting to quickly share (I have not been doing much Ruby programming lately at all other than &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions&#34;&gt;debugging my Octopress-generated blog&lt;/a&gt;), and don&amp;rsquo;t like talking just to talk.&lt;/p&gt;
+&lt;p&gt;Originally, I was not going to present anything, since I did not feel that I had anything exciting to quickly share (I have not been doing much Ruby programming lately at all other than &lt;a href=&#34;../../blog/2013/06/29/nil-non-determinism-exceptions&#34;&gt;debugging my Octopress-generated blog&lt;/a&gt;), and don&amp;rsquo;t like talking just to talk.&lt;/p&gt;
 
 &lt;p&gt;But at the very last minute, just half an hour before the meeting, I noticed some developments in the world of &lt;a href=&#34;http://rspec.info/&#34;&gt;RSpec&lt;/a&gt; announced on Twitter by Jim Weirich, and I got excited enough that I decided to talk about his &lt;a href=&#34;https://github.com/jimweirich/rspec-given&#34;&gt;&lt;code&gt;rspec-given&lt;/code&gt;&lt;/a&gt;, which was just released at version 3.0.0.&lt;/p&gt;
 

@@ -20,8 +20,8 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
-  <link href="/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../apple-touch-icon-144-precomposed.png">
+  <link href="../../../../../favicon.png" rel="icon">
 
   
   
@@ -44,7 +44,7 @@
     <ul class="sidebar-nav">
       <li class="sidebar-nav-item"><a href="http://conscientiousprogrammer.com">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="../../../../../about/">About</a></li>
       
     </ul>
 
@@ -94,7 +94,7 @@
 
 <p>I wrote Scala to execute and monitor the pipeline, because it turned out that component bugs and timeouts (from infinite loops sometimes) had to be dealt with: the original shell script pipelines did not handle any of that at all. Also, the vast amount of data meant that parallelizing was critical. The Scala ecosystem has  turned out great for me. I didn&rsquo;t use Akka actors for this task, just futures and parallel collections.</p>
 
-<p>I also used MongoDB because it is quite a natural fit for document-oriented storage and querying as an intermediate stage I can inspect before the final stage of conversion to Sketch Engine format. And I happened to just <a href="/blog/2013/12/04/mongodb-free-online-course-a-review/">finish a free online MongoDB course</a> which has been useful. In my Scala code, I used the official Scala driver <a href="https://github.com/mongodb/casbah">Casbah</a>.</p>
+<p>I also used MongoDB because it is quite a natural fit for document-oriented storage and querying as an intermediate stage I can inspect before the final stage of conversion to Sketch Engine format. And I happened to just <a href="../../../../../blog/2013/12/04/mongodb-free-online-course-a-review/">finish a free online MongoDB course</a> which has been useful. In my Scala code, I used the official Scala driver <a href="https://github.com/mongodb/casbah">Casbah</a>.</p>
 
 <p>Why MongoDB? I needed to track the transformations, and experiment with different parameters while also fixing bugs and rerunning stuff. Because there is so much data and sometimes something crashes in the pipeline, I decided to save all intermediate results in a database in order to avoid repeating work.</p>
 

@@ -20,8 +20,8 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
-  <link href="/favicon.png" rel="icon">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../apple-touch-icon-144-precomposed.png">
+  <link href="../../../../../favicon.png" rel="icon">
 
   
   
@@ -44,7 +44,7 @@
     <ul class="sidebar-nav">
       <li class="sidebar-nav-item"><a href="http://conscientiousprogrammer.com">Blog</a></li>
       
-      <li class="sidebar-nav-item"><a href="/about/">About</a></li>
+      <li class="sidebar-nav-item"><a href="../../../../../about/">About</a></li>
       
     </ul>
 
@@ -116,7 +116,7 @@
 
 <p>Richard talked about <a href="http://en.wikipedia.org/wiki/Immutable_object">immutability</a> as being part of what &ldquo;functional programming&rdquo; is about.</p>
 
-<p>Yes, it is, and in addition, common best practices in many programming languages these days argue for favoring immutability. I want to emphasize that you don&rsquo;t have to go full-blown into a specialized &ldquo;functional language&rdquo; in order to take advantage of immutability as desired: for example, this tip has long since been known as at least a &ldquo;design pattern&rdquo; in the <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">Java world</a>, in the <a href="http://www.harukizaemon.com/blog/2010/03/01/functional-programming-in-object-oriented-languages/">Ruby world</a>, and basically everywhere else.</p>
+<p>Yes, it is, and in addition, common best practices in many programming languages these days argue for favoring immutability. I want to emphasize that you don&rsquo;t have to go full-blown into a specialized &ldquo;functional language&rdquo; in order to take advantage of immutability as desired: for example, this tip has long since been known as at least a &ldquo;design pattern&rdquo; in the <a href="../../../../../blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">Java world</a>, in the <a href="http://www.harukizaemon.com/blog/2010/03/01/functional-programming-in-object-oriented-languages/">Ruby world</a>, and basically everywhere else.</p>
 
 <p>Richard suggested that &ldquo;functional languages&rdquo; don&rsquo;t allow mutation. By my definition, this is <em>not</em> actually true.  I didn&rsquo;t raise an objection during the talk because I didn&rsquo;t want to sidetrack it, but here I have space to elaborate a little. I would argue (but that would have to be another blog post) that the cleanest, most intuitive and novice-accessible &ldquo;functional languages&rdquo;) are those in the <a href="http://en.wikipedia.org/wiki/ML_%28programming_language%29">ML</a> family originally developed in the 1970s and lives on today&rsquo;s popular, industrial-strength dialects of <a href="http://en.wikipedia.org/wiki/Standard_ML">Standard ML</a>, <a href="http://ocaml.org/">OCaml</a>, and <a href="http://fsharp.org/">F#</a>.</p>
 
@@ -173,7 +173,7 @@
 
 <p>Richard gave some standard examples of using higher-order functions such as <code>map</code> and <code>filter</code> and <code>foreach</code> as provided in various popular JavaScript libraries such as <a href="http://underscorejs.org/">Underscore</a>.</p>
 
-<p>As a matter of style, he recommended against long, obscure one-liners that involve chaining. I agree. For readability and testability of pipelines, I have found that it is good to break things up into intermediate steps. (Just <a href="/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">recently</a>, Tim Lesher also recommended against stupidity masking as excessive cleverness in his Python lightning talk about functional programming with <code>itertools</code>.)</p>
+<p>As a matter of style, he recommended against long, obscure one-liners that involve chaining. I agree. For readability and testability of pipelines, I have found that it is good to break things up into intermediate steps. (Just <a href="../../../../../blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">recently</a>, Tim Lesher also recommended against stupidity masking as excessive cleverness in his Python lightning talk about functional programming with <code>itertools</code>.)</p>
 
 <h3 id="monads:4a05566a34ea27820d7f737863a690ea">Monads?!</h3>
 
@@ -215,7 +215,7 @@
 
 <p>Also, <a href="http://tonylukasavage.com/">Tony Lukasavage</a> emphasized that his concern was in the context of the need to evolve an existing API without breaking customers&rsquo; client code that uses it.</p>
 
-<p>My first note would be that API design is tricky and checking out <a href="/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">some resources on API design</a> is very helpful.</p>
+<p>My first note would be that API design is tricky and checking out <a href="../../../../../blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">some resources on API design</a> is very helpful.</p>
 
 <p>Regarding parameter lists, Richard noted that you might have a design problem if you have a function that needs to know about so many things it depends on. You may want to refactor the function (of course, in the context of evolving a mature API that customers depend on, it may be too late, unfortunately) and the data structures passed in. For example, if you have a number of functions that all take as parameters a <code>firstName</code> and <code>lastName</code>, then maybe you want a single <code>name</code> parameter instead.</p>
 

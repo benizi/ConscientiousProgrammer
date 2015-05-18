@@ -525,7 +525,7 @@ You ordered NULL items.
 
 &lt;p&gt;Richard talked about &lt;a href=&#34;http://en.wikipedia.org/wiki/Immutable_object&#34;&gt;immutability&lt;/a&gt; as being part of what &amp;ldquo;functional programming&amp;rdquo; is about.&lt;/p&gt;
 
-&lt;p&gt;Yes, it is, and in addition, common best practices in many programming languages these days argue for favoring immutability. I want to emphasize that you don&amp;rsquo;t have to go full-blown into a specialized &amp;ldquo;functional language&amp;rdquo; in order to take advantage of immutability as desired: for example, this tip has long since been known as at least a &amp;ldquo;design pattern&amp;rdquo; in the &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/&#34;&gt;Java world&lt;/a&gt;, in the &lt;a href=&#34;http://www.harukizaemon.com/blog/2010/03/01/functional-programming-in-object-oriented-languages/&#34;&gt;Ruby world&lt;/a&gt;, and basically everywhere else.&lt;/p&gt;
+&lt;p&gt;Yes, it is, and in addition, common best practices in many programming languages these days argue for favoring immutability. I want to emphasize that you don&amp;rsquo;t have to go full-blown into a specialized &amp;ldquo;functional language&amp;rdquo; in order to take advantage of immutability as desired: for example, this tip has long since been known as at least a &amp;ldquo;design pattern&amp;rdquo; in the &lt;a href=&#34;../../blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/&#34;&gt;Java world&lt;/a&gt;, in the &lt;a href=&#34;http://www.harukizaemon.com/blog/2010/03/01/functional-programming-in-object-oriented-languages/&#34;&gt;Ruby world&lt;/a&gt;, and basically everywhere else.&lt;/p&gt;
 
 &lt;p&gt;Richard suggested that &amp;ldquo;functional languages&amp;rdquo; don&amp;rsquo;t allow mutation. By my definition, this is &lt;em&gt;not&lt;/em&gt; actually true.  I didn&amp;rsquo;t raise an objection during the talk because I didn&amp;rsquo;t want to sidetrack it, but here I have space to elaborate a little. I would argue (but that would have to be another blog post) that the cleanest, most intuitive and novice-accessible &amp;ldquo;functional languages&amp;rdquo;) are those in the &lt;a href=&#34;http://en.wikipedia.org/wiki/ML_%28programming_language%29&#34;&gt;ML&lt;/a&gt; family originally developed in the 1970s and lives on today&amp;rsquo;s popular, industrial-strength dialects of &lt;a href=&#34;http://en.wikipedia.org/wiki/Standard_ML&#34;&gt;Standard ML&lt;/a&gt;, &lt;a href=&#34;http://ocaml.org/&#34;&gt;OCaml&lt;/a&gt;, and &lt;a href=&#34;http://fsharp.org/&#34;&gt;F#&lt;/a&gt;.&lt;/p&gt;
 
@@ -582,7 +582,7 @@ You ordered NULL items.
 
 &lt;p&gt;Richard gave some standard examples of using higher-order functions such as &lt;code&gt;map&lt;/code&gt; and &lt;code&gt;filter&lt;/code&gt; and &lt;code&gt;foreach&lt;/code&gt; as provided in various popular JavaScript libraries such as &lt;a href=&#34;http://underscorejs.org/&#34;&gt;Underscore&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;As a matter of style, he recommended against long, obscure one-liners that involve chaining. I agree. For readability and testability of pipelines, I have found that it is good to break things up into intermediate steps. (Just &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/&#34;&gt;recently&lt;/a&gt;, Tim Lesher also recommended against stupidity masking as excessive cleverness in his Python lightning talk about functional programming with &lt;code&gt;itertools&lt;/code&gt;.)&lt;/p&gt;
+&lt;p&gt;As a matter of style, he recommended against long, obscure one-liners that involve chaining. I agree. For readability and testability of pipelines, I have found that it is good to break things up into intermediate steps. (Just &lt;a href=&#34;../../blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/&#34;&gt;recently&lt;/a&gt;, Tim Lesher also recommended against stupidity masking as excessive cleverness in his Python lightning talk about functional programming with &lt;code&gt;itertools&lt;/code&gt;.)&lt;/p&gt;
 
 &lt;h3 id=&#34;monads:4a05566a34ea27820d7f737863a690ea&#34;&gt;Monads?!&lt;/h3&gt;
 
@@ -624,7 +624,7 @@ You ordered NULL items.
 
 &lt;p&gt;Also, &lt;a href=&#34;http://tonylukasavage.com/&#34;&gt;Tony Lukasavage&lt;/a&gt; emphasized that his concern was in the context of the need to evolve an existing API without breaking customers&amp;rsquo; client code that uses it.&lt;/p&gt;
 
-&lt;p&gt;My first note would be that API design is tricky and checking out &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/&#34;&gt;some resources on API design&lt;/a&gt; is very helpful.&lt;/p&gt;
+&lt;p&gt;My first note would be that API design is tricky and checking out &lt;a href=&#34;../../blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/&#34;&gt;some resources on API design&lt;/a&gt; is very helpful.&lt;/p&gt;
 
 &lt;p&gt;Regarding parameter lists, Richard noted that you might have a design problem if you have a function that needs to know about so many things it depends on. You may want to refactor the function (of course, in the context of evolving a mature API that customers depend on, it may be too late, unfortunately) and the data structures passed in. For example, if you have a number of functions that all take as parameters a &lt;code&gt;firstName&lt;/code&gt; and &lt;code&gt;lastName&lt;/code&gt;, then maybe you want a single &lt;code&gt;name&lt;/code&gt; parameter instead.&lt;/p&gt;
 
@@ -656,7 +656,7 @@ You ordered NULL items.
       <guid>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/</guid>
       <description>
 
-&lt;p&gt;I mentioned in my &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/&#34;&gt;initial post for this blog&lt;/a&gt; that I have had some problems with the software I use to generate my personal blog, &lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt;, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.&lt;/p&gt;
+&lt;p&gt;I mentioned in my &lt;a href=&#34;../../blog/2013/06/24/introducing-this-new-programming-blog/&#34;&gt;initial post for this blog&lt;/a&gt; that I have had some problems with the software I use to generate my personal blog, &lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt;, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.&lt;/p&gt;
 
 &lt;p&gt;Here I report on how I figured out the problem and begin a conversation about the nature of error handling and API design.&lt;/p&gt;
 
@@ -674,7 +674,7 @@ You ordered NULL items.
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
-&lt;p&gt;This is, unfortunately, an example of an error message that is next to useless, and should &lt;em&gt;never&lt;/em&gt; appear. I have stated that &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/&#34;&gt;we as programmers should not generate useless end user error messages&lt;/a&gt;, and of course, in context, I am an end user of the blog generating software I use.&lt;/p&gt;
+&lt;p&gt;This is, unfortunately, an example of an error message that is next to useless, and should &lt;em&gt;never&lt;/em&gt; appear. I have stated that &lt;a href=&#34;../../blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/&#34;&gt;we as programmers should not generate useless end user error messages&lt;/a&gt;, and of course, in context, I am an end user of the blog generating software I use.&lt;/p&gt;
 
 &lt;h2 id=&#34;debugging-and-finding-the-root-cause:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Debugging and finding the root cause&lt;/h2&gt;
 

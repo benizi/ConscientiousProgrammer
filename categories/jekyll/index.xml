@@ -17,7 +17,7 @@
       <guid>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/</guid>
       <description>
 
-&lt;p&gt;I mentioned in my &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/&#34;&gt;initial post for this blog&lt;/a&gt; that I have had some problems with the software I use to generate my personal blog, &lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt;, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.&lt;/p&gt;
+&lt;p&gt;I mentioned in my &lt;a href=&#34;../../blog/2013/06/24/introducing-this-new-programming-blog/&#34;&gt;initial post for this blog&lt;/a&gt; that I have had some problems with the software I use to generate my personal blog, &lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt;, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.&lt;/p&gt;
 
 &lt;p&gt;Here I report on how I figured out the problem and begin a conversation about the nature of error handling and API design.&lt;/p&gt;
 
@@ -35,7 +35,7 @@
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
-&lt;p&gt;This is, unfortunately, an example of an error message that is next to useless, and should &lt;em&gt;never&lt;/em&gt; appear. I have stated that &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/&#34;&gt;we as programmers should not generate useless end user error messages&lt;/a&gt;, and of course, in context, I am an end user of the blog generating software I use.&lt;/p&gt;
+&lt;p&gt;This is, unfortunately, an example of an error message that is next to useless, and should &lt;em&gt;never&lt;/em&gt; appear. I have stated that &lt;a href=&#34;../../blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/&#34;&gt;we as programmers should not generate useless end user error messages&lt;/a&gt;, and of course, in context, I am an end user of the blog generating software I use.&lt;/p&gt;
 
 &lt;h2 id=&#34;debugging-and-finding-the-root-cause:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Debugging and finding the root cause&lt;/h2&gt;
 
@@ -259,7 +259,7 @@
 I am a conscientious computer programmer, committed to designing, building, and testing correct, efficient, documented, maintainable software that meets users&#39; real needs.
 &lt;/blockquote&gt;
 
-&lt;p&gt;My material will come from my own experiences (successes and failures, past and present) as well as from those of others. See the &lt;a href=&#34;http://ConscientiousProgrammer.com/about/&#34;&gt;About page&lt;/a&gt; for more sound bites about what this blog will be about.&lt;/p&gt;
+&lt;p&gt;My material will come from my own experiences (successes and failures, past and present) as well as from those of others. See the &lt;a href=&#34;../../about/&#34;&gt;About page&lt;/a&gt; for more sound bites about what this blog will be about.&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s start immediately with my personal experience from just the past couple of days!&lt;/p&gt;
 

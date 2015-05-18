@@ -19,7 +19,7 @@
 
 &lt;p&gt;This year, I attended the second &lt;a href=&#34;http://steelcityrubyconf.org/&#34;&gt;Steel City Ruby Conference&lt;/a&gt;, 2013. The first one, last year (2012), was a &lt;a href=&#34;http://franklinchen.com/blog/2012/08/07/the-first-steel-city-ruby-conference-an-amazing-experience/&#34;&gt;life-changing experience&lt;/a&gt; for me. To my surprise, this second one also ended up being another radically transformative experience.&lt;/p&gt;
 
-&lt;p&gt;This is part 1 of my report, covering the first day (Friday). Part 2, covering the second day (Saturday), is &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/08/18/report-on-the-second-steel-city-ruby-conference-another-life-changing-one-for-me-part-2/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This is part 1 of my report, covering the first day (Friday). Part 2, covering the second day (Saturday), is &lt;a href=&#34;../../blog/2013/08/18/report-on-the-second-steel-city-ruby-conference-another-life-changing-one-for-me-part-2/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;videos-are-up:7e56a4d62ab96641f590de12053f21b0&#34;&gt;Videos are up!&lt;/h2&gt;
 
@@ -93,7 +93,7 @@
 
 &lt;p&gt;Given the anticipation, I confess I could not pay that much attention to the talks that preceded mine!&lt;/p&gt;
 
-&lt;p&gt;Here are all of Friday&amp;rsquo;s lightning talks. I&amp;rsquo;ve provided in a separate post a &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/&#34;&gt;transcript of my lightning talk, &amp;ldquo;Reflections&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here are all of Friday&amp;rsquo;s lightning talks. I&amp;rsquo;ve provided in a separate post a &lt;a href=&#34;../../blog/2013/08/18/my-lightning-talk-at-steel-city-ruby-2013/&#34;&gt;transcript of my lightning talk, &amp;ldquo;Reflections&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
 
 &lt;iframe src=&#34;//player.vimeo.com/video/72703334&#34; width=&#34;500&#34; height=&#34;281&#34; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
 
@@ -145,7 +145,7 @@
 
 &lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby&#34;&gt;Pittsburgh Ruby meetup&lt;/a&gt; held a &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby/events/120200102&#34;&gt;lightning talks session&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Originally, I was not going to present anything, since I did not feel that I had anything exciting to quickly share (I have not been doing much Ruby programming lately at all other than &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determinism-exceptions&#34;&gt;debugging my Octopress-generated blog&lt;/a&gt;), and don&amp;rsquo;t like talking just to talk.&lt;/p&gt;
+&lt;p&gt;Originally, I was not going to present anything, since I did not feel that I had anything exciting to quickly share (I have not been doing much Ruby programming lately at all other than &lt;a href=&#34;../../blog/2013/06/29/nil-non-determinism-exceptions&#34;&gt;debugging my Octopress-generated blog&lt;/a&gt;), and don&amp;rsquo;t like talking just to talk.&lt;/p&gt;
 
 &lt;p&gt;But at the very last minute, just half an hour before the meeting, I noticed some developments in the world of &lt;a href=&#34;http://rspec.info/&#34;&gt;RSpec&lt;/a&gt; announced on Twitter by Jim Weirich, and I got excited enough that I decided to talk about his &lt;a href=&#34;https://github.com/jimweirich/rspec-given&#34;&gt;&lt;code&gt;rspec-given&lt;/code&gt;&lt;/a&gt;, which was just released at version 3.0.0.&lt;/p&gt;
 

@@ -318,7 +318,7 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Implicits are a novel and fantastically important feature of Scala. I wish there were a comprehensive and concise single resource about them out there, but I don&amp;rsquo;t actually know of one.&lt;/p&gt;
 
-&lt;p&gt;I&amp;rsquo;ve been doing stuff with implicits lately. Not long ago, I wrote a blog post that involved &lt;a href=&#34;http://ConscientiousProgrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/&#34;&gt;using Scala implicits to avoid relying on the inherited Java &lt;code&gt;toString&lt;/code&gt; method&lt;/a&gt;. More recently, for this meetup I posted some code that I hoped someone would comment on, in which &lt;a href=&#34;https://github.com/franklinchen/test-specs2-matchers&#34;&gt;I used implicits to try to simplify a DSL&lt;/a&gt;. I&amp;rsquo;m not sure this is the right design choice, but it was an experiment.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ve been doing stuff with implicits lately. Not long ago, I wrote a blog post that involved &lt;a href=&#34;../../blog/2013/12/26/tostring-considered-harmful-part-2/&#34;&gt;using Scala implicits to avoid relying on the inherited Java &lt;code&gt;toString&lt;/code&gt; method&lt;/a&gt;. More recently, for this meetup I posted some code that I hoped someone would comment on, in which &lt;a href=&#34;https://github.com/franklinchen/test-specs2-matchers&#34;&gt;I used implicits to try to simplify a DSL&lt;/a&gt;. I&amp;rsquo;m not sure this is the right design choice, but it was an experiment.&lt;/p&gt;
 
 &lt;h2 id=&#34;presentation:e863a7ec4a3ba48279ebb2581682b028&#34;&gt;Presentation&lt;/h2&gt;
 
