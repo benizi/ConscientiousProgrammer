@@ -7,6 +7,7 @@ pygmentsstyle = "default"
 paginate = 10
 disqusShortname = "conscientiousprogrammer"
 RssUri = "atom.xml"
+RelativeURLs = "true"
 
 [author]
 # Seems to be used where title was
