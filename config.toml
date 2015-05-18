@@ -6,6 +6,7 @@ title = "The Conscientious Programmer"
 pygmentsstyle = "default"
 paginate = 10
 disqusShortname = "conscientiousprogrammer"
+RssUri = "atom.xml"
 
 [author]
 # Seems to be used where title was
