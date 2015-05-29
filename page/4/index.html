@@ -15,7 +15,9 @@
   <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole-overrides.css">
   <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-overrides.css">
   <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/franklin.css">
   <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/highlight/default.css">
+  <link href='http://fonts.googleapis.com/css?family=Gentium+Basic:400,400italic,700,700italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
@@ -36,16 +38,16 @@
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      <img src="http://www.gravatar.com/avatar/f8a7ccb41af2422d10599464b96cf034?s=200" alt="gravatar">
+      
       <h1>The Conscientious Programmer</h1>
       <p class="lead">Humbly exploring what it means to do the right thing.</p>
     </div>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item"><a href="http://conscientiousprogrammer.com">Blog</a></li>
       
       <li class="sidebar-nav-item"><a href="../../about/">About</a></li>
       
+      <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
     </ul>
 
     <ul class="sidebar-nav">
@@ -80,6 +82,7 @@
       <a class="label" href="http://conscientiousprogrammer.com/categories/pragmatism">pragmatism</a><a class="label" href="http://conscientiousprogrammer.com/categories/java">Java</a><a class="label" href="http://conscientiousprogrammer.com/categories/scala">Scala</a>
       </span>
       <p></p>
+      <p>I wrote a post on my personal blog about my being a &ldquo;pragmatist&rdquo;. I mention it here because few words are as controversial, I think, in the programming community, as &ldquo;pragmatic&rdquo;. I wanted to be on record as identifying myself as &ldquo;pragmatic&rdquo; despite the negative connotations, because the entire mindset of this new programming blog is pragmatic. For example, I will soon write about the realities of programming language choice, including why I used Java, despite its deficiencies, for a decade, and why it is not going away, and why I currently am an advocate of Scala, one of the most ambitiously pragmatic languages to have come along in my lifetime.</p>
       <a href="http://conscientiousprogrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/">Read On &rarr;</a>
     </div>
     
@@ -94,6 +97,10 @@
       <a class="label" href="http://conscientiousprogrammer.com/categories/error-handling">error handling</a><a class="label" href="http://conscientiousprogrammer.com/categories/error-messages">error messages</a><a class="label" href="http://conscientiousprogrammer.com/categories/nil">nil</a><a class="label" href="http://conscientiousprogrammer.com/categories/"></a><a class="label" href="http://conscientiousprogrammer.com/categories/ruby">Ruby</a><a class="label" href="http://conscientiousprogrammer.com/categories/exceptions">exceptions</a><a class="label" href="http://conscientiousprogrammer.com/categories/timeouts">timeouts</a><a class="label" href="http://conscientiousprogrammer.com/categories/testing">testing</a><a class="label" href="http://conscientiousprogrammer.com/categories/octopress">Octopress</a><a class="label" href="http://conscientiousprogrammer.com/categories/jekyll">Jekyll</a><a class="label" href="http://conscientiousprogrammer.com/categories/pygments">Pygments</a><a class="label" href="http://conscientiousprogrammer.com/categories/python">Python</a><a class="label" href="http://conscientiousprogrammer.com/categories/dynamic-typing">dynamic typing</a><a class="label" href="http://conscientiousprogrammer.com/categories/static-typing">static typing</a><a class="label" href="http://conscientiousprogrammer.com/categories/go">Go</a><a class="label" href="http://conscientiousprogrammer.com/categories/ocaml">OCaml</a><a class="label" href="http://conscientiousprogrammer.com/categories/scala">Scala</a><a class="label" href="http://conscientiousprogrammer.com/categories/haskell">Haskell</a>
       </span>
       <p></p>
+      <p><p>I mentioned in my <a href="../../blog/2013/06/24/introducing-this-new-programming-blog/">initial post for this blog</a> that I have had some problems with the software I use to generate my personal blog, <a href="http://octopress.org/">Octopress</a>, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.</p>
+
+<p>Here I report on how I figured out the problem and begin a conversation about the nature of error handling and API design.</p>
+</p>
       <a href="http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/">Read On &rarr;</a>
     </div>
     
@@ -108,6 +115,18 @@
       <a class="label" href="http://conscientiousprogrammer.com/categories/error-messages">error messages</a><a class="label" href="http://conscientiousprogrammer.com/categories/error-handling">error handling</a><a class="label" href="http://conscientiousprogrammer.com/categories/end-user">end user</a><a class="label" href="http://conscientiousprogrammer.com/categories/android">Android</a><a class="label" href="http://conscientiousprogrammer.com/categories/human-centered-design">human-centered design</a><a class="label" href="http://conscientiousprogrammer.com/categories/ux">UX</a>
       </span>
       <p></p>
+      <p><p>I have a <a href="http://franklinchen.com/blog/2012/03/22/paradox-i-will-observe-the-national-day-of-unplugging-but-just-bought-my-first-smartphone-this-week/">Samsung Galaxy S II smartphone</a>. I recently encountered a problem: auto-updating of apps failed with this terrible error message:</p>
+
+<blockquote>
+Application cannot be installed in the default install location.
+</blockquote>
+
+<p>Also, a lot of time and bandwidth was each time spent on re-downloading the app and then failing, with no way to gracefully recover.</p>
+
+<p>If you search the Web for this unpleasant error message, you will see hundreds if not thousands of confused end users like me asking on various forums how to deal with this.</p>
+
+<p>I feel pretty bad about this situation, both as a programmer and as an end user.</p>
+</p>
       <a href="http://conscientiousprogrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/">Read On &rarr;</a>
     </div>
     
@@ -122,6 +141,7 @@
       <a class="label" href="http://conscientiousprogrammer.com/categories/pittsburgh">Pittsburgh</a><a class="label" href="http://conscientiousprogrammer.com/categories/python">Python</a><a class="label" href="http://conscientiousprogrammer.com/categories/ipython-notebook">IPython Notebook</a><a class="label" href="http://conscientiousprogrammer.com/categories/scala">Scala</a><a class="label" href="http://conscientiousprogrammer.com/categories/sentry">Sentry</a><a class="label" href="http://conscientiousprogrammer.com/categories/logging">logging</a><a class="label" href="http://conscientiousprogrammer.com/categories/command-line">command line</a><a class="label" href="http://conscientiousprogrammer.com/categories/parsing">parsing</a><a class="label" href="http://conscientiousprogrammer.com/categories/domain-specific-languages">domain-specific languages</a><a class="label" href="http://conscientiousprogrammer.com/categories/convention">convention</a><a class="label" href="http://conscientiousprogrammer.com/categories/testing">testing</a><a class="label" href="http://conscientiousprogrammer.com/categories/property-based-testing">property-based testing</a><a class="label" href="http://conscientiousprogrammer.com/categories/quickcheck">QuickCheck</a><a class="label" href="http://conscientiousprogrammer.com/categories/scalacheck">ScalaCheck</a><a class="label" href="http://conscientiousprogrammer.com/categories/functional-programming">functional programming</a><a class="label" href="http://conscientiousprogrammer.com/categories/iterators">iterators</a><a class="label" href="http://conscientiousprogrammer.com/categories/lazy-sequences">lazy sequences</a><a class="label" href="http://conscientiousprogrammer.com/categories/community">community</a>
       </span>
       <p></p>
+      <p>Pittsburgh Python User Group The Pittsburgh Python User Group had another &ldquo;favorite module night&rdquo;. I enjoy this format because I get to learn about what people find useful, so that I may perhaps use it myself! How I benefited in the past For example, one of these &ldquo;favorite module night&rdquo; sessions was where I learned about Kenneth Reitz&rsquo;s requests library. Very often it is easy to not be aware of the rapidly changing ecology of very useful libraries in a programming language ecosystem outside of the official &ldquo;standard library&rdquo;, especially when using a language that is not one&rsquo;s primary working language.</p>
       <a href="http://conscientiousprogrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/">Read On &rarr;</a>
     </div>
     
@@ -136,6 +156,16 @@
       <a class="label" href="http://conscientiousprogrammer.com/categories/pittjug">PittJUG</a><a class="label" href="http://conscientiousprogrammer.com/categories/pittsburgh">Pittsburgh</a><a class="label" href="http://conscientiousprogrammer.com/categories/java">Java</a><a class="label" href="http://conscientiousprogrammer.com/categories/c">C&#43;&#43;</a><a class="label" href="http://conscientiousprogrammer.com/categories/ruby">Ruby</a><a class="label" href="http://conscientiousprogrammer.com/categories/ml">ML</a><a class="label" href="http://conscientiousprogrammer.com/categories/haskell">Haskell</a><a class="label" href="http://conscientiousprogrammer.com/categories/erlang">Erlang</a><a class="label" href="http://conscientiousprogrammer.com/categories/"></a><a class="label" href="http://conscientiousprogrammer.com/categories/strings">strings</a><a class="label" href="http://conscientiousprogrammer.com/categories/exceptions">exceptions</a><a class="label" href="http://conscientiousprogrammer.com/categories/types">types</a><a class="label" href="http://conscientiousprogrammer.com/categories/scala">Scala</a><a class="label" href="http://conscientiousprogrammer.com/categories/apis">APIs</a><a class="label" href="http://conscientiousprogrammer.com/categories/error-messages">error messages</a><a class="label" href="http://conscientiousprogrammer.com/categories/error-handling">error handling</a><a class="label" href="http://conscientiousprogrammer.com/categories/test-driven-development">test-driven development</a><a class="label" href="http://conscientiousprogrammer.com/categories/immutable">immutable</a>
       </span>
       <p></p>
+      <p><p>The topic for the featured presentation at the <a href="http://java.net/projects/pittjug/">Pittsburgh Java User Group</a> (PittJUG) was &ldquo;Building and Evolving a Java API&rdquo;, presented by Eric Stein of <a href="http://www.fulminatus.com/">Fulminatus Consulting</a>. I was excited to attend because API design is difficult but important, and today more than ever, because of the trend toward integrating many services to build an application, and toward providing such services (both externally and internally).</p>
+
+<p>(For past reports of mine on PittJUG, see the <a href="http://franklinchen.com/blog/categories/pittjug/">PittJUG archives in my other blog</a>.)</p>
+
+<p>The presentation was very good. (Eric&rsquo;s slides are available <a href="http://www.fulminatus.com/presentations/PittJUG%20API%20Presentation.pdf">here</a>, but as always with slides, be aware that it is just an outline, as good slides really should be, and the actual presentation and group discussion had all the substance.) Note that although some of the specific recommendations and examples are Java-specific, the entire area of good API design is <em>general</em> and is applicable no matter what programming language you are using.</p>
+
+<p>However, the presentation also filled me with a combination of <em>sadness</em>, because our computing profession could have done better up front to make good API design much easier in various ways. On the positive side, it&rsquo;s better late than never.</p>
+
+<p>A report on the presentation, with my commentary:</p>
+</p>
       <a href="http://conscientiousprogrammer.com/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/">Read On &rarr;</a>
     </div>
     
@@ -150,6 +180,7 @@
       <a class="label" href="http://conscientiousprogrammer.com/categories/bikeshedding">bikeshedding</a><a class="label" href="http://conscientiousprogrammer.com/categories/blog-software">blog software</a><a class="label" href="http://conscientiousprogrammer.com/categories/octopress">Octopress</a><a class="label" href="http://conscientiousprogrammer.com/categories/jekyll">Jekyll</a><a class="label" href="http://conscientiousprogrammer.com/categories/ruby">Ruby</a><a class="label" href="http://conscientiousprogrammer.com/categories/hakyll">Hakyll</a><a class="label" href="http://conscientiousprogrammer.com/categories/haskell">Haskell</a>
       </span>
       <p></p>
+      <p>Hi. My name is Franklin Chen. I already have a personal Web site and blog. But I ended up only writing a little bit about programming on that blog. So I decided it was time to start a separate blog to devoted entirely to computer programming. The problem with the all-in-one personal blog was that I ended up never really working up a momentum to post the kinds of articles I wanted to write about programming.</p>
       <a href="http://conscientiousprogrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/">Read On &rarr;</a>
     </div>
     
@@ -164,6 +195,12 @@
       <a class="label" href="http://conscientiousprogrammer.com/categories/parasail">Parasail</a><a class="label" href="http://conscientiousprogrammer.com/categories/parallelism">parallelism</a><a class="label" href="http://conscientiousprogrammer.com/categories/concurrency">concurrency</a><a class="label" href="http://conscientiousprogrammer.com/categories/carnegie-mellon-university">Carnegie Mellon University</a><a class="label" href="http://conscientiousprogrammer.com/categories/ada">Ada</a><a class="label" href="http://conscientiousprogrammer.com/categories/types">types</a><a class="label" href="http://conscientiousprogrammer.com/categories/tucker-taft">Tucker Taft</a><a class="label" href="http://conscientiousprogrammer.com/categories/guy-blelloch">Guy Blelloch</a><a class="label" href="http://conscientiousprogrammer.com/categories/nesl">NESL</a><a class="label" href="http://conscientiousprogrammer.com/categories/standard-ml">Standard ML</a><a class="label" href="http://conscientiousprogrammer.com/categories/haskell">Haskell</a>
       </span>
       <p></p>
+      <p><p>I noticed an announcement for a talk to be given at CMU for the <a href="http://www.isri.cmu.edu/">ISR</a> by visitor Tucker Taft, <a href="http://www.cs.cmu.edu/afs/.cs.cmu.edu/Web/copetas/Posters/ISR-Taft12.pdf">&ldquo;ParaSail: A Pointer-Free Path to Object-Oriented Parallel Programming&rdquo;</a>, and decided to attend.</p>
+
+<p>I&rsquo;d recognized <a href="http://en.wikipedia.org/wiki/User:Optikos/S._Tucker_Taft">Tucker Taft</a>&rsquo;s name because decades ago (and <a href="http://www.adacore.com/company/about/executive-team/">now still</a>), he was a very prominent member of the <a href="http://en.wikipedia.org/wiki/Ada_%28programming_language%29">Ada programming language</a> community, being one of the primary designers of the extensions to the original Ada 83. I never actually used Ada 95, but was following it a little bit because in 1995 I had to maintain some Ada 83 code at work, so I was curious where Ada was going. (I haven&rsquo;t used Ada since leaving that job in 1997.)</p>
+
+<p>So I was curious what an Ada guy had in mind as for one of the next steps in programming language design (parallelism), and why a new language and how it would be informed by an Ada mindset.</p>
+</p>
       <a href="http://conscientiousprogrammer.com/blog/2012/10/17/learning-about-parasail-a-new-parallel-programming-language/">Read On &rarr;</a>
     </div>
     

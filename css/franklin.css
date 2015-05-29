@@ -1,0 +1,10 @@
+html {
+  font-family: 'Gentium Basic', serif;
+}
+
+.sidebar-about h1 {
+  color: #fff;
+  margin-top: 0;
+  font-family: 'Gentium Basic', serif;
+  font-size: 2.3rem;
+}
