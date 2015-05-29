@@ -23,7 +23,7 @@ category = "categories"
 defaultDescription = "Franklin Chen's thoughts about computer programming"
 defaultKeywords = "Franklin Chen, programming, blog"
 
-gravatarHash = "f8a7ccb41af2422d10599464b96cf034"
+#gravatarHash = "f8a7ccb41af2422d10599464b96cf034"
 
 theme = "theme-base-0e"
 
