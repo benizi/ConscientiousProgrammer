@@ -27,7 +27,7 @@ categories:
 ---
 The topic for the featured presentation at the [Pittsburgh Java User Group](http://java.net/projects/pittjug/) (PittJUG) was "Building and Evolving a Java API", presented by Eric Stein of [Fulminatus Consulting](http://www.fulminatus.com/). I was excited to attend because API design is difficult but important, and today more than ever, because of the trend toward integrating many services to build an application, and toward providing such services (both externally and internally).
 
-(For past reports of mine on PittJUG, see the [PittJUG archives in my other blog](http://franklinchen.com/blog/categories/pittjug/).)
+(For past reports of mine on PittJUG, see the [PittJUG archives in my other blog](http://franklinchen.com/categories/pittjug/).)
 
 The presentation was very good. (Eric's slides are available [here](http://www.fulminatus.com/presentations/PittJUG%20API%20Presentation.pdf), but as always with slides, be aware that it is just an outline, as good slides really should be, and the actual presentation and group discussion had all the substance.) Note that although some of the specific recommendations and examples are Java-specific, the entire area of good API design is *general* and is applicable no matter what programming language you are using.
 

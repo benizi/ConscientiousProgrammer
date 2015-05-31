@@ -20,7 +20,7 @@ I attended [a fine meeting](http://www.meetup.com/Pittsburgh-Code-Supply/events/
 
 ## Erik Swanson on Overtone in Clojure
 
-[Overtone](http://overtone.github.io/) is a very interesting environment for programmable music written in Clojure that I'd heard of years ago but never gotten around to playing with, simply because my primary interest in music is [playing music on traditional physical instruments with my own hands, the old-fashioned way](http://franklinchen.com/blog/categories/music/). However, I am definitely open to the idea of doing interesting new things with computer aid; it just has not been a priority to explore.
+[Overtone](http://overtone.github.io/) is a very interesting environment for programmable music written in Clojure that I'd heard of years ago but never gotten around to playing with, simply because my primary interest in music is [playing music on traditional physical instruments with my own hands, the old-fashioned way](http://franklinchen.com/categories/music/). However, I am definitely open to the idea of doing interesting new things with computer aid; it just has not been a priority to explore.
 
 As preparation for the presentation (I don't like feeling completely lost during live demos; I usually do!), I actually finally set up an Overtone project with Leiningen and walked through a tutorial that simply used the Clojure CIDER mode in Emacs to operate in a REPL. I didn't do any real live-coding, however. I just wanted to get a taste.
 

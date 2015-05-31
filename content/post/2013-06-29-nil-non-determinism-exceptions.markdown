@@ -7,6 +7,7 @@ disqus_url: "http://ConscientiousProgrammer.com/blog/2013/06/29/nil-non-determin
 url: "blog/2013/06/29/nil-non-determinism-exceptions/"
 comments: true
 categories:
+- static site generator
 - error handling
 - error messages
 - nil
@@ -234,6 +235,38 @@ For now, before I propose to pygments.rb that an exception be raised (this would
 The `pygments.rb` library [has finally been updated with a `MENTOS_TIMEOUT` environment variable](https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999).
 
 This is obviously a short-term hack, and I don't see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the `pygments.rb` team, I have no right to complain!
+
+### (Update of 2014-08-08)
+
+I submitted a `pygments.rb` [pull request](https://github.com/tmm1/pygments.rb/pull/132) to fix a regression bug in which any use of
+`MENTOS_TIMEOUT` caused an instant type error:
+
+{{< highlight console >}}
+/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout': undefined method `zero?' for "100":String (NoMethodError)
+    from /Users/chen/.gem/ruby/2.1.2/gems/pygments.rb-0.6.0/lib/pygments/popen.rb:220:in `mentos'
+```
+{{< /highlight >}}
+
+### (Update of 2015-01-28)
+
+It took over 5 months (!) for my pull request to be looked at, after I
+begged that the bug be fixed because it was a show-stopper for anyone
+using the environment variable `MENTOS_TIMEOUT`. A problem was found
+in my fix for the case where the environment variable is `nil` (ugh, I
+didn't check the `nil` case: it's so easy to forget about `nil`
+cases), but I resolved it, and finally my fixed pull request was
+merged into `pygments.rb` version 0.6.2. Thus ended a two-year journey
+to finally fix a cascade of show-stopping type errors.
+
+The final diff involved trying to parse a string into an integer and
+catching the exception if any:
+
+{{< highlight diff >}}
+-        timeout_time = ENV["MENTOS_TIMEOUT"] || 8
++        # Invalid MENTOS_TIMEOUT results in just using default.
++        timeout_time = Integer(ENV["MENTOS_TIMEOUT"]) rescue 8
+{{< /highlight >}}
+
 
 ## Conclusion
 

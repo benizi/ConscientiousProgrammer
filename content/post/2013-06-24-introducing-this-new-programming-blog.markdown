@@ -16,7 +16,7 @@ categories:
 ---
 Hi. My name is Franklin Chen. I already have a [personal Web site and blog](http://franklinchen.com/).
 
-But I ended up only writing [a little bit about programming on that blog](http://franklinchen.com/blog/categories/programming/).
+But I ended up only writing [a little bit about programming on that blog](http://franklinchen.com/categories/programming/).
 
 So I decided it was time to start a separate blog to devoted entirely to computer programming. The problem with the all-in-one personal blog was that I ended up never really working up a momentum to post the kinds of articles I wanted to write about programming.
 
