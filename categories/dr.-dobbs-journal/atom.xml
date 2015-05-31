@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dr. Dobbs Journal on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/dr/index.-dobbs-journal/</link>
+    <description>Recent content in Dr. Dobbs Journal on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Dec 2014 22:23:42 -0500</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/dr.-dobbs-journal/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Remembering over 20 years of reading Dr. Dobb&#39;s Journal even till today</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/</link>
+      <pubDate>Tue, 16 Dec 2014 22:23:42 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/</guid>
+      <description>
+
+&lt;p&gt;It was with sadness, but not surprise, that I read today about the &lt;a href=&#34;http://www.drdobbs.com/architecture-and-design/farewell-dr-dobbs/240169421&#34;&gt;end of Dr. Dobb&amp;rsquo;s Journal&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve been reading this magazine for &lt;em&gt;twenty-two years&lt;/em&gt;! I haven&amp;rsquo;t read any other magazine on any topic for this long.&lt;/p&gt;
+
+&lt;h2 id=&#34;rss:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;RSS&lt;/h2&gt;
+
+&lt;p&gt;Of course, it&amp;rsquo;s been years since my last printed copy of &lt;a href=&#34;http://en.wikipedia.org/wiki/Dr._Dobb%27s_Journal&#34;&gt;Dr. Dobb&amp;rsquo;s Journal&lt;/a&gt; (DDJ) entered my mailbox. At some point I was simply regularly reading content from its online &lt;a href=&#34;http://drdobbs.com/rss/all&#34;&gt;RSS feed&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I was particularly sad when reading of the discontinuation of the publication because I had been following for quite some time Andrew Koenig&amp;rsquo;s multi-part article on binary search. In fact, &lt;a href=&#34;http://www.drdobbs.com/cpp/abstractions-for-binary-search-part-9-wh/240169416&#34;&gt;I had just read part 9 and was looking forward to the eventual conclusion of the series&lt;/a&gt;! I&amp;rsquo;ve been waiting to see his punch line, since every article in this series has ended with a cliff-hanger. Here, he had closed with &amp;ldquo;Next week, we shall continue building our tests.&amp;rdquo; I wonder if he be able to post the conclusion?&lt;/p&gt;
+
+&lt;h3 id=&#34;update-of-2014-12-22:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;(Update of 2014-12-22)&lt;/h3&gt;
+
+&lt;p&gt;Andrew Koenig&amp;rsquo;s article series did conclude, after all, &lt;a href=&#34;http://www.drdobbs.com/cpp/abstractions-for-binary-search-part-10-p/240169437&#34;&gt;today&lt;/a&gt;. I&amp;rsquo;ll comment on his concluded article series in a later blog post.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-i-started-reading-ddj:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;How I started reading DDJ&lt;/h2&gt;
+
+&lt;p&gt;In 1992, I was unemployed, a physics grad school dropout, and needed a new career. I had studied some math and passed the first two actuarial exams but frankly, had no interest in doing math and insurance for a living. Friends told me computer programming was a good way to go, so although I had not written a single computer program since high school (where I wrote and ran only COBOL and Pascal programs), I decided to learn C and Unix and Lisp, because these were technologies my friends had learned in their first year in college.&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, this was all before the Web, so the way to get any new and exciting information was from Usenet or from printed magazines. I got some recommendations to check out two magazines in particular: Dr. Dobb&amp;rsquo;s Journal and the &lt;a href=&#34;http://en.wikipedia.org/wiki/C/C%2B%2B_Users_Journal&#34;&gt;C Users Journal&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Yes, I did ask, &amp;ldquo;Who the heck is or was Dr. Dobb?!&amp;rdquo; It didn&amp;rsquo;t matter. The magazine was great. It covered all kinds of topics, and had code listings you could type in or download (remember &lt;a href=&#34;http://en.wikipedia.org/wiki/File_Transfer_Protocol#Anonymous_FTP&#34;&gt;anonymous FTP&lt;/a&gt; as the primary way to download stuff?).&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/d/d8/Macintosh_classic.jpg&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Macintosh Classic&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I got my first job as a software engineer in 1993, after much intense self-study, learning to programm in C on my younger sister&amp;rsquo;s &lt;a href=&#34;http://en.wikipedia.org/wiki/Macintosh_Classic&#34;&gt;Macintosh Classic&lt;/a&gt; using &lt;a href=&#34;http://en.wikipedia.org/wiki/THINK_C&#34;&gt;THINK C&lt;/a&gt;. What can I say, DDJ was there for me as a useful resource.&lt;/p&gt;
+
+&lt;h2 id=&#34;continuing-to-read-ddj-learning-new-languages:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Continuing to read DDJ; learning new languages&lt;/h2&gt;
+
+&lt;p&gt;Today I was intrigued to read &lt;a href=&#34;https://twitter.com/bodil/status/545009243272003585&#34;&gt;Bodil Stokke&amp;rsquo;s tweet&lt;/a&gt;, &amp;ldquo;I read about both Haskell and Dylan in Dr Dobbs 1994-ish and was itching to learn both, but couldn&amp;rsquo;t find Amiga impls for either.&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I did learn both Haskell and Dylan in 1994, but don&amp;rsquo;t remember whether it was because of mention in DDJ or because of other sources! I do remember that I downloaded quite a bit of &amp;ldquo;freeware&amp;rdquo; and &amp;ldquo;shareware&amp;rdquo; through FTP or bought through CD-ROMs in 1992-1994, before the birth of the &lt;a href=&#34;http://en.wikipedia.org/wiki/World_Wide_Web&#34;&gt;World Wide Web&lt;/a&gt;, which I started using excitedly in 1995.&lt;/p&gt;
+
+&lt;p&gt;1994 was a particularly important year for me, because I discovered and experimented with writing and running programs in a huge variety of programming languages that year.&lt;/p&gt;
+
+&lt;h3 id=&#34;haskell:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Haskell&lt;/h3&gt;
+
+&lt;p&gt;The most important new language I learned in 1994 was &lt;a href=&#34;http://caml.inria.fr/caml-light/&#34;&gt;Caml Light&lt;/a&gt;, which I came across and learned and used on my Mac SE/30 in 1994, at &lt;a href=&#34;http://caml.inria.fr/pub/old_caml_site/caml-list-ar/0136.html&#34;&gt;version 0.6&lt;/a&gt;. I still remember just finishing working through the &lt;a href=&#34;http://caml.inria.fr/pub/docs/fpcl/&#34;&gt;tutorial&lt;/a&gt; when version 0.7 came out and a lot of stuff changed, annoying me.  How Caml changed the course of my life is the subject of another article.&lt;/p&gt;
+
+&lt;p&gt;I also discovered Haskell in 1994. That took longer for me to get a feel for. It was the dialect &lt;a href=&#34;http://en.wikipedia.org/wiki/Gofer_%28programming_language%29&#34;&gt;Gofer&lt;/a&gt; that I first downloaded and copied to a floppy disk, in the form of &lt;a href=&#34;http://web.cecs.pdx.edu/~mpj/goferarc/macgofer/index.html&#34;&gt;MacGofer&lt;/a&gt;. Later, in 1996, I used &lt;a href=&#34;https://www.haskell.org/ghc/&#34;&gt;GHC&lt;/a&gt; briefly for a small internal utility at work in 1996. I see that DDJ &lt;a href=&#34;http://www.drdobbs.com/programming-paradigms/184409831&#34;&gt;mentioned Haskell in February 1996&lt;/a&gt;, but given that I learned it earlier, I don&amp;rsquo;t know if there was any earlier DDJ mention (not Web-searchable currently) that could have influenced me to try Gofer in the first place. (More on the history of my Haskell usage is the subject of another article; Haskell is the only programming language I am still using active twenty years after first learning it.)&lt;/p&gt;
+
+&lt;h3 id=&#34;dylan:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Dylan&lt;/h3&gt;
+
+&lt;p&gt;I see that there was a &lt;a href=&#34;http://www.drdobbs.com/tools/the-dylan-programming-language/184409404&#34;&gt;DDJ article on Dylan in January 1994&lt;/a&gt;. &amp;ldquo;Dylan, an object-oriented dynamic language developed by Apple Computer, is designed to replace existing static languages for the development of large software systems, yet remains small and efficient enough for the next generation of portable computers. Dylan was developed from the language Scheme, augmented with the Common-Lisp Object System (CLOS).&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I was very excited about &lt;a href=&#34;http://en.wikipedia.org/wiki/Dylan_%28programming_language%29&#34;&gt;Dylan&lt;/a&gt; when I learned about it, because of its ambitions to simultaneously&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;have all the nice features of Scheme&lt;/li&gt;
+&lt;li&gt;remain dynamically typed, but offer optional typing as a standard part of the language&lt;/li&gt;
+&lt;li&gt;provide an object system with multimethods (in 1994, I felt that conventional single-receiver OO was a dead end in the history of programming languages, as evidenced by the horrible &lt;a href=&#34;http://en.wikipedia.org/wiki/Visitor_pattern&#34;&gt;visitor pattern&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Up until I discovered Caml, my favorite language was Scheme, which I had learned in 1992 while working through (the first edition of) &lt;a href=&#34;http://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs&#34;&gt;&amp;ldquo;The Structure and Interpretation of Computer Programs&amp;rdquo;&lt;/a&gt; (SICP), so I felt totally at home in Dylan. In fact, I remember this very article as convincing me to switch from Scheme to Dylan: &lt;a href=&#34;http://www.drdobbs.com/tools/the-dylan-programming-language/184409404#0272_00e9&#34;&gt;Example 5&lt;/a&gt; in the article presented a code snippet from SICP translated into Dylan! Note that this was when Dylan was still using an S-expression syntax carried over from Scheme. Later, Dylan acquired an infix syntax, which I was a big fan of, actually, since I viscerally dislike the parentheses of Lisp languages. I played around with various implementations of Dylan before &lt;a href=&#34;http://en.wikipedia.org/wiki/Apple_Dylan&#34;&gt;Apple&amp;rsquo;s project&lt;/a&gt; was &lt;a href=&#34;http://web.archive.org/web/20060101181134/http://apple.computerhistory.org/discuss/msgReader$186?mode=day&#34;&gt;killed in 1995&lt;/a&gt;. That was a shocker. The news got to me late. I had acquired the Apple Dylan implementation and manual, and it was all for nothing. It was one of the greatest disappointments of my life (topic of another article).&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve appreciated Dr. Dobb&amp;rsquo;s Journal for over two decades because of the timely information it has brought on all kinds of topics involving software development, from C and assembly code listings to surveys of new languages, libraries, algorithms, etc. It was particularly exciting rediscovering an important article on Dylan that exposed me to a sadly short-lived language, Dylan (although some are trying to revive it as &lt;a href=&#34;http://opendylan.org/&#34;&gt;Open Dylan&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Some nostalgia and detective work have opened up memories and questions of &amp;ldquo;what could have been&amp;rdquo; that I&amp;rsquo;ll explore in later articles.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What is your relationship to Dr. Dobb&amp;rsquo;s Journal? Have you ever been a loyal reader of it? What did you get from it?&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

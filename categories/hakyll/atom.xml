@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hakyll on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/hakyll/</link>
+    <description>Recent content in Hakyll on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 24 Jun 2013 09:40:00 +0000</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/hakyll/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Introducing this new programming blog</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/</link>
+      <pubDate>Mon, 24 Jun 2013 09:40:00 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/</guid>
+      <description>
+
+&lt;p&gt;Hi. My name is Franklin Chen. I already have a &lt;a href=&#34;http://franklinchen.com/&#34;&gt;personal Web site and blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;But I ended up only writing &lt;a href=&#34;http://franklinchen.com/categories/programming/&#34;&gt;a little bit about programming on that blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So I decided it was time to start a separate blog to devoted entirely to computer programming. The problem with the all-in-one personal blog was that I ended up never really working up a momentum to post the kinds of articles I wanted to write about programming.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-the-conscientious-programmer:408b3167d100fed52fee95b6735e7853&#34;&gt;Why &amp;ldquo;The Conscientious Programmer&amp;rdquo;?&lt;/h2&gt;
+
+&lt;p&gt;At some point in the past year or two, I reflected on how I could best summarize my attitudes and aspirations as a programmer, as someone who loves programming and also works as a professional software developer.&lt;/p&gt;
+
+&lt;p&gt;I came up with the decidedly non-sexy term &lt;em&gt;conscientious programmer&lt;/em&gt;. It is also a term that requires explanation, because you could easily interpret it as having a connotation that is moralistic, pretentious, or boring!&lt;/p&gt;
+
+&lt;p&gt;It is impossible to summarize in a sound bite what I mean by the term, so I have created this blog in order to continually illustrate, by example, the kinds of technical and other issues that come up in software development that I grapple with.&lt;/p&gt;
+
+&lt;p&gt;However, since a sound bite is required in some circumstances, here&amp;rsquo;s what I currently have:&lt;/p&gt;
+
+&lt;blockquote&gt;
+I am a conscientious computer programmer, committed to designing, building, and testing correct, efficient, documented, maintainable software that meets users&#39; real needs.
+&lt;/blockquote&gt;
+
+&lt;p&gt;My material will come from my own experiences (successes and failures, past and present) as well as from those of others. See the &lt;a href=&#34;../../about/&#34;&gt;About page&lt;/a&gt; for more sound bites about what this blog will be about.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s start immediately with my personal experience from just the past couple of days!&lt;/p&gt;
+
+&lt;h2 id=&#34;future-topics:408b3167d100fed52fee95b6735e7853&#34;&gt;Future topics&lt;/h2&gt;
+
+&lt;p&gt;But first, here is a little sample of topics I will write about in the future:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;positive and negative experiences with statically typed languages&lt;/li&gt;
+&lt;li&gt;positive and negative experiences with dynamically typed languages&lt;/li&gt;
+&lt;li&gt;the good and bad of the polyglot programming world&lt;/li&gt;
+&lt;li&gt;what is object-oriented programming anyway?&lt;/li&gt;
+&lt;li&gt;what is functional programming anyway?&lt;/li&gt;
+&lt;li&gt;Agile notions&lt;/li&gt;
+&lt;li&gt;test-driven development, behavior-driven development, other testing topics&lt;/li&gt;
+&lt;li&gt;static analysis&lt;/li&gt;
+&lt;li&gt;code performance&lt;/li&gt;
+&lt;li&gt;human performance&lt;/li&gt;
+&lt;li&gt;controversies over the adjective &amp;ldquo;pragmatic&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;how much theory should one know or use?&lt;/li&gt;
+&lt;li&gt;how to teach&lt;/li&gt;
+&lt;li&gt;how to learn&lt;/li&gt;
+&lt;li&gt;how to focus and not be a dilettante&lt;/li&gt;
+&lt;li&gt;how to spread ideas&lt;/li&gt;
+&lt;li&gt;is syntax important?&lt;/li&gt;
+&lt;li&gt;are macros a good idea?&lt;/li&gt;
+&lt;li&gt;are unsound type systems justified?&lt;/li&gt;
+&lt;li&gt;what is a type system anyway or what should it be?&lt;/li&gt;
+&lt;li&gt;monads&lt;/li&gt;
+&lt;li&gt;editors and IDEs&lt;/li&gt;
+&lt;li&gt;are software patterns a mistake in disguise?&lt;/li&gt;
+&lt;li&gt;software evolution and maintenance&lt;/li&gt;
+&lt;li&gt;planning for the future vs. getting it done today&lt;/li&gt;
+&lt;li&gt;role of emotion in decision making&lt;/li&gt;
+&lt;li&gt;what is &amp;ldquo;community&amp;rdquo;?&lt;/li&gt;
+&lt;li&gt;politics of open source vs. free software&lt;/li&gt;
+&lt;li&gt;open standards&lt;/li&gt;
+&lt;li&gt;questions of diversity in our profession&lt;/li&gt;
+&lt;li&gt;education&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;the-dilemmas-i-encountered-when-deciding-to-create-this-blog:408b3167d100fed52fee95b6735e7853&#34;&gt;The dilemmas I encountered when deciding to create this blog&lt;/h2&gt;
+
+&lt;p&gt;I already encountered a dilemma some years ago when I thought that I should have a personal blog to regularly post to. I had messed around with Blogger and WordPress and they were not at all suitable for me. Luckily, I discovered &lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt; and it got me going very quickly. I&amp;rsquo;m still using it.&lt;/p&gt;
+
+&lt;p&gt;If all were going smoothly with the personal blog, then I probably would not have any dilemma when deciding to create the new blog; I would just use exactly the same Octopress platform.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Or would I?&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;desire-for-novelty-good-or-bad:408b3167d100fed52fee95b6735e7853&#34;&gt;Desire for novelty: good or bad?&lt;/h3&gt;
+
+&lt;p&gt;I am not immune to the thrill of novelty. I am not an extreme &lt;a href=&#34;http://en.wikipedia.org/wiki/Early_adopter&#34;&gt;early adopter&lt;/a&gt;, but I also do not entirely subscribe to the philosophy &lt;a href=&#34;http://en.wiktionary.org/wiki/if_it_ain%27t_broke,_don%27t_fix_it&#34;&gt;&amp;ldquo;if it ain&amp;rsquo;t broke, don&amp;rsquo;t fix it&amp;rdquo;&lt;/a&gt;. I like opportunities for doing something differently and better than in the past, but I like to evaluate these rationally. This is an example of what I mean by &amp;ldquo;conscientious programmer&amp;rdquo;: &lt;em&gt;always be aware of risks and tradeoffs when making any kind of decision&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;One thing that is sometimes forgotten in the rush to make a decision is that it is premature to immediately start making lists of risks and tradeoffs. First, you have to step back and figure out what the real goals are. Many projects fail because the assessments and the followup actions were &lt;em&gt;correct&lt;/em&gt;, but toward the &lt;em&gt;wrong&lt;/em&gt; goal. &lt;em&gt;Solving the correct problem&lt;/em&gt; is more important than &lt;em&gt;solving the wrong problem correctly&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the case of choosing which software to use for my new blog, there were actually several considerations.&lt;/p&gt;
+
+&lt;h3 id=&#34;unstable-branch-of-octopress:408b3167d100fed52fee95b6735e7853&#34;&gt;Unstable branch of Octopress&lt;/h3&gt;
+
+&lt;p&gt;Octopress&amp;rsquo;s stable &lt;a href=&#34;https://github.com/imathis/octopress&#34;&gt;&lt;code&gt;master&lt;/code&gt; branch&lt;/a&gt; is a continuation of version 2.0. At some point for my personal blog, I got excited about trying out the &lt;a href=&#34;https://github.com/imathis/octopress/tree/2.1&#34;&gt;unstable &lt;code&gt;2.1&lt;/code&gt; branch&lt;/a&gt; because of various improvements. I migrated over, and periodically endured a surprising amount of pain. It wasn&amp;rsquo;t just because I had to manually move files around and resolve merge conflicts and refactor my config files, but also bugs kept popping up, and I had to spend time fixing them.&lt;/p&gt;
+
+&lt;p&gt;In retrospect, &lt;em&gt;it was a mistake being an early adopter&lt;/em&gt; of branch &lt;code&gt;2.1&lt;/code&gt;. I stopped pulling and merging over a month ago, when it became clear that the migration to &lt;a href=&#34;http://jekyllrb.com/&#34;&gt;Jekyll&lt;/a&gt; 1.0 was causing major refactorings by the developers of the Octopress &lt;code&gt;2.1&lt;/code&gt; branch that were breaking everything on my blog.&lt;/p&gt;
+
+&lt;p&gt;It would &lt;em&gt;not&lt;/em&gt; have been a mistake if my goal were to help test and develop Octopress. That is a noble goal, because Octopress has been a &lt;em&gt;huge&lt;/em&gt; positive contributor to the world of blogging, as a static site generator that is programmable and comes with a good default theme (which I still use). But my &lt;em&gt;real goal&lt;/em&gt; is to write and post content, not spend my time fixing or configuring Octopress.&lt;/p&gt;
+
+&lt;h3 id=&#34;coming-back-to-octopress-master-branch:408b3167d100fed52fee95b6735e7853&#34;&gt;Coming back to Octopress &lt;code&gt;master&lt;/code&gt; branch?&lt;/h3&gt;
+
+&lt;p&gt;The official recommendation of the Octopress team right now (&lt;a href=&#34;https://twitter.com/octopress/status/348465809624027136&#34;&gt;as of two days ago, June 22&lt;/a&gt;) is to use &lt;code&gt;master&lt;/code&gt;, because once &lt;code&gt;2.1&lt;/code&gt; is cleaned up, it will actually become &lt;code&gt;3.0&lt;/code&gt; and there will be a tested migration path from &lt;code&gt;2.0&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;I confess to having a psychological resistance to &amp;ldquo;downgrading&amp;rdquo;, for this new blog, from my &lt;code&gt;2.1&lt;/code&gt;-based setup on my personal blog, but this is exactly the moment when it is necessary to remember that I want to be a &lt;em&gt;conscientious&lt;/em&gt; programmer.&lt;/p&gt;
+
+&lt;h3 id=&#34;switching-to-a-new-blogging-platform:408b3167d100fed52fee95b6735e7853&#34;&gt;Switching to a new blogging platform?&lt;/h3&gt;
+
+&lt;p&gt;The idea also occurred to me to use a completely different blogging platform. &lt;a href=&#34;http://jaspervdj.be/hakyll/&#34;&gt;Hakyll&lt;/a&gt; has always seemed appealing to me, because it is driven by Haskell (Octopress is driven by Ruby). I prefer programming in Haskell to programming in Ruby, both because of the static type safety and because of the expected considerable performance improvement in site generation (right now, full generation of my personal blog takes a very long time).&lt;/p&gt;
+
+&lt;p&gt;But after looking at Hakyll, and being tempted to get into it, I decided that my real goal is &lt;em&gt;not&lt;/em&gt; to spend a lot of time hacking Haskell as a personal side project, and creating cool themes and features for Hakyll, but to get a blog up and running so that I can focus on content for the blog. &lt;a href=&#34;http://en.wiktionary.org/wiki/bikeshedding&#34;&gt;Bikeshedding&lt;/a&gt; is not what I&amp;rsquo;m here for.&lt;/p&gt;
+
+&lt;p&gt;So I used Octopress again for this new blog.&lt;/p&gt;
+
+&lt;p&gt;By the way, if you are interested in using Octopress, here is a great &lt;a href=&#34;http://webdesign.tutsplus.com/tutorials/applications/getting-started-with-octopress/&#34;&gt;tutorial&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;flexibility:408b3167d100fed52fee95b6735e7853&#34;&gt;Flexibility&lt;/h3&gt;
+
+&lt;p&gt;Another thing I try to remember is to avoid getting backed into a corner when it comes to decision-making. I like to think about the future as well as the present. &lt;em&gt;What if&amp;hellip;?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;I know that if I wanted to, in the future I could switch blogging platforms at will, by doing some programming. The decisions that I am making &lt;em&gt;now&lt;/em&gt; are not irreversible. Using a programmable static site generator means that I have full control over paths, styles, generation of RSS feeds, insertion of JavaScript-based features (such as the &lt;a href=&#34;http://disqus.com/&#34;&gt;Disqus&lt;/a&gt; commenting system), etc.&lt;/p&gt;
+
+&lt;p&gt;Thinking up front about the future and how it might be different and what I might need or want to do in the future is not just idle daydreaming; I find it an essential final step in making a decision &lt;em&gt;now&lt;/em&gt; and focusing on action &lt;em&gt;now&lt;/em&gt;, with the peace of mind that I no longer have to worry about the future because I already have a &lt;a href=&#34;http://en.wikipedia.org/wiki/Plan_B&#34;&gt;Plan B&lt;/a&gt;. We must always assume possible failure and future change. But we don&amp;rsquo;t have to panic about it.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:408b3167d100fed52fee95b6735e7853&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve started this new programming blog, using the stable &lt;code&gt;master&lt;/code&gt; branch of Octopress. I hope we&amp;rsquo;ll share some interesting experiences here!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

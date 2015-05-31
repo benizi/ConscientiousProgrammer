@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pragmatism on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/pragmatism/</link>
+    <description>Recent content in Pragmatism on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 30 Jun 2013 23:34:00 +0000</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/pragmatism/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Why I hate calling myself &#34;pragmatic&#34; but do</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/</link>
+      <pubDate>Sun, 30 Jun 2013 23:34:00 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/</guid>
+      <description>&lt;p&gt;I wrote a &lt;a href=&#34;http://franklinchen.com/blog/2013/06/30/why-i-hate-calling-myself-pragmatic-but-do/&#34;&gt;post on my personal blog about my being a &amp;ldquo;pragmatist&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I mention it here because few words are as controversial, I think, in the programming community, as &amp;ldquo;pragmatic&amp;rdquo;. I wanted to be on record as identifying myself as &amp;ldquo;pragmatic&amp;rdquo; despite the negative connotations, because the entire mindset of this new programming blog is pragmatic.&lt;/p&gt;
+
+&lt;p&gt;For example, I will soon write about the realities of programming language choice, including why I used Java, despite its deficiencies, for a decade, and why it is not going away, and why I currently am an advocate of &lt;em&gt;Scala, one of the most ambitiously pragmatic languages&lt;/em&gt; to have come along in my lifetime.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

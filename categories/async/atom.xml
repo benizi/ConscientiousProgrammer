@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Async on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/async/</link>
+    <description>Recent content in Async on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 31 Dec 2013 21:29:39 -0500</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/async/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Review of the free Coursera course &#34;Principles of Reactive Programming&#34;</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/</link>
+      <pubDate>Tue, 31 Dec 2013 21:29:39 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/</guid>
+      <description>
+
+&lt;p&gt;At long last, I have officially completed the free Coursera course &lt;a href=&#34;http://www.coursera.org/course/reactive&#34;&gt;&amp;ldquo;Principles of Reactive Programming&amp;rdquo;&lt;/a&gt;, receiving my &amp;ldquo;Statement of Accomplishment&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;This was an intense course, a lot of work, actually, and made the last two month s of my life (November and December) challenging as I juggled many activities. But it was worth the effort. I would definitely recommend this course to anyone who has completed the introductory course &lt;a href=&#34;http://www.coursera.org/course/progfun&#34;&gt;&amp;ldquo;Principles of Functional Programming in Scala&amp;rdquo;&lt;/a&gt; (or has the equivalent background). (See my &lt;a href=&#34;http://franklinchen.com/blog/2012-11-15-review-of-courseras-fall-2012-functional-programming-principles-in-scala/&#34;&gt;review of that course as offered in fall of 2012&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;I took this course along with a bunch of local friends who are also members of the &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/&#34;&gt;Pittsburgh Scala Meetup&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-is-reactive:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;What is &amp;ldquo;Reactive&amp;rdquo;?&lt;/h2&gt;
+
+&lt;p&gt;&amp;ldquo;Reactive&amp;rdquo; is a fairly new buzzword, popularized recently by the &lt;a href=&#34;http://www.reactivemanifesto.org/&#34;&gt;Reactive Manifesto&lt;/a&gt; to urge consideration of four traits modern applications may need to have:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;responsive&lt;/li&gt;
+&lt;li&gt;scalable&lt;/li&gt;
+&lt;li&gt;resilient&lt;/li&gt;
+&lt;li&gt;event-driven&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;instructors-and-topics:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Instructors and topics&lt;/h2&gt;
+
+&lt;p&gt;Each instructor was responsible for covering a key technology.&lt;/p&gt;
+
+&lt;h3 id=&#34;martin-odersky:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Martin Odersky&lt;/h3&gt;
+
+&lt;p&gt;Martin Oderksy, the inventor of Scala and instructor for the previously mentioned &amp;ldquo;Principles of Functional Programming in Scala&amp;rdquo; course, focused on covering more advanced usage of Scala.&lt;/p&gt;
+
+&lt;p&gt;He immediately introduced monads, which are key to many of the concepts and libraries used throughout this course. Scala&amp;rsquo;s support for monads through the syntax of for-comprehensions is very helpful. He introduced the property-based testing framework &lt;a href=&#34;http://www.scalacheck.org/&#34;&gt;ScalaCheck&lt;/a&gt; (which uses monads for generation of data), and the first assignment involved working with the framework. (By the way, I gave a &lt;a href=&#34;http://franklinchen.com/blog/2013/04/11/my-pittsburgh-scala-meetup-talk-on-property-based-testing-using-scalacheck/&#34;&gt;talk on property-based testing using ScalaCheck&lt;/a&gt; eight months ago.)&lt;/p&gt;
+
+&lt;p&gt;Then he discussed modeling event simulation in Scala using mutable objects. I felt that this unit was not in the spirit of the others, because there was so much uncontrolled mutable state running around. My friends and I agreed that the assignment for this unit was burdensome and not really useful. I thought to myself, in fact, that I would never solve the problems in this way.&lt;/p&gt;
+
+&lt;h3 id=&#34;erik-meijer:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Erik Meijer&lt;/h3&gt;
+
+&lt;p&gt;Erik Meijer is a very energetic and humorous speaker. I really enjoyed his lectures.&lt;/p&gt;
+
+&lt;p&gt;In his first unit, he introduced asynchronous programming using Scala&amp;rsquo;s &lt;a href=&#34;http://docs.scala-lang.org/overviews/core/futures.html&#34;&gt;&lt;code&gt;Future&lt;/code&gt; monad (backed by a &lt;code&gt;Promise&lt;/code&gt;)&lt;/a&gt;, as well as the cool new &lt;a href=&#34;https://github.com/scala/async&#34;&gt;macro-based &lt;code&gt;async&lt;/code&gt;/&lt;code&gt;await&lt;/code&gt; library&lt;/a&gt;, which greatly simplifies writing code. Our assignment, which was instructive and interesting, was to implement a baby version of Node.js in Scala, ha!&lt;/p&gt;
+
+&lt;p&gt;Then he introduced &lt;a href=&#34;https://rxscala.github.io/&#34;&gt;&lt;code&gt;RxScala&lt;/code&gt;&lt;/a&gt;, a Scala adaptor for &lt;a href=&#34;https://github.com/Netflix/RxJava&#34;&gt;&lt;code&gt;RxJava&lt;/code&gt;&lt;/a&gt;, which is a Java port of Microsoft&amp;rsquo;s &amp;ldquo;reactive extensions&amp;rdquo; &lt;code&gt;Rx&lt;/code&gt; framework. I enjoyed this unit a lot, and appreciated the great documentation available (the &amp;ldquo;marble diagrams&amp;rdquo; are particularly useful). One nitpick I suppose I must have with his presentation is that I&amp;rsquo;m not sure that, for a non-theory-oriented audience, the discussions of &amp;ldquo;duality&amp;rdquo; were necessary. The assignment was very practically-oriented, gathering data asynchronously and displaying it and allowing user interaction. It was enjoyable and showcased the power of using a framework like Rx.&lt;/p&gt;
+
+&lt;h3 id=&#34;roland-kuhn:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Roland Kuhn&lt;/h3&gt;
+
+&lt;p&gt;Roland Kuhn covered the most complex section of the course, introducing actors by means of the &lt;a href=&#34;http://akka.io/&#34;&gt;Akka&lt;/a&gt; framework.&lt;/p&gt;
+
+&lt;p&gt;The first assignment was fairly straightforward, on implemented a distributed binary tree with actors.&lt;/p&gt;
+
+&lt;p&gt;The second assignment I found quite difficult, and not only because it was crunch time at the end of December before holiday season! It was a distributed key-value store with multiple levels of possible failure. There is no way I would have successfully and correctly completed this assignment without the helpful discussions I found on the online Coursera forums. To really figure out what was going on required (for me) turning on logging in various places and writing a lot of tests using Akka&amp;rsquo;s &lt;a href=&#34;http://doc.akka.io/docs/akka/snapshot/scala/testing.html&#34;&gt;&lt;code&gt;TestKit&lt;/code&gt;&lt;/a&gt;. I realized eventually that my code was ugly and not entirely clean and idiomatic, but it was definitely a worthwhile learning experience on a realistic problem to solve.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I learned quite a lot from this course. It is a very practical course on &amp;ldquo;reactive&amp;rdquo; programming. I felt after completing this course that I was ready to use the concepts and technologies covered in real problems. I am grateful to the instructors (who were active on the forums, by the way) for sharing their theoretical and practical knowledge as a free Coursera course.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

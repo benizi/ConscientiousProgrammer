@@ -368,7 +368,7 @@
 
 &lt;h2 id=&#34;erik-swanson-on-overtone-in-clojure:eae2c8db91585e112346d13d734d08c3&#34;&gt;Erik Swanson on Overtone in Clojure&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://overtone.github.io/&#34;&gt;Overtone&lt;/a&gt; is a very interesting environment for programmable music written in Clojure that I&amp;rsquo;d heard of years ago but never gotten around to playing with, simply because my primary interest in music is &lt;a href=&#34;http://franklinchen.com/blog/categories/music/&#34;&gt;playing music on traditional physical instruments with my own hands, the old-fashioned way&lt;/a&gt;. However, I am definitely open to the idea of doing interesting new things with computer aid; it just has not been a priority to explore.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://overtone.github.io/&#34;&gt;Overtone&lt;/a&gt; is a very interesting environment for programmable music written in Clojure that I&amp;rsquo;d heard of years ago but never gotten around to playing with, simply because my primary interest in music is &lt;a href=&#34;http://franklinchen.com/categories/music/&#34;&gt;playing music on traditional physical instruments with my own hands, the old-fashioned way&lt;/a&gt;. However, I am definitely open to the idea of doing interesting new things with computer aid; it just has not been a priority to explore.&lt;/p&gt;
 
 &lt;p&gt;As preparation for the presentation (I don&amp;rsquo;t like feeling completely lost during live demos; I usually do!), I actually finally set up an Overtone project with Leiningen and walked through a tutorial that simply used the Clojure CIDER mode in Emacs to operate in a REPL. I didn&amp;rsquo;t do any real live-coding, however. I just wanted to get a taste.&lt;/p&gt;
 

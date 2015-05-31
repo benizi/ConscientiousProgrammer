@@ -279,6 +279,37 @@
 
 <p>This is obviously a short-term hack, and I don&rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the <code>pygments.rb</code> team, I have no right to complain!</p>
 
+<h3 id="update-of-2014-08-08:08c2e7a867293a37060f4f671511a7f1">(Update of 2014-08-08)</h3>
+
+<p>I submitted a <code>pygments.rb</code> <a href="https://github.com/tmm1/pygments.rb/pull/132">pull request</a> to fix a regression bug in which any use of
+<code>MENTOS_TIMEOUT</code> caused an instant type error:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&#39;: undefined method `zero?&#39; for &quot;100&quot;:String (NoMethodError)</span>
+<span style="color: #888888">    from /Users/chen/.gem/ruby/2.1.2/gems/pygments.rb-0.6.0/lib/pygments/popen.rb:220:in `mentos&#39;</span>
+<span style="color: #888888">```</span>
+</pre></div>
+</p>
+
+<h3 id="update-of-2015-01-28:08c2e7a867293a37060f4f671511a7f1">(Update of 2015-01-28)</h3>
+
+<p>It took over 5 months (!) for my pull request to be looked at, after I
+begged that the bug be fixed because it was a show-stopper for anyone
+using the environment variable <code>MENTOS_TIMEOUT</code>. A problem was found
+in my fix for the case where the environment variable is <code>nil</code> (ugh, I
+didn&rsquo;t check the <code>nil</code> case: it&rsquo;s so easy to forget about <code>nil</code>
+cases), but I resolved it, and finally my fixed pull request was
+merged into <code>pygments.rb</code> version 0.6.2. Thus ended a two-year journey
+to finally fix a cascade of show-stopping type errors.</p>
+
+<p>The final diff involved trying to parse a string into an integer and
+catching the exception if any:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #A00000">-        timeout_time = ENV[&quot;MENTOS_TIMEOUT&quot;] || 8</span>
+<span style="color: #00A000">+        # Invalid MENTOS_TIMEOUT results in just using default.</span>
+<span style="color: #00A000">+        timeout_time = Integer(ENV[&quot;MENTOS_TIMEOUT&quot;]) rescue 8</span>
+</pre></div>
+</p>
+
 <h2 id="conclusion:08c2e7a867293a37060f4f671511a7f1">Conclusion</h2>
 
 <p>I&rsquo;ve used my recent frustration at being unable to publish my personal blog as a vehicle to begin a conversation about error handling and the issues of API design and documentation in the face of errors. I hope you enjoyed the ride.</p>

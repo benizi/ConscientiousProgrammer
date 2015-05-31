@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Web on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/web/</link>
+    <description>Recent content in Web on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Dec 2013 22:15:52 -0500</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/web/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Pittsburgh Scala Meetup: code walk through tic-tac-toe with Play</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play/</link>
+      <pubDate>Thu, 05 Dec 2013 22:15:52 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/12/05/pittsburgh-scala-meetup-code-walk-through-tic-tac-toe-with-play/</guid>
+      <description>&lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/&#34;&gt;Pittsburgh Scala Meetup&lt;/a&gt; met again with &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581232/&#34;&gt;Josh walking through his code for an interactive Web tic-tac-toe program implemented with Play&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;It was a good session. I&amp;rsquo;m finding that studying code (with the code&amp;rsquo;s author present) is a great way to learn, to discuss design decisions and alternate possible choices that could have been made. For example, when it comes to actors, there are decisions to be made about how many actors, what state they should contain, and how to transition.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

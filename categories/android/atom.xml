@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Android on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/android/</link>
+    <description>Recent content in Android on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 26 Jun 2013 23:44:00 +0000</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/android/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>We should not create this kind of terrible error message for the end user</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/</link>
+      <pubDate>Wed, 26 Jun 2013 23:44:00 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/</guid>
+      <description>
+
+&lt;p&gt;I have a &lt;a href=&#34;http://franklinchen.com/blog/2012/03/22/paradox-i-will-observe-the-national-day-of-unplugging-but-just-bought-my-first-smartphone-this-week/&#34;&gt;Samsung Galaxy S II smartphone&lt;/a&gt;. I recently encountered a problem: auto-updating of apps failed with this terrible error message:&lt;/p&gt;
+
+&lt;blockquote&gt;
+Application cannot be installed in the default install location.
+&lt;/blockquote&gt;
+
+&lt;p&gt;Also, a lot of time and bandwidth was each time spent on re-downloading the app and then failing, with no way to gracefully recover.&lt;/p&gt;
+
+&lt;p&gt;If you search the Web for this unpleasant error message, you will see hundreds if not thousands of confused end users like me asking on various forums how to deal with this.&lt;/p&gt;
+
+&lt;p&gt;I feel pretty bad about this situation, both as a programmer and as an end user.&lt;/p&gt;
+
+&lt;h2 id=&#34;as-an-end-user:e84e5720ba1a79447557437f40b64c27&#34;&gt;As an end user&lt;/h2&gt;
+
+&lt;p&gt;As an end user, I know very little about smartphones. I am not currently a mobile-device developer. I just want things to work, and I have never read the huge manual that came with my phone. If there is an error in my operation of the phone, I want some kind of useful guidance (ideally very specific and tailored to a common use case known by the vendor), not a mysterious generic error message.&lt;/p&gt;
+
+&lt;h2 id=&#34;as-a-programmer:e84e5720ba1a79447557437f40b64c27&#34;&gt;As a programmer&lt;/h2&gt;
+
+&lt;p&gt;It turns out that there is internal device storage and SD card storage, and if you run out of space somewhere, an error can happen, and that there is a default install location for apps. The gory details for developers are &lt;a href=&#34;https://developer.android.com/guide/topics/data/install-location.html&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Clearing some space and also moving a large app to SD card storage solved my problem.&lt;/p&gt;
+
+&lt;p&gt;So why that terrible error message? Why not just tell the end user exactly what is going on? Why not something like:&lt;/p&gt;
+
+&lt;blockquote&gt;
+The application X could not be installed at (device storage | SD card storage) because you don&#39;t have enough space. You can try clearing more space, or go to your application settings to move it to (SD card storage | device storage).
+&lt;/blockquote&gt;
+
+&lt;p&gt;The application should know exactly what is going on, and not only that, should be able to suggest a course of action based on all the relevant variables, such as how much space there is in different places, how large the application is, etc.&lt;/p&gt;
+
+&lt;h3 id=&#34;why:e84e5720ba1a79447557437f40b64c27&#34;&gt;Why?&lt;/h3&gt;
+
+&lt;p&gt;I haven&amp;rsquo;t seen the source code that generates the existing error message, but as a programmer, I can guess what might be happening.&lt;/p&gt;
+
+&lt;p&gt;I have been as guilty as anyone else of not providing good end user error messages in software I have written. It is very easy to do the following sloppy things instead:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Throwing exceptions that contain no useful information except some string&lt;/li&gt;
+&lt;li&gt;Not handling an exception close to where useful recovery can actually happen&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It is superficially &amp;ldquo;more work&amp;rdquo; to throw an exception that includes all relevant information, and for handlers to also do something intelligent rather than just pass the buck all the way to some top level catch-all handler.&lt;/p&gt;
+
+&lt;p&gt;Also, why should the phone download the whole app and then fail, if there is actually enough information to guess that the whole update might fail? Surely there is information about how big the app is, before downloading it?&lt;/p&gt;
+
+&lt;p&gt;And what&amp;rsquo;s with the default concurrent downloads of many updates at the same time, which greatly increases the probability of failure of all of them, when serializing the downloads results in less use of temporary space?&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:e84e5720ba1a79447557437f40b64c27&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;We programmers clearly are not conscientious enough about error handling and reporting. I believe that today, more than ever, we have a responsibility to &lt;em&gt;handle failure gracefully&lt;/em&gt; in software. I believe that failure should even be considered to be the &lt;em&gt;default&lt;/em&gt; expectation, rather than success, in order to create reliable software. As &lt;a href=&#34;http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/&#34;&gt;Dick Wall said at the recent 2013 Pittsburgh TechFest&lt;/a&gt;, it&amp;rsquo;s not enough to design and code and test primarily for the &amp;ldquo;happy path&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;There are ways to do error handling better, but they require serious thinking up front. This is a large topic we will be exploring in depth on this blog.&lt;/p&gt;
+
+&lt;h3 id=&#34;update-of-2013-06-27:e84e5720ba1a79447557437f40b64c27&#34;&gt;(Update of 2013-06-27)&lt;/h3&gt;
+
+&lt;p&gt;By sheer coincidence, a great &lt;a href=&#34;http://programming.oreilly.com/2013/06/human-centered-design-may-be-what-makes-your-app-stand-out.html&#34;&gt;interview on &lt;em&gt;human-centered design&lt;/em&gt;&lt;/a&gt; arrived in my RSS feed. Check it out.&lt;/p&gt;
+
+&lt;p&gt;I will be the first to admit that I don&amp;rsquo;t know much about UX or human-centered design. I just have some intuitions as an end user. I think we developers should learn more about this stuff in a more formal, serious way. And it&amp;rsquo;s just a matter of thinking about the ultimate end user. Even if we are not programming for the ultimate end user, we are at least programming for other programmers. If we are writing an API, the principles that guide human behavior must still be valid, even if programmers are an unusual subset of human beings! We write code &lt;em&gt;not&lt;/em&gt; primarily for computers but for other human beings (including our future selves).&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ada on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/ada/</link>
+    <description>Recent content in Ada on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 17 Oct 2012 20:39:15 -0400</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/ada/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Learning about Parasail: a new parallel programming language</title>
+      <link>http://conscientiousprogrammer.com/blog/2012/10/17/learning-about-parasail-a-new-parallel-programming-language/</link>
+      <pubDate>Wed, 17 Oct 2012 20:39:15 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2012/10/17/learning-about-parasail-a-new-parallel-programming-language/</guid>
+      <description>
+
+&lt;p&gt;I noticed an announcement for a talk to be given at CMU for the &lt;a href=&#34;http://www.isri.cmu.edu/&#34;&gt;ISR&lt;/a&gt; by visitor Tucker Taft, &lt;a href=&#34;http://www.cs.cmu.edu/afs/.cs.cmu.edu/Web/copetas/Posters/ISR-Taft12.pdf&#34;&gt;&amp;ldquo;ParaSail: A Pointer-Free Path to Object-Oriented Parallel Programming&amp;rdquo;&lt;/a&gt;, and decided to attend.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;d recognized &lt;a href=&#34;http://en.wikipedia.org/wiki/User:Optikos/S._Tucker_Taft&#34;&gt;Tucker Taft&lt;/a&gt;&amp;rsquo;s name because decades ago (and &lt;a href=&#34;http://www.adacore.com/company/about/executive-team/&#34;&gt;now still&lt;/a&gt;), he was a very prominent member of the &lt;a href=&#34;http://en.wikipedia.org/wiki/Ada_%28programming_language%29&#34;&gt;Ada programming language&lt;/a&gt; community, being one of the primary designers of the extensions to the original Ada 83. I never actually used Ada 95, but was following it a little bit because in 1995 I had to maintain some Ada 83 code at work, so I was curious where Ada was going. (I haven&amp;rsquo;t used Ada since leaving that job in 1997.)&lt;/p&gt;
+
+&lt;p&gt;So I was curious what an Ada guy had in mind as for one of the next steps in programming language design (parallelism), and why a new language and how it would be informed by an Ada mindset.&lt;/p&gt;
+
+&lt;h2 id=&#34;parasail-and-why-a-new-language-anyway:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Parasail, and why a new language anyway?&lt;/h2&gt;
+
+&lt;p&gt;The new language Taft has been working on is called Parasail and &lt;a href=&#34;http://parasail-programming-language.blogspot.com/&#34;&gt;its Web site is really a blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Why a new language, and not, say, libraries and idioms to bolt onto an existing language? Because to make parallelism &amp;ldquo;easy&amp;rdquo; to program, and correctly, language support is the way to go, leveraging types and compiler knowledge to help programmers.&lt;/p&gt;
+
+&lt;p&gt;This is not a new thought, of course. Parallel languages have been designed and implemented for decades. But none can be said to have truly caught on universally in practice. For example, as a graduate student in the late 1990s, I learned and used &lt;a href=&#34;http://www.cs.cmu.edu/~guyb/&#34;&gt;Guy Blelloch&lt;/a&gt;&amp;rsquo;s &lt;a href=&#34;http://www.cs.cmu.edu/~scandal/nesl.html&#34;&gt;NESL&lt;/a&gt;, based on the functional language &lt;a href=&#34;http://en.wikipedia.org/wiki/Standard_ML&#34;&gt;Standard ML&lt;/a&gt;, and I briefly participated in exploring bringing the ideas from NESL back into ML itself, as part of the &lt;a href=&#34;https://www.cs.cmu.edu/~pscico/&#34;&gt;PSciCo project&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.haskell.org/haskellwiki/GHC/Data_Parallel_Haskell&#34;&gt;Data Parallel Haskell&lt;/a&gt; is another example of an attempt at a very high level parallel programming language.&lt;/p&gt;
+
+&lt;p&gt;But these languages all come from the functional programming world.&lt;/p&gt;
+
+&lt;h2 id=&#34;mutation:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Mutation&lt;/h2&gt;
+
+&lt;p&gt;Apparently the goal of Parasail is to not force programmers to go all out into functional programming. For both style and efficiency, it may be desirable to program imperatively, with mutation. So how does Parasail try to cope with all the potential problems caused by mutation?&lt;/p&gt;
+
+&lt;p&gt;Parasail bans pointers, hiding them from the programmer by using types. In particular, assignment is by copy, but move and swap semantics are used underneath.&lt;/p&gt;
+
+&lt;h2 id=&#34;memory-management:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Memory management&lt;/h2&gt;
+
+&lt;p&gt;Furthermore, garbage collection is avoided through &lt;a href=&#34;http://en.wikipedia.org/wiki/Region-based_memory_management&#34;&gt;region-based memory management&lt;/a&gt;. This is an old idea, of course: I remember experimenting with using MLKit from the 1990s by Tofte and Talpin when it was hot off the press.&lt;/p&gt;
+
+&lt;h2 id=&#34;code-examples:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Code examples&lt;/h2&gt;
+
+&lt;p&gt;Taft gave some code examples to illustrate paralellization in Parasail. For example, quicksort is important because of its use of mutation.&lt;/p&gt;
+
+&lt;h2 id=&#34;other-features:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Other features&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;return&lt;/code&gt; is intentionally a sync point that introduces nondeterminism. Also, underneath, work stealing is used to handle the threads used underneath.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:277903bcdd4917269c8c2ab8eefc7e73&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;It was interesting to see new work on parallel programming languages. Check out Parasail&amp;rsquo;s Web site if you&amp;rsquo;re interested in learning more.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

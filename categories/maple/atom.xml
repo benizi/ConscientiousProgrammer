@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Maple on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/maple/</link>
+    <description>Recent content in Maple on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 06 Nov 2014 20:20:32 -0500</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/maple/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>When a computer algebra program gives wrong answers</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/</link>
+      <pubDate>Thu, 06 Nov 2014 20:20:32 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/</guid>
+      <description>
+
+&lt;p&gt;I read an interesting and disturbing report, &lt;a href=&#34;http://www.ams.org/notices/201410/rnoti-p1249.pdf&#34;&gt;&amp;ldquo;The Misfortunes of a Trio of Mathematicians Using Computer Algebra Systems. Can We Trust in Them?&amp;rdquo;&lt;/a&gt; published in the Notices of the American Mathematical Society. I feel that all software developers should read this and reflect on the nature of our work, when people who are not programmers depend on it.&lt;/p&gt;
+
+&lt;p&gt;This report was about mathematicians accidentally discovering a bug in a major computer algebra system, Mathematica.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-note-about-scientists-and-mathematicians:260dc6c39a3c815ab72d5109f7c53dfd&#34;&gt;A note about scientists and mathematicians&lt;/h2&gt;
+
+&lt;p&gt;Scientists and mathematicians increasingly depend on computer software for their work, to explore data, analyze it, verify hypotheses, etc. It&amp;rsquo;s gotten to the point where we can no longer pretend, for example, that scientists are not writing substantial computer programs, whether or not they are trained programmers (in fact, &lt;a href=&#34;http://software-carpentry.org/&#34;&gt;Software Carpentry&lt;/a&gt; was created by a physicist to fulfill the need of training scientists in programming).&lt;/p&gt;
+
+&lt;h2 id=&#34;the-discovery-of-the-bug:260dc6c39a3c815ab72d5109f7c53dfd&#34;&gt;The discovery of the bug&lt;/h2&gt;
+
+&lt;p&gt;A bunch of mathematicians used Mathematica to generate and test ideas they had about a mathematical hypothesis. They wanted to find counterexamples to their conjectures and found some with integer arithmetic calculations using Mathematica.&lt;/p&gt;
+
+&lt;p&gt;One of them happened to also be using Maple, and the results differed, so Mathematica or Maple had to be wrong. They isolated the error by &lt;em&gt;generating random test cases&lt;/em&gt; and finding that Mathematica was in error.&lt;/p&gt;
+
+&lt;p&gt;In fact, given the &lt;em&gt;same matrix&lt;/em&gt; and calling Mathematica&amp;rsquo;s matrix determinant function, Mathematica would return different results!! This was a rather serious bug indeed. They found that Mathematica 7 did not have this bug, but 9 and 10 did.&lt;/p&gt;
+
+&lt;h2 id=&#34;wolfram-research-s-lack-of-responsiveness-to-the-problem:260dc6c39a3c815ab72d5109f7c53dfd&#34;&gt;Wolfram Research&amp;rsquo;s lack of responsiveness to the problem&lt;/h2&gt;
+
+&lt;p&gt;They reported the Mathematica bug to Wolfram Research but got no useful reply, and at the next release of Mathematica, the bug was still not fixed.&lt;/p&gt;
+
+&lt;p&gt;There were other bugs they found as well.&lt;/p&gt;
+
+&lt;p&gt;Wolfram Research never gave any feedback, and does not publish a list of known bugs.&lt;/p&gt;
+
+&lt;h2 id=&#34;lessons-to-learn:260dc6c39a3c815ab72d5109f7c53dfd&#34;&gt;Lessons to learn&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;When there is a bug in proprietary, closed-source software, you are completely helpless. The bug may not even be acknowledged, much less fixed, and you could not fix it yourself even if you wanted to.&lt;/li&gt;
+&lt;li&gt;There is value in having an alternative tool: without independent work using Maple, the bugs in Mathematica may never have been discovered. Diversity is good.&lt;/li&gt;
+&lt;li&gt;All scientists should be aware that the tools they use can be buggy, and therefore computational results can only be &lt;em&gt;trusted&lt;/em&gt; as much as the specific versions of software they use can be trusted.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Does any of this surprise you? For what you rely on, how do you work around the inevitable fact that software has bugs?&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

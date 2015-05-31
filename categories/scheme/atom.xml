@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Scheme on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/scheme/</link>
+    <description>Recent content in Scheme on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Dec 2014 22:23:42 -0500</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/scheme/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Remembering over 20 years of reading Dr. Dobb&#39;s Journal even till today</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/</link>
+      <pubDate>Tue, 16 Dec 2014 22:23:42 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/</guid>
+      <description>
+
+&lt;p&gt;It was with sadness, but not surprise, that I read today about the &lt;a href=&#34;http://www.drdobbs.com/architecture-and-design/farewell-dr-dobbs/240169421&#34;&gt;end of Dr. Dobb&amp;rsquo;s Journal&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve been reading this magazine for &lt;em&gt;twenty-two years&lt;/em&gt;! I haven&amp;rsquo;t read any other magazine on any topic for this long.&lt;/p&gt;
+
+&lt;h2 id=&#34;rss:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;RSS&lt;/h2&gt;
+
+&lt;p&gt;Of course, it&amp;rsquo;s been years since my last printed copy of &lt;a href=&#34;http://en.wikipedia.org/wiki/Dr._Dobb%27s_Journal&#34;&gt;Dr. Dobb&amp;rsquo;s Journal&lt;/a&gt; (DDJ) entered my mailbox. At some point I was simply regularly reading content from its online &lt;a href=&#34;http://drdobbs.com/rss/all&#34;&gt;RSS feed&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I was particularly sad when reading of the discontinuation of the publication because I had been following for quite some time Andrew Koenig&amp;rsquo;s multi-part article on binary search. In fact, &lt;a href=&#34;http://www.drdobbs.com/cpp/abstractions-for-binary-search-part-9-wh/240169416&#34;&gt;I had just read part 9 and was looking forward to the eventual conclusion of the series&lt;/a&gt;! I&amp;rsquo;ve been waiting to see his punch line, since every article in this series has ended with a cliff-hanger. Here, he had closed with &amp;ldquo;Next week, we shall continue building our tests.&amp;rdquo; I wonder if he be able to post the conclusion?&lt;/p&gt;
+
+&lt;h3 id=&#34;update-of-2014-12-22:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;(Update of 2014-12-22)&lt;/h3&gt;
+
+&lt;p&gt;Andrew Koenig&amp;rsquo;s article series did conclude, after all, &lt;a href=&#34;http://www.drdobbs.com/cpp/abstractions-for-binary-search-part-10-p/240169437&#34;&gt;today&lt;/a&gt;. I&amp;rsquo;ll comment on his concluded article series in a later blog post.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-i-started-reading-ddj:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;How I started reading DDJ&lt;/h2&gt;
+
+&lt;p&gt;In 1992, I was unemployed, a physics grad school dropout, and needed a new career. I had studied some math and passed the first two actuarial exams but frankly, had no interest in doing math and insurance for a living. Friends told me computer programming was a good way to go, so although I had not written a single computer program since high school (where I wrote and ran only COBOL and Pascal programs), I decided to learn C and Unix and Lisp, because these were technologies my friends had learned in their first year in college.&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, this was all before the Web, so the way to get any new and exciting information was from Usenet or from printed magazines. I got some recommendations to check out two magazines in particular: Dr. Dobb&amp;rsquo;s Journal and the &lt;a href=&#34;http://en.wikipedia.org/wiki/C/C%2B%2B_Users_Journal&#34;&gt;C Users Journal&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Yes, I did ask, &amp;ldquo;Who the heck is or was Dr. Dobb?!&amp;rdquo; It didn&amp;rsquo;t matter. The magazine was great. It covered all kinds of topics, and had code listings you could type in or download (remember &lt;a href=&#34;http://en.wikipedia.org/wiki/File_Transfer_Protocol#Anonymous_FTP&#34;&gt;anonymous FTP&lt;/a&gt; as the primary way to download stuff?).&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/d/d8/Macintosh_classic.jpg&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Macintosh Classic&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I got my first job as a software engineer in 1993, after much intense self-study, learning to programm in C on my younger sister&amp;rsquo;s &lt;a href=&#34;http://en.wikipedia.org/wiki/Macintosh_Classic&#34;&gt;Macintosh Classic&lt;/a&gt; using &lt;a href=&#34;http://en.wikipedia.org/wiki/THINK_C&#34;&gt;THINK C&lt;/a&gt;. What can I say, DDJ was there for me as a useful resource.&lt;/p&gt;
+
+&lt;h2 id=&#34;continuing-to-read-ddj-learning-new-languages:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Continuing to read DDJ; learning new languages&lt;/h2&gt;
+
+&lt;p&gt;Today I was intrigued to read &lt;a href=&#34;https://twitter.com/bodil/status/545009243272003585&#34;&gt;Bodil Stokke&amp;rsquo;s tweet&lt;/a&gt;, &amp;ldquo;I read about both Haskell and Dylan in Dr Dobbs 1994-ish and was itching to learn both, but couldn&amp;rsquo;t find Amiga impls for either.&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I did learn both Haskell and Dylan in 1994, but don&amp;rsquo;t remember whether it was because of mention in DDJ or because of other sources! I do remember that I downloaded quite a bit of &amp;ldquo;freeware&amp;rdquo; and &amp;ldquo;shareware&amp;rdquo; through FTP or bought through CD-ROMs in 1992-1994, before the birth of the &lt;a href=&#34;http://en.wikipedia.org/wiki/World_Wide_Web&#34;&gt;World Wide Web&lt;/a&gt;, which I started using excitedly in 1995.&lt;/p&gt;
+
+&lt;p&gt;1994 was a particularly important year for me, because I discovered and experimented with writing and running programs in a huge variety of programming languages that year.&lt;/p&gt;
+
+&lt;h3 id=&#34;haskell:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Haskell&lt;/h3&gt;
+
+&lt;p&gt;The most important new language I learned in 1994 was &lt;a href=&#34;http://caml.inria.fr/caml-light/&#34;&gt;Caml Light&lt;/a&gt;, which I came across and learned and used on my Mac SE/30 in 1994, at &lt;a href=&#34;http://caml.inria.fr/pub/old_caml_site/caml-list-ar/0136.html&#34;&gt;version 0.6&lt;/a&gt;. I still remember just finishing working through the &lt;a href=&#34;http://caml.inria.fr/pub/docs/fpcl/&#34;&gt;tutorial&lt;/a&gt; when version 0.7 came out and a lot of stuff changed, annoying me.  How Caml changed the course of my life is the subject of another article.&lt;/p&gt;
+
+&lt;p&gt;I also discovered Haskell in 1994. That took longer for me to get a feel for. It was the dialect &lt;a href=&#34;http://en.wikipedia.org/wiki/Gofer_%28programming_language%29&#34;&gt;Gofer&lt;/a&gt; that I first downloaded and copied to a floppy disk, in the form of &lt;a href=&#34;http://web.cecs.pdx.edu/~mpj/goferarc/macgofer/index.html&#34;&gt;MacGofer&lt;/a&gt;. Later, in 1996, I used &lt;a href=&#34;https://www.haskell.org/ghc/&#34;&gt;GHC&lt;/a&gt; briefly for a small internal utility at work in 1996. I see that DDJ &lt;a href=&#34;http://www.drdobbs.com/programming-paradigms/184409831&#34;&gt;mentioned Haskell in February 1996&lt;/a&gt;, but given that I learned it earlier, I don&amp;rsquo;t know if there was any earlier DDJ mention (not Web-searchable currently) that could have influenced me to try Gofer in the first place. (More on the history of my Haskell usage is the subject of another article; Haskell is the only programming language I am still using active twenty years after first learning it.)&lt;/p&gt;
+
+&lt;h3 id=&#34;dylan:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Dylan&lt;/h3&gt;
+
+&lt;p&gt;I see that there was a &lt;a href=&#34;http://www.drdobbs.com/tools/the-dylan-programming-language/184409404&#34;&gt;DDJ article on Dylan in January 1994&lt;/a&gt;. &amp;ldquo;Dylan, an object-oriented dynamic language developed by Apple Computer, is designed to replace existing static languages for the development of large software systems, yet remains small and efficient enough for the next generation of portable computers. Dylan was developed from the language Scheme, augmented with the Common-Lisp Object System (CLOS).&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I was very excited about &lt;a href=&#34;http://en.wikipedia.org/wiki/Dylan_%28programming_language%29&#34;&gt;Dylan&lt;/a&gt; when I learned about it, because of its ambitions to simultaneously&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;have all the nice features of Scheme&lt;/li&gt;
+&lt;li&gt;remain dynamically typed, but offer optional typing as a standard part of the language&lt;/li&gt;
+&lt;li&gt;provide an object system with multimethods (in 1994, I felt that conventional single-receiver OO was a dead end in the history of programming languages, as evidenced by the horrible &lt;a href=&#34;http://en.wikipedia.org/wiki/Visitor_pattern&#34;&gt;visitor pattern&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Up until I discovered Caml, my favorite language was Scheme, which I had learned in 1992 while working through (the first edition of) &lt;a href=&#34;http://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs&#34;&gt;&amp;ldquo;The Structure and Interpretation of Computer Programs&amp;rdquo;&lt;/a&gt; (SICP), so I felt totally at home in Dylan. In fact, I remember this very article as convincing me to switch from Scheme to Dylan: &lt;a href=&#34;http://www.drdobbs.com/tools/the-dylan-programming-language/184409404#0272_00e9&#34;&gt;Example 5&lt;/a&gt; in the article presented a code snippet from SICP translated into Dylan! Note that this was when Dylan was still using an S-expression syntax carried over from Scheme. Later, Dylan acquired an infix syntax, which I was a big fan of, actually, since I viscerally dislike the parentheses of Lisp languages. I played around with various implementations of Dylan before &lt;a href=&#34;http://en.wikipedia.org/wiki/Apple_Dylan&#34;&gt;Apple&amp;rsquo;s project&lt;/a&gt; was &lt;a href=&#34;http://web.archive.org/web/20060101181134/http://apple.computerhistory.org/discuss/msgReader$186?mode=day&#34;&gt;killed in 1995&lt;/a&gt;. That was a shocker. The news got to me late. I had acquired the Apple Dylan implementation and manual, and it was all for nothing. It was one of the greatest disappointments of my life (topic of another article).&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve appreciated Dr. Dobb&amp;rsquo;s Journal for over two decades because of the timely information it has brought on all kinds of topics involving software development, from C and assembly code listings to surveys of new languages, libraries, algorithms, etc. It was particularly exciting rediscovering an important article on Dylan that exposed me to a sadly short-lived language, Dylan (although some are trying to revive it as &lt;a href=&#34;http://opendylan.org/&#34;&gt;Open Dylan&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Some nostalgia and detective work have opened up memories and questions of &amp;ldquo;what could have been&amp;rdquo; that I&amp;rsquo;ll explore in later articles.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What is your relationship to Dr. Dobb&amp;rsquo;s Journal? Have you ever been a loyal reader of it? What did you get from it?&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>toString considered harmful, part 3</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3/</link>
+      <pubDate>Fri, 27 Dec 2013 22:03:00 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3/</guid>
+      <description>
+
+&lt;p&gt;This is part 3 of a series of articles, &amp;ldquo;&lt;code&gt;toString&lt;/code&gt; considered harmful&amp;rdquo;.&lt;/p&gt;
+
+&lt;h2 id=&#34;languages-without-the-tostring-problem:577835a8e5105f4d9899060da7f84be0&#34;&gt;Languages without the &lt;code&gt;toString&lt;/code&gt; problem&lt;/h2&gt;
+
+&lt;p&gt;There actually are quite a few languages that don&amp;rsquo;t have the &lt;code&gt;toString&lt;/code&gt; problem, or at least have it to a lesser degree.&lt;/p&gt;
+
+&lt;h3 id=&#34;c:577835a8e5105f4d9899060da7f84be0&#34;&gt;C&lt;/h3&gt;
+
+&lt;p&gt;There is no friendly generic conversion to a string (uh, really just a pointer to a null-terminated chunk of &lt;code&gt;char&lt;/code&gt;) in C. The closest thing is using the type-unsafe &lt;code&gt;printf&lt;/code&gt; family of functions, but you have to do almost all the work if you have some complicated &lt;code&gt;struct&lt;/code&gt; and want to turn it into a C string.&lt;/p&gt;
+
+&lt;h3 id=&#34;c-1:577835a8e5105f4d9899060da7f84be0&#34;&gt;C++&lt;/h3&gt;
+
+&lt;p&gt;C++ introduced iostreams, where f you follow certain conventions and overload &lt;code&gt;operator&amp;lt;&amp;lt;&lt;/code&gt; for every domain class of interest, you can build up decent looking strings, without using inheritance.&lt;/p&gt;
+
+&lt;p&gt;Or you could do the object-oriented thing and set up a hierarchy with a &lt;code&gt;ToString&lt;/code&gt; abstract base class. But C++ does not come with everything already inheriting from an &lt;code&gt;Object&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;haskell:577835a8e5105f4d9899060da7f84be0&#34;&gt;Haskell&lt;/h3&gt;
+
+&lt;p&gt;Haskell does not force a &lt;code&gt;toString&lt;/code&gt; on everything, but provides a &lt;a href=&#34;http://www.haskell.org/tutorial/stdclasses.html&#34;&gt;&lt;code&gt;Show&lt;/code&gt; type class&lt;/a&gt; for convenience in the standard prelude. It is easy (and convenient for debugging) to just tack on &lt;code&gt;deriving Show&lt;/code&gt; and then call &lt;code&gt;show&lt;/code&gt; to convert stuff to a string. This means that one can get lazy and fall into the same design traps as mentioned in the very first code example above. Again, the solution is to refuse to abuse &lt;code&gt;show&lt;/code&gt;, and to use a different name instead for converting something to a string for a particular purpose.&lt;/p&gt;
+
+&lt;h3 id=&#34;go:577835a8e5105f4d9899060da7f84be0&#34;&gt;Go&lt;/h3&gt;
+
+&lt;p&gt;Go was invented at Google as a modernized C. It does not have classes, but does have &lt;a href=&#34;http://research.swtch.com/interfaces&#34;&gt;dynamic interfaces&lt;/a&gt;. All that is required for a user-defined type to satisfy an interface is to implement the method &lt;code&gt;String()&lt;/code&gt; returning a &lt;code&gt;string&lt;/code&gt;. Basically, this makes the type implement the interface &lt;a href=&#34;http://golang.org/pkg/fmt/#Stringer&#34;&gt;fmt.Stringer&lt;/a&gt;. Again, if you don&amp;rsquo;t implement &lt;code&gt;String() string&lt;/code&gt; for your type, then you will get a compile-time error when trying to treat it as a string.&lt;/p&gt;
+
+&lt;p&gt;Superficially, this sounds like Haskell type classes, but it&amp;rsquo;s much more limited, because Go does not have generics and Go is only single dispatch. Go&amp;rsquo;s interfaces really implement a kind of structural subtyping.&lt;/p&gt;
+
+&lt;h3 id=&#34;standard-ml:577835a8e5105f4d9899060da7f84be0&#34;&gt;Standard ML&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.standardml.org/&#34;&gt;Standard ML&lt;/a&gt; does not have the &lt;code&gt;toString&lt;/code&gt; problem. It does, by convention, supply a &lt;code&gt;toString&lt;/code&gt; function in many modules in the &lt;a href=&#34;http://www.standardml.org/Basis/&#34;&gt;Standard ML Basis Library&lt;/a&gt;, such as &lt;a href=&#34;http://www.standardml.org/Basis/integer.html&#34;&gt;Int&lt;/a&gt; and &lt;a href=&#34;http://www.standardml.org/Basis/real.html&#34;&gt;Real&lt;/a&gt; and &lt;a href=&#34;http://www.standardml.org/Basis/bool.html&#34;&gt;Bool&lt;/a&gt;, but these are just conventions and do not participate in any kind of unified conversion to string. If you want to convert anything besides a primitive type to a string, you have to write the conversion function yourself.&lt;/p&gt;
+
+&lt;p&gt;Furthermore, Standard ML, as a rather opinionated and &lt;a href=&#34;http://mitpress.mit.edu/books/definition-standard-ml&#34;&gt;&amp;ldquo;purist&amp;rdquo; language&lt;/a&gt;, designed specifically for static simplicity, semantic minimalism, and &lt;a href=&#34;http://mlton.org/&#34;&gt;runtime efficiency&lt;/a&gt;, does not believe in type classes, so there is no way to write a function that at runtime is generic over what can be turned into a string.&lt;/p&gt;
+
+&lt;p&gt;The best you can do is write something that is functorized, but then you have to apply it in a statically known context:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;signature&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;TO_STRING&lt;/span&gt; =
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;sig&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;t&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;toString&lt;/span&gt; : t -&amp;gt; string
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;functor&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoStuff&lt;/span&gt;(ToString : TO_STRING) =
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;doubleString&lt;/span&gt; (stuff: &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;ToString&lt;/span&gt;.t) =
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;s&lt;/span&gt; = &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;ToString&lt;/span&gt;.toString stuff
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;in&lt;/span&gt;
+        s ^ s
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;structure&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;MyStuff&lt;/span&gt; : TO_STRING =
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;t&lt;/span&gt; = int * bool
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;toString&lt;/span&gt; (i, b) =
+      &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;(&amp;quot;&lt;/span&gt; ^ &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;.toString i ^ &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;, &amp;quot;&lt;/span&gt; ^ &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Bool&lt;/span&gt;.toString b ^ &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;)&amp;quot;&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;structure&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoMyStuff&lt;/span&gt; = DoStuff(MyStuff)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;with&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoMyStuff&lt;/span&gt;.doubleString (&lt;span style=&#34;color: #666666&#34;&gt;42&lt;/span&gt;, true)
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;(* result is the string &amp;quot;(42, true)(42, true)&amp;quot; *)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Since the Standard ML ecosystem is so minimalist, it&amp;rsquo;s hard to fall into the &lt;code&gt;toString&lt;/code&gt; trap, because you would have to set it all up yourself.&lt;/p&gt;
+
+&lt;h3 id=&#34;ocaml:577835a8e5105f4d9899060da7f84be0&#34;&gt;OCaml&lt;/h3&gt;
+
+&lt;p&gt;OCaml, like Standard ML, does not provide a generic &lt;code&gt;toString&lt;/code&gt; out of the box, but the OCaml ecosystem is much more practically oriented.&lt;/p&gt;
+
+&lt;p&gt;There is a &lt;a href=&#34;http://en.wikipedia.org/wiki/Camlp4&#34;&gt;pre-processor for OCaml&lt;/a&gt; that can be used to generate convenient printers for types, &lt;a href=&#34;https://github.com/ocsigen/deriving&#34;&gt;&lt;code&gt;deriving&lt;/code&gt;&lt;/a&gt;. There is also an S-expression based generator, &lt;a href=&#34;http://realworldocaml.org/v1/en/html/data-serialization-with-s-expressions.html&#34;&gt;Sexplib&lt;/a&gt;. But these are mechanically generated, rather than part of something generic at runtime.&lt;/p&gt;
+
+&lt;p&gt;Of course, one could also use the &lt;a href=&#34;http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html&#34;&gt;object-oriented part of OCaml&lt;/a&gt; to make a generic &amp;ldquo;to string&amp;rdquo; hierarchy starting with a suitable interface:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; convert_to_string &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;method&lt;/span&gt; to_string &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;But I don&amp;rsquo;t actually know many people who use the object-oriented features of OCaml!&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:577835a8e5105f4d9899060da7f84be0&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;An annoying bug I temporarily created in my code led me to take stock of the state of &lt;code&gt;toString&lt;/code&gt; design choices in various programming languages, and also consider how we can better escape fragility in our code, independent of whatever language we are using.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>toString considered harmful, part 2</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/</link>
+      <pubDate>Thu, 26 Dec 2013 22:03:00 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/</guid>
+      <description>
+
+&lt;p&gt;This is part 2 of a series of articles, &amp;ldquo;&lt;code&gt;toString&lt;/code&gt; considered harmful&amp;rdquo;. [Part 1] introduced the problem in the context of a common design flaw present in object-oriented languages, and proposed a simple workaround.&lt;/p&gt;
+
+&lt;p&gt;In part 2, we look at advanced ways to organize &amp;ldquo;stringable&amp;rdquo; data, using either an object-oriented or functional style. Examples are in Scala because it equally supports either style.&lt;/p&gt;
+
+&lt;h2 id=&#34;object-oriented-vs-functional:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;Object-oriented vs. functional&lt;/h2&gt;
+
+&lt;p&gt;The fix presented was in &lt;em&gt;object-oriented&lt;/em&gt; style, adding a method &lt;code&gt;toUrlString&lt;/code&gt; to a class. The other solution is the &lt;em&gt;functional&lt;/em&gt; style, leaving the &lt;code&gt;Id&lt;/code&gt; class alone, and writing an external function instead:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;with&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;No id found!&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)))&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;There are advantages and disadvantages to either solution.&lt;/p&gt;
+
+&lt;h2 id=&#34;more-advanced-oo:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;More advanced OO&lt;/h2&gt;
+
+&lt;p&gt;It would be very natural, given a whole set of domain classes in addition to &lt;code&gt;Id&lt;/code&gt;, to want all of them to have a &lt;code&gt;toUrlString&lt;/code&gt;. Then the natural thing to do is to create a mini-universe (parallel to the &lt;code&gt;toString&lt;/code&gt; universe) by creating a hierarchy:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;trait&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;border: 1px solid #FF0000&#34;&gt;...&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(...)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;advanced-string-interpolation-with-oo:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;Advanced string interpolation with OO&lt;/h2&gt;
+
+&lt;p&gt;In fact, Scala and other languages with advanced string interpolation facilities allow yet another refactoring by making sure that what gets into a URL isn&amp;rsquo;t just an arbitrary string in the first place!&lt;/p&gt;
+
+&lt;p&gt;Below we define a string interpolator that only operates on objects of classes that implement the trait &lt;code&gt;UrlString&lt;/code&gt;, and therefore does away with an explicit call to &lt;code&gt;toUrlString&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;implicit&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlHelper&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; sc&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;StringContext&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;AnyVal&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; url&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString*&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; strings &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; sc&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parts&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; expressions &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; buf &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;StringBuffer&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;hasNext&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+        buf append expressions&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toUrlString
+        buf append strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next
+      &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+      buf&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use UrlString to create a URL. */&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; url&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;http://service.com?id=$id&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;with&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;No id found!&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This may or may not be overengineering.&lt;/p&gt;
+
+&lt;h2 id=&#34;advanced-string-interpolation-with-fp:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;Advanced string interpolation with FP&lt;/h2&gt;
+
+&lt;p&gt;The functional approach doesn&amp;rsquo;t like inheritance in the domain classes. We can implement it with &lt;a href=&#34;http://en.wikipedia.org/wiki/Type_class&#34;&gt;type classes&lt;/a&gt; (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement &lt;code&gt;toUrlString&lt;/code&gt; outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does &lt;em&gt;not&lt;/em&gt; depend on an inheritance hierarchy. If you&amp;rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// A type class&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;trait&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;a&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Implement the type class UrlString for Id&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;implicit&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;IdToUrlString&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;a&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; a&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;implicit&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlHelper&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; sc&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;StringContext&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;AnyVal&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; url&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;](&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;A*&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; strings &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; sc&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parts&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; expressions &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; buf &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;StringBuffer&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;hasNext&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+        buf append implicitly&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]].&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;expressions&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+        buf append strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next
+      &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+      buf&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Anything &amp;quot;viewable&amp;quot; as UrlString can be used to create a URL. */&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;](&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; url&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;http://service.com?id=$id&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;the-final-string-gotcha:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;The final string gotcha&lt;/h2&gt;
+
+&lt;p&gt;You may have noticed that there is still primitive obsession in this sample code: URLs are presented as &lt;code&gt;String&lt;/code&gt; for simplicity. In real life, I use builders such as &lt;code&gt;URIBuilder&lt;/code&gt; and &lt;code&gt;HttpGet&lt;/code&gt; (Java &lt;a href=&#34;http://hc.apache.org/&#34;&gt;Apache HttpComponents&lt;/a&gt;) or more sophisticated Scala-specific libraries such as &lt;a href=&#34;http://spray.io/&#34;&gt;Spray&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I thought it would useful to compare an object-oriented and a functional approach to unifying data that share a domain-consistent notion of conversion to a string. Scala is a language that allows easy expression of both.&lt;/p&gt;
+
+&lt;p&gt;In part 3, we will look at languages that just don&amp;rsquo;t have the &lt;code&gt;toString&lt;/code&gt; problem at all.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>toString considered harmful, part 1</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/12/23/tostring-considered-harmful-part-1/</link>
+      <pubDate>Mon, 23 Dec 2013 23:54:00 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/12/23/tostring-considered-harmful-part-1/</guid>
+      <description>
+
+&lt;p&gt;It is easy to rant about the problems or unexpected subtleties involving the use of &lt;a href=&#34;http://en.wikipedia.org/wiki/String_%28computer_science%29&#34;&gt;strings&lt;/a&gt; in programming languages. This post, however, is not so much a rant about strings as about design and meaning, with &lt;code&gt;toString&lt;/code&gt; only as an obvious example.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ll describe a pitfall that came up in my code, and a solution, and make observations about how different programming languages address or avoid this problem.&lt;/p&gt;
+
+&lt;p&gt;This is part one of a series.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-bug-when-evolving-my-code:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;A bug when evolving my code&lt;/h2&gt;
+
+&lt;p&gt;My example code is in Scala, but the problem illustrated actually extends to many (most?) other currently popular object-oriented languages as well, including Java (which Scala inherited &lt;code&gt;Object.toString&lt;/code&gt; from), C# (&lt;code&gt;Object.ToString&lt;/code&gt; stolen from Java), Ruby (&lt;code&gt;Object#to_s&lt;/code&gt;), Python (&lt;code&gt;str&lt;/code&gt;, which uses &lt;code&gt;object.__str__&lt;/code&gt; in case of an object). (Later in the post, I discuss languages without this specific feature.)&lt;/p&gt;
+
+&lt;h3 id=&#34;first-working-code:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;First working code&lt;/h3&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Example&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return ID of user&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #666666&#34;&gt;42&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Simulate making the Web request. */&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;url&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;url&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; main&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+    getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// output: http://service.com?id=42&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.&lt;/p&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t know Scala, just note that &lt;code&gt;s&amp;quot;...$id&amp;quot;&lt;/code&gt; is just Scala&amp;rsquo;s string interpolation syntax that behind the scenes calls &lt;code&gt;id.toString&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;non-working-code:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;Non-working code&lt;/h3&gt;
+
+&lt;p&gt;It turned out that finding an ID could fail, so I changed &lt;code&gt;findId&lt;/code&gt; to return the type &lt;code&gt;Option[Id]&lt;/code&gt; instead of &lt;code&gt;Id&lt;/code&gt;. To get the code to compile, I had to change the type of the parameter to &lt;code&gt;makeUrl&lt;/code&gt; also:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return Some(ID of user) if found, else None&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(42)&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Oops, now this has an unintended bug!&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: &lt;code&gt;http://service.com?id=Some(42)&lt;/code&gt; was being requested.&lt;/p&gt;
+
+&lt;p&gt;Furthermore, in the case of an ID not found, the URL constructed is &lt;code&gt;http://service.com?id=None&lt;/code&gt;. How many of you have seen applications or Web sites or emails in which something was clearly missing and the text contained either an empty space or the string &amp;ldquo;null&amp;rdquo; or &amp;ldquo;nullvalue&amp;rdquo; such as&lt;/p&gt;
+
+&lt;blockquote&gt;
+Dear NULL,
+
+You ordered NULL items.
+&lt;/blockquote&gt;
+
+&lt;p&gt;Yup, you guessed it: someone wrote crappy code like what I just showed you, and frightening thing is, &lt;em&gt;it could have been me&lt;/em&gt; and &lt;em&gt;it could have been you&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;what-s-the-big-deal:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;What&amp;rsquo;s the big deal?&lt;/h4&gt;
+
+&lt;p&gt;You might think, &amp;ldquo;Big deal, you changed your code, ran your test, and immediately found the bug, so what&amp;rsquo;s the problem?&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;The problem is that I have higher standards than that. I don&amp;rsquo;t want to rely on my tests to find my bugs. In fact, the test that went over the Web to do stuff was an &lt;em&gt;integration test&lt;/em&gt;, not a &lt;em&gt;unit test&lt;/em&gt;. The bug only manifested itself when the actual Web request failed. And as we see in real life, many apps are not sufficiently tested to root out all possible accidental string generations.&lt;/p&gt;
+
+&lt;p&gt;So although I caught the bug quickly, I caught it far less quickly than I wanted. I didn&amp;rsquo;t want to even construct an obviously garbage URL like &lt;code&gt;http://service.com?id=Some(42)&lt;/code&gt; at all. I prefer to have the type checker catch stupid design-level bugs up front. So I was furious at myself that I wrote code that the compiler was perfectly happy with but was obviously wrong. I had gotten lazy in more ways than one, and had been punished accordingly.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-symptom-of-bad-design:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;A symptom of bad design&lt;/h2&gt;
+
+&lt;p&gt;There were a couple of things wrong with my original code that made it not evolve well.&lt;/p&gt;
+
+&lt;h3 id=&#34;don-t-use-tostring:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;Don&amp;rsquo;t use &lt;code&gt;toString&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;First, by using string interpolation at all, I was relying on the implicit &lt;code&gt;toString&lt;/code&gt; method of all objects. String interpolation is an admittedly very convenient feature that I use extensively, but now I consider it rather dangerous.&lt;/p&gt;
+
+&lt;p&gt;But even if I hadn&amp;rsquo;t used string interpolation, I would have had to build up strings myself anyway, and would have called &lt;code&gt;toString&lt;/code&gt; &lt;em&gt;explicitly&lt;/em&gt;, and I would have had the same problem: changing the type of something from &lt;code&gt;Id&lt;/code&gt; to &lt;code&gt;Option[Id]&lt;/code&gt; does not get rid of &lt;code&gt;toString&lt;/code&gt;. In fact, in object-oriented languages where &lt;code&gt;toString&lt;/code&gt; is defined way up at the top, &lt;em&gt;everything&lt;/em&gt; has &lt;code&gt;toString&lt;/code&gt;, whether you like it or not! The best you can do is override &lt;code&gt;toString&lt;/code&gt;. (Actually, Scala &amp;ldquo;helpfully&amp;rdquo; generates a nice &lt;code&gt;toString&lt;/code&gt; override for you when you use case classes, hence the output of &lt;code&gt;Some(42)&lt;/code&gt;.)&lt;/p&gt;
+
+&lt;p&gt;I consider this &lt;em&gt;global infection&lt;/em&gt; a flaw in object-oriented languages that impose a set of methods on all objects whether you want them or not. &lt;code&gt;toString&lt;/code&gt; is hardly the worst offending method, actually, but I&amp;rsquo;ll save my complaints about others for later.&lt;/p&gt;
+
+&lt;p&gt;First step in cleaning up the code: make &lt;code&gt;toString&lt;/code&gt; explicit:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; main&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+    getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;(Later in the post, I will discuss alternatives to this explicit &lt;code&gt;toString&lt;/code&gt;.)&lt;/p&gt;
+
+&lt;h3 id=&#34;primitive-obsession:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;Primitive obsession&lt;/h3&gt;
+
+&lt;p&gt;Another design smell was that of using&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;in the first place. This is a well-known lazy practice called &lt;a href=&#34;http://c2.com/cgi/wiki?PrimitiveObsession&#34;&gt;primitive obsession&lt;/a&gt;. I know better than that.&lt;/p&gt;
+
+&lt;p&gt;The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return ID of user&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(42)&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(0)&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note that this still &lt;em&gt;would not&lt;/em&gt; have solved the &lt;code&gt;toString&lt;/code&gt; problem, since the output would simply have been &lt;code&gt;http://service.com?id=Some(Id(42))&lt;/code&gt; or the dreaded &lt;code&gt;http://service.com?id=None&lt;/code&gt;!&lt;/p&gt;
+
+&lt;h3 id=&#34;tostring-is-a-problematic-concept-anyway:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;&lt;code&gt;toString&lt;/code&gt; is a problematic concept anyway&lt;/h3&gt;
+
+&lt;p&gt;The real problem is one that transcends programming language design. (Later in this post I&amp;rsquo;ll show languages that don&amp;rsquo;t have &lt;code&gt;toString&lt;/code&gt; but still easily allow a similar problem.)&lt;/p&gt;
+
+&lt;p&gt;The real problem is that strings are used for &lt;em&gt;multiple&lt;/em&gt; purposes. Some are used just for debugging, showing an internal representation of data. Some are used for &amp;ldquo;human&amp;rdquo; reading. In fact, many languages distinguish between these two purposes: Lisp has &lt;a href=&#34;http://www.lispworks.com/documentation/HyperSpec/Body/f_wr_pr.htm&#34;&gt;&lt;code&gt;write&lt;/code&gt;, &lt;code&gt;prin1&lt;/code&gt;, &lt;code&gt;print&lt;/code&gt;, &lt;code&gt;pprint&lt;/code&gt;&lt;/a&gt;; Scheme has &lt;a href=&#34;http://www.scheme.com/tspl3/io.html&#34;&gt;&lt;code&gt;write&lt;/code&gt; and &lt;code&gt;display&lt;/code&gt;&lt;/a&gt;; Ruby has &lt;a href=&#34;http://ruby-doc.org/core-2.0.0/Object.html&#34;&gt;&lt;code&gt;to_s&lt;/code&gt; and &lt;code&gt;to_str&lt;/code&gt;&lt;/a&gt;; Python has &lt;a href=&#34;http://docs.python.org/2/library/functions.html&#34;&gt;&lt;code&gt;repr&lt;/code&gt; and &lt;code&gt;str&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;One is often directed to override the &amp;ldquo;human-oriented&amp;rdquo; version of these mechanisms (implementing one&amp;rsquo;s own special non-default format). In Java and Scala, that&amp;rsquo;s &lt;code&gt;toString&lt;/code&gt;. But this is precisely the problem. We are &lt;em&gt;encouraged&lt;/em&gt; to abuse this built-in mechanism for getting a string from an object that is supposed to mean something in the &lt;em&gt;context of an application&lt;/em&gt;. Yes, &lt;code&gt;Some(Id(42))&lt;/code&gt; is a useful human-readable string, but it&amp;rsquo;s not what I want to put into a URL for an ID parameter!&lt;/p&gt;
+
+&lt;h4 id=&#34;different-names-for-different-contexts:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;Different names for different contexts&lt;/h4&gt;
+
+&lt;p&gt;Suppose you had a &lt;code&gt;Name&lt;/code&gt; class, and it had fields such as &lt;code&gt;first&lt;/code&gt; and &lt;code&gt;middle&lt;/code&gt; and &lt;code&gt;last&lt;/code&gt;. It&amp;rsquo;s nonsensical to expect a single &lt;code&gt;toString&lt;/code&gt; override to express all the different contexts in which you might want to get a single string from a full name. Sometimes you might want to generate &lt;code&gt;Franklin Chen&lt;/code&gt;; other times, &lt;code&gt;Franklin Ming Chen&lt;/code&gt;; other times, &lt;code&gt;Franklin M. Chen&lt;/code&gt;; other times, &lt;code&gt;FMC&lt;/code&gt;. The point is that there should really be a method for each of these. &lt;code&gt;toString&lt;/code&gt; should be treated really as a debugging device.&lt;/p&gt;
+
+&lt;p&gt;Instead of piggybacking on &lt;code&gt;toString&lt;/code&gt;, we should call a spade a spade, and define our own methods whose name is actually informative and tells us for what &lt;em&gt;purpose&lt;/em&gt; we are asking for a string.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s refactor the code:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Special method for turning to URL string fragment&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return Some(ID of user) if found, else None&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(42))&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+
+  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Simulate making the Web request. */&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;url&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;url&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; main&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Now the code that was creating a junk URL will no longer compile: &lt;code&gt;id&lt;/code&gt; is of type &lt;code&gt;Option[Id]&lt;/code&gt; but that type does &lt;em&gt;not&lt;/em&gt; have a &lt;code&gt;toUrlString&lt;/code&gt; method. Mission accomplished!&lt;/p&gt;
+
+&lt;p&gt;To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
+
+    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;No id found!&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Simple!&lt;/p&gt;
+
+&lt;h2 id=&#34;the-final-string-gotcha-to-be-discussed-later:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;The final string gotcha (to be discussed later)&lt;/h2&gt;
+
+&lt;p&gt;You may have noticed that there is still primitive obsession in this sample code: URLs are presented as &lt;code&gt;String&lt;/code&gt; for simplicity. In real life, I use builders such as &lt;code&gt;URIBuilder&lt;/code&gt; and &lt;code&gt;HttpGet&lt;/code&gt; (Java &lt;a href=&#34;http://hc.apache.org/&#34;&gt;Apache HttpComponents&lt;/a&gt;) or more sophisticated Scala-specific libraries.&lt;/p&gt;
+
+&lt;p&gt;However, at some point, data has to be turned into strings: this simply is how the Web works. It is at that point where one has to watch out. I will discuss that boundary in another post. String injection attacks are precisely a result of being sloppy about crossing that boundary.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I gave a small taste of what the &lt;code&gt;toString&lt;/code&gt; problem is about, and some initial steps toward solving it through better design even if the programming language encourages us to be sloppy.&lt;/p&gt;
+
+&lt;p&gt;In part 2 of this series, I will expand on different design choices even in the situation we just examined, especially in the face of continued evolution in which there are multiple domain classes to be turned into strings.&lt;/p&gt;
+
+&lt;p&gt;Finally, there actually are quite a few languages that don&amp;rsquo;t have this particular &lt;code&gt;toString&lt;/code&gt; problem, but some have analogues to a lesser degree. Part 3 of this series will discuss the different design choices in the languages or in the standard libraries or idioms. Examples will be drawn from C, C++, Haskell, Go, Standard ML, OCaml, Rust, and JavaScript.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Pittsburgh JavaScript meetup: functional programming</title>
+      <link>http://conscientiousprogrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/</link>
+      <pubDate>Wed, 10 Jul 2013 22:37:00 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/</guid>
+      <description>
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Pittsburgh JavaScript&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Because the topic of the featured presentation by &lt;a href=&#34;http://idiotcoder.com/&#34;&gt;Richard Ashkettle&lt;/a&gt; was &lt;a href=&#34;http://en.wikipedia.org/wiki/Functional_programming&#34;&gt;functional programming&lt;/a&gt;, I made sure to attend my first meeting of the newly revived &lt;a href=&#34;http://www.meetup.com/Pittsburgh-JavaScript/&#34;&gt;Pittsburgh JavaScript meetup&lt;/a&gt;. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&amp;rsquo;t been able to make it to the first two.)&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;d met Richard earlier, a month ago at &lt;a href=&#34;http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/&#34;&gt;Pittsburgh TechFest&lt;/a&gt;. He does not claim to be an expert at functional programming, but is enthusiastic about concepts and techniques that he can and does apply to improving software quality in many dimensions. Since I have been a functional programming enthusiast and practitioner for twenty years, I had these goals in attending his presentations:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;evaluate what Richard and others have done with, and think is important about,  functional programming&lt;/li&gt;
+&lt;li&gt;offer a few corrections, elaborations, suggestions as appropriate for the situation&lt;/li&gt;
+&lt;li&gt;gather information on how I may be able to effectively explain functional programming to those who are new to it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;history-of-the-pittsbugh-javascript-meetup-group:4a05566a34ea27820d7f737863a690ea&#34;&gt;History of the Pittsbugh JavaScript meetup group&lt;/h2&gt;
+
+&lt;p&gt;Two years ago, in 2011, I had attended the &lt;a href=&#34;http://www.meetup.com/Pittsburgh-JavaScript-Developers&#34;&gt;first incarnation of the group&lt;/a&gt; faithfully, attending several months of meetings before it disbanded when the founder left Pittsburgh. I learned quite a bit from those meetings.&lt;/p&gt;
+
+&lt;p&gt;Two years is a long time in the world of JavaScript. Looking back at &lt;a href=&#34;http://franklinchen.com/blog/2011/09/27/when-jquery-attacks/&#34;&gt;one of my blog posts reporting on the old JavaScript meetup group&lt;/a&gt;, I am amused by how anachronistic that feels to me today, as in my mention of &lt;a href=&#34;http://sproutcore.com/&#34;&gt;Sproutcore&lt;/a&gt;, which I never hear about any more.&lt;/p&gt;
+
+&lt;h2 id=&#34;up-front-my-take-on-the-secret-of-javascript:4a05566a34ea27820d7f737863a690ea&#34;&gt;Up front: my take on the secret of JavaScript&lt;/h2&gt;
+
+&lt;p&gt;Here are some observations (not novel) I have about JavaScript, to set the stage for further discussion:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;JavaScript is full of horrible, disgusting Bad Parts.&lt;/li&gt;
+&lt;li&gt;JavaScript has only one shiny Good Part: it has first-class functions.&lt;/li&gt;
+&lt;li&gt;People manage to get a lot of amazingly cool and important stuff done using JavaScript, so take it seriously.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;comments-on-richard-s-presentation:4a05566a34ea27820d7f737863a690ea&#34;&gt;Comments on Richard&amp;rsquo;s presentation&lt;/h2&gt;
+
+&lt;h3 id=&#34;immutability-and-functional-languages:4a05566a34ea27820d7f737863a690ea&#34;&gt;Immutability and &amp;ldquo;functional languages&amp;rdquo;&lt;/h3&gt;
+
+&lt;p&gt;Richard talked about &lt;a href=&#34;http://en.wikipedia.org/wiki/Immutable_object&#34;&gt;immutability&lt;/a&gt; as being part of what &amp;ldquo;functional programming&amp;rdquo; is about.&lt;/p&gt;
+
+&lt;p&gt;Yes, it is, and in addition, common best practices in many programming languages these days argue for favoring immutability. I want to emphasize that you don&amp;rsquo;t have to go full-blown into a specialized &amp;ldquo;functional language&amp;rdquo; in order to take advantage of immutability as desired: for example, this tip has long since been known as at least a &amp;ldquo;design pattern&amp;rdquo; in the &lt;a href=&#34;../../blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/&#34;&gt;Java world&lt;/a&gt;, in the &lt;a href=&#34;http://www.harukizaemon.com/blog/2010/03/01/functional-programming-in-object-oriented-languages/&#34;&gt;Ruby world&lt;/a&gt;, and basically everywhere else.&lt;/p&gt;
+
+&lt;p&gt;Richard suggested that &amp;ldquo;functional languages&amp;rdquo; don&amp;rsquo;t allow mutation. By my definition, this is &lt;em&gt;not&lt;/em&gt; actually true.  I didn&amp;rsquo;t raise an objection during the talk because I didn&amp;rsquo;t want to sidetrack it, but here I have space to elaborate a little. I would argue (but that would have to be another blog post) that the cleanest, most intuitive and novice-accessible &amp;ldquo;functional languages&amp;rdquo;) are those in the &lt;a href=&#34;http://en.wikipedia.org/wiki/ML_%28programming_language%29&#34;&gt;ML&lt;/a&gt; family originally developed in the 1970s and lives on today&amp;rsquo;s popular, industrial-strength dialects of &lt;a href=&#34;http://en.wikipedia.org/wiki/Standard_ML&#34;&gt;Standard ML&lt;/a&gt;, &lt;a href=&#34;http://ocaml.org/&#34;&gt;OCaml&lt;/a&gt;, and &lt;a href=&#34;http://fsharp.org/&#34;&gt;F#&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;ML fully supports mutation&lt;/em&gt;, through &lt;a href=&#34;http://en.wikibooks.org/wiki/Standard_ML_Programming/Types#References&#34;&gt;reference cells&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Personally, because of notions like this, I&amp;rsquo;ve been thinking that maybe it would be best if we all stopped using the term &amp;ldquo;functional language&amp;rdquo;, because it has sadly become misleading and ambiguous. In particular, people instantly think &amp;ldquo;Haskell&amp;rdquo; when they use the word &amp;ldquo;functional language&amp;rdquo;, when in fact Haskell is a very unusual, unique language (and ecosystem) among languages that one could call &amp;ldquo;functional&amp;rdquo;.&lt;/p&gt;
+
+&lt;h3 id=&#34;expressions-functions-evaluation-and-values:4a05566a34ea27820d7f737863a690ea&#34;&gt;Expressions, functions, evaluation, and values&lt;/h3&gt;
+
+&lt;p&gt;As Richard put it, &amp;ldquo;favor expressions evaluating to a value&amp;rdquo;. The focus of functional programming is on &lt;em&gt;returning&lt;/em&gt; a value, from an expression that includes function calls, rather than munging some mutable global state, or modifying state through a reference passed into a function as a parameter.&lt;/p&gt;
+
+&lt;h3 id=&#34;recursion-vs-looping:4a05566a34ea27820d7f737863a690ea&#34;&gt;Recursion vs. looping?&lt;/h3&gt;
+
+&lt;p&gt;Richard noted that one characteristic of functional programming is the use of recursion instead of looping. He gave examples of writing tail-recursive functions.&lt;/p&gt;
+
+&lt;p&gt;One nitpick (which again, I did not bring up during the talk): recursion and looping (as in through &amp;ldquo;normal&amp;rdquo; constructs such as &lt;code&gt;while&lt;/code&gt; and &lt;code&gt;for&lt;/code&gt;) are &lt;em&gt;not&lt;/em&gt; actually opposed. I will write a blog post later about why conventional looping is best thought of as a derived construct built on top of recursion, and why it might be best to consider conventional looping to be a historical accident and mistake (but a very useful invention given the historical circumstances).&lt;/p&gt;
+
+&lt;h4 id=&#34;efficiency-of-recursion:4a05566a34ea27820d7f737863a690ea&#34;&gt;Efficiency of recursion?&lt;/h4&gt;
+
+&lt;p&gt;Also, people brought up the topic of efficiency. I have learned over the years that for many people, the word &amp;ldquo;recursion&amp;rdquo; seems to immediately trigger the word &amp;ldquo;efficiency&amp;rdquo;. Richard did a great job in mentioning that &lt;a href=&#34;http://wiki.ecmascript.org/doku.php?id=harmony:proper_tail_calls&#34;&gt;EMCAScript 6 is going to have proper tail calls (also called tail call optimization)&lt;/a&gt;, which will make tail recursion equivalent to ordinary looping in terms of space usage. This is &lt;em&gt;hugely important&lt;/em&gt; news, of course. This mandate shows how serious JavaScript is about embracing functional programming.&lt;/p&gt;
+
+&lt;h4 id=&#34;recursion-for-parallelism:4a05566a34ea27820d7f737863a690ea&#34;&gt;Recursion for parallelism&lt;/h4&gt;
+
+&lt;p&gt;But beyond the issue tail recursion, I felt I had to point out that recursive algorithms can offer actual &lt;em&gt;speedup&lt;/em&gt;. The classic examples, of course, are the &lt;a href=&#34;http://www.cs.cmu.edu/~scandal/nesl/alg-sequence.html#quicksort&#34;&gt;parallel speedups of divide-and-conquer algorithms such as quicksort that use recursion&lt;/a&gt;. If you expressed the algorithms by removing the recursion (with a hand-rolled stack as often taught in courses), you would destroy the inherent parallelism. So in the world of parallelism, you want your code to stay naturally recursive! As &lt;a href=&#34;http://adambom.github.io/parallel.js/&#34;&gt;parallel computing comes to JavaScript&lt;/a&gt;, keep this in mind!&lt;/p&gt;
+
+&lt;h3 id=&#34;higher-order-functions-first-class-functions:4a05566a34ea27820d7f737863a690ea&#34;&gt;Higher-order functions, first-class functions&lt;/h3&gt;
+
+&lt;p&gt;Richard: &amp;ldquo;A function is an object&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s really as simple as that. Functions can be created, stored, passed around. Functions can return other functions.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s amazing, but I claim that this is JavaScript&amp;rsquo;s one Good Part, its killer feature that surprisingly many languages don&amp;rsquo;t have. And it&amp;rsquo;s the one feature that is used &lt;em&gt;all the time&lt;/em&gt;, not just in esoteric code. From the very beginning, JavaScript had first-class functions, to support callbacks for client code in Web browsers. and &lt;a href=&#34;http://nodejs.org/&#34;&gt;Node&lt;/a&gt; server-side code is nothing if not a whole bunch of &lt;code&gt;function (...)&lt;/code&gt;. Without closures and first-class functions, JavaScript would have been completely useless. Thank goodness &lt;a href=&#34;http://brendaneich.com/2008/04/popularity/&#34;&gt;Brendan Eich was inspired by the Scheme functional language&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;no-methods:4a05566a34ea27820d7f737863a690ea&#34;&gt;No methods!&lt;/h4&gt;
+
+&lt;p&gt;JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented &amp;ldquo;interference&amp;rdquo; from the conventional class-based object-oriented world, which is mostly based not on functions, but on &lt;a href=&#34;https://en.wikipedia.org/wiki/Method_%28computer_programming%29&#34;&gt;methods&lt;/a&gt; that interference with functions because they are meant to &lt;em&gt;replace&lt;/em&gt; functions (since according to &amp;ldquo;pure&amp;rdquo; object-oriented thinking, functions are evil and computation should involve method calls on objects). &lt;em&gt;JavaScript does not (really) have methods&lt;/em&gt;; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use &lt;a href=&#34;http://emberjs.com&#34;&gt;Ember&lt;/a&gt;, the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of &lt;code&gt;function&lt;/code&gt;s: &lt;code&gt;valueWillChange&lt;/code&gt; and &lt;code&gt;valudDidChange&lt;/code&gt; are just functions. They are not special things, &amp;ldquo;methods&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;App.PersonView &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; Ember.View.extend({
+  valueWillChange&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;function&lt;/span&gt; (obj, keyName, value) {
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;this&lt;/span&gt;.changingFrom &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; value;
+  }.observesBefore(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;content.value&amp;#39;&lt;/span&gt;),
+  valueDidChange&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;function&lt;/span&gt;(obj, keyName, value) {
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// only run if updating a value already in the DOM&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;this&lt;/span&gt;.get(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;state&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;===&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;inDOM&amp;#39;&lt;/span&gt;) {
+          &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; color &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; value &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;this&lt;/span&gt;.changingFrom &lt;span style=&#34;color: #666666&#34;&gt;?&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;green&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;red&amp;#39;&lt;/span&gt;;
+          &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// logic&lt;/span&gt;
+      }
+  }.observes(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;content.value&amp;#39;&lt;/span&gt;)
+});
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;examples:4a05566a34ea27820d7f737863a690ea&#34;&gt;Examples&lt;/h3&gt;
+
+&lt;p&gt;Richard gave some standard examples of using higher-order functions such as &lt;code&gt;map&lt;/code&gt; and &lt;code&gt;filter&lt;/code&gt; and &lt;code&gt;foreach&lt;/code&gt; as provided in various popular JavaScript libraries such as &lt;a href=&#34;http://underscorejs.org/&#34;&gt;Underscore&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As a matter of style, he recommended against long, obscure one-liners that involve chaining. I agree. For readability and testability of pipelines, I have found that it is good to break things up into intermediate steps. (Just &lt;a href=&#34;../../blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/&#34;&gt;recently&lt;/a&gt;, Tim Lesher also recommended against stupidity masking as excessive cleverness in his Python lightning talk about functional programming with &lt;code&gt;itertools&lt;/code&gt;.)&lt;/p&gt;
+
+&lt;h3 id=&#34;monads:4a05566a34ea27820d7f737863a690ea&#34;&gt;Monads?!&lt;/h3&gt;
+
+&lt;p&gt;Regrettably, Richard brought up the term &lt;a href=&#34;http://en.wikipedia.org/wiki/Monad_%28functional_programming%29&#34;&gt;&amp;ldquo;monads&amp;rdquo;&lt;/a&gt;. I&amp;rsquo;m close to thinking that this word should be &lt;a href=&#34;http://fsharpforfunandprofit.com/posts/why-i-wont-be-writing-a-monad-tutorial/&#34;&gt;banned&lt;/a&gt;, because too many confusions about them have ruined the word. I have yet decided what the best alternative phrase might be. Maybe something like &amp;ldquo;computational context&amp;rdquo;?&lt;/p&gt;
+
+&lt;p&gt;Ironically, Richard admitted he was going to abuse the word, and for the sake of example, he said, he was going to say that &amp;ldquo;jQuery is a monad&amp;rdquo;. I didn&amp;rsquo;t want to derail his talk, and since he admitted the abuse, I decided there would be a better time to address this topic.&lt;/p&gt;
+
+&lt;p&gt;It was interesting to me, however, that he gathered that the interesting thing about jQuery, and why he wanted to call it a monad, was the chaining of calls in jQuery. I need to think of a good way to deal with this intuition when I get around to explaining monads.&lt;/p&gt;
+
+&lt;h3 id=&#34;partial-application-and-currying:4a05566a34ea27820d7f737863a690ea&#34;&gt;Partial application and currying&lt;/h3&gt;
+
+&lt;p&gt;Richard explained both partial application and currying, then he wondered when one would in practice write a curried function.&lt;/p&gt;
+
+&lt;p&gt;I said (but not very convincingly, I think) that you would write a curried function if you knew you would otherwise have to manually do a bunch of partial application. I have to confess that was a weak answer. I think the practical situation in JavaScript is that full-scale up-front currying is not useful.&lt;/p&gt;
+
+&lt;h3 id=&#34;libraries:4a05566a34ea27820d7f737863a690ea&#34;&gt;Libraries&lt;/h3&gt;
+
+&lt;p&gt;Richard recommended checking out the following libraries, especially Lo-Dash, which he judges to be faster than Underscore:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://underscorejs.org/&#34;&gt;Underscore&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://lodash.com/&#34;&gt;Lo-Dash&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://osteele.com/sources/javascript/functional/&#34;&gt;Functional JavaScript&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;questions-and-answers:4a05566a34ea27820d7f737863a690ea&#34;&gt;Questions and answers&lt;/h2&gt;
+
+&lt;p&gt;There were many interesting questions raised after the presentation.&lt;/p&gt;
+
+&lt;h3 id=&#34;introducing-functional-programming-into-a-team-environment:4a05566a34ea27820d7f737863a690ea&#34;&gt;Introducing functional programming into a team environment&lt;/h3&gt;
+
+&lt;p&gt;Someone asked Richard a good question about whether it&amp;rsquo;s appropriate to, say, start using Underscore at work and expecting other team members to learn how to use it. Is it fair to expect others to learn a new way of doing things that might seem weird?&lt;/p&gt;
+
+&lt;p&gt;My point of view is that there&amp;rsquo;s nothing specific about functional programming when it comes to questions like this. The same question comes up when evaluating a particular programming language or a particular MVC framework or a particular version control system, and the answer involve considering all the different realities of who is comfortable with what, whether it is worth learning something new, what the advantages and disadvantages are, how much the decision will affect delivery of business value.&lt;/p&gt;
+
+&lt;h3 id=&#34;growing-parameter-list-for-a-function-vs-passing-in-a-big-object:4a05566a34ea27820d7f737863a690ea&#34;&gt;Growing parameter list for a function vs. passing in a big object&lt;/h3&gt;
+
+&lt;p&gt;One concern brought up is that if you&amp;rsquo;re programming in a functional style, you can end up being faced with ever-growing parameter lists for a function to pass in everything that it needs. One solution is to create a big object to stick everything into it that might be needed (for example, a configuration object instead of separate flag parameters). Is this overkill?&lt;/p&gt;
+
+&lt;p&gt;Also, &lt;a href=&#34;http://tonylukasavage.com/&#34;&gt;Tony Lukasavage&lt;/a&gt; emphasized that his concern was in the context of the need to evolve an existing API without breaking customers&amp;rsquo; client code that uses it.&lt;/p&gt;
+
+&lt;p&gt;My first note would be that API design is tricky and checking out &lt;a href=&#34;../../blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/&#34;&gt;some resources on API design&lt;/a&gt; is very helpful.&lt;/p&gt;
+
+&lt;p&gt;Regarding parameter lists, Richard noted that you might have a design problem if you have a function that needs to know about so many things it depends on. You may want to refactor the function (of course, in the context of evolving a mature API that customers depend on, it may be too late, unfortunately) and the data structures passed in. For example, if you have a number of functions that all take as parameters a &lt;code&gt;firstName&lt;/code&gt; and &lt;code&gt;lastName&lt;/code&gt;, then maybe you want a single &lt;code&gt;name&lt;/code&gt; parameter instead.&lt;/p&gt;
+
+&lt;p&gt;I suggested also that if certain flags are not always needed, then instead of a huge configuration object, how about simply having separate but related functions (in a language supporting overloading, you could provide overloaded functions, although the topic of overloading is another large one to discuss later), each of which takes only the flags the client cares about. Of course, as some people pointed out, then you might end up with annoyingly long and specific function names.&lt;/p&gt;
+
+&lt;p&gt;Nobody said designing an API is easy.&lt;/p&gt;
+
+&lt;h3 id=&#34;do-i-actually-do-functional-programming:4a05566a34ea27820d7f737863a690ea&#34;&gt;Do I actually do functional programming?&lt;/h3&gt;
+
+&lt;p&gt;One question I got, since before the meetup, I had indicated having experience with functional programming, was basically, do I actually use it in JavaScript and elsewhere. The answer is, yes. As I&amp;rsquo;ve mentioned, you don&amp;rsquo;t have use a special language in order to program in this way, although it&amp;rsquo;s much easier and more efficient to use a language that is tailored to support it. Most of the code I&amp;rsquo;ve written in the past fifteen years has attempted to be primarily functional in style, whatever language I&amp;rsquo;m using for work (mostly Java, Perl, Python, and recently Scala). I don&amp;rsquo;t do this out of some kind of ideology, but because it works well in getting stuff done. Before adopting a primarily functional style of programming, I spent years working in traditional imperative and object-oriented styles, and empirically, that was less pleasant.&lt;/p&gt;
+
+&lt;h4 id=&#34;do-i-do-functional-programming-in-javascript:4a05566a34ea27820d7f737863a690ea&#34;&gt;Do I do functional programming in JavaScript?&lt;/h4&gt;
+
+&lt;p&gt;I have not actually done any JavaScript programming for work since doing some UI prototyping two years ago. I don&amp;rsquo;t know when I&amp;rsquo;ll return to doing front end work, but meanwhile, I am interested in doing some Web browser stuff for personal projects, so I try to keep up to date on developments in the JavaScript world.&lt;/p&gt;
+
+&lt;p&gt;One thing that has been interesting that I need to check out is the rise of &lt;a href=&#34;http://en.wikipedia.org/wiki/Functional_reactive_programming&#34;&gt;functional reactive programming (FRP)&lt;/a&gt; libraries for JavaScript, such as &lt;a href=&#34;https://github.com/raimohanska/bacon.js&#34;&gt;Bacon.js&lt;/a&gt;. FRP was originally invented in the 1990s by Conal Elliott in the context of Haskell, but almost twenty years later, has finally spread well beyond that now to mainstream visibility and use. For example, Microsoft has thrown its weight behind &lt;a href=&#34;http://rx.codeplex.com/&#34;&gt;Reactive Extensions (Rx)&lt;/a&gt;, which started out in the .NET world, but Microsoft then ported it to JavaScript, C/C++, Python, and Ruby.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:4a05566a34ea27820d7f737863a690ea&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I was happy to see interest in functional programming in the local JavaScript community. Richard gave an introductory talk on it that I thought was very useful as a starting point for those who are new to it. I made note of some omissions or inaccuracies in order to improve my thinking about how I can contribute in the future to improving people&amp;rsquo;s understanding and application of functional programming principles.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
