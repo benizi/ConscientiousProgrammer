@@ -8,6 +8,7 @@ paginate = 10
 disqusShortname = "conscientiousprogrammer"
 RssUri = "atom.xml"
 RelativeURLs = "true"
+MetaDataFormat = "yaml"
 
 [author]
 # Seems to be used where title was
