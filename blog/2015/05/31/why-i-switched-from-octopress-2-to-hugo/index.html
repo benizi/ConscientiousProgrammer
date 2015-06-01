@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>Why I switched from Octopress 2 to Hugo &middot; The Conscientious Programmer</title>
+
+  
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/hyde-x.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/franklin.css">
+  <link rel="stylesheet" href="http://conscientiousprogrammer.com/css/highlight/default.css">
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../apple-touch-icon-144-precomposed.png">
+  <link href="../../../../../favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>The Conscientious Programmer</h1>
+      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      
+      <li class="sidebar-nav-item"><a href="../../../../../about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+      
+      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>Why I switched from Octopress 2 to Hugo</h1>
+    
+
+<p>Until now, I haven&rsquo;t been publishing anything on any of my three blogs
+for half a year now. There are many reasons, but one of them was that
+I wanted to migrate away from
+<a href="http://octopress.org/">Octopress</a> 2. Octopress 2 is ancient and slow
+and unmaintained, and I&rsquo;d been waiting for
+<a href="https://github.com/octopress/octopress">Octopress 3</a> for over three
+years
+<a href="http://octopress.org/2015/01/15/octopress-3.0-is-coming/">to arrive</a>,
+so when I heard that Octopress 3 was finally going to be officially
+announced at <a href="http://jekyllconf.com/">JekyllConf</a>, I decided it was
+time to migrate my blogs, to Octopress 3 or
+<a href="http://jekyllrb.com/">Jekyll</a>, or something else entirely.</p>
+
+<h2 id="factors-to-consider-when-choosing-a-static-site-generator:26b28caf414f77ef05fac6550ae96388">Factors to consider when choosing a static site generator</h2>
+
+<p>Some factors I kept in mind while evaluating a new static site
+generator:</p>
+
+<ul>
+<li>Speed of full generation</li>
+<li>Speed of incremental generation</li>
+<li>Active progress in bug fixes, improvements, new features</li>
+<li>Availability of themes</li>
+<li>Community sharing, support</li>
+<li>Languages used for using and writing own templates and plugins</li>
+</ul>
+
+<h2 id="speed-is-critical-for-me:26b28caf414f77ef05fac6550ae96388">Speed is critical for me</h2>
+
+<p><strong>Speed</strong> was a huge consideration for me when I evaluated alternative
+static site generators, so I was particularly interested in evaluating</p>
+
+<ul>
+<li><a href="http://gohugo.io/">Hugo</a> (written in Go)</li>
+<li><a href="http://jaspervdj.be/hakyll/">Hakyll</a> (written in Haskell)</li>
+</ul>
+
+<p>The advantages of these two are that they are implemented in
+statically typed languages that compile to native
+executables.</p>
+
+<p>Furthermore, Hakyll is a library, such that your configuration is
+actually merely a Haskell program using the library, without the
+indirection of configuration languages and interpreters of the
+languages, and you can compile your site into a specialized native
+executable. (For example, Hakyll uses Pandoc as a library for Markdown processing.)</p>
+
+<h2 id="advantages-of-going-to-jekyll:26b28caf414f77ef05fac6550ae96388">Advantages of going to Jekyll?</h2>
+
+<p>Jekyll is the most popular static site generator, so I had to evaluate
+it despite knowing up front that it was not going to be a speed
+winner. It might well be fast <em>enough</em>. The benefits of using a
+platform with a large and passionate community are <em>tremendous</em>: bugs
+get fixed, cool features get added, people step in to help you out if
+you have questions, incremental improvements keep happening, themes
+abound that you can just take and use. I never evaluate using a
+technology based only on one consideration (such as speed).</p>
+
+<p>Note that Octopress 3 is basically a really cool interface over an
+underlying Jekyll setup, so I will only refer to Jekyll below, with
+the understanding that all performance matters that apply to Jekyll
+apply to Octopress 3 as well.</p>
+
+<h2 id="speed-comparisons-octopress-2-jekyll-hugo-hakyll:26b28caf414f77ef05fac6550ae96388">Speed comparisons: Octopress 2, Jekyll, Hugo, Hakyll</h2>
+
+<h3 id="full-generation-from-scratch:26b28caf414f77ef05fac6550ae96388">Full generation from scratch</h3>
+
+<p>My <a href="http://franklinchen.com/">personal blog</a> has 585 posts. Here are
+the from-scratch full generation times, based on migrations away from
+Octopress 2 that I performed using a bunch of Perl scripts. Note that
+the sites are not completely equivalent, because I only wanted to get
+a rough idea, not compare total equivalence:</p>
+
+<ul>
+<li>Octopress 2: 5:39.28</li>
+<li>Jekyll: 15.90</li>
+<li>Hakyll: 14.51</li>
+<li>Hugo: 4.90</li>
+</ul>
+
+<p>Jekyll and Hakyll don&rsquo;t do too badly, but Hugo was by far the fastest.</p>
+
+<p>Although I suspect that as more features
+get added to Hugo, it may slow down some, I also trust that since the
+author and the Go community in general are <em>obsessed</em> with speed, Hugo
+is a safe bet for anyone concerned about speed.</p>
+
+<h3 id="full-generation-but-not-from-scratch:26b28caf414f77ef05fac6550ae96388">Full generation but not from scratch</h3>
+
+<p>Hakyll stores a lot of information in a cache directory. If you&rsquo;ve
+done a full generation and change nothing and do a full generation
+again (<code>my-compiled-site-builder build</code>), it comes back almost
+instantaneously. If you&rsquo;ve modified a file (as in the incremental,
+server mode generation), my result was slightly slower than in server
+mode:</p>
+
+<ul>
+<li>Hakyll: 2.23</li>
+</ul>
+
+<h3 id="incremental-generation:26b28caf414f77ef05fac6550ae96388">Incremental generation</h3>
+
+<p>I brought each generator up in &ldquo;server&rdquo; &ldquo;watching&rdquo; mode, to see what
+would happen if I changed a single file, resulting in regeneration of
+everything affected. For example, I changed the most recent blog post,
+which affects its generation as well as potentially the main
+page, RSS, sitemap, archive, tags and categories.</p>
+
+<ul>
+<li>Jekyll: 9.95</li>
+<li>Hugo: 4.11</li>
+<li>Hakyll: 1.50</li>
+</ul>
+
+<p>It&rsquo;s interesting that Hugo&rsquo;s live &ldquo;watch&rdquo; functionality does not really
+improve over regenerating the site from scratch.</p>
+
+<p>For Hakyll, there is tremendous improvement. I believe this may be
+because of the use of a cache directory but also because a
+Hakyll-compiled generator incurs no <em>interpreter</em> overhead once you
+have it running in server mode watching for changes.</p>
+
+<p>9.95 seconds is still kind of slow for me, for making a quick change
+to a file in progress and wanting to see how it displays in the
+browser, so Jekyll is not optimal for me. But Hugo&rsquo;s 4.11 seconds is acceptable.</p>
+
+<h2 id="so-why-not-hakyll:26b28caf414f77ef05fac6550ae96388">So why not Hakyll?</h2>
+
+<p>So, given that Hakyll looks so promising, and I would far prefer
+writing and debugging Haskell code, to hacking in some mixture of Go
+templating and other configuration languages, why did I not migrate to
+Hakyll?</p>
+
+<p>There are many considerations that go into what I choose as a
+technology to solve a specific problem. For example, there&rsquo;s a reason
+I wrote all my one-shot little blog migration scripts in Perl, even
+though I no longer write Perl for any other purpose (although Perl was
+one of my main languages I used for nontrivial programs from
+1999-2010).</p>
+
+<p>Hakyll has a small community. I&rsquo;m not sure I would even call it a
+community. It&rsquo;s basically one guy&rsquo;s project. It is completely
+unopinionated, such that to create any reasonable site you have to
+write your own code or copy and paste from someone else&rsquo;s. There is no
+formal concept of &ldquo;theme&rdquo; or an official theme sharing site.</p>
+
+<p>Hakyll is pretty confusing to build if you don&rsquo;t use a Cabal sandbox,
+and even then, there have perpetually been build problems of some kind
+or another, for years. Last year, <a href="https://github.com/jaspervdj/hakyll/issues/302">I could not get it to build at all</a>.</p>
+
+<p>Meanwhile, the <a href="https://travis-ci.org/jaspervdj/hakyll">Travis build</a>
+is perpetually broken and doesn&rsquo;t even test multiple versions of GHC
+and Cabal. A call to
+<a href="https://github.com/jaspervdj/hakyll/issues/299">get Hakyll into Stackage</a>
+is still open.</p>
+
+<p>I ran into a
+<a href="https://github.com/jaspervdj/hakyll/issues/225">serious YAML-handling bug that still has not been addressed after over a year</a>.</p>
+
+<p>In other words, just because Hakyll seems to perform well on a
+simplistic toy migration of my personal blog (after all the
+workarounds for the bugs mentioned above) doesn&rsquo;t mean that I can
+trust it to work if I do more complicated things, or that bug reports
+will get addressed.</p>
+
+<p>I&rsquo;m writing this not to criticize the author of Hakyll, who by the way
+writes a lot of quite high-quality
+<a href="http://jaspervdj.be/posts.html">blog posts on Haskell</a> and has a day
+job developing in Haskell. Open source projects are labors of love
+that just cannot be sustained by one person who has many things to do
+in life.</p>
+
+<h2 id="winner-hugo:26b28caf414f77ef05fac6550ae96388">Winner: Hugo</h2>
+
+<p>It would be nice if there were a larger Hakyll community, but the
+reality is that there isn&rsquo;t, and therefore as someone who also has
+many things to do and prefers to write for my blogs rather than
+implement features for the blog engine, I chose Hugo as the clear
+winner for my current needs.</p>
+
+<p>Hugo not only has an entire official
+<a href="http://discuss.gohugo.io/">discussion site</a> but also an active
+<a href="https://gitter.im/spf13/hugo">Gitter room</a>.</p>
+
+<p>The official documentation is pretty good and continues to be updated.</p>
+
+<h2 id="conclusion:26b28caf414f77ef05fac6550ae96388">Conclusion</h2>
+
+<p>Choosing a static site generator is like choosing any other software
+to perform a task: you have to evaluate many different factors and
+tradeoffs among the different choices available. For me, speed is very
+important, but also a thriving, growing community of maintainers,
+contributors, and users.</p>
+
+<p>In the end, I chose Hugo, because it is fast, actively maintained, and
+has a sizable community revolving around it.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/05\/31\/why-i-switched-from-octopress-2-to-hugo\/';
+    var disqus_title = 'Why I switched from Octopress 2 to Hugo';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/05\/31\/why-i-switched-from-octopress-2-to-hugo\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>

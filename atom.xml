@@ -6,8 +6,215 @@
     <description>Recent content on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 21 Dec 2014 14:31:36 -0500</lastBuildDate>
+    <lastBuildDate>Sun, 31 May 2015 12:26:32 -0400</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Why I switched from Octopress 2 to Hugo</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/05/31/why-i-switched-from-octopress-2-to-hugo/</link>
+      <pubDate>Sun, 31 May 2015 12:26:32 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/05/31/why-i-switched-from-octopress-2-to-hugo/</guid>
+      <description>
+
+&lt;p&gt;Until now, I haven&amp;rsquo;t been publishing anything on any of my three blogs
+for half a year now. There are many reasons, but one of them was that
+I wanted to migrate away from
+&lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt; 2. Octopress 2 is ancient and slow
+and unmaintained, and I&amp;rsquo;d been waiting for
+&lt;a href=&#34;https://github.com/octopress/octopress&#34;&gt;Octopress 3&lt;/a&gt; for over three
+years
+&lt;a href=&#34;http://octopress.org/2015/01/15/octopress-3.0-is-coming/&#34;&gt;to arrive&lt;/a&gt;,
+so when I heard that Octopress 3 was finally going to be officially
+announced at &lt;a href=&#34;http://jekyllconf.com/&#34;&gt;JekyllConf&lt;/a&gt;, I decided it was
+time to migrate my blogs, to Octopress 3 or
+&lt;a href=&#34;http://jekyllrb.com/&#34;&gt;Jekyll&lt;/a&gt;, or something else entirely.&lt;/p&gt;
+
+&lt;h2 id=&#34;factors-to-consider-when-choosing-a-static-site-generator:26b28caf414f77ef05fac6550ae96388&#34;&gt;Factors to consider when choosing a static site generator&lt;/h2&gt;
+
+&lt;p&gt;Some factors I kept in mind while evaluating a new static site
+generator:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Speed of full generation&lt;/li&gt;
+&lt;li&gt;Speed of incremental generation&lt;/li&gt;
+&lt;li&gt;Active progress in bug fixes, improvements, new features&lt;/li&gt;
+&lt;li&gt;Availability of themes&lt;/li&gt;
+&lt;li&gt;Community sharing, support&lt;/li&gt;
+&lt;li&gt;Languages used for using and writing own templates and plugins&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;speed-is-critical-for-me:26b28caf414f77ef05fac6550ae96388&#34;&gt;Speed is critical for me&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Speed&lt;/strong&gt; was a huge consideration for me when I evaluated alternative
+static site generators, so I was particularly interested in evaluating&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; (written in Go)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://jaspervdj.be/hakyll/&#34;&gt;Hakyll&lt;/a&gt; (written in Haskell)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The advantages of these two are that they are implemented in
+statically typed languages that compile to native
+executables.&lt;/p&gt;
+
+&lt;p&gt;Furthermore, Hakyll is a library, such that your configuration is
+actually merely a Haskell program using the library, without the
+indirection of configuration languages and interpreters of the
+languages, and you can compile your site into a specialized native
+executable. (For example, Hakyll uses Pandoc as a library for Markdown processing.)&lt;/p&gt;
+
+&lt;h2 id=&#34;advantages-of-going-to-jekyll:26b28caf414f77ef05fac6550ae96388&#34;&gt;Advantages of going to Jekyll?&lt;/h2&gt;
+
+&lt;p&gt;Jekyll is the most popular static site generator, so I had to evaluate
+it despite knowing up front that it was not going to be a speed
+winner. It might well be fast &lt;em&gt;enough&lt;/em&gt;. The benefits of using a
+platform with a large and passionate community are &lt;em&gt;tremendous&lt;/em&gt;: bugs
+get fixed, cool features get added, people step in to help you out if
+you have questions, incremental improvements keep happening, themes
+abound that you can just take and use. I never evaluate using a
+technology based only on one consideration (such as speed).&lt;/p&gt;
+
+&lt;p&gt;Note that Octopress 3 is basically a really cool interface over an
+underlying Jekyll setup, so I will only refer to Jekyll below, with
+the understanding that all performance matters that apply to Jekyll
+apply to Octopress 3 as well.&lt;/p&gt;
+
+&lt;h2 id=&#34;speed-comparisons-octopress-2-jekyll-hugo-hakyll:26b28caf414f77ef05fac6550ae96388&#34;&gt;Speed comparisons: Octopress 2, Jekyll, Hugo, Hakyll&lt;/h2&gt;
+
+&lt;h3 id=&#34;full-generation-from-scratch:26b28caf414f77ef05fac6550ae96388&#34;&gt;Full generation from scratch&lt;/h3&gt;
+
+&lt;p&gt;My &lt;a href=&#34;http://franklinchen.com/&#34;&gt;personal blog&lt;/a&gt; has 585 posts. Here are
+the from-scratch full generation times, based on migrations away from
+Octopress 2 that I performed using a bunch of Perl scripts. Note that
+the sites are not completely equivalent, because I only wanted to get
+a rough idea, not compare total equivalence:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Octopress 2: 5:39.28&lt;/li&gt;
+&lt;li&gt;Jekyll: 15.90&lt;/li&gt;
+&lt;li&gt;Hakyll: 14.51&lt;/li&gt;
+&lt;li&gt;Hugo: 4.90&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Jekyll and Hakyll don&amp;rsquo;t do too badly, but Hugo was by far the fastest.&lt;/p&gt;
+
+&lt;p&gt;Although I suspect that as more features
+get added to Hugo, it may slow down some, I also trust that since the
+author and the Go community in general are &lt;em&gt;obsessed&lt;/em&gt; with speed, Hugo
+is a safe bet for anyone concerned about speed.&lt;/p&gt;
+
+&lt;h3 id=&#34;full-generation-but-not-from-scratch:26b28caf414f77ef05fac6550ae96388&#34;&gt;Full generation but not from scratch&lt;/h3&gt;
+
+&lt;p&gt;Hakyll stores a lot of information in a cache directory. If you&amp;rsquo;ve
+done a full generation and change nothing and do a full generation
+again (&lt;code&gt;my-compiled-site-builder build&lt;/code&gt;), it comes back almost
+instantaneously. If you&amp;rsquo;ve modified a file (as in the incremental,
+server mode generation), my result was slightly slower than in server
+mode:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Hakyll: 2.23&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;incremental-generation:26b28caf414f77ef05fac6550ae96388&#34;&gt;Incremental generation&lt;/h3&gt;
+
+&lt;p&gt;I brought each generator up in &amp;ldquo;server&amp;rdquo; &amp;ldquo;watching&amp;rdquo; mode, to see what
+would happen if I changed a single file, resulting in regeneration of
+everything affected. For example, I changed the most recent blog post,
+which affects its generation as well as potentially the main
+page, RSS, sitemap, archive, tags and categories.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Jekyll: 9.95&lt;/li&gt;
+&lt;li&gt;Hugo: 4.11&lt;/li&gt;
+&lt;li&gt;Hakyll: 1.50&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It&amp;rsquo;s interesting that Hugo&amp;rsquo;s live &amp;ldquo;watch&amp;rdquo; functionality does not really
+improve over regenerating the site from scratch.&lt;/p&gt;
+
+&lt;p&gt;For Hakyll, there is tremendous improvement. I believe this may be
+because of the use of a cache directory but also because a
+Hakyll-compiled generator incurs no &lt;em&gt;interpreter&lt;/em&gt; overhead once you
+have it running in server mode watching for changes.&lt;/p&gt;
+
+&lt;p&gt;9.95 seconds is still kind of slow for me, for making a quick change
+to a file in progress and wanting to see how it displays in the
+browser, so Jekyll is not optimal for me. But Hugo&amp;rsquo;s 4.11 seconds is acceptable.&lt;/p&gt;
+
+&lt;h2 id=&#34;so-why-not-hakyll:26b28caf414f77ef05fac6550ae96388&#34;&gt;So why not Hakyll?&lt;/h2&gt;
+
+&lt;p&gt;So, given that Hakyll looks so promising, and I would far prefer
+writing and debugging Haskell code, to hacking in some mixture of Go
+templating and other configuration languages, why did I not migrate to
+Hakyll?&lt;/p&gt;
+
+&lt;p&gt;There are many considerations that go into what I choose as a
+technology to solve a specific problem. For example, there&amp;rsquo;s a reason
+I wrote all my one-shot little blog migration scripts in Perl, even
+though I no longer write Perl for any other purpose (although Perl was
+one of my main languages I used for nontrivial programs from
+1999-2010).&lt;/p&gt;
+
+&lt;p&gt;Hakyll has a small community. I&amp;rsquo;m not sure I would even call it a
+community. It&amp;rsquo;s basically one guy&amp;rsquo;s project. It is completely
+unopinionated, such that to create any reasonable site you have to
+write your own code or copy and paste from someone else&amp;rsquo;s. There is no
+formal concept of &amp;ldquo;theme&amp;rdquo; or an official theme sharing site.&lt;/p&gt;
+
+&lt;p&gt;Hakyll is pretty confusing to build if you don&amp;rsquo;t use a Cabal sandbox,
+and even then, there have perpetually been build problems of some kind
+or another, for years. Last year, &lt;a href=&#34;https://github.com/jaspervdj/hakyll/issues/302&#34;&gt;I could not get it to build at all&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, the &lt;a href=&#34;https://travis-ci.org/jaspervdj/hakyll&#34;&gt;Travis build&lt;/a&gt;
+is perpetually broken and doesn&amp;rsquo;t even test multiple versions of GHC
+and Cabal. A call to
+&lt;a href=&#34;https://github.com/jaspervdj/hakyll/issues/299&#34;&gt;get Hakyll into Stackage&lt;/a&gt;
+is still open.&lt;/p&gt;
+
+&lt;p&gt;I ran into a
+&lt;a href=&#34;https://github.com/jaspervdj/hakyll/issues/225&#34;&gt;serious YAML-handling bug that still has not been addressed after over a year&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In other words, just because Hakyll seems to perform well on a
+simplistic toy migration of my personal blog (after all the
+workarounds for the bugs mentioned above) doesn&amp;rsquo;t mean that I can
+trust it to work if I do more complicated things, or that bug reports
+will get addressed.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m writing this not to criticize the author of Hakyll, who by the way
+writes a lot of quite high-quality
+&lt;a href=&#34;http://jaspervdj.be/posts.html&#34;&gt;blog posts on Haskell&lt;/a&gt; and has a day
+job developing in Haskell. Open source projects are labors of love
+that just cannot be sustained by one person who has many things to do
+in life.&lt;/p&gt;
+
+&lt;h2 id=&#34;winner-hugo:26b28caf414f77ef05fac6550ae96388&#34;&gt;Winner: Hugo&lt;/h2&gt;
+
+&lt;p&gt;It would be nice if there were a larger Hakyll community, but the
+reality is that there isn&amp;rsquo;t, and therefore as someone who also has
+many things to do and prefers to write for my blogs rather than
+implement features for the blog engine, I chose Hugo as the clear
+winner for my current needs.&lt;/p&gt;
+
+&lt;p&gt;Hugo not only has an entire official
+&lt;a href=&#34;http://discuss.gohugo.io/&#34;&gt;discussion site&lt;/a&gt; but also an active
+&lt;a href=&#34;https://gitter.im/spf13/hugo&#34;&gt;Gitter room&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The official documentation is pretty good and continues to be updated.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:26b28caf414f77ef05fac6550ae96388&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Choosing a static site generator is like choosing any other software
+to perform a task: you have to evaluate many different factors and
+tradeoffs among the different choices available. For me, speed is very
+important, but also a thriving, growing community of maintainers,
+contributors, and users.&lt;/p&gt;
+
+&lt;p&gt;In the end, I chose Hugo, because it is fast, actively maintained, and
+has a sizable community revolving around it.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>How to think about Rust ownership versus C&#43;&#43; unique_ptr</title>
@@ -1269,234 +1476,6 @@ whatever, input -&amp;gt; whatever
 &lt;p&gt;I thought it would useful to compare an object-oriented and a functional approach to unifying data that share a domain-consistent notion of conversion to a string. Scala is a language that allows easy expression of both.&lt;/p&gt;
 
 &lt;p&gt;In part 3, we will look at languages that just don&amp;rsquo;t have the &lt;code&gt;toString&lt;/code&gt; problem at all.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>toString considered harmful, part 1</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/12/23/tostring-considered-harmful-part-1/</link>
-      <pubDate>Mon, 23 Dec 2013 23:54:00 +0000</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2013/12/23/tostring-considered-harmful-part-1/</guid>
-      <description>
-
-&lt;p&gt;It is easy to rant about the problems or unexpected subtleties involving the use of &lt;a href=&#34;http://en.wikipedia.org/wiki/String_%28computer_science%29&#34;&gt;strings&lt;/a&gt; in programming languages. This post, however, is not so much a rant about strings as about design and meaning, with &lt;code&gt;toString&lt;/code&gt; only as an obvious example.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ll describe a pitfall that came up in my code, and a solution, and make observations about how different programming languages address or avoid this problem.&lt;/p&gt;
-
-&lt;p&gt;This is part one of a series.&lt;/p&gt;
-
-&lt;h2 id=&#34;a-bug-when-evolving-my-code:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;A bug when evolving my code&lt;/h2&gt;
-
-&lt;p&gt;My example code is in Scala, but the problem illustrated actually extends to many (most?) other currently popular object-oriented languages as well, including Java (which Scala inherited &lt;code&gt;Object.toString&lt;/code&gt; from), C# (&lt;code&gt;Object.ToString&lt;/code&gt; stolen from Java), Ruby (&lt;code&gt;Object#to_s&lt;/code&gt;), Python (&lt;code&gt;str&lt;/code&gt;, which uses &lt;code&gt;object.__str__&lt;/code&gt; in case of an object). (Later in the post, I discuss languages without this specific feature.)&lt;/p&gt;
-
-&lt;h3 id=&#34;first-working-code:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;First working code&lt;/h3&gt;
-
-&lt;p&gt;Here&amp;rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Example&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return ID of user&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #666666&#34;&gt;42&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Simulate making the Web request. */&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;url&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;url&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; main&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-    getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
-    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// output: http://service.com?id=42&lt;/span&gt;
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-&lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.&lt;/p&gt;
-
-&lt;p&gt;If you don&amp;rsquo;t know Scala, just note that &lt;code&gt;s&amp;quot;...$id&amp;quot;&lt;/code&gt; is just Scala&amp;rsquo;s string interpolation syntax that behind the scenes calls &lt;code&gt;id.toString&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;non-working-code:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;Non-working code&lt;/h3&gt;
-
-&lt;p&gt;It turned out that finding an ID could fail, so I changed &lt;code&gt;findId&lt;/code&gt; to return the type &lt;code&gt;Option[Id]&lt;/code&gt; instead of &lt;code&gt;Id&lt;/code&gt;. To get the code to compile, I had to change the type of the parameter to &lt;code&gt;makeUrl&lt;/code&gt; also:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return Some(ID of user) if found, else None&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(42)&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Oops, now this has an unintended bug!&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: &lt;code&gt;http://service.com?id=Some(42)&lt;/code&gt; was being requested.&lt;/p&gt;
-
-&lt;p&gt;Furthermore, in the case of an ID not found, the URL constructed is &lt;code&gt;http://service.com?id=None&lt;/code&gt;. How many of you have seen applications or Web sites or emails in which something was clearly missing and the text contained either an empty space or the string &amp;ldquo;null&amp;rdquo; or &amp;ldquo;nullvalue&amp;rdquo; such as&lt;/p&gt;
-
-&lt;blockquote&gt;
-Dear NULL,
-
-You ordered NULL items.
-&lt;/blockquote&gt;
-
-&lt;p&gt;Yup, you guessed it: someone wrote crappy code like what I just showed you, and frightening thing is, &lt;em&gt;it could have been me&lt;/em&gt; and &lt;em&gt;it could have been you&lt;/em&gt;.&lt;/p&gt;
-
-&lt;h4 id=&#34;what-s-the-big-deal:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;What&amp;rsquo;s the big deal?&lt;/h4&gt;
-
-&lt;p&gt;You might think, &amp;ldquo;Big deal, you changed your code, ran your test, and immediately found the bug, so what&amp;rsquo;s the problem?&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;The problem is that I have higher standards than that. I don&amp;rsquo;t want to rely on my tests to find my bugs. In fact, the test that went over the Web to do stuff was an &lt;em&gt;integration test&lt;/em&gt;, not a &lt;em&gt;unit test&lt;/em&gt;. The bug only manifested itself when the actual Web request failed. And as we see in real life, many apps are not sufficiently tested to root out all possible accidental string generations.&lt;/p&gt;
-
-&lt;p&gt;So although I caught the bug quickly, I caught it far less quickly than I wanted. I didn&amp;rsquo;t want to even construct an obviously garbage URL like &lt;code&gt;http://service.com?id=Some(42)&lt;/code&gt; at all. I prefer to have the type checker catch stupid design-level bugs up front. So I was furious at myself that I wrote code that the compiler was perfectly happy with but was obviously wrong. I had gotten lazy in more ways than one, and had been punished accordingly.&lt;/p&gt;
-
-&lt;h2 id=&#34;a-symptom-of-bad-design:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;A symptom of bad design&lt;/h2&gt;
-
-&lt;p&gt;There were a couple of things wrong with my original code that made it not evolve well.&lt;/p&gt;
-
-&lt;h3 id=&#34;don-t-use-tostring:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;Don&amp;rsquo;t use &lt;code&gt;toString&lt;/code&gt;&lt;/h3&gt;
-
-&lt;p&gt;First, by using string interpolation at all, I was relying on the implicit &lt;code&gt;toString&lt;/code&gt; method of all objects. String interpolation is an admittedly very convenient feature that I use extensively, but now I consider it rather dangerous.&lt;/p&gt;
-
-&lt;p&gt;But even if I hadn&amp;rsquo;t used string interpolation, I would have had to build up strings myself anyway, and would have called &lt;code&gt;toString&lt;/code&gt; &lt;em&gt;explicitly&lt;/em&gt;, and I would have had the same problem: changing the type of something from &lt;code&gt;Id&lt;/code&gt; to &lt;code&gt;Option[Id]&lt;/code&gt; does not get rid of &lt;code&gt;toString&lt;/code&gt;. In fact, in object-oriented languages where &lt;code&gt;toString&lt;/code&gt; is defined way up at the top, &lt;em&gt;everything&lt;/em&gt; has &lt;code&gt;toString&lt;/code&gt;, whether you like it or not! The best you can do is override &lt;code&gt;toString&lt;/code&gt;. (Actually, Scala &amp;ldquo;helpfully&amp;rdquo; generates a nice &lt;code&gt;toString&lt;/code&gt; override for you when you use case classes, hence the output of &lt;code&gt;Some(42)&lt;/code&gt;.)&lt;/p&gt;
-
-&lt;p&gt;I consider this &lt;em&gt;global infection&lt;/em&gt; a flaw in object-oriented languages that impose a set of methods on all objects whether you want them or not. &lt;code&gt;toString&lt;/code&gt; is hardly the worst offending method, actually, but I&amp;rsquo;ll save my complaints about others for later.&lt;/p&gt;
-
-&lt;p&gt;First step in cleaning up the code: make &lt;code&gt;toString&lt;/code&gt; explicit:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
-
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; main&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-    getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;(Later in the post, I will discuss alternatives to this explicit &lt;code&gt;toString&lt;/code&gt;.)&lt;/p&gt;
-
-&lt;h3 id=&#34;primitive-obsession:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;Primitive obsession&lt;/h3&gt;
-
-&lt;p&gt;Another design smell was that of using&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;in the first place. This is a well-known lazy practice called &lt;a href=&#34;http://c2.com/cgi/wiki?PrimitiveObsession&#34;&gt;primitive obsession&lt;/a&gt;. I know better than that.&lt;/p&gt;
-
-&lt;p&gt;The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return ID of user&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(42)&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(0)&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;Note that this still &lt;em&gt;would not&lt;/em&gt; have solved the &lt;code&gt;toString&lt;/code&gt; problem, since the output would simply have been &lt;code&gt;http://service.com?id=Some(Id(42))&lt;/code&gt; or the dreaded &lt;code&gt;http://service.com?id=None&lt;/code&gt;!&lt;/p&gt;
-
-&lt;h3 id=&#34;tostring-is-a-problematic-concept-anyway:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;&lt;code&gt;toString&lt;/code&gt; is a problematic concept anyway&lt;/h3&gt;
-
-&lt;p&gt;The real problem is one that transcends programming language design. (Later in this post I&amp;rsquo;ll show languages that don&amp;rsquo;t have &lt;code&gt;toString&lt;/code&gt; but still easily allow a similar problem.)&lt;/p&gt;
-
-&lt;p&gt;The real problem is that strings are used for &lt;em&gt;multiple&lt;/em&gt; purposes. Some are used just for debugging, showing an internal representation of data. Some are used for &amp;ldquo;human&amp;rdquo; reading. In fact, many languages distinguish between these two purposes: Lisp has &lt;a href=&#34;http://www.lispworks.com/documentation/HyperSpec/Body/f_wr_pr.htm&#34;&gt;&lt;code&gt;write&lt;/code&gt;, &lt;code&gt;prin1&lt;/code&gt;, &lt;code&gt;print&lt;/code&gt;, &lt;code&gt;pprint&lt;/code&gt;&lt;/a&gt;; Scheme has &lt;a href=&#34;http://www.scheme.com/tspl3/io.html&#34;&gt;&lt;code&gt;write&lt;/code&gt; and &lt;code&gt;display&lt;/code&gt;&lt;/a&gt;; Ruby has &lt;a href=&#34;http://ruby-doc.org/core-2.0.0/Object.html&#34;&gt;&lt;code&gt;to_s&lt;/code&gt; and &lt;code&gt;to_str&lt;/code&gt;&lt;/a&gt;; Python has &lt;a href=&#34;http://docs.python.org/2/library/functions.html&#34;&gt;&lt;code&gt;repr&lt;/code&gt; and &lt;code&gt;str&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;One is often directed to override the &amp;ldquo;human-oriented&amp;rdquo; version of these mechanisms (implementing one&amp;rsquo;s own special non-default format). In Java and Scala, that&amp;rsquo;s &lt;code&gt;toString&lt;/code&gt;. But this is precisely the problem. We are &lt;em&gt;encouraged&lt;/em&gt; to abuse this built-in mechanism for getting a string from an object that is supposed to mean something in the &lt;em&gt;context of an application&lt;/em&gt;. Yes, &lt;code&gt;Some(Id(42))&lt;/code&gt; is a useful human-readable string, but it&amp;rsquo;s not what I want to put into a URL for an ID parameter!&lt;/p&gt;
-
-&lt;h4 id=&#34;different-names-for-different-contexts:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;Different names for different contexts&lt;/h4&gt;
-
-&lt;p&gt;Suppose you had a &lt;code&gt;Name&lt;/code&gt; class, and it had fields such as &lt;code&gt;first&lt;/code&gt; and &lt;code&gt;middle&lt;/code&gt; and &lt;code&gt;last&lt;/code&gt;. It&amp;rsquo;s nonsensical to expect a single &lt;code&gt;toString&lt;/code&gt; override to express all the different contexts in which you might want to get a single string from a full name. Sometimes you might want to generate &lt;code&gt;Franklin Chen&lt;/code&gt;; other times, &lt;code&gt;Franklin Ming Chen&lt;/code&gt;; other times, &lt;code&gt;Franklin M. Chen&lt;/code&gt;; other times, &lt;code&gt;FMC&lt;/code&gt;. The point is that there should really be a method for each of these. &lt;code&gt;toString&lt;/code&gt; should be treated really as a debugging device.&lt;/p&gt;
-
-&lt;p&gt;Instead of piggybacking on &lt;code&gt;toString&lt;/code&gt;, we should call a spade a spade, and define our own methods whose name is actually informative and tells us for what &lt;em&gt;purpose&lt;/em&gt; we are asking for a string.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s refactor the code:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Special method for turning to URL string fragment&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return Some(ID of user) if found, else None&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;name &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(42))&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Simulate making the Web request. */&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;url&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;url&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; main&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; findId&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
-    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;Now the code that was creating a junk URL will no longer compile: &lt;code&gt;id&lt;/code&gt; is of type &lt;code&gt;Option[Id]&lt;/code&gt; but that type does &lt;em&gt;not&lt;/em&gt; have a &lt;code&gt;toUrlString&lt;/code&gt; method. Mission accomplished!&lt;/p&gt;
-
-&lt;p&gt;To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
-    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
-
-    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;No id found!&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;Simple!&lt;/p&gt;
-
-&lt;h2 id=&#34;the-final-string-gotcha-to-be-discussed-later:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;The final string gotcha (to be discussed later)&lt;/h2&gt;
-
-&lt;p&gt;You may have noticed that there is still primitive obsession in this sample code: URLs are presented as &lt;code&gt;String&lt;/code&gt; for simplicity. In real life, I use builders such as &lt;code&gt;URIBuilder&lt;/code&gt; and &lt;code&gt;HttpGet&lt;/code&gt; (Java &lt;a href=&#34;http://hc.apache.org/&#34;&gt;Apache HttpComponents&lt;/a&gt;) or more sophisticated Scala-specific libraries.&lt;/p&gt;
-
-&lt;p&gt;However, at some point, data has to be turned into strings: this simply is how the Web works. It is at that point where one has to watch out. I will discuss that boundary in another post. String injection attacks are precisely a result of being sloppy about crossing that boundary.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:45b0a6938d55f3a5abad0effaee4e741&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I gave a small taste of what the &lt;code&gt;toString&lt;/code&gt; problem is about, and some initial steps toward solving it through better design even if the programming language encourages us to be sloppy.&lt;/p&gt;
-
-&lt;p&gt;In part 2 of this series, I will expand on different design choices even in the situation we just examined, especially in the face of continued evolution in which there are multiple domain classes to be turned into strings.&lt;/p&gt;
-
-&lt;p&gt;Finally, there actually are quite a few languages that don&amp;rsquo;t have this particular &lt;code&gt;toString&lt;/code&gt; problem, but some have analogues to a lesser degree. Part 3 of this series will discuss the different design choices in the languages or in the standard libraries or idioms. Examples will be drawn from C, C++, Haskell, Go, Standard ML, OCaml, Rust, and JavaScript.&lt;/p&gt;
 </description>
     </item>
     
