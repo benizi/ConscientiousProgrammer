@@ -6,8 +6,93 @@
     <description>Recent content on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 31 May 2015 12:26:32 -0400</lastBuildDate>
+    <lastBuildDate>Tue, 16 Jun 2015 21:37:39 -0400</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Aegis and Cook: what happens when an open source developer dies?</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/</link>
+      <pubDate>Tue, 16 Jun 2015 21:37:39 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/</guid>
+      <description>
+
+&lt;p&gt;By sheer accident, while I was looking for something else online, I
+came across a Web site for &lt;a href=&#34;http://aegis.sourceforge.net/&#34;&gt;Aegis&lt;/a&gt;, a
+distributed version control system I used at work back in 1995-1997. I
+was surprised this software was still alive after twenty years. A lot
+of software has a very short life span, and since I had not heard
+anything about Aegis all this time, I would have guessed that it had
+died.&lt;/p&gt;
+
+&lt;p&gt;I remembered that we had used this software along with another tool
+the author developed, called
+&lt;a href=&#34;https://ftp.gnu.org/non-gnu/cook.README&#34;&gt;Cook&lt;/a&gt;, which was a
+replacement for
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Make_%28software%29&#34;&gt;Make&lt;/a&gt;. I was
+unsuccessful in locating any official Web site for Cook, so I assume
+it is more or less dead.&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, I found by coincidence that actually, the author,
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Peter_Miller_%28software_engineer%29&#34;&gt;Peter Miller&lt;/a&gt;,
+died less than a year ago (July 2014). There was enough memory of him
+that someone wrote that Wikipedia page on his contributions to open
+source software. However, his Web site &lt;code&gt;http://www.canb.auug.org.au/~millerp/
+&lt;/code&gt;, sadly, has died with him, and with that, the site he had on Cook.&lt;/p&gt;
+
+&lt;p&gt;But we know that the Web is &amp;ldquo;forever&amp;rdquo;, right? Let&amp;rsquo;s see.&lt;/p&gt;
+
+&lt;p&gt;I found this old photo, for example.&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://web.archive.org/web/20090111230031/http://miller.emu.id.au/pmiller/pmiller-1993-128.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Peter Miller, 1993&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;wayback-machine:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;Wayback Machine&lt;/h2&gt;
+
+&lt;p&gt;Basically, I checked the Wayback Machine, and it has some snapshots of
+&lt;a href=&#34;http://web.archive.org/web/*/http://www.canb.auug.org.au/~millerp/&#34;&gt;his site&lt;/a&gt;. The
+last working snapshot was
+&lt;a href=&#34;http://web.archive.org/web/20090111230031/http://miller.emu.id.au/pmiller/&#34;&gt;from 2009&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here is his old
+&lt;a href=&#34;http://web.archive.org/web/20090327074944/http://miller.emu.id.au/pmiller/software/&#34;&gt;software page&lt;/a&gt;. Yes,
+it includes a link to a Cook site, but it leads to a nonexistent
+snapshot.&lt;/p&gt;
+
+&lt;p&gt;I stopped because I am not that interested in reliving the early
+history of Cook. I never met the guy, although I believe I exchanged
+email with him when it was just his personal project and he was &amp;ldquo;tech
+support&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;I wonder how historians fifty years from now will be working. So much
+is no longer on paper, but stored in random archives on hard drives
+somewhere.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Software dies, people die. It was just weird for me to accidentally do
+a bit of sleuthing to find more information about someone whose
+software I once used a lot.&lt;/p&gt;
+
+&lt;p&gt;I haven&amp;rsquo;t made a &amp;ldquo;will&amp;rdquo; for my code. I suppose I should have a plan in
+place for whatever I value.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Do you have a plan for your Web site or code or writings? Or do you
+  expect them to disappear? How do you feel about leaving something
+  behind?&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Why I switched from Octopress 2 to Hugo</title>
@@ -1006,6 +1091,103 @@ whatever, input -&amp;gt; whatever
     </item>
     
     <item>
+      <title>Why programming puzzlers make me sad</title>
+      <link>http://conscientiousprogrammer.com/blog/2014/07/17/why-programming-puzzlers-make-me-sad/</link>
+      <pubDate>Thu, 17 Jul 2014 23:01:52 +0000</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2014/07/17/why-programming-puzzlers-make-me-sad/</guid>
+      <description>
+
+&lt;p&gt;I recently saw a
+&lt;a href=&#34;http://blog.plover.com/2014/07/17/&#34;&gt;&amp;ldquo;guess what this does&amp;rdquo; article&lt;/a&gt;
+on a blog I follow, and this post presents mysterious Perl code for
+which the reader is asked to guess what it does:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;perl -le &#39;print(two + two == five ? &amp;quot;true&amp;quot; : &amp;quot;false&amp;quot;)&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I looked at it briefly, got a headache, and didn&amp;rsquo;t even want to solve
+it. This despite using Perl as one of my main programming languages
+from 1993-2010 and considering myself fairly proficient at Perl.&lt;/p&gt;
+
+&lt;p&gt;Programming puzzlers just in general make me sad.&lt;/p&gt;
+
+&lt;h2 id=&#34;i-know-every-programming-language-has-quirks:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;I know every programming language has quirks&lt;/h2&gt;
+
+&lt;p&gt;It is a human reality, given human imperfection, that the languages we
+invent have quirks of some kind. You might expect that, unlike natural
+languages like English and Chinese, which have the burden of no
+centralized design and hundreds or thousands of year of history and
+random evolution, computer languages would be designed up front to
+avoid ambiguity and just plain confusion. But the human desire to make
+some things &amp;ldquo;easy&amp;rdquo; through clever defaults or implicit assumptions
+always results in an invented computer language that has
+irregularities or unexpected behavior somewhere.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-strange-love-of-puzzlers:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;The strange love of puzzlers&lt;/h2&gt;
+
+&lt;p&gt;Still, it makes me sad when I see &amp;ldquo;puzzlers&amp;rdquo;, and especially how they
+are used. For some reason, in some circles, it is considered a sign of
+intelligence or competence to be able to decode strange
+puzzlers. Many academic homework assignments and exams tend to focus
+on weird puzzlers as a way of supposedly testing proficiency in
+programming. Java certification exams and job interview questions
+often throw in puzzlers. I deplore this situation.&lt;/p&gt;
+
+&lt;p&gt;I understand that in specialized circumstances, you would want to
+value someone who was really good at puzzlers: someone who could write
+a conforming compiler for a language, diagnose strange bugs, etc. But
+that is not what most of us do or need to do. And too many puzzlers
+makes non-programmers wince and stay away from a field they consider
+to be pointlessly capricious.&lt;/p&gt;
+
+&lt;h2 id=&#34;when-to-understand-puzzlers:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;When to understand puzzlers&lt;/h2&gt;
+
+&lt;p&gt;The exception I make is when a &amp;ldquo;puzzler&amp;rdquo; is not actually rare code,
+but typical code that has some kind of mistake. Some languages have
+more of these puzzlers that are actually critical to understand in
+order to be functional at working with code in them. For example,
+almost all normally used features of C could be considered puzzlers!&lt;/p&gt;
+
+&lt;h2 id=&#34;languages-with-puzzler-books:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;Languages with &amp;ldquo;puzzler&amp;rdquo; books&lt;/h2&gt;
+
+&lt;p&gt;Many languages have spawned &amp;ldquo;puzzler&amp;rdquo; books or sites. You can look
+them up for yourself if you are curious about puzzlers in your
+favorite languages. I won&amp;rsquo;t list any here because I wouldn&amp;rsquo;t know
+where to stop. I didn&amp;rsquo;t mean to pick on Perl, of course, when writing
+this article.&lt;/p&gt;
+
+&lt;h2 id=&#34;an-idea-how-about-learning-from-all-the-puzzlers:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;An idea: how about learning from all the puzzlers?&lt;/h2&gt;
+
+&lt;p&gt;I have an idea: how about pooling together all the puzzlers in all the
+languages that currently exist, classifying the language misfeatures
+that resulted in those puzzlers, and coming up with a plan to&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;teach the puzzlers in a systematic polyglot way&lt;/li&gt;
+&lt;li&gt;fix as many of these puzzlers as possible in the languages (I expect
+this to be very difficult because of compatibility needs)&lt;/li&gt;
+&lt;li&gt;write up a guide to what &lt;em&gt;not&lt;/em&gt; to do in future &lt;em&gt;new&lt;/em&gt; languages&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Do you think there would be value in mining existing puzzlers for
+  the purpose of a systematic resource for learning about programming
+  language design?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I don&amp;rsquo;t like programming puzzlers. They are supposed to be funny, and
+maybe sometimes they are, but often they are abused for status and
+mistaken as an accurate gauge of competence.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;How do you feel about puzzlers? Do you use them for assessing your
+  own or others&amp;rsquo; knowledge? Do you solve them for entertainment? Do
+  you think minimizing the existence of puzzlers should be a criterion
+  for design of any new programming languages?&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Pittsburgh Scala Meetup: Exploring type-directed, test-driven development using FizzBuzz (my practice talk)</title>
       <link>http://conscientiousprogrammer.com/blog/2014/05/15/pittsburgh-scala-meetup-exploring-type-directed/</link>
       <pubDate>Thu, 15 May 2014 22:49:48 -0400</pubDate>
@@ -1242,240 +1424,6 @@ whatever, input -&amp;gt; whatever
 &lt;h2 id=&#34;conclusion:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;I learned quite a lot from this course. It is a very practical course on &amp;ldquo;reactive&amp;rdquo; programming. I felt after completing this course that I was ready to use the concepts and technologies covered in real problems. I am grateful to the instructors (who were active on the forums, by the way) for sharing their theoretical and practical knowledge as a free Coursera course.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>toString considered harmful, part 3</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3/</link>
-      <pubDate>Fri, 27 Dec 2013 22:03:00 +0000</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2013/12/27/tostring-considered-harmful-part-3/</guid>
-      <description>
-
-&lt;p&gt;This is part 3 of a series of articles, &amp;ldquo;&lt;code&gt;toString&lt;/code&gt; considered harmful&amp;rdquo;.&lt;/p&gt;
-
-&lt;h2 id=&#34;languages-without-the-tostring-problem:577835a8e5105f4d9899060da7f84be0&#34;&gt;Languages without the &lt;code&gt;toString&lt;/code&gt; problem&lt;/h2&gt;
-
-&lt;p&gt;There actually are quite a few languages that don&amp;rsquo;t have the &lt;code&gt;toString&lt;/code&gt; problem, or at least have it to a lesser degree.&lt;/p&gt;
-
-&lt;h3 id=&#34;c:577835a8e5105f4d9899060da7f84be0&#34;&gt;C&lt;/h3&gt;
-
-&lt;p&gt;There is no friendly generic conversion to a string (uh, really just a pointer to a null-terminated chunk of &lt;code&gt;char&lt;/code&gt;) in C. The closest thing is using the type-unsafe &lt;code&gt;printf&lt;/code&gt; family of functions, but you have to do almost all the work if you have some complicated &lt;code&gt;struct&lt;/code&gt; and want to turn it into a C string.&lt;/p&gt;
-
-&lt;h3 id=&#34;c-1:577835a8e5105f4d9899060da7f84be0&#34;&gt;C++&lt;/h3&gt;
-
-&lt;p&gt;C++ introduced iostreams, where f you follow certain conventions and overload &lt;code&gt;operator&amp;lt;&amp;lt;&lt;/code&gt; for every domain class of interest, you can build up decent looking strings, without using inheritance.&lt;/p&gt;
-
-&lt;p&gt;Or you could do the object-oriented thing and set up a hierarchy with a &lt;code&gt;ToString&lt;/code&gt; abstract base class. But C++ does not come with everything already inheriting from an &lt;code&gt;Object&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;haskell:577835a8e5105f4d9899060da7f84be0&#34;&gt;Haskell&lt;/h3&gt;
-
-&lt;p&gt;Haskell does not force a &lt;code&gt;toString&lt;/code&gt; on everything, but provides a &lt;a href=&#34;http://www.haskell.org/tutorial/stdclasses.html&#34;&gt;&lt;code&gt;Show&lt;/code&gt; type class&lt;/a&gt; for convenience in the standard prelude. It is easy (and convenient for debugging) to just tack on &lt;code&gt;deriving Show&lt;/code&gt; and then call &lt;code&gt;show&lt;/code&gt; to convert stuff to a string. This means that one can get lazy and fall into the same design traps as mentioned in the very first code example above. Again, the solution is to refuse to abuse &lt;code&gt;show&lt;/code&gt;, and to use a different name instead for converting something to a string for a particular purpose.&lt;/p&gt;
-
-&lt;h3 id=&#34;go:577835a8e5105f4d9899060da7f84be0&#34;&gt;Go&lt;/h3&gt;
-
-&lt;p&gt;Go was invented at Google as a modernized C. It does not have classes, but does have &lt;a href=&#34;http://research.swtch.com/interfaces&#34;&gt;dynamic interfaces&lt;/a&gt;. All that is required for a user-defined type to satisfy an interface is to implement the method &lt;code&gt;String()&lt;/code&gt; returning a &lt;code&gt;string&lt;/code&gt;. Basically, this makes the type implement the interface &lt;a href=&#34;http://golang.org/pkg/fmt/#Stringer&#34;&gt;fmt.Stringer&lt;/a&gt;. Again, if you don&amp;rsquo;t implement &lt;code&gt;String() string&lt;/code&gt; for your type, then you will get a compile-time error when trying to treat it as a string.&lt;/p&gt;
-
-&lt;p&gt;Superficially, this sounds like Haskell type classes, but it&amp;rsquo;s much more limited, because Go does not have generics and Go is only single dispatch. Go&amp;rsquo;s interfaces really implement a kind of structural subtyping.&lt;/p&gt;
-
-&lt;h3 id=&#34;standard-ml:577835a8e5105f4d9899060da7f84be0&#34;&gt;Standard ML&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.standardml.org/&#34;&gt;Standard ML&lt;/a&gt; does not have the &lt;code&gt;toString&lt;/code&gt; problem. It does, by convention, supply a &lt;code&gt;toString&lt;/code&gt; function in many modules in the &lt;a href=&#34;http://www.standardml.org/Basis/&#34;&gt;Standard ML Basis Library&lt;/a&gt;, such as &lt;a href=&#34;http://www.standardml.org/Basis/integer.html&#34;&gt;Int&lt;/a&gt; and &lt;a href=&#34;http://www.standardml.org/Basis/real.html&#34;&gt;Real&lt;/a&gt; and &lt;a href=&#34;http://www.standardml.org/Basis/bool.html&#34;&gt;Bool&lt;/a&gt;, but these are just conventions and do not participate in any kind of unified conversion to string. If you want to convert anything besides a primitive type to a string, you have to write the conversion function yourself.&lt;/p&gt;
-
-&lt;p&gt;Furthermore, Standard ML, as a rather opinionated and &lt;a href=&#34;http://mitpress.mit.edu/books/definition-standard-ml&#34;&gt;&amp;ldquo;purist&amp;rdquo; language&lt;/a&gt;, designed specifically for static simplicity, semantic minimalism, and &lt;a href=&#34;http://mlton.org/&#34;&gt;runtime efficiency&lt;/a&gt;, does not believe in type classes, so there is no way to write a function that at runtime is generic over what can be turned into a string.&lt;/p&gt;
-
-&lt;p&gt;The best you can do is write something that is functorized, but then you have to apply it in a statically known context:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;signature&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;TO_STRING&lt;/span&gt; =
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;sig&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;t&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;toString&lt;/span&gt; : t -&amp;gt; string
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;functor&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoStuff&lt;/span&gt;(ToString : TO_STRING) =
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;doubleString&lt;/span&gt; (stuff: &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;ToString&lt;/span&gt;.t) =
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;
-        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;s&lt;/span&gt; = &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;ToString&lt;/span&gt;.toString stuff
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;in&lt;/span&gt;
-        s ^ s
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;structure&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;MyStuff&lt;/span&gt; : TO_STRING =
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;t&lt;/span&gt; = int * bool
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;toString&lt;/span&gt; (i, b) =
-      &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;(&amp;quot;&lt;/span&gt; ^ &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;.toString i ^ &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;, &amp;quot;&lt;/span&gt; ^ &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Bool&lt;/span&gt;.toString b ^ &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;)&amp;quot;&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;structure&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoMyStuff&lt;/span&gt; = DoStuff(MyStuff)
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;with&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoMyStuff&lt;/span&gt;.doubleString (&lt;span style=&#34;color: #666666&#34;&gt;42&lt;/span&gt;, true)
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;(* result is the string &amp;quot;(42, true)(42, true)&amp;quot; *)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;Since the Standard ML ecosystem is so minimalist, it&amp;rsquo;s hard to fall into the &lt;code&gt;toString&lt;/code&gt; trap, because you would have to set it all up yourself.&lt;/p&gt;
-
-&lt;h3 id=&#34;ocaml:577835a8e5105f4d9899060da7f84be0&#34;&gt;OCaml&lt;/h3&gt;
-
-&lt;p&gt;OCaml, like Standard ML, does not provide a generic &lt;code&gt;toString&lt;/code&gt; out of the box, but the OCaml ecosystem is much more practically oriented.&lt;/p&gt;
-
-&lt;p&gt;There is a &lt;a href=&#34;http://en.wikipedia.org/wiki/Camlp4&#34;&gt;pre-processor for OCaml&lt;/a&gt; that can be used to generate convenient printers for types, &lt;a href=&#34;https://github.com/ocsigen/deriving&#34;&gt;&lt;code&gt;deriving&lt;/code&gt;&lt;/a&gt;. There is also an S-expression based generator, &lt;a href=&#34;http://realworldocaml.org/v1/en/html/data-serialization-with-s-expressions.html&#34;&gt;Sexplib&lt;/a&gt;. But these are mechanically generated, rather than part of something generic at runtime.&lt;/p&gt;
-
-&lt;p&gt;Of course, one could also use the &lt;a href=&#34;http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html&#34;&gt;object-oriented part of OCaml&lt;/a&gt; to make a generic &amp;ldquo;to string&amp;rdquo; hierarchy starting with a suitable interface:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; convert_to_string &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;method&lt;/span&gt; to_string &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;But I don&amp;rsquo;t actually know many people who use the object-oriented features of OCaml!&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:577835a8e5105f4d9899060da7f84be0&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;An annoying bug I temporarily created in my code led me to take stock of the state of &lt;code&gt;toString&lt;/code&gt; design choices in various programming languages, and also consider how we can better escape fragility in our code, independent of whatever language we are using.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>toString considered harmful, part 2</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/</link>
-      <pubDate>Thu, 26 Dec 2013 22:03:00 +0000</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2013/12/26/tostring-considered-harmful-part-2/</guid>
-      <description>
-
-&lt;p&gt;This is part 2 of a series of articles, &amp;ldquo;&lt;code&gt;toString&lt;/code&gt; considered harmful&amp;rdquo;. [Part 1] introduced the problem in the context of a common design flaw present in object-oriented languages, and proposed a simple workaround.&lt;/p&gt;
-
-&lt;p&gt;In part 2, we look at advanced ways to organize &amp;ldquo;stringable&amp;rdquo; data, using either an object-oriented or functional style. Examples are in Scala because it equally supports either style.&lt;/p&gt;
-
-&lt;h2 id=&#34;object-oriented-vs-functional:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;Object-oriented vs. functional&lt;/h2&gt;
-
-&lt;p&gt;The fix presented was in &lt;em&gt;object-oriented&lt;/em&gt; style, adding a method &lt;code&gt;toUrlString&lt;/code&gt; to a class. The other solution is the &lt;em&gt;functional&lt;/em&gt; style, leaving the &lt;code&gt;Id&lt;/code&gt; class alone, and writing an external function instead:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;with&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;No id found!&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)))&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;There are advantages and disadvantages to either solution.&lt;/p&gt;
-
-&lt;h2 id=&#34;more-advanced-oo:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;More advanced OO&lt;/h2&gt;
-
-&lt;p&gt;It would be very natural, given a whole set of domain classes in addition to &lt;code&gt;Id&lt;/code&gt;, to want all of them to have a &lt;code&gt;toUrlString&lt;/code&gt;. Then the natural thing to do is to create a mini-universe (parallel to the &lt;code&gt;toString&lt;/code&gt; universe) by creating a hierarchy:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;trait&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;border: 1px solid #FF0000&#34;&gt;...&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(...)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;h2 id=&#34;advanced-string-interpolation-with-oo:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;Advanced string interpolation with OO&lt;/h2&gt;
-
-&lt;p&gt;In fact, Scala and other languages with advanced string interpolation facilities allow yet another refactoring by making sure that what gets into a URL isn&amp;rsquo;t just an arbitrary string in the first place!&lt;/p&gt;
-
-&lt;p&gt;Below we define a string interpolator that only operates on objects of classes that implement the trait &lt;code&gt;UrlString&lt;/code&gt;, and therefore does away with an explicit call to &lt;code&gt;toUrlString&lt;/code&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;implicit&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlHelper&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; sc&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;StringContext&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;AnyVal&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; url&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString*&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; strings &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; sc&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parts&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; expressions &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; buf &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;StringBuffer&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;hasNext&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-        buf append expressions&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toUrlString
-        buf append strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next
-      &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-      buf&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use UrlString to create a URL. */&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; url&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;http://service.com?id=$id&amp;quot;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;with&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;No id found!&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;This may or may not be overengineering.&lt;/p&gt;
-
-&lt;h2 id=&#34;advanced-string-interpolation-with-fp:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;Advanced string interpolation with FP&lt;/h2&gt;
-
-&lt;p&gt;The functional approach doesn&amp;rsquo;t like inheritance in the domain classes. We can implement it with &lt;a href=&#34;http://en.wikipedia.org/wiki/Type_class&#34;&gt;type classes&lt;/a&gt; (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement &lt;code&gt;toUrlString&lt;/code&gt; outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does &lt;em&gt;not&lt;/em&gt; depend on an inheritance hierarchy. If you&amp;rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// A type class&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;trait&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;a&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Implement the type class UrlString for Id&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;implicit&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;IdToUrlString&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;a&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; a&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;implicit&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlHelper&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; sc&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;StringContext&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;AnyVal&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; url&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;](&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;A*&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; strings &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; sc&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parts&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; expressions &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; buf &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;StringBuffer&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;hasNext&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
-        buf append implicitly&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]].&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;expressions&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
-        buf append strings&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;next
-      &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-      buf&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
-    &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-  &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
-
-  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Anything &amp;quot;viewable&amp;quot; as UrlString can be used to create a URL. */&lt;/span&gt;
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;](&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; url&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;http://service.com?id=$id&amp;quot;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;h2 id=&#34;the-final-string-gotcha:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;The final string gotcha&lt;/h2&gt;
-
-&lt;p&gt;You may have noticed that there is still primitive obsession in this sample code: URLs are presented as &lt;code&gt;String&lt;/code&gt; for simplicity. In real life, I use builders such as &lt;code&gt;URIBuilder&lt;/code&gt; and &lt;code&gt;HttpGet&lt;/code&gt; (Java &lt;a href=&#34;http://hc.apache.org/&#34;&gt;Apache HttpComponents&lt;/a&gt;) or more sophisticated Scala-specific libraries such as &lt;a href=&#34;http://spray.io/&#34;&gt;Spray&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I thought it would useful to compare an object-oriented and a functional approach to unifying data that share a domain-consistent notion of conversion to a string. Scala is a language that allows easy expression of both.&lt;/p&gt;
-
-&lt;p&gt;In part 3, we will look at languages that just don&amp;rsquo;t have the &lt;code&gt;toString&lt;/code&gt; problem at all.&lt;/p&gt;
 </description>
     </item>
     

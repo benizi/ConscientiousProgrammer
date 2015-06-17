@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Make on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/make/</link>
+    <description>Recent content in Make on The Conscientious Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Jun 2015 21:37:39 -0400</lastBuildDate>
+    <atom:link href="http://ConscientiousProgrammer.com/categories/make/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Aegis and Cook: what happens when an open source developer dies?</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/</link>
+      <pubDate>Tue, 16 Jun 2015 21:37:39 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/</guid>
+      <description>
+
+&lt;p&gt;By sheer accident, while I was looking for something else online, I
+came across a Web site for &lt;a href=&#34;http://aegis.sourceforge.net/&#34;&gt;Aegis&lt;/a&gt;, a
+distributed version control system I used at work back in 1995-1997. I
+was surprised this software was still alive after twenty years. A lot
+of software has a very short life span, and since I had not heard
+anything about Aegis all this time, I would have guessed that it had
+died.&lt;/p&gt;
+
+&lt;p&gt;I remembered that we had used this software along with another tool
+the author developed, called
+&lt;a href=&#34;https://ftp.gnu.org/non-gnu/cook.README&#34;&gt;Cook&lt;/a&gt;, which was a
+replacement for
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Make_%28software%29&#34;&gt;Make&lt;/a&gt;. I was
+unsuccessful in locating any official Web site for Cook, so I assume
+it is more or less dead.&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, I found by coincidence that actually, the author,
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Peter_Miller_%28software_engineer%29&#34;&gt;Peter Miller&lt;/a&gt;,
+died less than a year ago (July 2014). There was enough memory of him
+that someone wrote that Wikipedia page on his contributions to open
+source software. However, his Web site &lt;code&gt;http://www.canb.auug.org.au/~millerp/
+&lt;/code&gt;, sadly, has died with him, and with that, the site he had on Cook.&lt;/p&gt;
+
+&lt;p&gt;But we know that the Web is &amp;ldquo;forever&amp;rdquo;, right? Let&amp;rsquo;s see.&lt;/p&gt;
+
+&lt;p&gt;I found this old photo, for example.&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://web.archive.org/web/20090111230031/http://miller.emu.id.au/pmiller/pmiller-1993-128.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Peter Miller, 1993&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;wayback-machine:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;Wayback Machine&lt;/h2&gt;
+
+&lt;p&gt;Basically, I checked the Wayback Machine, and it has some snapshots of
+&lt;a href=&#34;http://web.archive.org/web/*/http://www.canb.auug.org.au/~millerp/&#34;&gt;his site&lt;/a&gt;. The
+last working snapshot was
+&lt;a href=&#34;http://web.archive.org/web/20090111230031/http://miller.emu.id.au/pmiller/&#34;&gt;from 2009&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here is his old
+&lt;a href=&#34;http://web.archive.org/web/20090327074944/http://miller.emu.id.au/pmiller/software/&#34;&gt;software page&lt;/a&gt;. Yes,
+it includes a link to a Cook site, but it leads to a nonexistent
+snapshot.&lt;/p&gt;
+
+&lt;p&gt;I stopped because I am not that interested in reliving the early
+history of Cook. I never met the guy, although I believe I exchanged
+email with him when it was just his personal project and he was &amp;ldquo;tech
+support&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;I wonder how historians fifty years from now will be working. So much
+is no longer on paper, but stored in random archives on hard drives
+somewhere.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Software dies, people die. It was just weird for me to accidentally do
+a bit of sleuthing to find more information about someone whose
+software I once used a lot.&lt;/p&gt;
+
+&lt;p&gt;I haven&amp;rsquo;t made a &amp;ldquo;will&amp;rdquo; for my code. I suppose I should have a plan in
+place for whatever I value.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Do you have a plan for your Web site or code or writings? Or do you
+  expect them to disappear? How do you feel about leaving something
+  behind?&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
