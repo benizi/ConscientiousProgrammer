@@ -5,6 +5,9 @@ categories:
 - Peter Miller
 - version control
 - Make
+- bors
+- Rust
+- continuous integration
 comments: true
 date: 2015-06-16T21:37:39-04:00
 layout: post
@@ -77,3 +80,13 @@ place for whatever I value.
 **Do you have a plan for your Web site or code or writings? Or do you
   expect them to disappear? How do you feel about leaving something
   behind?**
+
+### (Update of 2015-06-29)
+
+By accident, while reading an old blog post by Graydon Hoare about
+[bors](https://github.com/graydon/bors), which is used for continuous
+integration for the Rust project, I noticed his
+[shoutout to Peter Miller for Aegis](http://graydon2.dreamwidth.org/1597.html). It's
+great that Peter Miller's work inspired others to build systems that
+are used today. One random person's ideas and software made a lasting
+difference in the world!
