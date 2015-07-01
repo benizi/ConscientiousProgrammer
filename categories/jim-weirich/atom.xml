@@ -173,15 +173,15 @@
 
 &lt;p&gt;Finally, I love the new natural assertions, the ability to write stuff like&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #880000&#34;&gt;Then&lt;/span&gt; { stack&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;top &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;:second_item&lt;/span&gt; }
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #880000&#34;&gt;Then&lt;/span&gt; { stack&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;top &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;:second_item&lt;/span&gt; }
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;instead of&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #880000&#34;&gt;Then&lt;/span&gt; { expect(stack&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;top)&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;to eq(&lt;span style=&#34;color: #19177C&#34;&gt;:second_item&lt;/span&gt;) }
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #880000&#34;&gt;Then&lt;/span&gt; { expect(stack&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;top)&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;to eq(&lt;span style=&#34;color: #19177C&#34;&gt;:second_item&lt;/span&gt;) }
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;while &lt;code&gt;RSpec&lt;/code&gt; automatically generates useful messages on failure.&lt;/p&gt;
 

@@ -6,8 +6,103 @@
     <description>Recent content in Continuous Integration on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 26 Aug 2013 22:09:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 16 Jun 2015 21:37:39 -0400</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/categories/continuous-integration/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Aegis and Cook: what happens when an open source developer dies?</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/</link>
+      <pubDate>Tue, 16 Jun 2015 21:37:39 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/</guid>
+      <description>
+
+&lt;p&gt;By sheer accident, while I was looking for something else online, I
+came across a Web site for &lt;a href=&#34;http://aegis.sourceforge.net/&#34;&gt;Aegis&lt;/a&gt;, a
+distributed version control system I used at work back in 1995-1997. I
+was surprised this software was still alive after twenty years. A lot
+of software has a very short life span, and since I had not heard
+anything about Aegis all this time, I would have guessed that it had
+died.&lt;/p&gt;
+
+&lt;p&gt;I remembered that we had used this software along with another tool
+the author developed, called
+&lt;a href=&#34;https://ftp.gnu.org/non-gnu/cook.README&#34;&gt;Cook&lt;/a&gt;, which was a
+replacement for
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Make_%28software%29&#34;&gt;Make&lt;/a&gt;. I was
+unsuccessful in locating any official Web site for Cook, so I assume
+it is more or less dead.&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, I found by coincidence that actually, the author,
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Peter_Miller_%28software_engineer%29&#34;&gt;Peter Miller&lt;/a&gt;,
+died less than a year ago (July 2014). There was enough memory of him
+that someone wrote that Wikipedia page on his contributions to open
+source software. However, his Web site &lt;code&gt;http://www.canb.auug.org.au/~millerp/
+&lt;/code&gt;, sadly, has died with him, and with that, the site he had on Cook.&lt;/p&gt;
+
+&lt;p&gt;But we know that the Web is &amp;ldquo;forever&amp;rdquo;, right? Let&amp;rsquo;s see.&lt;/p&gt;
+
+&lt;p&gt;I found this old photo, for example.&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://web.archive.org/web/20090111230031/http://miller.emu.id.au/pmiller/pmiller-1993-128.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Peter Miller, 1993&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;h2 id=&#34;wayback-machine:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;Wayback Machine&lt;/h2&gt;
+
+&lt;p&gt;Basically, I checked the Wayback Machine, and it has some snapshots of
+&lt;a href=&#34;http://web.archive.org/web/*/http://www.canb.auug.org.au/~millerp/&#34;&gt;his site&lt;/a&gt;. The
+last working snapshot was
+&lt;a href=&#34;http://web.archive.org/web/20090111230031/http://miller.emu.id.au/pmiller/&#34;&gt;from 2009&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here is his old
+&lt;a href=&#34;http://web.archive.org/web/20090327074944/http://miller.emu.id.au/pmiller/software/&#34;&gt;software page&lt;/a&gt;. Yes,
+it includes a link to a Cook site, but it leads to a nonexistent
+snapshot.&lt;/p&gt;
+
+&lt;p&gt;I stopped because I am not that interested in reliving the early
+history of Cook. I never met the guy, although I believe I exchanged
+email with him when it was just his personal project and he was &amp;ldquo;tech
+support&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;I wonder how historians fifty years from now will be working. So much
+is no longer on paper, but stored in random archives on hard drives
+somewhere.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Software dies, people die. It was just weird for me to accidentally do
+a bit of sleuthing to find more information about someone whose
+software I once used a lot.&lt;/p&gt;
+
+&lt;p&gt;I haven&amp;rsquo;t made a &amp;ldquo;will&amp;rdquo; for my code. I suppose I should have a plan in
+place for whatever I value.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Do you have a plan for your Web site or code or writings? Or do you
+  expect them to disappear? How do you feel about leaving something
+  behind?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;update-of-2015-06-29:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;(Update of 2015-06-29)&lt;/h3&gt;
+
+&lt;p&gt;By accident, while reading an old blog post by Graydon Hoare about
+&lt;a href=&#34;https://github.com/graydon/bors&#34;&gt;bors&lt;/a&gt;, which is used for continuous
+integration for the Rust project, I noticed his
+&lt;a href=&#34;http://graydon2.dreamwidth.org/1597.html&#34;&gt;shoutout to Peter Miller for Aegis&lt;/a&gt;. It&amp;rsquo;s
+great that Peter Miller&amp;rsquo;s work inspired others to build systems that
+are used today. One random person&amp;rsquo;s ideas and software made a lasting
+difference in the world!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>OpenHack Pittsburgh: learning Elixir test-driven and package-publishing</title>
@@ -25,7 +120,7 @@
 
 &lt;p&gt;What does that mean?&lt;/p&gt;
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg&#34; /&gt;
@@ -37,7 +132,7 @@
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;how-to-learn-a-programming-language:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;How to learn a programming language&lt;/h2&gt;
 

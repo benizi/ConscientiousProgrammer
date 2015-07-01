@@ -85,9 +85,9 @@
 
 <p>Here&rsquo;s the error message (I have omitted the 46-line stack trace):</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">      Generating... Liquid Exception: undefined method `sub&#39; for nil:NilClass in atom.xml</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">      Generating... Liquid Exception: undefined method `sub&#39; for nil:NilClass in atom.xml</span>
 </pre></div>
-</p>
+
 
 <p>This is, unfortunately, an example of an error message that is next to useless, and should <em>never</em> appear. I have stated that <a href="../../../../../blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/">we as programmers should not generate useless end user error messages</a>, and of course, in context, I am an end user of the blog generating software I use.</p>
 
@@ -99,7 +99,7 @@
 
 <p>The bug is that the code in Jekyll that does syntax highlighting using Pygments makes an assumption that the return value of <code>Pygments.highlight()</code> is never <code>nil</code>:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">              <span style="color: #19177C">@renderer</span> <span style="color: #666666">||=</span> <span style="color: #880000">Class</span><span style="color: #666666">.</span>new(<span style="color: #880000">Redcarpet</span><span style="color: #666666">::</span><span style="color: #880000">Render</span><span style="color: #666666">::</span><span style="color: #880000">HTML</span>) <span style="color: #008000; font-weight: bold">do</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">              <span style="color: #19177C">@renderer</span> <span style="color: #666666">||=</span> <span style="color: #880000">Class</span><span style="color: #666666">.</span>new(<span style="color: #880000">Redcarpet</span><span style="color: #666666">::</span><span style="color: #880000">Render</span><span style="color: #666666">::</span><span style="color: #880000">HTML</span>) <span style="color: #008000; font-weight: bold">do</span>
                 <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">block_code</span>(code, lang)
                   lang <span style="color: #666666">=</span> lang <span style="color: #666666">&amp;&amp;</span> lang<span style="color: #666666">.</span>split<span style="color: #666666">.</span>first <span style="color: #666666">||</span> <span style="color: #BA2121">&quot;text&quot;</span>
                   output <span style="color: #666666">=</span> add_code_tags(
@@ -114,7 +114,7 @@
                 <span style="color: #008000; font-weight: bold">end</span>
               <span style="color: #008000; font-weight: bold">end</span>
 </pre></div>
-</p>
+
 
 <p>Well, it <em>can</em> be <code>nil</code> and was for me, and therefore <code>add_code_tags</code> was calling <code>code.sub()</code> with <code>code</code> being <code>nil</code>.</p>
 
@@ -137,7 +137,7 @@
 
 <p>Unfortunately, the documentation of the Pygments API was incomplete in <code>lib/pygments/popen.rb</code>, where <code>highlight</code> is defined:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    <span style="color: #408080; font-style: italic"># Public: Highlight code.</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    <span style="color: #408080; font-style: italic"># Public: Highlight code.</span>
     <span style="color: #408080; font-style: italic">#</span>
     <span style="color: #408080; font-style: italic"># Takes a first-position argument of the code to be highlighted, and a</span>
     <span style="color: #408080; font-style: italic"># second-position hash of various arguments specifiying highlighting properties.</span>
@@ -158,7 +158,7 @@
       str
     <span style="color: #008000; font-weight: bold">end</span>
 </pre></div>
-</p>
+
 
 <h2 id="a-problem-with-dynamically-typed-language-culture:08c2e7a867293a37060f4f671511a7f1">A problem with dynamically typed language culture</h2>
 
@@ -168,15 +168,15 @@
 
 <p>In code in a statically typed language such as OCaml (or Haskell or Scala), I would expect to see:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">let</span> highlight <span style="color: #666666">(</span>code <span style="color: #666666">:</span> <span style="color: #B00040">string</span><span style="color: #666666">)</span> <span style="color: #666666">(</span>opts <span style="color: #666666">:</span> my_map<span style="color: #666666">)</span> <span style="color: #666666">:</span> <span style="color: #B00040">string</span> <span style="color: #666666">=</span> <span style="color: #666666">//...</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">let</span> highlight <span style="color: #666666">(</span>code <span style="color: #666666">:</span> <span style="color: #B00040">string</span><span style="color: #666666">)</span> <span style="color: #666666">(</span>opts <span style="color: #666666">:</span> my_map<span style="color: #666666">)</span> <span style="color: #666666">:</span> <span style="color: #B00040">string</span> <span style="color: #666666">=</span> <span style="color: #666666">//...</span>
 </pre></div>
-</p>
+
 
 <p>and expect that the return value should be a <code>String</code>, or</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">let</span> highlight <span style="color: #666666">(</span>code <span style="color: #666666">:</span> <span style="color: #B00040">string</span><span style="color: #666666">)</span> <span style="color: #666666">(</span>opts <span style="color: #666666">:</span> my_map<span style="color: #666666">)</span> <span style="color: #666666">:</span> <span style="color: #B00040">string</span> option <span style="color: #666666">=</span> <span style="color: #666666">//...</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">let</span> highlight <span style="color: #666666">(</span>code <span style="color: #666666">:</span> <span style="color: #B00040">string</span><span style="color: #666666">)</span> <span style="color: #666666">(</span>opts <span style="color: #666666">:</span> my_map<span style="color: #666666">)</span> <span style="color: #666666">:</span> <span style="color: #B00040">string</span> option <span style="color: #666666">=</span> <span style="color: #666666">//...</span>
 </pre></div>
-</p>
+
 
 <p>to indicate that the return value could be either <code>Some(formatted_code)</code> or <code>None</code>.</p>
 
@@ -184,11 +184,11 @@
 
 <p>Reading the Ruby code, I saw that the situation is even more complex than I thought:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">      <span style="color: #408080; font-style: italic"># If the caller didn&#39;t give us any code, we have nothing to do,</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">      <span style="color: #408080; font-style: italic"># If the caller didn&#39;t give us any code, we have nothing to do,</span>
       <span style="color: #408080; font-style: italic"># so return right away.</span>
       <span style="color: #008000; font-weight: bold">return</span> code <span style="color: #008000; font-weight: bold">if</span> code<span style="color: #666666">.</span>nil? <span style="color: #666666">||</span> code<span style="color: #666666">.</span>empty?
 </pre></div>
-</p>
+
 
 <p>Wow: <code>code</code> can be <code>nil</code>, in which case <code>nil</code> is returned.</p>
 
@@ -200,7 +200,7 @@
 
 <p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    <span style="color: #408080; font-style: italic"># Our &#39;rpc&#39;-ish request to mentos. Requires a method name, and then optional</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    <span style="color: #408080; font-style: italic"># Our &#39;rpc&#39;-ish request to mentos. Requires a method name, and then optional</span>
     <span style="color: #408080; font-style: italic"># args, kwargs, code.</span>
     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">mentos</span>(<span style="color: #008000">method</span>, args<span style="color: #666666">=[]</span>, kwargs<span style="color: #666666">=</span>{}, original_code<span style="color: #666666">=</span><span style="color: #008000">nil</span>)
       <span style="color: #408080; font-style: italic"># Open the pipe if necessary</span>
@@ -224,7 +224,7 @@
     <span style="color: #008000; font-weight: bold">raise</span> <span style="color: #880000">MentosError</span>, <span style="color: #BA2121">&quot;EPIPE&quot;</span>
     <span style="color: #008000; font-weight: bold">end</span>
 </pre></div>
-</p>
+
 
 <p>It turns out that fundamental problem is not <code>nil</code> so much as <em>non-determinism</em>: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for <code>nil</code> to end up being returned. This non-determinism is worse than <code>nil</code>. I think that in a situation like this, an <em>exception</em> is called for. <code>highlight()</code> should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return <code>nil</code> (or if using a statically typed language, a <code>None</code>).</p>
 
@@ -232,26 +232,26 @@
 
 <p>Amusingly, upon discovering the logging code, I used it, setting the magic environment variable <code>MENTOS_LOG</code> (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">#</span> Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">#</span> Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
 <span style="color: #888888">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.</span>
 <span style="color: #888888">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Out header: {&quot;method&quot;:&quot;highlight&quot;,&quot;args&quot;:null,&quot;kwargs&quot;:{&quot;lexer&quot;:&quot;console&quot;,&quot;options&quot;:{&quot;encoding&quot;:&quot;utf-8&quot;,&quot;outencoding&quot;:&quot;utf-8&quot;},&quot;fd&quot;:10,&quot;id&quot;:&quot;TVQSJNBV&quot;,&quot;bytes&quot;:147}}</span>
 <span style="color: #888888">E, [2013-06-29 10:26 #13799] ERROR -- : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call</span>
 <span style="color: #888888">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.</span>
 <span style="color: #888888">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting</span>
 </pre></div>
-</p>
+
 
 <h2 id="testing:08c2e7a867293a37060f4f671511a7f1">Testing</h2>
 
 <p>It turns out that there <em>is</em> a place where the intended behavior is in a sense documented: the unit tests in <code>test_pygments.rb</code>:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">test_returns_nil_on_timeout</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">test_returns_nil_on_timeout</span>
     large_code <span style="color: #666666">=</span> <span style="color: #880000">REDIS_CODE</span> <span style="color: #666666">*</span> <span style="color: #666666">300</span>
     code <span style="color: #666666">=</span> P<span style="color: #666666">.</span>highlight(large_code) <span style="color: #408080; font-style: italic"># a 30 mb highlight request will timeout</span>
     assert_equal <span style="color: #008000">nil</span>, code
   <span style="color: #008000; font-weight: bold">end</span>
 </pre></div>
-</p>
+
 
 <p>The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be <code>nil</code>!</p>
 
@@ -284,11 +284,11 @@
 <p>I submitted a <code>pygments.rb</code> <a href="https://github.com/tmm1/pygments.rb/pull/132">pull request</a> to fix a regression bug in which any use of
 <code>MENTOS_TIMEOUT</code> caused an instant type error:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&#39;: undefined method `zero?&#39; for &quot;100&quot;:String (NoMethodError)</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&#39;: undefined method `zero?&#39; for &quot;100&quot;:String (NoMethodError)</span>
 <span style="color: #888888">    from /Users/chen/.gem/ruby/2.1.2/gems/pygments.rb-0.6.0/lib/pygments/popen.rb:220:in `mentos&#39;</span>
 <span style="color: #888888">```</span>
 </pre></div>
-</p>
+
 
 <h3 id="update-of-2015-01-28:08c2e7a867293a37060f4f671511a7f1">(Update of 2015-01-28)</h3>
 
@@ -304,11 +304,11 @@ to finally fix a cascade of show-stopping type errors.</p>
 <p>The final diff involved trying to parse a string into an integer and
 catching the exception if any:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #A00000">-        timeout_time = ENV[&quot;MENTOS_TIMEOUT&quot;] || 8</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #A00000">-        timeout_time = ENV[&quot;MENTOS_TIMEOUT&quot;] || 8</span>
 <span style="color: #00A000">+        # Invalid MENTOS_TIMEOUT results in just using default.</span>
 <span style="color: #00A000">+        timeout_time = Integer(ENV[&quot;MENTOS_TIMEOUT&quot;]) rescue 8</span>
 </pre></div>
-</p>
+
 
 <h2 id="conclusion:08c2e7a867293a37060f4f671511a7f1">Conclusion</h2>
 
@@ -331,7 +331,7 @@ catching the exception if any:</p>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
 </div>
-<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script src="http://ConscientiousProgrammer.com/js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
 <script>

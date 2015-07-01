@@ -17,14 +17,14 @@
       <guid>http://conscientiousprogrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/</guid>
       <description>
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://static.squarespace.com/static/538f3cc8e4b00f52172b5560/t/53a4ec76e4b0488fb14c5a29/1403317372203/sign.png?format=500w&#34; /&gt;
     
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;I finally attended my first ever &lt;a href=&#34;http://www.codeandsupply.co/&#34;&gt;Pittsburgh Code and Supply&lt;/a&gt; meeting! The group, which posts its &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/&#34;&gt;events on Meetup&lt;/a&gt;, was created by local Pittsburgh software developer &lt;a href=&#34;https://twitter.com/justinxreese&#34;&gt;Justin Reese&lt;/a&gt; just a few months ago, in March 2014. His vision is to create a local community that, unlike conventional specific language/technology-based meetups, is much more universal and broad. If you haven&amp;rsquo;t do so already, read more about the &lt;a href=&#34;http://www.codeandsupply.co/about&#34;&gt;goals of Pittsburgh Code and Supply&lt;/a&gt;. I&amp;rsquo;m very excited about this new group!&lt;/p&gt;
 
@@ -156,7 +156,7 @@
 
 &lt;p&gt;The best you can do is write something that is functorized, but then you have to apply it in a statically known context:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;signature&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;TO_STRING&lt;/span&gt; =
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;signature&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;TO_STRING&lt;/span&gt; =
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;sig&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;t&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;toString&lt;/span&gt; : t -&amp;gt; string
@@ -181,14 +181,14 @@
 
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;structure&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoMyStuff&lt;/span&gt; = DoStuff(MyStuff)
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;with&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoMyStuff&lt;/span&gt;.doubleString (&lt;span style=&#34;color: #666666&#34;&gt;42&lt;/span&gt;, true)
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoMyStuff&lt;/span&gt;.doubleString (&lt;span style=&#34;color: #666666&#34;&gt;42&lt;/span&gt;, true)
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;(* result is the string &amp;quot;(42, true)(42, true)&amp;quot; *)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Since the Standard ML ecosystem is so minimalist, it&amp;rsquo;s hard to fall into the &lt;code&gt;toString&lt;/code&gt; trap, because you would have to set it all up yourself.&lt;/p&gt;
 
@@ -200,12 +200,12 @@
 
 &lt;p&gt;Of course, one could also use the &lt;a href=&#34;http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html&#34;&gt;object-oriented part of OCaml&lt;/a&gt; to make a generic &amp;ldquo;to string&amp;rdquo; hierarchy starting with a suitable interface:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; convert_to_string &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; convert_to_string &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;method&lt;/span&gt; to_string &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;But I don&amp;rsquo;t actually know many people who use the object-oriented features of OCaml!&lt;/p&gt;
 
@@ -231,20 +231,20 @@
 
 &lt;p&gt;The fix presented was in &lt;em&gt;object-oriented&lt;/em&gt; style, adding a method &lt;code&gt;toUrlString&lt;/code&gt; to a class. The other solution is the &lt;em&gt;functional&lt;/em&gt; style, leaving the &lt;code&gt;Id&lt;/code&gt; class alone, and writing an external function instead:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
 
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;with&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;No id found!&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)))&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;There are advantages and disadvantages to either solution.&lt;/p&gt;
 
@@ -252,7 +252,7 @@
 
 &lt;p&gt;It would be very natural, given a whole set of domain classes in addition to &lt;code&gt;Id&lt;/code&gt;, to want all of them to have a &lt;code&gt;toUrlString&lt;/code&gt;. Then the natural thing to do is to create a mini-universe (parallel to the &lt;code&gt;toString&lt;/code&gt; universe) by creating a hierarchy:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;trait&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;trait&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 
@@ -264,7 +264,7 @@
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;advanced-string-interpolation-with-oo:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;Advanced string interpolation with OO&lt;/h2&gt;
 
@@ -272,7 +272,7 @@
 
 &lt;p&gt;Below we define a string interpolator that only operates on objects of classes that implement the trait &lt;code&gt;UrlString&lt;/code&gt;, and therefore does away with an explicit call to &lt;code&gt;toUrlString&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;implicit&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlHelper&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; sc&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;StringContext&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;AnyVal&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;implicit&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlHelper&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; sc&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;StringContext&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;AnyVal&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; url&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString*&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; strings &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; sc&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parts&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; expressions &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
@@ -288,16 +288,16 @@
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use UrlString to create a URL. */&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; url&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;http://service.com?id=$id&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;with&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;No id found!&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;This may or may not be overengineering.&lt;/p&gt;
 
@@ -305,7 +305,7 @@
 
 &lt;p&gt;The functional approach doesn&amp;rsquo;t like inheritance in the domain classes. We can implement it with &lt;a href=&#34;http://en.wikipedia.org/wiki/Type_class&#34;&gt;type classes&lt;/a&gt; (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement &lt;code&gt;toUrlString&lt;/code&gt; outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does &lt;em&gt;not&lt;/em&gt; depend on an inheritance hierarchy. If you&amp;rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// A type class&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// A type class&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;trait&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;a&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
@@ -334,7 +334,7 @@
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Anything &amp;quot;viewable&amp;quot; as UrlString can be used to create a URL. */&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;](&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; url&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;http://service.com?id=$id&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;the-final-string-gotcha:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;The final string gotcha&lt;/h2&gt;
 
@@ -370,7 +370,7 @@
 
 &lt;p&gt;Here&amp;rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Example&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Example&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
 
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
@@ -396,7 +396,7 @@
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.&lt;/p&gt;
 
@@ -406,7 +406,7 @@
 
 &lt;p&gt;It turned out that finding an ID could fail, so I changed &lt;code&gt;findId&lt;/code&gt; to return the type &lt;code&gt;Option[Id]&lt;/code&gt; instead of &lt;code&gt;Id&lt;/code&gt;. To get the code to compile, I had to change the type of the parameter to &lt;code&gt;makeUrl&lt;/code&gt; also:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return Some(ID of user) if found, else None&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
@@ -420,7 +420,7 @@
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Oops, now this has an unintended bug!&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: &lt;code&gt;http://service.com?id=Some(42)&lt;/code&gt; was being requested.&lt;/p&gt;
 
@@ -456,7 +456,7 @@ You ordered NULL items.
 
 &lt;p&gt;First step in cleaning up the code: make &lt;code&gt;toString&lt;/code&gt; explicit:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
 
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; main&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
@@ -464,7 +464,7 @@ You ordered NULL items.
     getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;(Later in the post, I will discuss alternatives to this explicit &lt;code&gt;toString&lt;/code&gt;.)&lt;/p&gt;
 
@@ -472,15 +472,15 @@ You ordered NULL items.
 
 &lt;p&gt;Another design smell was that of using&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;in the first place. This is a well-known lazy practice called &lt;a href=&#34;http://c2.com/cgi/wiki?PrimitiveObsession&#34;&gt;primitive obsession&lt;/a&gt;. I know better than that.&lt;/p&gt;
 
 &lt;p&gt;The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
 
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
@@ -493,7 +493,7 @@ You ordered NULL items.
       &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(0)&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Note that this still &lt;em&gt;would not&lt;/em&gt; have solved the &lt;code&gt;toString&lt;/code&gt; problem, since the output would simply have been &lt;code&gt;http://service.com?id=Some(Id(42))&lt;/code&gt; or the dreaded &lt;code&gt;http://service.com?id=None&lt;/code&gt;!&lt;/p&gt;
 
@@ -513,7 +513,7 @@ You ordered NULL items.
 
 &lt;p&gt;Let&amp;rsquo;s refactor the code:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Special method for turning to URL string fragment&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
@@ -542,13 +542,13 @@ You ordered NULL items.
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Now the code that was creating a junk URL will no longer compile: &lt;code&gt;id&lt;/code&gt; is of type &lt;code&gt;Option[Id]&lt;/code&gt; but that type does &lt;em&gt;not&lt;/em&gt; have a &lt;code&gt;toUrlString&lt;/code&gt; method. Mission accomplished!&lt;/p&gt;
 
 &lt;p&gt;To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
 
     id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
@@ -556,7 +556,7 @@ You ordered NULL items.
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Simple!&lt;/p&gt;
 
@@ -592,7 +592,7 @@ You ordered NULL items.
 
 &lt;p&gt;What does that mean?&lt;/p&gt;
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg&#34; /&gt;
@@ -604,7 +604,7 @@ You ordered NULL items.
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;how-to-learn-a-programming-language:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;How to learn a programming language&lt;/h2&gt;
 
@@ -850,15 +850,15 @@ You ordered NULL items.
 
 &lt;p&gt;Finally, I love the new natural assertions, the ability to write stuff like&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #880000&#34;&gt;Then&lt;/span&gt; { stack&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;top &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;:second_item&lt;/span&gt; }
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #880000&#34;&gt;Then&lt;/span&gt; { stack&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;top &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;:second_item&lt;/span&gt; }
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;instead of&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #880000&#34;&gt;Then&lt;/span&gt; { expect(stack&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;top)&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;to eq(&lt;span style=&#34;color: #19177C&#34;&gt;:second_item&lt;/span&gt;) }
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #880000&#34;&gt;Then&lt;/span&gt; { expect(stack&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;top)&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;to eq(&lt;span style=&#34;color: #19177C&#34;&gt;:second_item&lt;/span&gt;) }
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;while &lt;code&gt;RSpec&lt;/code&gt; automatically generates useful messages on failure.&lt;/p&gt;
 
@@ -890,7 +890,7 @@ You ordered NULL items.
       <guid>http://conscientiousprogrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/</guid>
       <description>
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg&#34; /&gt;
@@ -902,7 +902,7 @@ You ordered NULL items.
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Because the topic of the featured presentation by &lt;a href=&#34;http://idiotcoder.com/&#34;&gt;Richard Ashkettle&lt;/a&gt; was &lt;a href=&#34;http://en.wikipedia.org/wiki/Functional_programming&#34;&gt;functional programming&lt;/a&gt;, I made sure to attend my first meeting of the newly revived &lt;a href=&#34;http://www.meetup.com/Pittsburgh-JavaScript/&#34;&gt;Pittsburgh JavaScript meetup&lt;/a&gt;. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&amp;rsquo;t been able to make it to the first two.)&lt;/p&gt;
 
@@ -974,7 +974,7 @@ You ordered NULL items.
 
 &lt;p&gt;JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented &amp;ldquo;interference&amp;rdquo; from the conventional class-based object-oriented world, which is mostly based not on functions, but on &lt;a href=&#34;https://en.wikipedia.org/wiki/Method_%28computer_programming%29&#34;&gt;methods&lt;/a&gt; that interference with functions because they are meant to &lt;em&gt;replace&lt;/em&gt; functions (since according to &amp;ldquo;pure&amp;rdquo; object-oriented thinking, functions are evil and computation should involve method calls on objects). &lt;em&gt;JavaScript does not (really) have methods&lt;/em&gt;; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use &lt;a href=&#34;http://emberjs.com&#34;&gt;Ember&lt;/a&gt;, the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of &lt;code&gt;function&lt;/code&gt;s: &lt;code&gt;valueWillChange&lt;/code&gt; and &lt;code&gt;valudDidChange&lt;/code&gt; are just functions. They are not special things, &amp;ldquo;methods&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;App.PersonView &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; Ember.View.extend({
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;App.PersonView &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; Ember.View.extend({
   valueWillChange&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;function&lt;/span&gt; (obj, keyName, value) {
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;this&lt;/span&gt;.changingFrom &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; value;
   }.observesBefore(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;content.value&amp;#39;&lt;/span&gt;),
@@ -987,7 +987,7 @@ You ordered NULL items.
   }.observes(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;content.value&amp;#39;&lt;/span&gt;)
 });
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;examples:4a05566a34ea27820d7f737863a690ea&#34;&gt;Examples&lt;/h3&gt;
 
@@ -1081,9 +1081,9 @@ You ordered NULL items.
 
 &lt;p&gt;Here&amp;rsquo;s the error message (I have omitted the 46-line stack trace):&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;      Generating... Liquid Exception: undefined method `sub&amp;#39; for nil:NilClass in atom.xml&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;      Generating... Liquid Exception: undefined method `sub&amp;#39; for nil:NilClass in atom.xml&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;This is, unfortunately, an example of an error message that is next to useless, and should &lt;em&gt;never&lt;/em&gt; appear. I have stated that &lt;a href=&#34;../../blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/&#34;&gt;we as programmers should not generate useless end user error messages&lt;/a&gt;, and of course, in context, I am an end user of the blog generating software I use.&lt;/p&gt;
 
@@ -1095,7 +1095,7 @@ You ordered NULL items.
 
 &lt;p&gt;The bug is that the code in Jekyll that does syntax highlighting using Pygments makes an assumption that the return value of &lt;code&gt;Pygments.highlight()&lt;/code&gt; is never &lt;code&gt;nil&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;              &lt;span style=&#34;color: #19177C&#34;&gt;@renderer&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;||=&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;Class&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;new(&lt;span style=&#34;color: #880000&#34;&gt;Redcarpet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;Render&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;HTML&lt;/span&gt;) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;              &lt;span style=&#34;color: #19177C&#34;&gt;@renderer&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;||=&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;Class&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;new(&lt;span style=&#34;color: #880000&#34;&gt;Redcarpet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;Render&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;HTML&lt;/span&gt;) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
                 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;block_code&lt;/span&gt;(code, lang)
                   lang &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; lang &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; lang&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;split&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;first &lt;span style=&#34;color: #666666&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;
                   output &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; add_code_tags(
@@ -1110,7 +1110,7 @@ You ordered NULL items.
                 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
               &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Well, it &lt;em&gt;can&lt;/em&gt; be &lt;code&gt;nil&lt;/code&gt; and was for me, and therefore &lt;code&gt;add_code_tags&lt;/code&gt; was calling &lt;code&gt;code.sub()&lt;/code&gt; with &lt;code&gt;code&lt;/code&gt; being &lt;code&gt;nil&lt;/code&gt;.&lt;/p&gt;
 
@@ -1133,7 +1133,7 @@ You ordered NULL items.
 
 &lt;p&gt;Unfortunately, the documentation of the Pygments API was incomplete in &lt;code&gt;lib/pygments/popen.rb&lt;/code&gt;, where &lt;code&gt;highlight&lt;/code&gt; is defined:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Public: Highlight code.&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Public: Highlight code.&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;#&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Takes a first-position argument of the code to be highlighted, and a&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# second-position hash of various arguments specifiying highlighting properties.&lt;/span&gt;
@@ -1154,7 +1154,7 @@ You ordered NULL items.
       str
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;a-problem-with-dynamically-typed-language-culture:08c2e7a867293a37060f4f671511a7f1&#34;&gt;A problem with dynamically typed language culture&lt;/h2&gt;
 
@@ -1164,15 +1164,15 @@ You ordered NULL items.
 
 &lt;p&gt;In code in a statically typed language such as OCaml (or Haskell or Scala), I would expect to see:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; highlight &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;code &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;opts &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; my_map&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;//...&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; highlight &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;code &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;opts &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; my_map&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;//...&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;and expect that the return value should be a &lt;code&gt;String&lt;/code&gt;, or&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; highlight &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;code &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;opts &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; my_map&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; option &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;//...&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; highlight &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;code &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;opts &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; my_map&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; option &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;//...&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;to indicate that the return value could be either &lt;code&gt;Some(formatted_code)&lt;/code&gt; or &lt;code&gt;None&lt;/code&gt;.&lt;/p&gt;
 
@@ -1180,11 +1180,11 @@ You ordered NULL items.
 
 &lt;p&gt;Reading the Ruby code, I saw that the situation is even more complex than I thought:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# If the caller didn&amp;#39;t give us any code, we have nothing to do,&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# If the caller didn&amp;#39;t give us any code, we have nothing to do,&lt;/span&gt;
       &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# so return right away.&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; code &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; code&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;nil? &lt;span style=&#34;color: #666666&#34;&gt;||&lt;/span&gt; code&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;empty?
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Wow: &lt;code&gt;code&lt;/code&gt; can be &lt;code&gt;nil&lt;/code&gt;, in which case &lt;code&gt;nil&lt;/code&gt; is returned.&lt;/p&gt;
 
@@ -1196,7 +1196,7 @@ You ordered NULL items.
 
 &lt;p&gt;&lt;code&gt;mentos()&lt;/code&gt; is not very well documented. Until I read this code, I didn&amp;rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In &lt;code&gt;lib/pygments/popen.rb&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Our &amp;#39;rpc&amp;#39;-ish request to mentos. Requires a method name, and then optional&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Our &amp;#39;rpc&amp;#39;-ish request to mentos. Requires a method name, and then optional&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# args, kwargs, code.&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;mentos&lt;/span&gt;(&lt;span style=&#34;color: #008000&#34;&gt;method&lt;/span&gt;, args&lt;span style=&#34;color: #666666&#34;&gt;=[]&lt;/span&gt;, kwargs&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;{}, original_code&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;nil&lt;/span&gt;)
       &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Open the pipe if necessary&lt;/span&gt;
@@ -1220,7 +1220,7 @@ You ordered NULL items.
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;raise&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;MentosError&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;EPIPE&amp;quot;&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;It turns out that fundamental problem is not &lt;code&gt;nil&lt;/code&gt; so much as &lt;em&gt;non-determinism&lt;/em&gt;: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for &lt;code&gt;nil&lt;/code&gt; to end up being returned. This non-determinism is worse than &lt;code&gt;nil&lt;/code&gt;. I think that in a situation like this, an &lt;em&gt;exception&lt;/em&gt; is called for. &lt;code&gt;highlight()&lt;/code&gt; should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return &lt;code&gt;nil&lt;/code&gt; (or if using a statically typed language, a &lt;code&gt;None&lt;/code&gt;).&lt;/p&gt;
 
@@ -1228,26 +1228,26 @@ You ordered NULL items.
 
 &lt;p&gt;Amusingly, upon discovering the logging code, I used it, setting the magic environment variable &lt;code&gt;MENTOS_LOG&lt;/code&gt; (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;#&lt;/span&gt; Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;#&lt;/span&gt; Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Out header: {&amp;quot;method&amp;quot;:&amp;quot;highlight&amp;quot;,&amp;quot;args&amp;quot;:null,&amp;quot;kwargs&amp;quot;:{&amp;quot;lexer&amp;quot;:&amp;quot;console&amp;quot;,&amp;quot;options&amp;quot;:{&amp;quot;encoding&amp;quot;:&amp;quot;utf-8&amp;quot;,&amp;quot;outencoding&amp;quot;:&amp;quot;utf-8&amp;quot;},&amp;quot;fd&amp;quot;:10,&amp;quot;id&amp;quot;:&amp;quot;TVQSJNBV&amp;quot;,&amp;quot;bytes&amp;quot;:147}}&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;E, [2013-06-29 10:26 #13799] ERROR -- : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;testing:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Testing&lt;/h2&gt;
 
 &lt;p&gt;It turns out that there &lt;em&gt;is&lt;/em&gt; a place where the intended behavior is in a sense documented: the unit tests in &lt;code&gt;test_pygments.rb&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;test_returns_nil_on_timeout&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;test_returns_nil_on_timeout&lt;/span&gt;
     large_code &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;REDIS_CODE&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;300&lt;/span&gt;
     code &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; P&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;highlight(large_code) &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# a 30 mb highlight request will timeout&lt;/span&gt;
     assert_equal &lt;span style=&#34;color: #008000&#34;&gt;nil&lt;/span&gt;, code
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be &lt;code&gt;nil&lt;/code&gt;!&lt;/p&gt;
 
@@ -1280,11 +1280,11 @@ You ordered NULL items.
 &lt;p&gt;I submitted a &lt;code&gt;pygments.rb&lt;/code&gt; &lt;a href=&#34;https://github.com/tmm1/pygments.rb/pull/132&#34;&gt;pull request&lt;/a&gt; to fix a regression bug in which any use of
 &lt;code&gt;MENTOS_TIMEOUT&lt;/code&gt; caused an instant type error:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&amp;#39;: undefined method `zero?&amp;#39; for &amp;quot;100&amp;quot;:String (NoMethodError)&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&amp;#39;: undefined method `zero?&amp;#39; for &amp;quot;100&amp;quot;:String (NoMethodError)&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;    from /Users/chen/.gem/ruby/2.1.2/gems/pygments.rb-0.6.0/lib/pygments/popen.rb:220:in `mentos&amp;#39;&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;```&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;update-of-2015-01-28:08c2e7a867293a37060f4f671511a7f1&#34;&gt;(Update of 2015-01-28)&lt;/h3&gt;
 
@@ -1300,11 +1300,11 @@ to finally fix a cascade of show-stopping type errors.&lt;/p&gt;
 &lt;p&gt;The final diff involved trying to parse a string into an integer and
 catching the exception if any:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #A00000&#34;&gt;-        timeout_time = ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;] || 8&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #A00000&#34;&gt;-        timeout_time = ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;] || 8&lt;/span&gt;
 &lt;span style=&#34;color: #00A000&#34;&gt;+        # Invalid MENTOS_TIMEOUT results in just using default.&lt;/span&gt;
 &lt;span style=&#34;color: #00A000&#34;&gt;+        timeout_time = Integer(ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;]) rescue 8&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;conclusion:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Conclusion&lt;/h2&gt;
 
@@ -1320,7 +1320,7 @@ catching the exception if any:&lt;/p&gt;
       <guid>http://conscientiousprogrammer.com/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/</guid>
       <description>
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://photos4.meetupstatic.com/photos/event/d/e/b/e/global_187797022.jpeg&#34; /&gt;
@@ -1332,7 +1332,7 @@ catching the exception if any:&lt;/p&gt;
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/pghpython/&#34;&gt;Pittsburgh Python User Group&lt;/a&gt; had &lt;a href=&#34;http://www.meetup.com/pghpython/events/120442102&#34;&gt;another &amp;ldquo;favorite module night&amp;rdquo;&lt;/a&gt;. I enjoy this format because I get to learn about what people find useful, so that I may perhaps use it myself!&lt;/p&gt;
 

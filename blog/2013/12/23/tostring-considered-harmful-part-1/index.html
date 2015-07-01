@@ -85,7 +85,7 @@
 
 <p>Here&rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">object</span> <span style="color: #0000FF; font-weight: bold">Example</span> <span style="color: #666666">{</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">object</span> <span style="color: #0000FF; font-weight: bold">Example</span> <span style="color: #666666">{</span>
   <span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Id</span> <span style="color: #666666">=</span> <span style="color: #0000FF; font-weight: bold">Int</span>
 
   <span style="color: #408080; font-style: italic">/**</span>
@@ -111,7 +111,7 @@
   <span style="color: #666666">}</span>
 <span style="color: #666666">}</span>
 </pre></div>
-</p>
+
 
 <p>In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.</p>
 
@@ -121,7 +121,7 @@
 
 <p>It turned out that finding an ID could fail, so I changed <code>findId</code> to return the type <code>Option[Id]</code> instead of <code>Id</code>. To get the code to compile, I had to change the type of the parameter to <code>makeUrl</code> also:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">/**</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">/**</span>
 <span style="color: #408080; font-style: italic">    @param name User name to look up</span>
 <span style="color: #408080; font-style: italic">    @return Some(ID of user) if found, else None</span>
 <span style="color: #408080; font-style: italic">    */</span>
@@ -135,7 +135,7 @@
   <span style="color: #408080; font-style: italic">// Oops, now this has an unintended bug!</span>
   <span style="color: #008000; font-weight: bold">def</span> makeUrl<span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Option</span><span style="color: #666666">[</span><span style="color: #B00040">Id</span><span style="color: #666666">])</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> <span style="color: #BA2121">s&quot;http://service.com?id=</span><span style="color: #BB6688; font-weight: bold">$id</span><span style="color: #BA2121">&quot;</span>
 </pre></div>
-</p>
+
 
 <p>But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: <code>http://service.com?id=Some(42)</code> was being requested.</p>
 
@@ -171,7 +171,7 @@ You ordered NULL items.
 
 <p>First step in cleaning up the code: make <code>toString</code> explicit:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">/** Only ever use a String to create a URL. */</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">/** Only ever use a String to create a URL. */</span>
   <span style="color: #008000; font-weight: bold">def</span> makeUrl<span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> <span style="color: #BA2121">s&quot;http://service.com?id=</span><span style="color: #BB6688; font-weight: bold">$id</span><span style="color: #BA2121">&quot;</span>
 
   <span style="color: #008000; font-weight: bold">def</span> main<span style="color: #666666">(</span>args<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Array</span><span style="color: #666666">[</span><span style="color: #B00040">String</span><span style="color: #666666">])</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Unit</span> <span style="color: #666666">=</span> <span style="color: #666666">{</span>
@@ -179,7 +179,7 @@ You ordered NULL items.
     getUrl<span style="color: #666666">(</span>makeUrl<span style="color: #666666">(</span>id<span style="color: #666666">.</span>toString<span style="color: #666666">))</span>
   <span style="color: #666666">}</span>
 </pre></div>
-</p>
+
 
 <p>(Later in the post, I will discuss alternatives to this explicit <code>toString</code>.)</p>
 
@@ -187,15 +187,15 @@ You ordered NULL items.
 
 <p>Another design smell was that of using</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Id</span> <span style="color: #666666">=</span> <span style="color: #0000FF; font-weight: bold">Int</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Id</span> <span style="color: #666666">=</span> <span style="color: #0000FF; font-weight: bold">Int</span>
 </pre></div>
-</p>
+
 
 <p>in the first place. This is a well-known lazy practice called <a href="http://c2.com/cgi/wiki?PrimitiveObsession">primitive obsession</a>. I know better than that.</p>
 
 <p>The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span>
 
   <span style="color: #408080; font-style: italic">/**</span>
 <span style="color: #408080; font-style: italic">    @param name User name to look up</span>
@@ -208,7 +208,7 @@ You ordered NULL items.
       <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(0)</span>
     <span style="color: #666666">}</span>
 </pre></div>
-</p>
+
 
 <p>Note that this still <em>would not</em> have solved the <code>toString</code> problem, since the output would simply have been <code>http://service.com?id=Some(Id(42))</code> or the dreaded <code>http://service.com?id=None</code>!</p>
 
@@ -228,7 +228,7 @@ You ordered NULL items.
 
 <p>Let&rsquo;s refactor the code:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">// Wrapper class</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">// Wrapper class</span>
   <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
     <span style="color: #408080; font-style: italic">// Special method for turning to URL string fragment</span>
     <span style="color: #008000; font-weight: bold">def</span> toUrlString <span style="color: #008000; font-weight: bold">=</span> id<span style="color: #666666">.</span>toString
@@ -257,13 +257,13 @@ You ordered NULL items.
     <span style="color: #408080; font-style: italic">//getUrl(makeUrl(id.toUrlString))</span>
   <span style="color: #666666">}</span>
 </pre></div>
-</p>
+
 
 <p>Now the code that was creating a junk URL will no longer compile: <code>id</code> is of type <code>Option[Id]</code> but that type does <em>not</em> have a <code>toUrlString</code> method. Mission accomplished!</p>
 
 <p>To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    <span style="color: #408080; font-style: italic">// Will not compile because Option[Id] does not have toUrlString</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    <span style="color: #408080; font-style: italic">// Will not compile because Option[Id] does not have toUrlString</span>
     <span style="color: #408080; font-style: italic">//getUrl(makeUrl(id.toUrlString))</span>
 
     id <span style="color: #008000; font-weight: bold">match</span> <span style="color: #666666">{</span>
@@ -271,7 +271,7 @@ You ordered NULL items.
       <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">Some</span><span style="color: #666666">(</span>n<span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">=&gt;</span> getUrl<span style="color: #666666">(</span>makeUrl<span style="color: #666666">(</span>n<span style="color: #666666">.</span>toUrlString<span style="color: #666666">))</span>
     <span style="color: #666666">}</span>
 </pre></div>
-</p>
+
 
 <p>Simple!</p>
 
@@ -306,7 +306,7 @@ You ordered NULL items.
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
 </div>
-<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script src="http://ConscientiousProgrammer.com/js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
 <script>

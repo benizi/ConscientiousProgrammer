@@ -71,7 +71,7 @@
     <h1>Pittsburgh JavaScript meetup: functional programming</h1>
     
 
-<p>
+
 <figure >
     
         <img src="http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg" />
@@ -83,7 +83,7 @@
     </figcaption>
     
 </figure>
-</p>
+
 
 <p>Because the topic of the featured presentation by <a href="http://idiotcoder.com/">Richard Ashkettle</a> was <a href="http://en.wikipedia.org/wiki/Functional_programming">functional programming</a>, I made sure to attend my first meeting of the newly revived <a href="http://www.meetup.com/Pittsburgh-JavaScript/">Pittsburgh JavaScript meetup</a>. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&rsquo;t been able to make it to the first two.)</p>
 
@@ -155,7 +155,7 @@
 
 <p>JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented &ldquo;interference&rdquo; from the conventional class-based object-oriented world, which is mostly based not on functions, but on <a href="https://en.wikipedia.org/wiki/Method_%28computer_programming%29">methods</a> that interference with functions because they are meant to <em>replace</em> functions (since according to &ldquo;pure&rdquo; object-oriented thinking, functions are evil and computation should involve method calls on objects). <em>JavaScript does not (really) have methods</em>; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use <a href="http://emberjs.com">Ember</a>, the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of <code>function</code>s: <code>valueWillChange</code> and <code>valudDidChange</code> are just functions. They are not special things, &ldquo;methods&rdquo;.</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">App.PersonView <span style="color: #666666">=</span> Ember.View.extend({
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">App.PersonView <span style="color: #666666">=</span> Ember.View.extend({
   valueWillChange<span style="color: #666666">:</span> <span style="color: #008000; font-weight: bold">function</span> (obj, keyName, value) {
     <span style="color: #008000; font-weight: bold">this</span>.changingFrom <span style="color: #666666">=</span> value;
   }.observesBefore(<span style="color: #BA2121">&#39;content.value&#39;</span>),
@@ -168,7 +168,7 @@
   }.observes(<span style="color: #BA2121">&#39;content.value&#39;</span>)
 });
 </pre></div>
-</p>
+
 
 <h3 id="examples:4a05566a34ea27820d7f737863a690ea">Examples</h3>
 
@@ -255,7 +255,7 @@
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
 </div>
-<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script src="http://ConscientiousProgrammer.com/js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
 <script>

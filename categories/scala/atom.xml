@@ -25,13 +25,13 @@
 
 &lt;p&gt;Rich informally gave some type signatures in his blog post:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;;;reducing function signature
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;;;reducing function signature
 whatever, input -&amp;gt; whatever
 
 ;;transducer signature
 (whatever, input -&amp;gt; whatever) -&amp;gt; (whatever, input -&amp;gt; whatever)
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;This was, unfortunately, not very helpful. It is hard to make sense of this pseudo-notation for types. What is quantified over what? And what is bound to what? I&amp;rsquo;ll explain later what I mean by these questions.&lt;/p&gt;
 
@@ -47,27 +47,27 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Rich Hickey &lt;a href=&#34;https://news.ycombinator.com/item?id=8144385&#34;&gt;informally offered some types&lt;/a&gt; (which he said were &amp;ldquo;a la Haskell&amp;rdquo;) to try to help out:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    ;;reducing fn
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    ;;reducing fn
     x-&amp;gt;a-&amp;gt;x
 
     ;;transducer fn
     (x-&amp;gt;a-&amp;gt;x)-&amp;gt;(x-&amp;gt;b-&amp;gt;x)
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;OK, by using type variables &lt;code&gt;a&lt;/code&gt;, &lt;code&gt;b&lt;/code&gt;, and &lt;code&gt;x&lt;/code&gt;, that indicates what is bound to what. The blog post should have used this notation rather than&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;;;transducer signature
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;;;transducer signature
 (whatever, input -&amp;gt; whatever) -&amp;gt; (whatever, input -&amp;gt; whatever)
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;sample-clojure-code:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Sample Clojure code&lt;/h3&gt;
 
 &lt;p&gt;He also posted some sample Clojure code:&lt;/p&gt;
 
-&lt;p&gt;&lt;script src=&#34;https://gist.github.com/b5aefa622180681e1c81.js&#34;&gt;&lt;/script&gt;
-&lt;/p&gt;
+&lt;script src=&#34;https://gist.github.com/b5aefa622180681e1c81.js&#34;&gt;&lt;/script&gt;
+
 
 &lt;h2 id=&#34;second-discussion-thread-i-saw:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Second discussion thread I saw&lt;/h2&gt;
 
@@ -77,7 +77,7 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Rich finally posted some actual &lt;a href=&#34;http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/&#34;&gt;type-checked, runnable Haskell code&lt;/a&gt;!&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Transducers in Haskell&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Transducers in Haskell&lt;/span&gt;
 
 &lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Original was (b -&amp;gt; a) -&amp;gt; (r -&amp;gt; a -&amp;gt; r) -&amp;gt; (r -&amp;gt; b -&amp;gt; r)&lt;/span&gt;
@@ -115,7 +115,7 @@ whatever, input -&amp;gt; whatever
 &lt;span style=&#34;color: #0000FF&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; xlist xform [&lt;span style=&#34;color: #666666&#34;&gt;1..5&lt;/span&gt;]
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;After this post, I knew it would not take me long to figure out transducers.&lt;/p&gt;
 
@@ -132,38 +132,38 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Defining lots and lots of types (whether synonyms or &lt;a href=&#34;http://www.haskell.org/haskellwiki/Newtype&#34;&gt;newtypes&lt;/a&gt; is standard practice when programming in a modern typed language. OK, so I defined a type synonym&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left reduce&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left reduce&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;But what about transducer? This is trickier.&lt;/p&gt;
 
 &lt;p&gt;An &lt;em&gt;invalid&lt;/em&gt; attempt at a type would be&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Illegal!&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Illegal!&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; b r
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;because the type variable &lt;code&gt;r&lt;/code&gt; is not bound in the type definition. And it would be incorrect to just randomly add &lt;code&gt;r&lt;/code&gt; on the left hand side as an extra parameter to the &lt;code&gt;Transducer&lt;/code&gt; type, because in fact it is &lt;em&gt;critical&lt;/em&gt; that a transducer &lt;em&gt;does not care&lt;/em&gt; about the underlying reducer&amp;rsquo;s return type &lt;code&gt;r&lt;/code&gt;. How do we write the desired type?&lt;/p&gt;
 
 &lt;p&gt;It turns out you need &lt;a href=&#34;http://www.haskell.org/haskellwiki/Rank-N_types&#34;&gt;higher-rank types&lt;/a&gt;. Rank-1 types are not sufficient; we need a rank-2 type to quantify &lt;code&gt;r&lt;/code&gt;, to say that a transducer from &lt;code&gt;a&lt;/code&gt; to &lt;code&gt;b&lt;/code&gt; is a transformation that takes a reducer to a specific &lt;code&gt;r&lt;/code&gt; and returns another reducer to the &lt;em&gt;same&lt;/em&gt; &lt;code&gt;r&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Here&amp;#39;s where the rank-2 type is needed&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Here&amp;#39;s where the rank-2 type is needed&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; forall r &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; b r
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Now we can see more clearly some &lt;em&gt;completely generic&lt;/em&gt; ways to create a transducer:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
 &lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xf r (f a)
 
 &lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a a
 &lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; p xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; p a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; xf r a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; r
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h4 id=&#34;a-bit-of-history:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;A bit of history&lt;/h4&gt;
 
@@ -180,7 +180,7 @@ whatever, input -&amp;gt; whatever
 &lt;li&gt;&lt;code&gt;conj&lt;/code&gt; and empty list &lt;code&gt;[]&lt;/code&gt; abstracted to a &lt;code&gt;class Conjable&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left fold&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left fold&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
   fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a (f a)
 
@@ -188,7 +188,7 @@ whatever, input -&amp;gt; whatever
   empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; f a
   conj &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a (f a)
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Note our reliance on transducing and reducing from one type &lt;code&gt;a&lt;/code&gt; to another, &lt;code&gt;f a&lt;/code&gt;.&lt;/p&gt;
 
@@ -196,16 +196,16 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Unlike &lt;code&gt;mapping&lt;/code&gt; and &lt;code&gt;filtering&lt;/code&gt;, &lt;code&gt;flatmapping&lt;/code&gt; is &lt;em&gt;not completely generic&lt;/em&gt;, because it depends on something being &lt;code&gt;Foldable&lt;/code&gt; (implementing a &lt;code&gt;fold&lt;/code&gt;):&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
 &lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fold xf r (f a)
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h4 id=&#34;conjable-constraint:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;&lt;code&gt;Conjable&lt;/code&gt; constraint&lt;/h4&gt;
 
 &lt;p&gt;Finally, here&amp;rsquo;s the originally list-specific code that now depends only on &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- I changed Rich Hickey&amp;#39;s code to be more general than just list&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- I changed Rich Hickey&amp;#39;s code to be more general than just list&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- but accept anything Conjable&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
 &lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; xf &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fold (xf conj) empty
@@ -220,13 +220,13 @@ whatever, input -&amp;gt; whatever
 &lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
 &lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; flatmapping f
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;list-specific-stuff:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;List-specific stuff&lt;/h3&gt;
 
 &lt;p&gt;Here is the list-specific code:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Stuff specialized to lists.&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Stuff specialized to lists.&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- To use another type, just make it a Foldable and Conjable.&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
   fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl
@@ -246,7 +246,7 @@ whatever, input -&amp;gt; whatever
 &lt;span style=&#34;color: #0000FF&#34;&gt;munge&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; f &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;munge&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist xform
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Notice some very important properties of this code:&lt;/p&gt;
 
@@ -257,18 +257,18 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Example:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- munge a list&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- munge a list&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;example1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;]
 &lt;span style=&#34;color: #0000FF&#34;&gt;example1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; munge [&lt;span style=&#34;color: #666666&#34;&gt;1..5&lt;/span&gt;]
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;implementing-another-type-to-illustrate-the-genericity-of-transducers:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Implementing another type to illustrate the genericity of transducers&lt;/h3&gt;
 
 &lt;p&gt;To illustrate Rich Hickey&amp;rsquo;s main point, I implemented instances of &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt; for a standard Haskell &lt;code&gt;Vector&lt;/code&gt; library as an alternate &amp;ldquo;collection-like&amp;rdquo; type.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- For example using Vector instead of list&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- For example using Vector instead of list&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; V
 
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Implement Foldable, Conjable type classes for Vector&lt;/span&gt;
@@ -279,16 +279,16 @@ whatever, input -&amp;gt; whatever
   empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;empty
   conj &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;snoc
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;And we can run &lt;code&gt;munge&lt;/code&gt; directly on a vector instead of a list, &lt;em&gt;without making any changes&lt;/em&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- return a vector rather than a list; note the fact that munge actually&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- return a vector rather than a list; note the fact that munge actually&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- internally uses a list&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;example2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;example2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; munge &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;enumFromN &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;This is &lt;em&gt;code reuse&lt;/em&gt; at its best.&lt;/p&gt;
 
@@ -556,7 +556,7 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;The best you can do is write something that is functorized, but then you have to apply it in a statically known context:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;signature&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;TO_STRING&lt;/span&gt; =
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;signature&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;TO_STRING&lt;/span&gt; =
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;sig&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;t&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;toString&lt;/span&gt; : t -&amp;gt; string
@@ -581,14 +581,14 @@ whatever, input -&amp;gt; whatever
 
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;structure&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoMyStuff&lt;/span&gt; = DoStuff(MyStuff)
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;with&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoMyStuff&lt;/span&gt;.doubleString (&lt;span style=&#34;color: #666666&#34;&gt;42&lt;/span&gt;, true)
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;DoMyStuff&lt;/span&gt;.doubleString (&lt;span style=&#34;color: #666666&#34;&gt;42&lt;/span&gt;, true)
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;(* result is the string &amp;quot;(42, true)(42, true)&amp;quot; *)&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Since the Standard ML ecosystem is so minimalist, it&amp;rsquo;s hard to fall into the &lt;code&gt;toString&lt;/code&gt; trap, because you would have to set it all up yourself.&lt;/p&gt;
 
@@ -600,12 +600,12 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Of course, one could also use the &lt;a href=&#34;http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html&#34;&gt;object-oriented part of OCaml&lt;/a&gt; to make a generic &amp;ldquo;to string&amp;rdquo; hierarchy starting with a suitable interface:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; convert_to_string &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; convert_to_string &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;method&lt;/span&gt; to_string &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;But I don&amp;rsquo;t actually know many people who use the object-oriented features of OCaml!&lt;/p&gt;
 
@@ -631,20 +631,20 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;The fix presented was in &lt;em&gt;object-oriented&lt;/em&gt; style, adding a method &lt;code&gt;toUrlString&lt;/code&gt; to a class. The other solution is the &lt;em&gt;functional&lt;/em&gt; style, leaving the &lt;code&gt;Id&lt;/code&gt; class alone, and writing an external function instead:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
 
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;with&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;No id found!&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)))&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;There are advantages and disadvantages to either solution.&lt;/p&gt;
 
@@ -652,7 +652,7 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;It would be very natural, given a whole set of domain classes in addition to &lt;code&gt;Id&lt;/code&gt;, to want all of them to have a &lt;code&gt;toUrlString&lt;/code&gt;. Then the natural thing to do is to create a mini-universe (parallel to the &lt;code&gt;toString&lt;/code&gt; universe) by creating a hierarchy:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;trait&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;trait&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 
@@ -664,7 +664,7 @@ whatever, input -&amp;gt; whatever
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;advanced-string-interpolation-with-oo:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;Advanced string interpolation with OO&lt;/h2&gt;
 
@@ -672,7 +672,7 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Below we define a string interpolator that only operates on objects of classes that implement the trait &lt;code&gt;UrlString&lt;/code&gt;, and therefore does away with an explicit call to &lt;code&gt;toUrlString&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;implicit&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlHelper&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; sc&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;StringContext&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;AnyVal&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;implicit&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlHelper&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; sc&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;StringContext&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;AnyVal&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; url&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString*&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; strings &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; sc&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parts&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;val&lt;/span&gt; expressions &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; args&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iterator
@@ -688,16 +688,16 @@ whatever, input -&amp;gt; whatever
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use UrlString to create a URL. */&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; url&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;http://service.com?id=$id&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;with&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;None&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; println&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;No id found!&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;This may or may not be overengineering.&lt;/p&gt;
 
@@ -705,7 +705,7 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;The functional approach doesn&amp;rsquo;t like inheritance in the domain classes. We can implement it with &lt;a href=&#34;http://en.wikipedia.org/wiki/Type_class&#34;&gt;type classes&lt;/a&gt; (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement &lt;code&gt;toUrlString&lt;/code&gt; outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does &lt;em&gt;not&lt;/em&gt; depend on an inheritance hierarchy. If you&amp;rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// A type class&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// A type class&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;trait&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;a&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
@@ -734,7 +734,7 @@ whatever, input -&amp;gt; whatever
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Anything &amp;quot;viewable&amp;quot; as UrlString can be used to create a URL. */&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;A:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;UrlString&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;](&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; url&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;http://service.com?id=$id&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;the-final-string-gotcha:61f4feb9ec203761b1ad81e849476dfd&#34;&gt;The final string gotcha&lt;/h2&gt;
 
@@ -770,7 +770,7 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Here&amp;rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Example&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Example&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
 
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
@@ -796,7 +796,7 @@ whatever, input -&amp;gt; whatever
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.&lt;/p&gt;
 
@@ -806,7 +806,7 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;It turned out that finding an ID could fail, so I changed &lt;code&gt;findId&lt;/code&gt; to return the type &lt;code&gt;Option[Id]&lt;/code&gt; instead of &lt;code&gt;Id&lt;/code&gt;. To get the code to compile, I had to change the type of the parameter to &lt;code&gt;makeUrl&lt;/code&gt; also:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return Some(ID of user) if found, else None&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
@@ -820,7 +820,7 @@ whatever, input -&amp;gt; whatever
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Oops, now this has an unintended bug!&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: &lt;code&gt;http://service.com?id=Some(42)&lt;/code&gt; was being requested.&lt;/p&gt;
 
@@ -856,7 +856,7 @@ You ordered NULL items.
 
 &lt;p&gt;First step in cleaning up the code: make &lt;code&gt;toString&lt;/code&gt; explicit:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
 
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; main&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
@@ -864,7 +864,7 @@ You ordered NULL items.
     getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;(Later in the post, I will discuss alternatives to this explicit &lt;code&gt;toString&lt;/code&gt;.)&lt;/p&gt;
 
@@ -872,15 +872,15 @@ You ordered NULL items.
 
 &lt;p&gt;Another design smell was that of using&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;in the first place. This is a well-known lazy practice called &lt;a href=&#34;http://c2.com/cgi/wiki?PrimitiveObsession&#34;&gt;primitive obsession&lt;/a&gt;. I know better than that.&lt;/p&gt;
 
 &lt;p&gt;The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
 
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
@@ -893,7 +893,7 @@ You ordered NULL items.
       &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(0)&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Note that this still &lt;em&gt;would not&lt;/em&gt; have solved the &lt;code&gt;toString&lt;/code&gt; problem, since the output would simply have been &lt;code&gt;http://service.com?id=Some(Id(42))&lt;/code&gt; or the dreaded &lt;code&gt;http://service.com?id=None&lt;/code&gt;!&lt;/p&gt;
 
@@ -913,7 +913,7 @@ You ordered NULL items.
 
 &lt;p&gt;Let&amp;rsquo;s refactor the code:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Special method for turning to URL string fragment&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
@@ -942,13 +942,13 @@ You ordered NULL items.
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Now the code that was creating a junk URL will no longer compile: &lt;code&gt;id&lt;/code&gt; is of type &lt;code&gt;Option[Id]&lt;/code&gt; but that type does &lt;em&gt;not&lt;/em&gt; have a &lt;code&gt;toUrlString&lt;/code&gt; method. Mission accomplished!&lt;/p&gt;
 
 &lt;p&gt;To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
 
     id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
@@ -956,7 +956,7 @@ You ordered NULL items.
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Simple!&lt;/p&gt;
 
@@ -996,7 +996,7 @@ You ordered NULL items.
       <guid>http://conscientiousprogrammer.com/blog/2013/12/04/mongodb-free-online-course-a-review/</guid>
       <description>
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://www.mongodb.com/sites/all/themes/bonsai/logo.png&#34; /&gt;
@@ -1008,7 +1008,7 @@ You ordered NULL items.
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;I finally finished a two-month &lt;a href=&#34;http://education.mongodb.com/&#34;&gt;free online course on MongoDB&lt;/a&gt;, given by &lt;a href=&#34;http://www.mongodb.com/&#34;&gt;MongoDB, Inc&lt;/a&gt;.&lt;/p&gt;
 
@@ -1094,7 +1094,7 @@ You ordered NULL items.
 
 &lt;p&gt;What does that mean?&lt;/p&gt;
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg&#34; /&gt;
@@ -1106,7 +1106,7 @@ You ordered NULL items.
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;how-to-learn-a-programming-language:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;How to learn a programming language&lt;/h2&gt;
 
@@ -1418,7 +1418,7 @@ You ordered NULL items.
       <guid>http://conscientiousprogrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/</guid>
       <description>
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg&#34; /&gt;
@@ -1430,7 +1430,7 @@ You ordered NULL items.
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Because the topic of the featured presentation by &lt;a href=&#34;http://idiotcoder.com/&#34;&gt;Richard Ashkettle&lt;/a&gt; was &lt;a href=&#34;http://en.wikipedia.org/wiki/Functional_programming&#34;&gt;functional programming&lt;/a&gt;, I made sure to attend my first meeting of the newly revived &lt;a href=&#34;http://www.meetup.com/Pittsburgh-JavaScript/&#34;&gt;Pittsburgh JavaScript meetup&lt;/a&gt;. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&amp;rsquo;t been able to make it to the first two.)&lt;/p&gt;
 
@@ -1502,7 +1502,7 @@ You ordered NULL items.
 
 &lt;p&gt;JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented &amp;ldquo;interference&amp;rdquo; from the conventional class-based object-oriented world, which is mostly based not on functions, but on &lt;a href=&#34;https://en.wikipedia.org/wiki/Method_%28computer_programming%29&#34;&gt;methods&lt;/a&gt; that interference with functions because they are meant to &lt;em&gt;replace&lt;/em&gt; functions (since according to &amp;ldquo;pure&amp;rdquo; object-oriented thinking, functions are evil and computation should involve method calls on objects). &lt;em&gt;JavaScript does not (really) have methods&lt;/em&gt;; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use &lt;a href=&#34;http://emberjs.com&#34;&gt;Ember&lt;/a&gt;, the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of &lt;code&gt;function&lt;/code&gt;s: &lt;code&gt;valueWillChange&lt;/code&gt; and &lt;code&gt;valudDidChange&lt;/code&gt; are just functions. They are not special things, &amp;ldquo;methods&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;App.PersonView &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; Ember.View.extend({
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;App.PersonView &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; Ember.View.extend({
   valueWillChange&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;function&lt;/span&gt; (obj, keyName, value) {
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;this&lt;/span&gt;.changingFrom &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; value;
   }.observesBefore(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;content.value&amp;#39;&lt;/span&gt;),
@@ -1515,7 +1515,7 @@ You ordered NULL items.
   }.observes(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;content.value&amp;#39;&lt;/span&gt;)
 });
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;examples:4a05566a34ea27820d7f737863a690ea&#34;&gt;Examples&lt;/h3&gt;
 

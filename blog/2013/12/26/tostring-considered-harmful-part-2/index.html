@@ -79,20 +79,20 @@
 
 <p>The fix presented was in <em>object-oriented</em> style, adding a method <code>toUrlString</code> to a class. The other solution is the <em>functional</em> style, leaving the <code>Id</code> class alone, and writing an external function instead:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span>
 
   <span style="color: #008000; font-weight: bold">def</span> toUrlString<span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Id</span><span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">=</span> id<span style="color: #666666">.</span>toString
 </pre></div>
-</p>
+
 
 <p>with</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    id <span style="color: #008000; font-weight: bold">match</span> <span style="color: #666666">{</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    id <span style="color: #008000; font-weight: bold">match</span> <span style="color: #666666">{</span>
       <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">None</span> <span style="color: #008000; font-weight: bold">=&gt;</span> println<span style="color: #666666">(</span><span style="color: #BA2121">&quot;No id found!&quot;</span><span style="color: #666666">)</span>
       <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">Some</span><span style="color: #666666">(</span>n<span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">=&gt;</span> getUrl<span style="color: #666666">(</span>makeUrl<span style="color: #666666">(</span>toUrlString<span style="color: #666666">(</span>n<span style="color: #666666">)))</span>
     <span style="color: #666666">}</span>
 </pre></div>
-</p>
+
 
 <p>There are advantages and disadvantages to either solution.</p>
 
@@ -100,7 +100,7 @@
 
 <p>It would be very natural, given a whole set of domain classes in addition to <code>Id</code>, to want all of them to have a <code>toUrlString</code>. Then the natural thing to do is to create a mini-universe (parallel to the <code>toString</code> universe) by creating a hierarchy:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">trait</span> <span style="color: #0000FF; font-weight: bold">UrlString</span> <span style="color: #666666">{</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">trait</span> <span style="color: #0000FF; font-weight: bold">UrlString</span> <span style="color: #666666">{</span>
     <span style="color: #008000; font-weight: bold">def</span> toUrlString<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span>
   <span style="color: #666666">}</span>
 
@@ -112,7 +112,7 @@
     <span style="color: #008000; font-weight: bold">override</span> <span style="color: #008000; font-weight: bold">def</span> toUrlString <span style="color: #008000; font-weight: bold">=</span> <span style="color: #666666">...</span>
   <span style="color: #666666">}</span>
 </pre></div>
-</p>
+
 
 <h2 id="advanced-string-interpolation-with-oo:61f4feb9ec203761b1ad81e849476dfd">Advanced string interpolation with OO</h2>
 
@@ -120,7 +120,7 @@
 
 <p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">implicit</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">UrlHelper</span><span style="color: #666666">(</span><span style="color: #008000; font-weight: bold">val</span> sc<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">StringContext</span><span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #0000FF; font-weight: bold">AnyVal</span> <span style="color: #666666">{</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">implicit</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">UrlHelper</span><span style="color: #666666">(</span><span style="color: #008000; font-weight: bold">val</span> sc<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">StringContext</span><span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #0000FF; font-weight: bold">AnyVal</span> <span style="color: #666666">{</span>
     <span style="color: #008000; font-weight: bold">def</span> url<span style="color: #666666">(</span>args<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">UrlString*</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> <span style="color: #666666">{</span>
       <span style="color: #008000; font-weight: bold">val</span> strings <span style="color: #008000; font-weight: bold">=</span> sc<span style="color: #666666">.</span>parts<span style="color: #666666">.</span>iterator
       <span style="color: #008000; font-weight: bold">val</span> expressions <span style="color: #008000; font-weight: bold">=</span> args<span style="color: #666666">.</span>iterator
@@ -136,16 +136,16 @@
   <span style="color: #408080; font-style: italic">/** Only ever use UrlString to create a URL. */</span>
   <span style="color: #008000; font-weight: bold">def</span> makeUrl<span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">UrlString</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> url<span style="color: #BA2121">&quot;http://service.com?id=$id&quot;</span>
 </pre></div>
-</p>
+
 
 <p>with</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    id <span style="color: #008000; font-weight: bold">match</span> <span style="color: #666666">{</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    id <span style="color: #008000; font-weight: bold">match</span> <span style="color: #666666">{</span>
       <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">None</span> <span style="color: #008000; font-weight: bold">=&gt;</span> println<span style="color: #666666">(</span><span style="color: #BA2121">&quot;No id found!&quot;</span><span style="color: #666666">)</span>
       <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">Some</span><span style="color: #666666">(</span>n<span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">=&gt;</span> getUrl<span style="color: #666666">(</span>makeUrl<span style="color: #666666">(</span>n<span style="color: #666666">))</span>
     <span style="color: #666666">}</span>
 </pre></div>
-</p>
+
 
 <p>This may or may not be overengineering.</p>
 
@@ -153,7 +153,7 @@
 
 <p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">// A type class</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">// A type class</span>
   <span style="color: #008000; font-weight: bold">trait</span> <span style="color: #0000FF; font-weight: bold">UrlString</span><span style="color: #666666">[</span><span style="color: #B00040">A</span><span style="color: #666666">]</span> <span style="color: #666666">{</span>
     <span style="color: #008000; font-weight: bold">def</span> toUrlString<span style="color: #666666">(</span>a<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">A</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span>
   <span style="color: #666666">}</span>
@@ -182,7 +182,7 @@
   <span style="color: #408080; font-style: italic">/** Anything &quot;viewable&quot; as UrlString can be used to create a URL. */</span>
   <span style="color: #008000; font-weight: bold">def</span> makeUrl<span style="color: #666666">[</span><span style="color: #B00040">A:</span> <span style="color: #B00040">UrlString</span><span style="color: #666666">](</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">A</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> url<span style="color: #BA2121">&quot;http://service.com?id=$id&quot;</span>
 </pre></div>
-</p>
+
 
 <h2 id="the-final-string-gotcha:61f4feb9ec203761b1ad81e849476dfd">The final string gotcha</h2>
 
@@ -211,7 +211,7 @@
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
 </div>
-<script src="http://conscientiousprogrammer.com/js/highlight.pack.js"></script>
+<script src="http://ConscientiousProgrammer.com/js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
 <script>

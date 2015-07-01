@@ -6,8 +6,103 @@
     <description>Recent content in Rust on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 21 Dec 2014 14:31:36 -0500</lastBuildDate>
+    <lastBuildDate>Tue, 16 Jun 2015 21:37:39 -0400</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/categories/rust/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Aegis and Cook: what happens when an open source developer dies?</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/</link>
+      <pubDate>Tue, 16 Jun 2015 21:37:39 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/</guid>
+      <description>
+
+&lt;p&gt;By sheer accident, while I was looking for something else online, I
+came across a Web site for &lt;a href=&#34;http://aegis.sourceforge.net/&#34;&gt;Aegis&lt;/a&gt;, a
+distributed version control system I used at work back in 1995-1997. I
+was surprised this software was still alive after twenty years. A lot
+of software has a very short life span, and since I had not heard
+anything about Aegis all this time, I would have guessed that it had
+died.&lt;/p&gt;
+
+&lt;p&gt;I remembered that we had used this software along with another tool
+the author developed, called
+&lt;a href=&#34;https://ftp.gnu.org/non-gnu/cook.README&#34;&gt;Cook&lt;/a&gt;, which was a
+replacement for
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Make_%28software%29&#34;&gt;Make&lt;/a&gt;. I was
+unsuccessful in locating any official Web site for Cook, so I assume
+it is more or less dead.&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, I found by coincidence that actually, the author,
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Peter_Miller_%28software_engineer%29&#34;&gt;Peter Miller&lt;/a&gt;,
+died less than a year ago (July 2014). There was enough memory of him
+that someone wrote that Wikipedia page on his contributions to open
+source software. However, his Web site &lt;code&gt;http://www.canb.auug.org.au/~millerp/
+&lt;/code&gt;, sadly, has died with him, and with that, the site he had on Cook.&lt;/p&gt;
+
+&lt;p&gt;But we know that the Web is &amp;ldquo;forever&amp;rdquo;, right? Let&amp;rsquo;s see.&lt;/p&gt;
+
+&lt;p&gt;I found this old photo, for example.&lt;/p&gt;
+
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;http://web.archive.org/web/20090111230031/http://miller.emu.id.au/pmiller/pmiller-1993-128.png&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Peter Miller, 1993&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;h2 id=&#34;wayback-machine:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;Wayback Machine&lt;/h2&gt;
+
+&lt;p&gt;Basically, I checked the Wayback Machine, and it has some snapshots of
+&lt;a href=&#34;http://web.archive.org/web/*/http://www.canb.auug.org.au/~millerp/&#34;&gt;his site&lt;/a&gt;. The
+last working snapshot was
+&lt;a href=&#34;http://web.archive.org/web/20090111230031/http://miller.emu.id.au/pmiller/&#34;&gt;from 2009&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here is his old
+&lt;a href=&#34;http://web.archive.org/web/20090327074944/http://miller.emu.id.au/pmiller/software/&#34;&gt;software page&lt;/a&gt;. Yes,
+it includes a link to a Cook site, but it leads to a nonexistent
+snapshot.&lt;/p&gt;
+
+&lt;p&gt;I stopped because I am not that interested in reliving the early
+history of Cook. I never met the guy, although I believe I exchanged
+email with him when it was just his personal project and he was &amp;ldquo;tech
+support&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;I wonder how historians fifty years from now will be working. So much
+is no longer on paper, but stored in random archives on hard drives
+somewhere.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Software dies, people die. It was just weird for me to accidentally do
+a bit of sleuthing to find more information about someone whose
+software I once used a lot.&lt;/p&gt;
+
+&lt;p&gt;I haven&amp;rsquo;t made a &amp;ldquo;will&amp;rdquo; for my code. I suppose I should have a plan in
+place for whatever I value.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Do you have a plan for your Web site or code or writings? Or do you
+  expect them to disappear? How do you feel about leaving something
+  behind?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;update-of-2015-06-29:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;(Update of 2015-06-29)&lt;/h3&gt;
+
+&lt;p&gt;By accident, while reading an old blog post by Graydon Hoare about
+&lt;a href=&#34;https://github.com/graydon/bors&#34;&gt;bors&lt;/a&gt;, which is used for continuous
+integration for the Rust project, I noticed his
+&lt;a href=&#34;http://graydon2.dreamwidth.org/1597.html&#34;&gt;shoutout to Peter Miller for Aegis&lt;/a&gt;. It&amp;rsquo;s
+great that Peter Miller&amp;rsquo;s work inspired others to build systems that
+are used today. One random person&amp;rsquo;s ideas and software made a lasting
+difference in the world!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>How to think about Rust ownership versus C&#43;&#43; unique_ptr</title>
@@ -38,7 +133,7 @@
 
 &lt;p&gt;Here is Steve&amp;rsquo;s example of an unintended segmentation fault from C++:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;iostream&amp;gt;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;iostream&amp;gt;&lt;/span&gt;
 &lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;memory&amp;gt;&lt;/span&gt;
 
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;namespace&lt;/span&gt; std;
@@ -54,11 +149,11 @@
     cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
 }
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Steve shows an &amp;ldquo;equivalent&amp;rdquo; Rust program in which code attempts to move ownership fails to compile because of a type error (I edited to correspond more closely with the C++):&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;orig&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;box&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
@@ -68,7 +163,7 @@
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;orig);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 }&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;understanding-c-behavior-by-modeling-it-in-rust-safely:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Understanding C++ behavior by modeling it in Rust, safely&lt;/h2&gt;
 
@@ -80,7 +175,7 @@
 
 &lt;p&gt;You can play with this code &lt;a href=&#34;http://is.gd/5kEQA8&#34;&gt;at this Rust playground link&lt;/a&gt;. (You may find it interesting to examine the assembly code generated.)&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Simulate a segmentation fault.&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Simulate a segmentation fault.&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;seg_fault()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;panic&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;segmentation fault&amp;quot;&lt;/span&gt;);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 }&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
@@ -109,7 +204,7 @@
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 }&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Nobody would ever write this kind of code in Rust, but implicitly, all C++ programs are semantically basically doing this, except that for efficiency, the &lt;code&gt;nullptr&lt;/code&gt; checking is not done at the language level but just results in an actual segmentation fault at the operating system level.&lt;/p&gt;
 
@@ -117,7 +212,7 @@
 
 &lt;p&gt;The single most disturbing failure mode of the C++-based software product I worked on in 1995-1997 in C++ was segmentation faults resulting from mysteriously disappearing pointers. What I mean is, behavior like the following, where a container containing smart pointers to objects was meant to &lt;em&gt;own&lt;/em&gt; them, but there was no compile-time way to verify this fact, because of the nature of the object graph. If someone didn&amp;rsquo;t play by the uncheckable rules and inadvertently took ownership of (instead of &amp;ldquo;borrowing&amp;rdquo; through a raw pointer) something embedded in the collection, then &lt;code&gt;nullptr&lt;/code&gt; appeared, and a segmentation fault happened.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;vector&amp;gt;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;vector&amp;gt;&lt;/span&gt;
 &lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;memory&amp;gt;&lt;/span&gt;
 &lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;iostream&amp;gt;&lt;/span&gt;
 
@@ -137,7 +232,7 @@
     cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
 }
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;You can probably guess what some developers did to &amp;ldquo;fix&amp;rdquo; the segmentation fault. They started adding &lt;code&gt;nullptr&lt;/code&gt; checks everywhere to prevent crashing, but this only resulted in &lt;em&gt;corrupt user data and documents&lt;/em&gt;, because in fact, we lost data in those collections and smart pointers to the data should never have ended up &lt;code&gt;nullptr&lt;/code&gt;!!&lt;/p&gt;
 
@@ -147,7 +242,7 @@
 
 &lt;p&gt;The Rust type-checker rejects any attempt to move ownership out of a collection. (Try to compile it in &lt;a href=&#34;http://is.gd/Om7wfr&#34;&gt;this playground&lt;/a&gt;.)&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;v&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;vec&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;[&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;box&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i];&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
@@ -159,16 +254,16 @@
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 }&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7:24: 7:28 error: cannot move out of dereference (dereference is implicit, due to indexing)&lt;/span&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7:24: 7:28 error: cannot move out of dereference (dereference is implicit, due to indexing)&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;                                                       ^~~~&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7:9: 7:21 note: attempting to move value to here&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;                                        ^~~~~~~~~~~~&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;often-you-do-want-to-share:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Often, you do want to share&lt;/h3&gt;
 
@@ -176,7 +271,7 @@
 
 &lt;p&gt;But note that Rust is flexible: you don&amp;rsquo;t have to use Rust&amp;rsquo;s default pointer type! You can use one of Rust&amp;rsquo;s many other pointer types, such as &lt;a href=&#34;http://doc.rust-lang.org/guide.html#rc-and-arc&#34;&gt;&lt;code&gt;Rc&lt;/code&gt; or &lt;code&gt;Arc&lt;/code&gt;&lt;/a&gt;, that allow reference-counted shared ownership (like C++ &lt;code&gt;shared_ptr&lt;/code&gt;), if that&amp;rsquo;s what you really want. (&lt;a href=&#34;http://is.gd/HNi7SR&#34;&gt;Playground here&lt;/a&gt;.)&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Reference-counted smart pointer.&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Reference-counted smart pointer.&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;std&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;rc&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;Rc;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
@@ -190,13 +285,13 @@
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 }&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;unsafe:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Unsafe&lt;/h2&gt;
 
 &lt;p&gt;Finally, Rust does allow you to go all out and write &lt;a href=&#34;http://doc.rust-lang.org/guide.html#unsafe&#34;&gt;unsafe&lt;/a&gt; code, if you truly need to for raw C performance or FFI reasons. Most of the time you do not need to, because the whole point of Rust is to compile down to the same kind of assembly code you would get from C.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extern&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;crate&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;libc;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extern&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;crate&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;libc;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;libc&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;{size_t,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;malloc};&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;std&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;mem;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
@@ -218,7 +313,7 @@
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 }&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;conclusion:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Conclusion&lt;/h2&gt;
 
@@ -298,7 +393,7 @@
 
 &lt;p&gt;Here&amp;rsquo;s the first version of the code, which is a simplification of logic in a real application. A name is looked up to find an ID, then the ID is used to construct a URL to submit to a Web service.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Example&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Example&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
 
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
@@ -324,7 +419,7 @@
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;In this code, everything seems fine. This was the situation in my application when it was certain that finding an ID would succeed.&lt;/p&gt;
 
@@ -334,7 +429,7 @@
 
 &lt;p&gt;It turned out that finding an ID could fail, so I changed &lt;code&gt;findId&lt;/code&gt; to return the type &lt;code&gt;Option[Id]&lt;/code&gt; instead of &lt;code&gt;Id&lt;/code&gt;. To get the code to compile, I had to change the type of the parameter to &lt;code&gt;makeUrl&lt;/code&gt; also:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @return Some(ID of user) if found, else None&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    */&lt;/span&gt;
@@ -348,7 +443,7 @@
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Oops, now this has an unintended bug!&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Option&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;But this resulted in a bug (thankfully caught by my test suite that actually went over the Web to fetch stuff)! The bug was that the URL constructed was nothing resembling what I ever wanted to construct: &lt;code&gt;http://service.com?id=Some(42)&lt;/code&gt; was being requested.&lt;/p&gt;
 
@@ -384,7 +479,7 @@ You ordered NULL items.
 
 &lt;p&gt;First step in cleaning up the code: make &lt;code&gt;toString&lt;/code&gt; explicit:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
 
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; main&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
@@ -392,7 +487,7 @@ You ordered NULL items.
     getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;(Later in the post, I will discuss alternatives to this explicit &lt;code&gt;toString&lt;/code&gt;.)&lt;/p&gt;
 
@@ -400,15 +495,15 @@ You ordered NULL items.
 
 &lt;p&gt;Another design smell was that of using&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;in the first place. This is a well-known lazy practice called &lt;a href=&#34;http://c2.com/cgi/wiki?PrimitiveObsession&#34;&gt;primitive obsession&lt;/a&gt;. I know better than that.&lt;/p&gt;
 
 &lt;p&gt;The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
 
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
@@ -421,7 +516,7 @@ You ordered NULL items.
       &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(0)&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Note that this still &lt;em&gt;would not&lt;/em&gt; have solved the &lt;code&gt;toString&lt;/code&gt; problem, since the output would simply have been &lt;code&gt;http://service.com?id=Some(Id(42))&lt;/code&gt; or the dreaded &lt;code&gt;http://service.com?id=None&lt;/code&gt;!&lt;/p&gt;
 
@@ -441,7 +536,7 @@ You ordered NULL items.
 
 &lt;p&gt;Let&amp;rsquo;s refactor the code:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Special method for turning to URL string fragment&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
@@ -470,13 +565,13 @@ You ordered NULL items.
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Now the code that was creating a junk URL will no longer compile: &lt;code&gt;id&lt;/code&gt; is of type &lt;code&gt;Option[Id]&lt;/code&gt; but that type does &lt;em&gt;not&lt;/em&gt; have a &lt;code&gt;toUrlString&lt;/code&gt; method. Mission accomplished!&lt;/p&gt;
 
 &lt;p&gt;To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
 
     id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
@@ -484,7 +579,7 @@ You ordered NULL items.
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Simple!&lt;/p&gt;
 

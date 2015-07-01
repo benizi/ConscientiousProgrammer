@@ -17,7 +17,7 @@
       <guid>http://conscientiousprogrammer.com/blog/2013/07/10/pittsburgh-javascript-meetup-functional-programming/</guid>
       <description>
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://photos3.meetupstatic.com/photos/event/7/f/6/e/global_239372622.jpeg&#34; /&gt;
@@ -29,7 +29,7 @@
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Because the topic of the featured presentation by &lt;a href=&#34;http://idiotcoder.com/&#34;&gt;Richard Ashkettle&lt;/a&gt; was &lt;a href=&#34;http://en.wikipedia.org/wiki/Functional_programming&#34;&gt;functional programming&lt;/a&gt;, I made sure to attend my first meeting of the newly revived &lt;a href=&#34;http://www.meetup.com/Pittsburgh-JavaScript/&#34;&gt;Pittsburgh JavaScript meetup&lt;/a&gt;. (This was actually the third meeting of the revived Pittsburgh JavaScript group, but I hadn&amp;rsquo;t been able to make it to the first two.)&lt;/p&gt;
 
@@ -101,7 +101,7 @@
 
 &lt;p&gt;JavaScript not only provides full-fledged functions, but ironically, its weirdest feature, the prototype-based inheritance instead of class-based inheritance, inadvertently has prevented &amp;ldquo;interference&amp;rdquo; from the conventional class-based object-oriented world, which is mostly based not on functions, but on &lt;a href=&#34;https://en.wikipedia.org/wiki/Method_%28computer_programming%29&#34;&gt;methods&lt;/a&gt; that interference with functions because they are meant to &lt;em&gt;replace&lt;/em&gt; functions (since according to &amp;ldquo;pure&amp;rdquo; object-oriented thinking, functions are evil and computation should involve method calls on objects). &lt;em&gt;JavaScript does not (really) have methods&lt;/em&gt;; it only simulates them, by storing bona fide closures into fields of (map) objects. For example, if you use &lt;a href=&#34;http://emberjs.com&#34;&gt;Ember&lt;/a&gt;, the following code illustrates how the building blocks of typical JavaScript programming involve creating lots of &lt;code&gt;function&lt;/code&gt;s: &lt;code&gt;valueWillChange&lt;/code&gt; and &lt;code&gt;valudDidChange&lt;/code&gt; are just functions. They are not special things, &amp;ldquo;methods&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;App.PersonView &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; Ember.View.extend({
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;App.PersonView &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; Ember.View.extend({
   valueWillChange&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;function&lt;/span&gt; (obj, keyName, value) {
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;this&lt;/span&gt;.changingFrom &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; value;
   }.observesBefore(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;content.value&amp;#39;&lt;/span&gt;),
@@ -114,7 +114,7 @@
   }.observes(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;content.value&amp;#39;&lt;/span&gt;)
 });
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;examples:4a05566a34ea27820d7f737863a690ea&#34;&gt;Examples&lt;/h3&gt;
 

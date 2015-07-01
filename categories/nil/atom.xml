@@ -17,7 +17,7 @@
       <guid>http://conscientiousprogrammer.com/blog/2013/10/31/surprised-by-the-go-programming-languages-treatment-of-nil/</guid>
       <description>
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://golang.org/doc/gopher/frontpage.png&#34; /&gt;
@@ -29,7 +29,7 @@
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;So I happened to see an &lt;a href=&#34;http://tip.golang.org/doc/go1.2&#34;&gt;announcement of Go version 1.2&lt;/a&gt;. I saw something that disturbed me, having to do with &lt;code&gt;nil&lt;/code&gt;, a &lt;a href=&#34;../../blog/2013/06/29/nil-non-determinism-exceptions/&#34;&gt;&amp;ldquo;favorite&amp;rdquo; topic of mine&lt;/a&gt;.&lt;/p&gt;
 
@@ -97,9 +97,9 @@ The current behavior is at best merely historical accident; it was definitely no
 
 &lt;p&gt;Here&amp;rsquo;s the error message (I have omitted the 46-line stack trace):&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;      Generating... Liquid Exception: undefined method `sub&amp;#39; for nil:NilClass in atom.xml&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;      Generating... Liquid Exception: undefined method `sub&amp;#39; for nil:NilClass in atom.xml&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;This is, unfortunately, an example of an error message that is next to useless, and should &lt;em&gt;never&lt;/em&gt; appear. I have stated that &lt;a href=&#34;../../blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/&#34;&gt;we as programmers should not generate useless end user error messages&lt;/a&gt;, and of course, in context, I am an end user of the blog generating software I use.&lt;/p&gt;
 
@@ -111,7 +111,7 @@ The current behavior is at best merely historical accident; it was definitely no
 
 &lt;p&gt;The bug is that the code in Jekyll that does syntax highlighting using Pygments makes an assumption that the return value of &lt;code&gt;Pygments.highlight()&lt;/code&gt; is never &lt;code&gt;nil&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;              &lt;span style=&#34;color: #19177C&#34;&gt;@renderer&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;||=&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;Class&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;new(&lt;span style=&#34;color: #880000&#34;&gt;Redcarpet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;Render&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;HTML&lt;/span&gt;) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;              &lt;span style=&#34;color: #19177C&#34;&gt;@renderer&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;||=&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;Class&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;new(&lt;span style=&#34;color: #880000&#34;&gt;Redcarpet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;Render&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;HTML&lt;/span&gt;) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
                 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;block_code&lt;/span&gt;(code, lang)
                   lang &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; lang &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; lang&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;split&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;first &lt;span style=&#34;color: #666666&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;
                   output &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; add_code_tags(
@@ -126,7 +126,7 @@ The current behavior is at best merely historical accident; it was definitely no
                 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
               &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Well, it &lt;em&gt;can&lt;/em&gt; be &lt;code&gt;nil&lt;/code&gt; and was for me, and therefore &lt;code&gt;add_code_tags&lt;/code&gt; was calling &lt;code&gt;code.sub()&lt;/code&gt; with &lt;code&gt;code&lt;/code&gt; being &lt;code&gt;nil&lt;/code&gt;.&lt;/p&gt;
 
@@ -149,7 +149,7 @@ The current behavior is at best merely historical accident; it was definitely no
 
 &lt;p&gt;Unfortunately, the documentation of the Pygments API was incomplete in &lt;code&gt;lib/pygments/popen.rb&lt;/code&gt;, where &lt;code&gt;highlight&lt;/code&gt; is defined:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Public: Highlight code.&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Public: Highlight code.&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;#&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Takes a first-position argument of the code to be highlighted, and a&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# second-position hash of various arguments specifiying highlighting properties.&lt;/span&gt;
@@ -170,7 +170,7 @@ The current behavior is at best merely historical accident; it was definitely no
       str
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;a-problem-with-dynamically-typed-language-culture:08c2e7a867293a37060f4f671511a7f1&#34;&gt;A problem with dynamically typed language culture&lt;/h2&gt;
 
@@ -180,15 +180,15 @@ The current behavior is at best merely historical accident; it was definitely no
 
 &lt;p&gt;In code in a statically typed language such as OCaml (or Haskell or Scala), I would expect to see:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; highlight &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;code &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;opts &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; my_map&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;//...&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; highlight &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;code &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;opts &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; my_map&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;//...&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;and expect that the return value should be a &lt;code&gt;String&lt;/code&gt;, or&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; highlight &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;code &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;opts &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; my_map&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; option &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;//...&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; highlight &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;code &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;opts &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; my_map&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; option &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;//...&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;to indicate that the return value could be either &lt;code&gt;Some(formatted_code)&lt;/code&gt; or &lt;code&gt;None&lt;/code&gt;.&lt;/p&gt;
 
@@ -196,11 +196,11 @@ The current behavior is at best merely historical accident; it was definitely no
 
 &lt;p&gt;Reading the Ruby code, I saw that the situation is even more complex than I thought:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# If the caller didn&amp;#39;t give us any code, we have nothing to do,&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# If the caller didn&amp;#39;t give us any code, we have nothing to do,&lt;/span&gt;
       &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# so return right away.&lt;/span&gt;
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; code &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; code&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;nil? &lt;span style=&#34;color: #666666&#34;&gt;||&lt;/span&gt; code&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;empty?
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Wow: &lt;code&gt;code&lt;/code&gt; can be &lt;code&gt;nil&lt;/code&gt;, in which case &lt;code&gt;nil&lt;/code&gt; is returned.&lt;/p&gt;
 
@@ -212,7 +212,7 @@ The current behavior is at best merely historical accident; it was definitely no
 
 &lt;p&gt;&lt;code&gt;mentos()&lt;/code&gt; is not very well documented. Until I read this code, I didn&amp;rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In &lt;code&gt;lib/pygments/popen.rb&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Our &amp;#39;rpc&amp;#39;-ish request to mentos. Requires a method name, and then optional&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Our &amp;#39;rpc&amp;#39;-ish request to mentos. Requires a method name, and then optional&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# args, kwargs, code.&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;mentos&lt;/span&gt;(&lt;span style=&#34;color: #008000&#34;&gt;method&lt;/span&gt;, args&lt;span style=&#34;color: #666666&#34;&gt;=[]&lt;/span&gt;, kwargs&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;{}, original_code&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;nil&lt;/span&gt;)
       &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Open the pipe if necessary&lt;/span&gt;
@@ -236,7 +236,7 @@ The current behavior is at best merely historical accident; it was definitely no
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;raise&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;MentosError&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;EPIPE&amp;quot;&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;It turns out that fundamental problem is not &lt;code&gt;nil&lt;/code&gt; so much as &lt;em&gt;non-determinism&lt;/em&gt;: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for &lt;code&gt;nil&lt;/code&gt; to end up being returned. This non-determinism is worse than &lt;code&gt;nil&lt;/code&gt;. I think that in a situation like this, an &lt;em&gt;exception&lt;/em&gt; is called for. &lt;code&gt;highlight()&lt;/code&gt; should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return &lt;code&gt;nil&lt;/code&gt; (or if using a statically typed language, a &lt;code&gt;None&lt;/code&gt;).&lt;/p&gt;
 
@@ -244,26 +244,26 @@ The current behavior is at best merely historical accident; it was definitely no
 
 &lt;p&gt;Amusingly, upon discovering the logging code, I used it, setting the magic environment variable &lt;code&gt;MENTOS_LOG&lt;/code&gt; (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;#&lt;/span&gt; Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;#&lt;/span&gt; Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Out header: {&amp;quot;method&amp;quot;:&amp;quot;highlight&amp;quot;,&amp;quot;args&amp;quot;:null,&amp;quot;kwargs&amp;quot;:{&amp;quot;lexer&amp;quot;:&amp;quot;console&amp;quot;,&amp;quot;options&amp;quot;:{&amp;quot;encoding&amp;quot;:&amp;quot;utf-8&amp;quot;,&amp;quot;outencoding&amp;quot;:&amp;quot;utf-8&amp;quot;},&amp;quot;fd&amp;quot;:10,&amp;quot;id&amp;quot;:&amp;quot;TVQSJNBV&amp;quot;,&amp;quot;bytes&amp;quot;:147}}&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;E, [2013-06-29 10:26 #13799] ERROR -- : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;testing:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Testing&lt;/h2&gt;
 
 &lt;p&gt;It turns out that there &lt;em&gt;is&lt;/em&gt; a place where the intended behavior is in a sense documented: the unit tests in &lt;code&gt;test_pygments.rb&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;test_returns_nil_on_timeout&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;test_returns_nil_on_timeout&lt;/span&gt;
     large_code &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;REDIS_CODE&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;300&lt;/span&gt;
     code &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; P&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;highlight(large_code) &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# a 30 mb highlight request will timeout&lt;/span&gt;
     assert_equal &lt;span style=&#34;color: #008000&#34;&gt;nil&lt;/span&gt;, code
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be &lt;code&gt;nil&lt;/code&gt;!&lt;/p&gt;
 
@@ -296,11 +296,11 @@ The current behavior is at best merely historical accident; it was definitely no
 &lt;p&gt;I submitted a &lt;code&gt;pygments.rb&lt;/code&gt; &lt;a href=&#34;https://github.com/tmm1/pygments.rb/pull/132&#34;&gt;pull request&lt;/a&gt; to fix a regression bug in which any use of
 &lt;code&gt;MENTOS_TIMEOUT&lt;/code&gt; caused an instant type error:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&amp;#39;: undefined method `zero?&amp;#39; for &amp;quot;100&amp;quot;:String (NoMethodError)&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&amp;#39;: undefined method `zero?&amp;#39; for &amp;quot;100&amp;quot;:String (NoMethodError)&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;    from /Users/chen/.gem/ruby/2.1.2/gems/pygments.rb-0.6.0/lib/pygments/popen.rb:220:in `mentos&amp;#39;&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;```&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;update-of-2015-01-28:08c2e7a867293a37060f4f671511a7f1&#34;&gt;(Update of 2015-01-28)&lt;/h3&gt;
 
@@ -316,11 +316,11 @@ to finally fix a cascade of show-stopping type errors.&lt;/p&gt;
 &lt;p&gt;The final diff involved trying to parse a string into an integer and
 catching the exception if any:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #A00000&#34;&gt;-        timeout_time = ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;] || 8&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #A00000&#34;&gt;-        timeout_time = ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;] || 8&lt;/span&gt;
 &lt;span style=&#34;color: #00A000&#34;&gt;+        # Invalid MENTOS_TIMEOUT results in just using default.&lt;/span&gt;
 &lt;span style=&#34;color: #00A000&#34;&gt;+        timeout_time = Integer(ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;]) rescue 8&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;conclusion:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Conclusion&lt;/h2&gt;
 

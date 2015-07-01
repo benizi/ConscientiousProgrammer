@@ -59,14 +59,14 @@
       <guid>http://conscientiousprogrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/</guid>
       <description>
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://static.squarespace.com/static/538f3cc8e4b00f52172b5560/t/53a4ec76e4b0488fb14c5a29/1403317372203/sign.png?format=500w&#34; /&gt;
     
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;I finally attended my first ever &lt;a href=&#34;http://www.codeandsupply.co/&#34;&gt;Pittsburgh Code and Supply&lt;/a&gt; meeting! The group, which posts its &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/&#34;&gt;events on Meetup&lt;/a&gt;, was created by local Pittsburgh software developer &lt;a href=&#34;https://twitter.com/justinxreese&#34;&gt;Justin Reese&lt;/a&gt; just a few months ago, in March 2014. His vision is to create a local community that, unlike conventional specific language/technology-based meetups, is much more universal and broad. If you haven&amp;rsquo;t do so already, read more about the &lt;a href=&#34;http://www.codeandsupply.co/about&#34;&gt;goals of Pittsburgh Code and Supply&lt;/a&gt;. I&amp;rsquo;m very excited about this new group!&lt;/p&gt;
 
@@ -389,7 +389,7 @@
 
 &lt;p&gt;What does that mean?&lt;/p&gt;
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg&#34; /&gt;
@@ -401,7 +401,7 @@
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;how-to-learn-a-programming-language:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;How to learn a programming language&lt;/h2&gt;
 
@@ -747,7 +747,7 @@
 
 &lt;p&gt;The meeting did nothing to change my intuition.&lt;/p&gt;
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;../../images/pittjug-2013-08-13/group.jpg&#34; /&gt;
@@ -759,7 +759,7 @@
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;presentation-by-reza-rahman:b1f3aed35fff29eb7f9fd9ed02e1ec4c&#34;&gt;Presentation by Reza Rahman&lt;/h2&gt;
 
@@ -767,7 +767,7 @@
 
 &lt;p&gt;He gave a retrospective on how surprisingly long ago Java EE came on the scene, a decade ago, and described the evolution over the years to improve developer productivity.&lt;/p&gt;
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;../../images/pittjug-2013-08-13/speaker.jpg&#34; /&gt;
@@ -779,7 +779,7 @@
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;Also it was good to see that the new APIs have improved since the old ones, including &amp;ldquo;fluent&amp;rdquo; APIs, the fact is that everything still seems clunky and &amp;ldquo;old&amp;rdquo;.&lt;/p&gt;
 

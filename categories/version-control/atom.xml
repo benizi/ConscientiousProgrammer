@@ -44,7 +44,7 @@ source software. However, his Web site &lt;code&gt;http://www.canb.auug.org.au/~
 
 &lt;p&gt;I found this old photo, for example.&lt;/p&gt;
 
-&lt;p&gt;
+
 &lt;figure &gt;
     
         &lt;img src=&#34;http://web.archive.org/web/20090111230031/http://miller.emu.id.au/pmiller/pmiller-1993-128.png&#34; /&gt;
@@ -56,7 +56,7 @@ source software. However, his Web site &lt;code&gt;http://www.canb.auug.org.au/~
     &lt;/figcaption&gt;
     
 &lt;/figure&gt;
-&lt;/p&gt;
+
 
 &lt;h2 id=&#34;wayback-machine:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;Wayback Machine&lt;/h2&gt;
 
@@ -91,6 +91,16 @@ place for whatever I value.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Do you have a plan for your Web site or code or writings? Or do you
   expect them to disappear? How do you feel about leaving something
   behind?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;update-of-2015-06-29:a626c37eefef6cb88a3f2de686a3eafc&#34;&gt;(Update of 2015-06-29)&lt;/h3&gt;
+
+&lt;p&gt;By accident, while reading an old blog post by Graydon Hoare about
+&lt;a href=&#34;https://github.com/graydon/bors&#34;&gt;bors&lt;/a&gt;, which is used for continuous
+integration for the Rust project, I noticed his
+&lt;a href=&#34;http://graydon2.dreamwidth.org/1597.html&#34;&gt;shoutout to Peter Miller for Aegis&lt;/a&gt;. It&amp;rsquo;s
+great that Peter Miller&amp;rsquo;s work inspired others to build systems that
+are used today. One random person&amp;rsquo;s ideas and software made a lasting
+difference in the world!&lt;/p&gt;
 </description>
     </item>
     
