@@ -11,16 +11,16 @@ RelativeURLs = "true"
 MetaDataFormat = "yaml"
 
 [author]
-# Seems to be used where title was
-name = "The Conscientious Programmer"
+name = "Franklin Chen"
 
 [permalinks]
 post = "/blog/:year/:month/:day/:title/"
 
-[indexes]
+[taxonomies]
 category = "categories"
 
 [params]
+truncate = true
 defaultDescription = "Franklin Chen's thoughts about computer programming"
 defaultKeywords = "Franklin Chen, programming, blog"
 
@@ -30,12 +30,16 @@ theme = "theme-base-0e"
 
 highlight = "default"
 tagline = "Humbly exploring what it means to do the right thing."
+home = "The Conscientious Programmer"
 
 googleAuthorship = "100967806642012078047"
 googleAnalytics = "UA-41982602-1"
 
 github = "https://github.com/FranklinChen"
+#bitbucket = "https://bitbucket.org/FranklinChen/"
 linkedin = "http://www.linkedin.com/in/franklinchen"
 googleplus = "http://google.com/+FranklinChen"
 facebook = "http://www.facebook.com/franklin.chen"
 twitter = "http://twitter.com/franklinchen"
+youtube = "http://www.youtube.com/user/FranklinChen"
+rss = true
