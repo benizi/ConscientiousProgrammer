@@ -6,8 +6,141 @@
     <description>Recent content on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Jun 2015 21:37:39 -0400</lastBuildDate>
+    <lastBuildDate>Wed, 07 Oct 2015 23:25:12 -0400</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Report on my talk &#34;A gentle conceptual introduction to functional programming&#34;</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/10/07/report-on-my-talk-a-gentle-conceptual-introduction-to-functional-programming/</link>
+      <pubDate>Wed, 07 Oct 2015 23:25:12 -0400</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/10/07/report-on-my-talk-a-gentle-conceptual-introduction-to-functional-programming/</guid>
+      <description>
+
+&lt;p&gt;On behalf of the relatively new
+&lt;a href=&#34;http://www.meetup.com/Pittsburgh-Functional-Programming-Meetup/&#34;&gt;Pittsburgh Functional Programming&lt;/a&gt;,
+I gave an introductory talk held at Google Pittsburgh that I called
+&lt;a href=&#34;http://www.meetup.com/Pittsburgh-Functional-Programming-Meetup/events/224593883/&#34;&gt;&amp;ldquo;A gentle conceptual introduction to functional programming&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This presentation is part of an experiment, a big shift in how I&amp;rsquo;m
+trying to talk about not only &amp;ldquo;functional programming&amp;rdquo;, but any kind
+of programming and more generally any topic at all (whether it&amp;rsquo;s
+cooking or music) for a wide audience. As I&amp;rsquo;ve been doing more
+teaching and collaboration in many areas of my life, I&amp;rsquo;ve been trying
+to figure out ways to better reach people. In particular, when
+presenting something new, it&amp;rsquo;s useful to motivate it and somehow
+connect it to something they already know, even if it&amp;rsquo;s different.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ll write more later about what I did differently in this talk than
+I&amp;rsquo;ve done in the past, and why. For now, I&amp;rsquo;ll just say that one big
+addition I made was that I prepared feedback forms to be filled out,
+both to help me understand what I can do better and also to help
+Pittsburgh Functional Programming plan further events and topics that
+people want to see. So I will summarize the feedback I got (fifteen
+participants filled out feedback forms).&lt;/p&gt;
+
+&lt;h2 id=&#34;slides:d0bf3f7e5dfd4c4da1d64828408ba330&#34;&gt;Slides&lt;/h2&gt;
+
+&lt;p&gt;For those who are curious about an outline of my talk, there are
+&lt;a href=&#34;https://github.com/FranklinChen/gentle-conceptual-intro-to-fp-for-humans/raw/master/presentation.pdf&#34;&gt;slides&lt;/a&gt;,
+with the caveat that much of what I said or did are not on the
+slides. In fact, one of the most commented-on helpful aspects of the
+presentation was not on the slides at all: my use of a whiteboard. I
+was happy I specifically requested that the venue provide me with a
+whiteboard. I knew it was going to make a difference.&lt;/p&gt;
+
+&lt;h2 id=&#34;comments-and-suggestions:d0bf3f7e5dfd4c4da1d64828408ba330&#34;&gt;Comments and suggestions&lt;/h2&gt;
+
+&lt;h3 id=&#34;logistics:d0bf3f7e5dfd4c4da1d64828408ba330&#34;&gt;Logistics&lt;/h3&gt;
+
+&lt;p&gt;Some mentioned that I should have used a microphone. Point taken. This
+is not the first time I&amp;rsquo;ve forgotten to ask for a microphone. When
+there&amp;rsquo;s a large room and thirty people, even though I think I&amp;rsquo;m
+speaking loudly, it may not be loud enough.&lt;/p&gt;
+
+&lt;h3 id=&#34;presentation:d0bf3f7e5dfd4c4da1d64828408ba330&#34;&gt;Presentation&lt;/h3&gt;
+
+&lt;p&gt;I was happy that commenters felt I did a good job providing an
+introduction that was not too elementary (I knew that there would be a
+wide range of experience among those who attended). They also
+appreciated my use of concrete &lt;strong&gt;examples&lt;/strong&gt; and metaphors (such as the
+pizza order).&lt;/p&gt;
+
+&lt;p&gt;My use of a &lt;strong&gt;whiteboard&lt;/strong&gt; to draw pictures of immutable data structures
+and step through the structural sharing that happens when you update
+them was particularly well-received. I&amp;rsquo;m convinced even more than ever
+that helping with &lt;strong&gt;visualization&lt;/strong&gt; and &lt;strong&gt;process&lt;/strong&gt; is key.&lt;/p&gt;
+
+&lt;p&gt;My giving &lt;strong&gt;concrete&lt;/strong&gt; pointers to libraries and other resources for
+using FP in various languages (such as Python and JavaScript) was
+noted. Just saying &amp;ldquo;people are doing this, search for it&amp;rdquo; is not
+helpful.&lt;/p&gt;
+
+&lt;p&gt;A few quotes that made me feel I succeeded in my objectives, which
+were to give an introduction that would open a world and inspire
+further exploration:&lt;/p&gt;
+
+&lt;blockquote&gt;
+I much better understand now the paradigm behind FP. So now I have a
+reason to explore it.
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+Thinking about immutable data in new way.
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+It provided the foundation I was hoping for. I liked the data visualization.
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+While I have encountered most of these topics before, the speaker did
+an excellent job of giving a wide view of functional programming and
+details beyond just the theory.
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;some-things-people-are-interested-in-learning-and-using:d0bf3f7e5dfd4c4da1d64828408ba330&#34;&gt;Some things people are interested in learning and using&lt;/h3&gt;
+
+&lt;p&gt;On the feedback form I requested suggestions for talk topics, hands-on
+workshops, and study groups.&lt;/p&gt;
+
+&lt;p&gt;Here are some examples:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;How to use FP in a traditionally OO language&lt;/li&gt;
+&lt;li&gt;FP for practical tasks such as command-line and Web&lt;/li&gt;
+&lt;li&gt;FP design patterns&lt;/li&gt;
+&lt;li&gt;Concurrency in FP&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Languages people were interested in learning and using for FP (I list
+those with at least two people writing them in):&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Haskell (4 responses)&lt;/li&gt;
+&lt;li&gt;Clojure (3 responses)&lt;/li&gt;
+&lt;li&gt;Elm (2 responses)&lt;/li&gt;
+&lt;li&gt;Scala (2 responses)&lt;/li&gt;
+&lt;li&gt;Python (2 responses)&lt;/li&gt;
+&lt;li&gt;JavaScript (2 responses)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I should note that in the discussions, where not everyone submitted a
+written feedback form, I gathered there was a lot of curiosity about
+Elm.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:d0bf3f7e5dfd4c4da1d64828408ba330&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;This wasn&amp;rsquo;t much of a report on the presentation, and I&amp;rsquo;ll need to
+write up details on our session, but I haven&amp;rsquo;t been writing much at
+all, so I thought this brief summary of the feedback is better than
+nothing, in order to continue to move forward.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m very grateful for the hosting at Google Pittsburgh and all who
+came out to attend my presentation and gave me such detailed feedback
+in person or on paper.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Aegis and Cook: what happens when an open source developer dies?</title>
@@ -1375,65 +1508,6 @@ mistaken as an accurate gauge of competence.&lt;/p&gt;
 &lt;h2 id=&#34;conclusion:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;This was a great Pittsburgh Scala Meetup session. I felt that a lot of questions that had built up in my mind after having gotten into reactive programming are being addressed with continuing work.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Review of the free Coursera course &#34;Principles of Reactive Programming&#34;</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/</link>
-      <pubDate>Tue, 31 Dec 2013 21:29:39 -0500</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/</guid>
-      <description>
-
-&lt;p&gt;At long last, I have officially completed the free Coursera course &lt;a href=&#34;http://www.coursera.org/course/reactive&#34;&gt;&amp;ldquo;Principles of Reactive Programming&amp;rdquo;&lt;/a&gt;, receiving my &amp;ldquo;Statement of Accomplishment&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;This was an intense course, a lot of work, actually, and made the last two month s of my life (November and December) challenging as I juggled many activities. But it was worth the effort. I would definitely recommend this course to anyone who has completed the introductory course &lt;a href=&#34;http://www.coursera.org/course/progfun&#34;&gt;&amp;ldquo;Principles of Functional Programming in Scala&amp;rdquo;&lt;/a&gt; (or has the equivalent background). (See my &lt;a href=&#34;http://franklinchen.com/blog/2012-11-15-review-of-courseras-fall-2012-functional-programming-principles-in-scala/&#34;&gt;review of that course as offered in fall of 2012&lt;/a&gt;.)&lt;/p&gt;
-
-&lt;p&gt;I took this course along with a bunch of local friends who are also members of the &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/&#34;&gt;Pittsburgh Scala Meetup&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;what-is-reactive:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;What is &amp;ldquo;Reactive&amp;rdquo;?&lt;/h2&gt;
-
-&lt;p&gt;&amp;ldquo;Reactive&amp;rdquo; is a fairly new buzzword, popularized recently by the &lt;a href=&#34;http://www.reactivemanifesto.org/&#34;&gt;Reactive Manifesto&lt;/a&gt; to urge consideration of four traits modern applications may need to have:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;responsive&lt;/li&gt;
-&lt;li&gt;scalable&lt;/li&gt;
-&lt;li&gt;resilient&lt;/li&gt;
-&lt;li&gt;event-driven&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;instructors-and-topics:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Instructors and topics&lt;/h2&gt;
-
-&lt;p&gt;Each instructor was responsible for covering a key technology.&lt;/p&gt;
-
-&lt;h3 id=&#34;martin-odersky:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Martin Odersky&lt;/h3&gt;
-
-&lt;p&gt;Martin Oderksy, the inventor of Scala and instructor for the previously mentioned &amp;ldquo;Principles of Functional Programming in Scala&amp;rdquo; course, focused on covering more advanced usage of Scala.&lt;/p&gt;
-
-&lt;p&gt;He immediately introduced monads, which are key to many of the concepts and libraries used throughout this course. Scala&amp;rsquo;s support for monads through the syntax of for-comprehensions is very helpful. He introduced the property-based testing framework &lt;a href=&#34;http://www.scalacheck.org/&#34;&gt;ScalaCheck&lt;/a&gt; (which uses monads for generation of data), and the first assignment involved working with the framework. (By the way, I gave a &lt;a href=&#34;http://franklinchen.com/blog/2013/04/11/my-pittsburgh-scala-meetup-talk-on-property-based-testing-using-scalacheck/&#34;&gt;talk on property-based testing using ScalaCheck&lt;/a&gt; eight months ago.)&lt;/p&gt;
-
-&lt;p&gt;Then he discussed modeling event simulation in Scala using mutable objects. I felt that this unit was not in the spirit of the others, because there was so much uncontrolled mutable state running around. My friends and I agreed that the assignment for this unit was burdensome and not really useful. I thought to myself, in fact, that I would never solve the problems in this way.&lt;/p&gt;
-
-&lt;h3 id=&#34;erik-meijer:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Erik Meijer&lt;/h3&gt;
-
-&lt;p&gt;Erik Meijer is a very energetic and humorous speaker. I really enjoyed his lectures.&lt;/p&gt;
-
-&lt;p&gt;In his first unit, he introduced asynchronous programming using Scala&amp;rsquo;s &lt;a href=&#34;http://docs.scala-lang.org/overviews/core/futures.html&#34;&gt;&lt;code&gt;Future&lt;/code&gt; monad (backed by a &lt;code&gt;Promise&lt;/code&gt;)&lt;/a&gt;, as well as the cool new &lt;a href=&#34;https://github.com/scala/async&#34;&gt;macro-based &lt;code&gt;async&lt;/code&gt;/&lt;code&gt;await&lt;/code&gt; library&lt;/a&gt;, which greatly simplifies writing code. Our assignment, which was instructive and interesting, was to implement a baby version of Node.js in Scala, ha!&lt;/p&gt;
-
-&lt;p&gt;Then he introduced &lt;a href=&#34;https://rxscala.github.io/&#34;&gt;&lt;code&gt;RxScala&lt;/code&gt;&lt;/a&gt;, a Scala adaptor for &lt;a href=&#34;https://github.com/Netflix/RxJava&#34;&gt;&lt;code&gt;RxJava&lt;/code&gt;&lt;/a&gt;, which is a Java port of Microsoft&amp;rsquo;s &amp;ldquo;reactive extensions&amp;rdquo; &lt;code&gt;Rx&lt;/code&gt; framework. I enjoyed this unit a lot, and appreciated the great documentation available (the &amp;ldquo;marble diagrams&amp;rdquo; are particularly useful). One nitpick I suppose I must have with his presentation is that I&amp;rsquo;m not sure that, for a non-theory-oriented audience, the discussions of &amp;ldquo;duality&amp;rdquo; were necessary. The assignment was very practically-oriented, gathering data asynchronously and displaying it and allowing user interaction. It was enjoyable and showcased the power of using a framework like Rx.&lt;/p&gt;
-
-&lt;h3 id=&#34;roland-kuhn:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Roland Kuhn&lt;/h3&gt;
-
-&lt;p&gt;Roland Kuhn covered the most complex section of the course, introducing actors by means of the &lt;a href=&#34;http://akka.io/&#34;&gt;Akka&lt;/a&gt; framework.&lt;/p&gt;
-
-&lt;p&gt;The first assignment was fairly straightforward, on implemented a distributed binary tree with actors.&lt;/p&gt;
-
-&lt;p&gt;The second assignment I found quite difficult, and not only because it was crunch time at the end of December before holiday season! It was a distributed key-value store with multiple levels of possible failure. There is no way I would have successfully and correctly completed this assignment without the helpful discussions I found on the online Coursera forums. To really figure out what was going on required (for me) turning on logging in various places and writing a lot of tests using Akka&amp;rsquo;s &lt;a href=&#34;http://doc.akka.io/docs/akka/snapshot/scala/testing.html&#34;&gt;&lt;code&gt;TestKit&lt;/code&gt;&lt;/a&gt;. I realized eventually that my code was ugly and not entirely clean and idiomatic, but it was definitely a worthwhile learning experience on a realistic problem to solve.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:4f64f078d93c39dccf60b45a8d4f55e9&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I learned quite a lot from this course. It is a very practical course on &amp;ldquo;reactive&amp;rdquo; programming. I felt after completing this course that I was ready to use the concepts and technologies covered in real problems. I am grateful to the instructors (who were active on the forums, by the way) for sharing their theoretical and practical knowledge as a free Coursera course.&lt;/p&gt;
 </description>
     </item>
     

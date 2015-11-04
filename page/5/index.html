@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>The Conscientious Programmer &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/highlight/default.css">
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  <link href="http://ConscientiousProgrammer.com/index.xml" rel="alternate" type="application/rss+xml" title="The Conscientious Programmer &middot; Franklin Chen" />
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      
+      <h1>Franklin Chen</h1>
+      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+      
+      <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+      
+      <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+      <li class="sidebar-nav-item">
+      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+      
+      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+      <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+      <a href="http://ConscientiousProgrammer.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+      </li>
+    </ul>
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="posts">
+    
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2012/10/17/learning-about-parasail-a-new-parallel-programming-language/">Learning about Parasail: a new parallel programming language</a>
+      </h1>
+      <span class="post-date">Oct 17, 2012 &middot; 3 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2012/10/17/learning-about-parasail-a-new-parallel-programming-language/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/parasail">Parasail</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parallelism">parallelism</a><a class="label" href="http://ConscientiousProgrammer.com/categories/concurrency">concurrency</a><a class="label" href="http://ConscientiousProgrammer.com/categories/carnegie-mellon-university">Carnegie Mellon University</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ada">Ada</a><a class="label" href="http://ConscientiousProgrammer.com/categories/types">types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/tucker-taft">Tucker Taft</a><a class="label" href="http://ConscientiousProgrammer.com/categories/guy-blelloch">Guy Blelloch</a><a class="label" href="http://ConscientiousProgrammer.com/categories/nesl">NESL</a><a class="label" href="http://ConscientiousProgrammer.com/categories/standard-ml">Standard ML</a><a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a>
+      </span>
+      
+      <p>I noticed an announcement for a talk to be given at CMU for the <a href="http://www.isri.cmu.edu/">ISR</a> by visitor Tucker Taft, <a href="http://www.cs.cmu.edu/afs/.cs.cmu.edu/Web/copetas/Posters/ISR-Taft12.pdf">&ldquo;ParaSail: A Pointer-Free Path to Object-Oriented Parallel Programming&rdquo;</a>, and decided to attend.</p>
+
+<p>I&rsquo;d recognized <a href="http://en.wikipedia.org/wiki/User:Optikos/S._Tucker_Taft">Tucker Taft</a>&rsquo;s name because decades ago (and <a href="http://www.adacore.com/company/about/executive-team/">now still</a>), he was a very prominent member of the <a href="http://en.wikipedia.org/wiki/Ada_%28programming_language%29">Ada programming language</a> community, being one of the primary designers of the extensions to the original Ada 83. I never actually used Ada 95, but was following it a little bit because in 1995 I had to maintain some Ada 83 code at work, so I was curious where Ada was going. (I haven&rsquo;t used Ada since leaving that job in 1997.)</p>
+
+<p>So I was curious what an Ada guy had in mind as for one of the next steps in programming language design (parallelism), and why a new language and how it would be informed by an Ada mindset.</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2012/10/17/learning-about-parasail-a-new-parallel-programming-language/">Read On &rarr;</a>
+      
+    </div>
+    
+    
+    
+    <ul class="pagination">
+        
+        <li>
+            <a href="../../" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+        </li>
+        
+        <li
+        >
+        <a href="../../page/4/" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+        </li>
+        
+        <li
+        ><a href="../../">1</a></li>
+        
+        <li
+        ><a href="../../page/2/">2</a></li>
+        
+        <li
+        ><a href="../../page/3/">3</a></li>
+        
+        <li
+        ><a href="../../page/4/">4</a></li>
+        
+        <li
+        class="active"><a href="../../page/5/">5</a></li>
+        
+        <li
+        class="disabled">
+        <a href="" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+        </li>
+        
+        <li>
+            <a href="../../page/5/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        </li>
+        
+    </ul>
+    
+  </div>
+</div>
+<script src="http://ConscientiousProgrammer.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+
