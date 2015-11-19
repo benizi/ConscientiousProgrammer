@@ -37,9 +37,11 @@ googleAnalytics = "UA-41982602-1"
 
 github = "https://github.com/FranklinChen"
 #bitbucket = "https://bitbucket.org/FranklinChen/"
+stackOverflow = ""
 linkedin = "http://www.linkedin.com/in/franklinchen"
 googleplus = "http://google.com/+FranklinChen"
 facebook = "http://www.facebook.com/franklin.chen"
 twitter = "http://twitter.com/franklinchen"
 youtube = "http://www.youtube.com/user/FranklinChen"
 rss = true
+flatter = ""
