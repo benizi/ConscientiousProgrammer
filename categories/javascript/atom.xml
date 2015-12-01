@@ -117,7 +117,7 @@ You ordered NULL items.
 
 &lt;p&gt;First step in cleaning up the code: make &lt;code&gt;toString&lt;/code&gt; explicit:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/** Only ever use a String to create a URL. */&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;s&amp;quot;http://service.com?id=&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;$id&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
 
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; main&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;args&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;])&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Unit&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
@@ -125,7 +125,7 @@ You ordered NULL items.
     getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;(Later in the post, I will discuss alternatives to this explicit &lt;code&gt;toString&lt;/code&gt;.)&lt;/p&gt;
 
@@ -133,15 +133,15 @@ You ordered NULL items.
 
 &lt;p&gt;Another design smell was that of using&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Id&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Int&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;in the first place. This is a well-known lazy practice called &lt;a href=&#34;http://c2.com/cgi/wiki?PrimitiveObsession&#34;&gt;primitive obsession&lt;/a&gt;. I know better than that.&lt;/p&gt;
 
 &lt;p&gt;The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt;
 
   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;/**&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;    @param name User name to look up&lt;/span&gt;
@@ -154,7 +154,7 @@ You ordered NULL items.
       &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(0)&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;Note that this still &lt;em&gt;would not&lt;/em&gt; have solved the &lt;code&gt;toString&lt;/code&gt; problem, since the output would simply have been &lt;code&gt;http://service.com?id=Some(Id(42))&lt;/code&gt; or the dreaded &lt;code&gt;http://service.com?id=None&lt;/code&gt;!&lt;/p&gt;
 
@@ -174,7 +174,7 @@ You ordered NULL items.
 
 &lt;p&gt;Let&amp;rsquo;s refactor the code:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Wrapper class&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Id&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;id&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Special method for turning to URL string fragment&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; toUrlString &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&lt;/span&gt; id&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toString
@@ -203,13 +203,13 @@ You ordered NULL items.
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
   &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;Now the code that was creating a junk URL will no longer compile: &lt;code&gt;id&lt;/code&gt; is of type &lt;code&gt;Option[Id]&lt;/code&gt; but that type does &lt;em&gt;not&lt;/em&gt; have a &lt;code&gt;toUrlString&lt;/code&gt; method. Mission accomplished!&lt;/p&gt;
 
 &lt;p&gt;To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Will not compile because Option[Id] does not have toUrlString&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;//getUrl(makeUrl(id.toUrlString))&lt;/span&gt;
 
     id &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;{&lt;/span&gt;
@@ -217,7 +217,7 @@ You ordered NULL items.
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Some&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; getUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;makeUrl&lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;n&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toUrlString&lt;span style=&#34;color: #666666&#34;&gt;))&lt;/span&gt;
     &lt;span style=&#34;color: #666666&#34;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;Simple!&lt;/p&gt;
 

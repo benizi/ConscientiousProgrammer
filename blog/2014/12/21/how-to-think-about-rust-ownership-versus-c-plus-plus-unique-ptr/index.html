@@ -39,30 +39,33 @@
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      
-      <h1>Franklin Chen</h1>
-      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+        
+        <h1>Franklin Chen</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
     </div>
 
     <ul class="sidebar-nav">
-      
-      <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
-      
-      <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
     </ul>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item">
-      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
-      
-      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
-      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
-      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
-      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
-      <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
-      <a href="" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
-      </li>
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
     </ul>
+
+    
 
     <p>Copyright &copy; 2015 Franklin Chen<br/>
        Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
@@ -175,7 +178,7 @@
 
 <p>The single most disturbing failure mode of the C++-based software product I worked on in 1995-1997 in C++ was segmentation faults resulting from mysteriously disappearing pointers. What I mean is, behavior like the following, where a container containing smart pointers to objects was meant to <em>own</em> them, but there was no compile-time way to verify this fact, because of the nature of the object graph. If someone didn&rsquo;t play by the uncheckable rules and inadvertently took ownership of (instead of &ldquo;borrowing&rdquo; through a raw pointer) something embedded in the collection, then <code>nullptr</code> appeared, and a segmentation fault happened.</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #BC7A00">#include &lt;vector&gt;</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #BC7A00">#include &lt;vector&gt;</span>
 <span style="color: #BC7A00">#include &lt;memory&gt;</span>
 <span style="color: #BC7A00">#include &lt;iostream&gt;</span>
 
@@ -195,7 +198,7 @@
     cout <span style="color: #666666">&lt;&lt;</span> <span style="color: #666666">*</span>v[<span style="color: #666666">0</span>] <span style="color: #666666">&lt;&lt;</span> endl;
 }
 </pre></div>
-
+</p>
 
 <p>You can probably guess what some developers did to &ldquo;fix&rdquo; the segmentation fault. They started adding <code>nullptr</code> checks everywhere to prevent crashing, but this only resulted in <em>corrupt user data and documents</em>, because in fact, we lost data in those collections and smart pointers to the data should never have ended up <code>nullptr</code>!!</p>
 
@@ -205,7 +208,7 @@
 
 <p>The Rust type-checker rejects any attempt to move ownership out of a collection. (Try to compile it in <a href="http://is.gd/Om7wfr">this playground</a>.)</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">fn</span><span style="color: #bbbbbb"> </span>main()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">fn</span><span style="color: #bbbbbb"> </span>main()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
 <span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">let</span><span style="color: #bbbbbb"> </span>v<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>vec<span style="color: #666666">!</span>[<span style="color: #008000; font-weight: bold">box</span><span style="color: #bbbbbb"> </span><span style="color: #666666">5</span>i];<span style="color: #bbbbbb"></span>
 
 <span style="color: #bbbbbb">    </span><span style="color: #008000">println</span><span style="color: #666666">!</span>(<span style="color: #BA2121">&quot;{}&quot;</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>v[<span style="color: #666666">0</span>]);<span style="color: #bbbbbb"></span>
@@ -217,16 +220,16 @@
 <span style="color: #bbbbbb">    </span><span style="color: #008000">println</span><span style="color: #666666">!</span>(<span style="color: #BA2121">&quot;{}&quot;</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>v[<span style="color: #666666">0</span>]);<span style="color: #bbbbbb"></span>
 }<span style="color: #bbbbbb"></span>
 </pre></div>
+</p>
 
-
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">illegal_move_out_of_vector.rs:7:24: 7:28 error: cannot move out of dereference (dereference is implicit, due to indexing)</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">illegal_move_out_of_vector.rs:7:24: 7:28 error: cannot move out of dereference (dereference is implicit, due to indexing)</span>
 <span style="color: #888888">illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];</span>
 <span style="color: #888888">                                                       ^~~~</span>
 <span style="color: #888888">illegal_move_out_of_vector.rs:7:9: 7:21 note: attempting to move value to here</span>
 <span style="color: #888888">illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];</span>
 <span style="color: #888888">                                        ^~~~~~~~~~~~</span>
 </pre></div>
-
+</p>
 
 <h3 id="often-you-do-want-to-share:e300201b2ae8bf2fc96c870d894e0bf5">Often, you do want to share</h3>
 
@@ -234,7 +237,7 @@
 
 <p>But note that Rust is flexible: you don&rsquo;t have to use Rust&rsquo;s default pointer type! You can use one of Rust&rsquo;s many other pointer types, such as <a href="http://doc.rust-lang.org/guide.html#rc-and-arc"><code>Rc</code> or <code>Arc</code></a>, that allow reference-counted shared ownership (like C++ <code>shared_ptr</code>), if that&rsquo;s what you really want. (<a href="http://is.gd/HNi7SR">Playground here</a>.)</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">// Reference-counted smart pointer.</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">// Reference-counted smart pointer.</span>
 <span style="color: #008000; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>std<span style="color: #666666">::</span>rc<span style="color: #666666">::</span>Rc;<span style="color: #bbbbbb"></span>
 
 <span style="color: #008000; font-weight: bold">fn</span><span style="color: #bbbbbb"> </span>main()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"></span>
@@ -248,13 +251,13 @@
 <span style="color: #bbbbbb">    </span><span style="color: #008000">println</span><span style="color: #666666">!</span>(<span style="color: #BA2121">&quot;{}&quot;</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>v[<span style="color: #666666">0</span>]);<span style="color: #bbbbbb"></span>
 }<span style="color: #bbbbbb"></span>
 </pre></div>
-
+</p>
 
 <h2 id="unsafe:e300201b2ae8bf2fc96c870d894e0bf5">Unsafe</h2>
 
 <p>Finally, Rust does allow you to go all out and write <a href="http://doc.rust-lang.org/guide.html#unsafe">unsafe</a> code, if you truly need to for raw C performance or FFI reasons. Most of the time you do not need to, because the whole point of Rust is to compile down to the same kind of assembly code you would get from C.</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span>crate<span style="color: #bbbbbb"> </span>libc;<span style="color: #bbbbbb"></span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span>crate<span style="color: #bbbbbb"> </span>libc;<span style="color: #bbbbbb"></span>
 
 <span style="color: #008000; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>libc<span style="color: #666666">::</span>{size_t,<span style="color: #bbbbbb"> </span>malloc};<span style="color: #bbbbbb"></span>
 <span style="color: #008000; font-weight: bold">use</span><span style="color: #bbbbbb"> </span>std<span style="color: #666666">::</span>mem;<span style="color: #bbbbbb"></span>
@@ -276,7 +279,7 @@
 <span style="color: #bbbbbb">    </span>}<span style="color: #bbbbbb"></span>
 }<span style="color: #bbbbbb"></span>
 </pre></div>
-
+</p>
 
 <h2 id="conclusion:e300201b2ae8bf2fc96c870d894e0bf5">Conclusion</h2>
 

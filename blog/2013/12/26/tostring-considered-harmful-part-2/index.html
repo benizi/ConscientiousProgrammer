@@ -39,30 +39,33 @@
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      
-      <h1>Franklin Chen</h1>
-      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+        
+        <h1>Franklin Chen</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
     </div>
 
     <ul class="sidebar-nav">
-      
-      <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
-      
-      <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
     </ul>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item">
-      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
-      
-      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
-      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
-      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
-      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
-      <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
-      <a href="" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
-      </li>
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
     </ul>
+
+    
 
     <p>Copyright &copy; 2015 Franklin Chen<br/>
        Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
@@ -124,7 +127,7 @@
 
 <p>Below we define a string interpolator that only operates on objects of classes that implement the trait <code>UrlString</code>, and therefore does away with an explicit call to <code>toUrlString</code>:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">implicit</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">UrlHelper</span><span style="color: #666666">(</span><span style="color: #008000; font-weight: bold">val</span> sc<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">StringContext</span><span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #0000FF; font-weight: bold">AnyVal</span> <span style="color: #666666">{</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">implicit</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">UrlHelper</span><span style="color: #666666">(</span><span style="color: #008000; font-weight: bold">val</span> sc<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">StringContext</span><span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">extends</span> <span style="color: #0000FF; font-weight: bold">AnyVal</span> <span style="color: #666666">{</span>
     <span style="color: #008000; font-weight: bold">def</span> url<span style="color: #666666">(</span>args<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">UrlString*</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> <span style="color: #666666">{</span>
       <span style="color: #008000; font-weight: bold">val</span> strings <span style="color: #008000; font-weight: bold">=</span> sc<span style="color: #666666">.</span>parts<span style="color: #666666">.</span>iterator
       <span style="color: #008000; font-weight: bold">val</span> expressions <span style="color: #008000; font-weight: bold">=</span> args<span style="color: #666666">.</span>iterator
@@ -140,16 +143,16 @@
   <span style="color: #408080; font-style: italic">/** Only ever use UrlString to create a URL. */</span>
   <span style="color: #008000; font-weight: bold">def</span> makeUrl<span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">UrlString</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> url<span style="color: #BA2121">&quot;http://service.com?id=$id&quot;</span>
 </pre></div>
-
+</p>
 
 <p>with</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    id <span style="color: #008000; font-weight: bold">match</span> <span style="color: #666666">{</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    id <span style="color: #008000; font-weight: bold">match</span> <span style="color: #666666">{</span>
       <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">None</span> <span style="color: #008000; font-weight: bold">=&gt;</span> println<span style="color: #666666">(</span><span style="color: #BA2121">&quot;No id found!&quot;</span><span style="color: #666666">)</span>
       <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">Some</span><span style="color: #666666">(</span>n<span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">=&gt;</span> getUrl<span style="color: #666666">(</span>makeUrl<span style="color: #666666">(</span>n<span style="color: #666666">))</span>
     <span style="color: #666666">}</span>
 </pre></div>
-
+</p>
 
 <p>This may or may not be overengineering.</p>
 
@@ -157,7 +160,7 @@
 
 <p>The functional approach doesn&rsquo;t like inheritance in the domain classes. We can implement it with <a href="http://en.wikipedia.org/wiki/Type_class">type classes</a> (a concept first pioneered in Haskell in the late 1980s) by means of implicits in Scala, in order to implement <code>toUrlString</code> outside of a class hierarchy but also allow it to be used in a constrained generic way. A full discussion of this is outside the scope of this post, but the basic point is that with type classes, one can write code that does <em>not</em> depend on an inheritance hierarchy. If you&rsquo;re used to monkey-patching in dynamic languages, think of it as compile-time monkey-patching.</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">// A type class</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">// A type class</span>
   <span style="color: #008000; font-weight: bold">trait</span> <span style="color: #0000FF; font-weight: bold">UrlString</span><span style="color: #666666">[</span><span style="color: #B00040">A</span><span style="color: #666666">]</span> <span style="color: #666666">{</span>
     <span style="color: #008000; font-weight: bold">def</span> toUrlString<span style="color: #666666">(</span>a<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">A</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span>
   <span style="color: #666666">}</span>
@@ -186,7 +189,7 @@
   <span style="color: #408080; font-style: italic">/** Anything &quot;viewable&quot; as UrlString can be used to create a URL. */</span>
   <span style="color: #008000; font-weight: bold">def</span> makeUrl<span style="color: #666666">[</span><span style="color: #B00040">A:</span> <span style="color: #B00040">UrlString</span><span style="color: #666666">](</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">A</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> url<span style="color: #BA2121">&quot;http://service.com?id=$id&quot;</span>
 </pre></div>
-
+</p>
 
 <h2 id="the-final-string-gotcha:61f4feb9ec203761b1ad81e849476dfd">The final string gotcha</h2>
 

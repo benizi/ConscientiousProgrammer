@@ -39,30 +39,33 @@
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      
-      <h1>Franklin Chen</h1>
-      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+        
+        <h1>Franklin Chen</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
     </div>
 
     <ul class="sidebar-nav">
-      
-      <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
-      
-      <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
     </ul>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item">
-      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
-      
-      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
-      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
-      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
-      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
-      <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
-      <a href="" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
-      </li>
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
     </ul>
+
+    
 
     <p>Copyright &copy; 2015 Franklin Chen<br/>
        Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
@@ -138,10 +141,10 @@
 
 <p>with</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF; font-weight: bold">DoMyStuff</span>.doubleString (<span style="color: #666666">42</span>, true)
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF; font-weight: bold">DoMyStuff</span>.doubleString (<span style="color: #666666">42</span>, true)
 <span style="color: #408080; font-style: italic">(* result is the string &quot;(42, true)(42, true)&quot; *)</span>
 </pre></div>
-
+</p>
 
 <p>Since the Standard ML ecosystem is so minimalist, it&rsquo;s hard to fall into the <code>toString</code> trap, because you would have to set it all up yourself.</p>
 
@@ -153,12 +156,12 @@
 
 <p>Of course, one could also use the <a href="http://caml.inria.fr/pub/docs/manual-ocaml-4.01/objectexamples.html">object-oriented part of OCaml</a> to make a generic &ldquo;to string&rdquo; hierarchy starting with a suitable interface:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #008000; font-weight: bold">type</span> convert_to_string <span style="color: #666666">=</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #008000; font-weight: bold">type</span> convert_to_string <span style="color: #666666">=</span>
   <span style="color: #008000; font-weight: bold">object</span>
     <span style="color: #008000; font-weight: bold">method</span> to_string <span style="color: #666666">:</span> <span style="color: #B00040">string</span>
   <span style="color: #008000; font-weight: bold">end</span>
 </pre></div>
-
+</p>
 
 <p>But I don&rsquo;t actually know many people who use the object-oriented features of OCaml!</p>
 

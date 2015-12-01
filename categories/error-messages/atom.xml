@@ -146,7 +146,7 @@
 
 &lt;p&gt;&lt;code&gt;mentos()&lt;/code&gt; is not very well documented. Until I read this code, I didn&amp;rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In &lt;code&gt;lib/pygments/popen.rb&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Our &amp;#39;rpc&amp;#39;-ish request to mentos. Requires a method name, and then optional&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Our &amp;#39;rpc&amp;#39;-ish request to mentos. Requires a method name, and then optional&lt;/span&gt;
     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# args, kwargs, code.&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;mentos&lt;/span&gt;(&lt;span style=&#34;color: #008000&#34;&gt;method&lt;/span&gt;, args&lt;span style=&#34;color: #666666&#34;&gt;=[]&lt;/span&gt;, kwargs&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;{}, original_code&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;nil&lt;/span&gt;)
       &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Open the pipe if necessary&lt;/span&gt;
@@ -170,7 +170,7 @@
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;raise&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;MentosError&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;EPIPE&amp;quot;&lt;/span&gt;
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;It turns out that fundamental problem is not &lt;code&gt;nil&lt;/code&gt; so much as &lt;em&gt;non-determinism&lt;/em&gt;: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for &lt;code&gt;nil&lt;/code&gt; to end up being returned. This non-determinism is worse than &lt;code&gt;nil&lt;/code&gt;. I think that in a situation like this, an &lt;em&gt;exception&lt;/em&gt; is called for. &lt;code&gt;highlight()&lt;/code&gt; should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return &lt;code&gt;nil&lt;/code&gt; (or if using a statically typed language, a &lt;code&gt;None&lt;/code&gt;).&lt;/p&gt;
 
@@ -178,26 +178,26 @@
 
 &lt;p&gt;Amusingly, upon discovering the logging code, I used it, setting the magic environment variable &lt;code&gt;MENTOS_LOG&lt;/code&gt; (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;#&lt;/span&gt; Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;#&lt;/span&gt; Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Out header: {&amp;quot;method&amp;quot;:&amp;quot;highlight&amp;quot;,&amp;quot;args&amp;quot;:null,&amp;quot;kwargs&amp;quot;:{&amp;quot;lexer&amp;quot;:&amp;quot;console&amp;quot;,&amp;quot;options&amp;quot;:{&amp;quot;encoding&amp;quot;:&amp;quot;utf-8&amp;quot;,&amp;quot;outencoding&amp;quot;:&amp;quot;utf-8&amp;quot;},&amp;quot;fd&amp;quot;:10,&amp;quot;id&amp;quot;:&amp;quot;TVQSJNBV&amp;quot;,&amp;quot;bytes&amp;quot;:147}}&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;E, [2013-06-29 10:26 #13799] ERROR -- : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;h2 id=&#34;testing:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Testing&lt;/h2&gt;
 
 &lt;p&gt;It turns out that there &lt;em&gt;is&lt;/em&gt; a place where the intended behavior is in a sense documented: the unit tests in &lt;code&gt;test_pygments.rb&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;test_returns_nil_on_timeout&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;test_returns_nil_on_timeout&lt;/span&gt;
     large_code &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;REDIS_CODE&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;300&lt;/span&gt;
     code &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; P&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;highlight(large_code) &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# a 30 mb highlight request will timeout&lt;/span&gt;
     assert_equal &lt;span style=&#34;color: #008000&#34;&gt;nil&lt;/span&gt;, code
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be &lt;code&gt;nil&lt;/code&gt;!&lt;/p&gt;
 
@@ -230,11 +230,11 @@
 &lt;p&gt;I submitted a &lt;code&gt;pygments.rb&lt;/code&gt; &lt;a href=&#34;https://github.com/tmm1/pygments.rb/pull/132&#34;&gt;pull request&lt;/a&gt; to fix a regression bug in which any use of
 &lt;code&gt;MENTOS_TIMEOUT&lt;/code&gt; caused an instant type error:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&amp;#39;: undefined method `zero?&amp;#39; for &amp;quot;100&amp;quot;:String (NoMethodError)&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&amp;#39;: undefined method `zero?&amp;#39; for &amp;quot;100&amp;quot;:String (NoMethodError)&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;    from /Users/chen/.gem/ruby/2.1.2/gems/pygments.rb-0.6.0/lib/pygments/popen.rb:220:in `mentos&amp;#39;&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;```&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;h3 id=&#34;update-of-2015-01-28:08c2e7a867293a37060f4f671511a7f1&#34;&gt;(Update of 2015-01-28)&lt;/h3&gt;
 
@@ -250,11 +250,11 @@ to finally fix a cascade of show-stopping type errors.&lt;/p&gt;
 &lt;p&gt;The final diff involved trying to parse a string into an integer and
 catching the exception if any:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #A00000&#34;&gt;-        timeout_time = ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;] || 8&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #A00000&#34;&gt;-        timeout_time = ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;] || 8&lt;/span&gt;
 &lt;span style=&#34;color: #00A000&#34;&gt;+        # Invalid MENTOS_TIMEOUT results in just using default.&lt;/span&gt;
 &lt;span style=&#34;color: #00A000&#34;&gt;+        timeout_time = Integer(ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;]) rescue 8&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;h2 id=&#34;conclusion:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Conclusion&lt;/h2&gt;
 

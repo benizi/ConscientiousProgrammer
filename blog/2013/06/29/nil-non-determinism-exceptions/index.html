@@ -39,30 +39,33 @@
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      
-      <h1>Franklin Chen</h1>
-      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+        
+        <h1>Franklin Chen</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
     </div>
 
     <ul class="sidebar-nav">
-      
-      <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
-      
-      <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
     </ul>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item">
-      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
-      
-      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
-      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
-      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
-      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
-      <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
-      <a href="" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
-      </li>
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
     </ul>
+
+    
 
     <p>Copyright &copy; 2015 Franklin Chen<br/>
        Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
@@ -204,7 +207,7 @@
 
 <p><code>mentos()</code> is not very well documented. Until I read this code, I didn&rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In <code>lib/pygments/popen.rb</code>:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    <span style="color: #408080; font-style: italic"># Our &#39;rpc&#39;-ish request to mentos. Requires a method name, and then optional</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    <span style="color: #408080; font-style: italic"># Our &#39;rpc&#39;-ish request to mentos. Requires a method name, and then optional</span>
     <span style="color: #408080; font-style: italic"># args, kwargs, code.</span>
     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">mentos</span>(<span style="color: #008000">method</span>, args<span style="color: #666666">=[]</span>, kwargs<span style="color: #666666">=</span>{}, original_code<span style="color: #666666">=</span><span style="color: #008000">nil</span>)
       <span style="color: #408080; font-style: italic"># Open the pipe if necessary</span>
@@ -228,7 +231,7 @@
     <span style="color: #008000; font-weight: bold">raise</span> <span style="color: #880000">MentosError</span>, <span style="color: #BA2121">&quot;EPIPE&quot;</span>
     <span style="color: #008000; font-weight: bold">end</span>
 </pre></div>
-
+</p>
 
 <p>It turns out that fundamental problem is not <code>nil</code> so much as <em>non-determinism</em>: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for <code>nil</code> to end up being returned. This non-determinism is worse than <code>nil</code>. I think that in a situation like this, an <em>exception</em> is called for. <code>highlight()</code> should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return <code>nil</code> (or if using a statically typed language, a <code>None</code>).</p>
 
@@ -236,26 +239,26 @@
 
 <p>Amusingly, upon discovering the logging code, I used it, setting the magic environment variable <code>MENTOS_LOG</code> (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">#</span> Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">#</span> Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
 <span style="color: #888888">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.</span>
 <span style="color: #888888">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Out header: {&quot;method&quot;:&quot;highlight&quot;,&quot;args&quot;:null,&quot;kwargs&quot;:{&quot;lexer&quot;:&quot;console&quot;,&quot;options&quot;:{&quot;encoding&quot;:&quot;utf-8&quot;,&quot;outencoding&quot;:&quot;utf-8&quot;},&quot;fd&quot;:10,&quot;id&quot;:&quot;TVQSJNBV&quot;,&quot;bytes&quot;:147}}</span>
 <span style="color: #888888">E, [2013-06-29 10:26 #13799] ERROR -- : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call</span>
 <span style="color: #888888">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.</span>
 <span style="color: #888888">I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting</span>
 </pre></div>
-
+</p>
 
 <h2 id="testing:08c2e7a867293a37060f4f671511a7f1">Testing</h2>
 
 <p>It turns out that there <em>is</em> a place where the intended behavior is in a sense documented: the unit tests in <code>test_pygments.rb</code>:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">test_returns_nil_on_timeout</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">test_returns_nil_on_timeout</span>
     large_code <span style="color: #666666">=</span> <span style="color: #880000">REDIS_CODE</span> <span style="color: #666666">*</span> <span style="color: #666666">300</span>
     code <span style="color: #666666">=</span> P<span style="color: #666666">.</span>highlight(large_code) <span style="color: #408080; font-style: italic"># a 30 mb highlight request will timeout</span>
     assert_equal <span style="color: #008000">nil</span>, code
   <span style="color: #008000; font-weight: bold">end</span>
 </pre></div>
-
+</p>
 
 <p>The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be <code>nil</code>!</p>
 
@@ -288,11 +291,11 @@
 <p>I submitted a <code>pygments.rb</code> <a href="https://github.com/tmm1/pygments.rb/pull/132">pull request</a> to fix a regression bug in which any use of
 <code>MENTOS_TIMEOUT</code> caused an instant type error:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&#39;: undefined method `zero?&#39; for &quot;100&quot;:String (NoMethodError)</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&#39;: undefined method `zero?&#39; for &quot;100&quot;:String (NoMethodError)</span>
 <span style="color: #888888">    from /Users/chen/.gem/ruby/2.1.2/gems/pygments.rb-0.6.0/lib/pygments/popen.rb:220:in `mentos&#39;</span>
 <span style="color: #888888">```</span>
 </pre></div>
-
+</p>
 
 <h3 id="update-of-2015-01-28:08c2e7a867293a37060f4f671511a7f1">(Update of 2015-01-28)</h3>
 
@@ -308,11 +311,11 @@ to finally fix a cascade of show-stopping type errors.</p>
 <p>The final diff involved trying to parse a string into an integer and
 catching the exception if any:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #A00000">-        timeout_time = ENV[&quot;MENTOS_TIMEOUT&quot;] || 8</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #A00000">-        timeout_time = ENV[&quot;MENTOS_TIMEOUT&quot;] || 8</span>
 <span style="color: #00A000">+        # Invalid MENTOS_TIMEOUT results in just using default.</span>
 <span style="color: #00A000">+        timeout_time = Integer(ENV[&quot;MENTOS_TIMEOUT&quot;]) rescue 8</span>
 </pre></div>
-
+</p>
 
 <h2 id="conclusion:08c2e7a867293a37060f4f671511a7f1">Conclusion</h2>
 

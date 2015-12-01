@@ -39,30 +39,33 @@
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      
-      <h1>Franklin Chen</h1>
-      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+        
+        <h1>Franklin Chen</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
     </div>
 
     <ul class="sidebar-nav">
-      
-      <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
-      
-      <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
     </ul>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item">
-      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
-      
-      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
-      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
-      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
-      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
-      <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
-      <a href="" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
-      </li>
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
     </ul>
+
+    
 
     <p>Copyright &copy; 2015 Franklin Chen<br/>
        Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
@@ -175,7 +178,7 @@ You ordered NULL items.
 
 <p>First step in cleaning up the code: make <code>toString</code> explicit:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">/** Only ever use a String to create a URL. */</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">/** Only ever use a String to create a URL. */</span>
   <span style="color: #008000; font-weight: bold">def</span> makeUrl<span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span><span style="color: #666666">)</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">String</span> <span style="color: #666666">=</span> <span style="color: #BA2121">s&quot;http://service.com?id=</span><span style="color: #BB6688; font-weight: bold">$id</span><span style="color: #BA2121">&quot;</span>
 
   <span style="color: #008000; font-weight: bold">def</span> main<span style="color: #666666">(</span>args<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Array</span><span style="color: #666666">[</span><span style="color: #B00040">String</span><span style="color: #666666">])</span><span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Unit</span> <span style="color: #666666">=</span> <span style="color: #666666">{</span>
@@ -183,7 +186,7 @@ You ordered NULL items.
     getUrl<span style="color: #666666">(</span>makeUrl<span style="color: #666666">(</span>id<span style="color: #666666">.</span>toString<span style="color: #666666">))</span>
   <span style="color: #666666">}</span>
 </pre></div>
-
+</p>
 
 <p>(Later in the post, I will discuss alternatives to this explicit <code>toString</code>.)</p>
 
@@ -191,15 +194,15 @@ You ordered NULL items.
 
 <p>Another design smell was that of using</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Id</span> <span style="color: #666666">=</span> <span style="color: #0000FF; font-weight: bold">Int</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Id</span> <span style="color: #666666">=</span> <span style="color: #0000FF; font-weight: bold">Int</span>
 </pre></div>
-
+</p>
 
 <p>in the first place. This is a well-known lazy practice called <a href="http://c2.com/cgi/wiki?PrimitiveObsession">primitive obsession</a>. I know better than that.</p>
 
 <p>The solution to primitive obsession is easy: create a new wrapper type. Hence, the original code, even before the possibly failing ID lookup, should have been</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span>
 
   <span style="color: #408080; font-style: italic">/**</span>
 <span style="color: #408080; font-style: italic">    @param name User name to look up</span>
@@ -212,7 +215,7 @@ You ordered NULL items.
       <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(0)</span>
     <span style="color: #666666">}</span>
 </pre></div>
-
+</p>
 
 <p>Note that this still <em>would not</em> have solved the <code>toString</code> problem, since the output would simply have been <code>http://service.com?id=Some(Id(42))</code> or the dreaded <code>http://service.com?id=None</code>!</p>
 
@@ -232,7 +235,7 @@ You ordered NULL items.
 
 <p>Let&rsquo;s refactor the code:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">// Wrapper class</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #408080; font-style: italic">// Wrapper class</span>
   <span style="color: #008000; font-weight: bold">case</span> <span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Id</span><span style="color: #666666">(</span>id<span style="color: #008000; font-weight: bold">:</span> <span style="color: #B00040">Int</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
     <span style="color: #408080; font-style: italic">// Special method for turning to URL string fragment</span>
     <span style="color: #008000; font-weight: bold">def</span> toUrlString <span style="color: #008000; font-weight: bold">=</span> id<span style="color: #666666">.</span>toString
@@ -261,13 +264,13 @@ You ordered NULL items.
     <span style="color: #408080; font-style: italic">//getUrl(makeUrl(id.toUrlString))</span>
   <span style="color: #666666">}</span>
 </pre></div>
-
+</p>
 
 <p>Now the code that was creating a junk URL will no longer compile: <code>id</code> is of type <code>Option[Id]</code> but that type does <em>not</em> have a <code>toUrlString</code> method. Mission accomplished!</p>
 
 <p>To fix the code to get it compile, we handle both the case in which the ID is not found and the case in which it is:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    <span style="color: #408080; font-style: italic">// Will not compile because Option[Id] does not have toUrlString</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    <span style="color: #408080; font-style: italic">// Will not compile because Option[Id] does not have toUrlString</span>
     <span style="color: #408080; font-style: italic">//getUrl(makeUrl(id.toUrlString))</span>
 
     id <span style="color: #008000; font-weight: bold">match</span> <span style="color: #666666">{</span>
@@ -275,7 +278,7 @@ You ordered NULL items.
       <span style="color: #008000; font-weight: bold">case</span> <span style="color: #0000FF; font-weight: bold">Some</span><span style="color: #666666">(</span>n<span style="color: #666666">)</span> <span style="color: #008000; font-weight: bold">=&gt;</span> getUrl<span style="color: #666666">(</span>makeUrl<span style="color: #666666">(</span>n<span style="color: #666666">.</span>toUrlString<span style="color: #666666">))</span>
     <span style="color: #666666">}</span>
 </pre></div>
-
+</p>
 
 <p>Simple!</p>
 

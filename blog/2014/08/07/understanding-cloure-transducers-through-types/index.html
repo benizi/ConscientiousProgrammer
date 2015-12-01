@@ -39,30 +39,33 @@
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      
-      <h1>Franklin Chen</h1>
-      <p class="lead">Humbly exploring what it means to do the right thing.</p>
+        
+        <h1>Franklin Chen</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
     </div>
 
     <ul class="sidebar-nav">
-      
-      <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
-      
-      <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
     </ul>
 
     <ul class="sidebar-nav">
-      <li class="sidebar-nav-item">
-      <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
-      
-      <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
-      <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
-      <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
-      <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
-      <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
-      <a href="" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
-      </li>
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
     </ul>
+
+    
 
     <p>Copyright &copy; 2015 Franklin Chen<br/>
        Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
@@ -190,38 +193,38 @@ whatever, input -&gt; whatever
 
 <p>Defining lots and lots of types (whether synonyms or <a href="http://www.haskell.org/haskellwiki/Newtype">newtypes</a> is standard practice when programming in a modern typed language. OK, so I defined a type synonym</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Left reduce</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Left reduce</span>
 <span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Reducer</span> a r <span style="color: #AA22FF; font-weight: bold">=</span> r <span style="color: #AA22FF; font-weight: bold">-&gt;</span> a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> r
 </pre></div>
-
+</p>
 
 <p>But what about transducer? This is trickier.</p>
 
 <p>An <em>invalid</em> attempt at a type would be</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Illegal!</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Illegal!</span>
 <span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Transducer</span> a b <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Reducer</span> a r <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Reducer</span> b r
 </pre></div>
-
+</p>
 
 <p>because the type variable <code>r</code> is not bound in the type definition. And it would be incorrect to just randomly add <code>r</code> on the left hand side as an extra parameter to the <code>Transducer</code> type, because in fact it is <em>critical</em> that a transducer <em>does not care</em> about the underlying reducer&rsquo;s return type <code>r</code>. How do we write the desired type?</p>
 
 <p>It turns out you need <a href="http://www.haskell.org/haskellwiki/Rank-N_types">higher-rank types</a>. Rank-1 types are not sufficient; we need a rank-2 type to quantify <code>r</code>, to say that a transducer from <code>a</code> to <code>b</code> is a transformation that takes a reducer to a specific <code>r</code> and returns another reducer to the <em>same</em> <code>r</code>.</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Here&#39;s where the rank-2 type is needed</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Here&#39;s where the rank-2 type is needed</span>
 <span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Transducer</span> a b <span style="color: #AA22FF; font-weight: bold">=</span> forall r <span style="color: #666666">.</span> <span style="color: #B00040">Reducer</span> a r <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Reducer</span> b r
 </pre></div>
-
+</p>
 
 <p>Now we can see more clearly some <em>completely generic</em> ways to create a transducer:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">mapping</span> <span style="color: #AA22FF; font-weight: bold">::</span> (a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> b) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Transducer</span> b a
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">mapping</span> <span style="color: #AA22FF; font-weight: bold">::</span> (a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> b) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Transducer</span> b a
 <span style="color: #0000FF">mapping</span> f xf r a <span style="color: #AA22FF; font-weight: bold">=</span> xf r (f a)
 
 <span style="color: #0000FF">filtering</span> <span style="color: #AA22FF; font-weight: bold">::</span> (a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Bool</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Transducer</span> a a
 <span style="color: #0000FF">filtering</span> p xf r a <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">if</span> p a <span style="color: #008000; font-weight: bold">then</span> xf r a <span style="color: #008000; font-weight: bold">else</span> r
 </pre></div>
-
+</p>
 
 <h4 id="a-bit-of-history:5a7fb7f4f2a1a2d30fdd2c73dcd9c156">A bit of history</h4>
 
@@ -238,7 +241,7 @@ whatever, input -&gt; whatever
 <li><code>conj</code> and empty list <code>[]</code> abstracted to a <code>class Conjable</code></li>
 </ul>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Left fold</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Left fold</span>
 <span style="color: #008000; font-weight: bold">class</span> <span style="color: #B00040">Foldable</span> f <span style="color: #008000; font-weight: bold">where</span>
   fold <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Transducer</span> a (f a)
 
@@ -246,7 +249,7 @@ whatever, input -&gt; whatever
   empty <span style="color: #AA22FF; font-weight: bold">::</span> f a
   conj <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Reducer</span> a (f a)
 </pre></div>
-
+</p>
 
 <p>Note our reliance on transducing and reducing from one type <code>a</code> to another, <code>f a</code>.</p>
 
@@ -254,16 +257,16 @@ whatever, input -&gt; whatever
 
 <p>Unlike <code>mapping</code> and <code>filtering</code>, <code>flatmapping</code> is <em>not completely generic</em>, because it depends on something being <code>Foldable</code> (implementing a <code>fold</code>):</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">flatmapping</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Foldable</span> f <span style="color: #AA22FF; font-weight: bold">=&gt;</span> (a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> f b) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Transducer</span> b a
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">flatmapping</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Foldable</span> f <span style="color: #AA22FF; font-weight: bold">=&gt;</span> (a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> f b) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Transducer</span> b a
 <span style="color: #0000FF">flatmapping</span> f xf r a <span style="color: #AA22FF; font-weight: bold">=</span> fold xf r (f a)
 </pre></div>
-
+</p>
 
 <h4 id="conjable-constraint:5a7fb7f4f2a1a2d30fdd2c73dcd9c156"><code>Conjable</code> constraint</h4>
 
 <p>Finally, here&rsquo;s the originally list-specific code that now depends only on <code>Foldable</code> and <code>Conjable</code>:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- I changed Rich Hickey&#39;s code to be more general than just list</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- I changed Rich Hickey&#39;s code to be more general than just list</span>
 <span style="color: #408080; font-style: italic">-- but accept anything Conjable</span>
 <span style="color: #0000FF">xlist</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">Foldable</span> f, <span style="color: #B00040">Conjable</span> f) <span style="color: #AA22FF; font-weight: bold">=&gt;</span> <span style="color: #B00040">Transducer</span> b a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> f a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> f b
 <span style="color: #0000FF">xlist</span> xf <span style="color: #AA22FF; font-weight: bold">=</span> fold (xf conj) empty
@@ -278,13 +281,13 @@ whatever, input -&gt; whatever
 <span style="color: #0000FF">xflatmap</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">Foldable</span> f, <span style="color: #B00040">Conjable</span> f) <span style="color: #AA22FF; font-weight: bold">=&gt;</span> (a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> f b) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> f a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> f b
 <span style="color: #0000FF">xflatmap</span> f <span style="color: #AA22FF; font-weight: bold">=</span> xlist <span style="color: #666666">$</span> flatmapping f
 </pre></div>
-
+</p>
 
 <h3 id="list-specific-stuff:5a7fb7f4f2a1a2d30fdd2c73dcd9c156">List-specific stuff</h3>
 
 <p>Here is the list-specific code:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Stuff specialized to lists.</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Stuff specialized to lists.</span>
 <span style="color: #408080; font-style: italic">-- To use another type, just make it a Foldable and Conjable.</span>
 <span style="color: #008000; font-weight: bold">instance</span> <span style="color: #B00040">Foldable</span> <span style="color: #B00040">[]</span> <span style="color: #008000; font-weight: bold">where</span>
   fold <span style="color: #AA22FF; font-weight: bold">=</span> foldl
@@ -304,7 +307,7 @@ whatever, input -&gt; whatever
 <span style="color: #0000FF">munge</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">Foldable</span> f, <span style="color: #B00040">Conjable</span> f) <span style="color: #AA22FF; font-weight: bold">=&gt;</span> f <span style="color: #B00040">Integer</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> f <span style="color: #B00040">Integer</span>
 <span style="color: #0000FF">munge</span> <span style="color: #AA22FF; font-weight: bold">=</span> xlist xform
 </pre></div>
-
+</p>
 
 <p>Notice some very important properties of this code:</p>
 
@@ -315,18 +318,18 @@ whatever, input -&gt; whatever
 
 <p>Example:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- munge a list</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- munge a list</span>
 <span style="color: #408080; font-style: italic">-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]</span>
 <span style="color: #0000FF">example1</span> <span style="color: #AA22FF; font-weight: bold">::</span> [<span style="color: #B00040">Integer</span>]
 <span style="color: #0000FF">example1</span> <span style="color: #AA22FF; font-weight: bold">=</span> munge [<span style="color: #666666">1..5</span>]
 </pre></div>
-
+</p>
 
 <h3 id="implementing-another-type-to-illustrate-the-genericity-of-transducers:5a7fb7f4f2a1a2d30fdd2c73dcd9c156">Implementing another type to illustrate the genericity of transducers</h3>
 
 <p>To illustrate Rich Hickey&rsquo;s main point, I implemented instances of <code>Foldable</code> and <code>Conjable</code> for a standard Haskell <code>Vector</code> library as an alternate &ldquo;collection-like&rdquo; type.</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- For example using Vector instead of list</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- For example using Vector instead of list</span>
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.Vector</span> <span style="color: #008000; font-weight: bold">as</span> V
 
 <span style="color: #408080; font-style: italic">-- Implement Foldable, Conjable type classes for Vector</span>
@@ -337,16 +340,16 @@ whatever, input -&gt; whatever
   empty <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">V</span><span style="color: #666666">.</span>empty
   conj <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">V</span><span style="color: #666666">.</span>snoc
 </pre></div>
-
+</p>
 
 <p>And we can run <code>munge</code> directly on a vector instead of a list, <em>without making any changes</em>:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- return a vector rather than a list; note the fact that munge actually</span>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- return a vector rather than a list; note the fact that munge actually</span>
 <span style="color: #408080; font-style: italic">-- internally uses a list</span>
 <span style="color: #0000FF">example2</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">V</span><span style="color: #666666">.</span><span style="color: #B00040">Vector</span> <span style="color: #B00040">Integer</span>
 <span style="color: #0000FF">example2</span> <span style="color: #AA22FF; font-weight: bold">=</span> munge <span style="color: #666666">$</span> <span style="color: #B00040">V</span><span style="color: #666666">.</span>enumFromN <span style="color: #666666">1</span> <span style="color: #666666">5</span>
 </pre></div>
-
+</p>
 
 <p>This is <em>code reuse</em> at its best.</p>
 

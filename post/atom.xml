@@ -6,8 +6,346 @@
     <description>Recent content in Posts on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 07 Oct 2015 23:25:12 -0400</lastBuildDate>
+    <lastBuildDate>Mon, 30 Nov 2015 16:20:11 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/post/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/</link>
+      <pubDate>Mon, 30 Nov 2015 16:20:11 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/</guid>
+      <description>
+
+&lt;p&gt;A couple of days ago, I happened to see a
+&lt;a href=&#34;https://twitter.com/acid2/status/669882628695281669&#34;&gt;tweet from Ollie Charles&lt;/a&gt;
+that he didn&amp;rsquo;t have time to do his usual annual December &amp;ldquo;24 days of&amp;hellip;&amp;rdquo;
+Haskell blog posts this year (2015) and felt sad because I&amp;rsquo;ve
+learned a huge amount from
+&lt;a href=&#34;https://ocharles.org.uk/blog/&#34;&gt;reading them&lt;/a&gt;. In both 2012 and 2013, he
+wrote &amp;ldquo;24 days of Hackage&amp;rdquo;, daily short and sweet blog posts that
+showed how to use selected Haskell packages you can get from the
+community archive &lt;a href=&#34;http://hackage.haskell.org/&#34;&gt;Hackage&lt;/a&gt;, and in 2014
+he covered GHC language extensions.&lt;/p&gt;
+
+&lt;p&gt;With some trepidation, I decided that I would do a &amp;ldquo;24 days of
+Hackage&amp;rdquo; series myself to cap off this year, to share a selection of
+the huge number of Haskell packages I find useful. I thought it would
+be particularly appropriate to do this given that 2015 was the year
+that I migrated to &lt;em&gt;using Haskell as my main language&lt;/em&gt; for most new work and
+personal projects, and therefore this has been a year of considerable
+discovery for me.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:c37cfe20acfff0cff8579f026185f721&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series will be at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;my-selection-criteria:c37cfe20acfff0cff8579f026185f721&#34;&gt;My selection criteria&lt;/h2&gt;
+
+&lt;p&gt;How to choose what to cover? I like what Ollie wrote in his
+&lt;a href=&#34;https://ocharles.org.uk/blog/posts/2012-12-01-24-days-of-hackage.html&#34;&gt;2012 inaugural post&lt;/a&gt;:
+&amp;ldquo;This will be a whirlwind tour of some modules that I use on an almost
+daily basis, including modules that have inspired me, modules that
+have changed the way I think about code, and some modules that are so
+amazing I’m not even smart enough to use them!&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;My own intention: some of what I&amp;rsquo;ll cover is already popular and
+well-known, some may be just minor but useful utilities, some may be
+completely obscure, but the underlying theme will be &amp;ldquo;stuff I use and
+can briefly say something useful about&amp;rdquo;.&lt;/p&gt;
+
+&lt;h2 id=&#34;stack:c37cfe20acfff0cff8579f026185f721&#34;&gt;Stack&lt;/h2&gt;
+
+&lt;p&gt;It was a no-brainer to choose the first day&amp;rsquo;s topic:
+&lt;a href=&#34;http://haskellstack.org/&#34;&gt;Stack&lt;/a&gt;, the main new thing for Haskell in
+2015 other than &lt;a href=&#34;https://www.haskell.org/ghc/&#34;&gt;GHC&lt;/a&gt; 7.10.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Stack changed my (Haskell) life.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Stack is a game changer for the Haskell community. It is an all-in-one
+solution for creating Haskell projects, managing dependencies,
+building, and more. Since Stack came out, I&amp;rsquo;ve been slowly migrating
+old projects to use it, and I use Stack for all new projects,
+including the
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;repo for this article series&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m not giving a full-blown tutorial on Stack here today, just a
+little taste, and you can read the
+&lt;a href=&#34;http://haskellstack.org/&#34;&gt;official documentation&lt;/a&gt; for details, but
+what I want to emphasize is that Stack is useful not only for
+experienced developers, but especially also for newcomers, so part of
+today&amp;rsquo;s article is geared specifically to newcomers (or those who
+tried Haskell once and are interested in a fresh start with better
+tooling).&lt;/p&gt;
+
+&lt;h2 id=&#34;how-do-i-get-started-with-haskell:c37cfe20acfff0cff8579f026185f721&#34;&gt;&amp;ldquo;How do I get started with Haskell&amp;rdquo;?&lt;/h2&gt;
+
+&lt;p&gt;When I launched &lt;a href=&#34;http://pittsburghhaskell.org/&#34;&gt;Pittsburgh Haskell&lt;/a&gt;
+in February this year (2015), I faced a huge hurdle: helping newcomers
+to Haskell get started. I created an introductory workshop session,
+but a huge number of people were discouraged by my best shot at
+creating &lt;a href=&#34;https://github.com/pittsburgh-haskell/haskell-installation&#34;&gt;a now-obsolete set of Haskell installation instructions&lt;/a&gt; that would work for Mac OS,
+Windows, and Linux, and people had major problems installing a basic
+tool chain, and versioning issues if they already had an old version
+of GHC installed. Too much time was wasted on trying to help people with
+installation.&lt;/p&gt;
+
+&lt;p&gt;Pittsburgh Haskell happened to go on hiatus in April as I got busy
+with many other things and there was no momentum at the time to keep
+it going, but I believe one huge problem in trying to create a new
+local Haskell community from newcomers was the tooling/setup
+annoyance.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Stack solves this problem.&lt;/strong&gt; If I gave an introductory Haskell workshop again, I would definitely use Stack.&lt;/p&gt;
+
+&lt;h2 id=&#34;an-example-of-getting-started-with-stack-using-a-custom-template:c37cfe20acfff0cff8579f026185f721&#34;&gt;An example of getting started with Stack using a custom template&lt;/h2&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t already use Stack,
+&lt;a href=&#34;http://docs.haskellstack.org/en/stable/README.html#how-to-install&#34;&gt;download it&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The Stack Web site already has documentation on how to get started
+with Stack using a default template. Here, I want to promote the idea
+of using and sharing custom templates. This is not documented so well,
+but I think will become more and more important for newcomers, and is
+also of course useful for any of us who end up creating the same
+boilerplate project setups.&lt;/p&gt;
+
+&lt;h3 id=&#34;using-an-official-template:c37cfe20acfff0cff8579f026185f721&#34;&gt;Using an official template&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;ve created a custom template called &lt;code&gt;franklinchen&lt;/code&gt; that is part of
+the official &lt;a href=&#34;https://github.com/commercialhaskell/stack-templates&#34;&gt;&lt;code&gt;stack-templates&lt;/code&gt;&lt;/a&gt;
+repo.&lt;/p&gt;
+
+&lt;p&gt;If you run&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack new stack-template-demo franklinchen
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;you will be prompted for information to create a new project called &lt;code&gt;stack-template-demo&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;using-your-own-local-template:c37cfe20acfff0cff8579f026185f721&#34;&gt;Using your own local template&lt;/h3&gt;
+
+&lt;p&gt;Note that the template specified does &lt;em&gt;not&lt;/em&gt; have to be in the official
+&lt;code&gt;stack-templates&lt;/code&gt; repo. It can also be on your local file system. For
+example, before I submitted my template to &lt;code&gt;stack-templates&lt;/code&gt;, I used
+to run&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack new stack-template-demo /path/on/my/computer/to/franklinchen.hsfiles
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;where &lt;code&gt;franklinchen.hsfiles&lt;/code&gt; is my template (read below on creating
+your own template).&lt;/p&gt;
+
+&lt;p&gt;(I&amp;rsquo;ve put up an instance of the generated project up
+&lt;a href=&#34;https://github.com/FranklinChen/stack-template-demo&#34;&gt;on GitHub&lt;/a&gt; if
+you want to look at its structure without installing and running Stack
+right now.)&lt;/p&gt;
+
+&lt;h3 id=&#34;getting-started-with-the-newly-generated-project:c37cfe20acfff0cff8579f026185f721&#34;&gt;Getting started with the newly generated project&lt;/h3&gt;
+
+&lt;p&gt;Enter the project directory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ cd stack-template-demo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;stack-downloads-ghc-for-you:c37cfe20acfff0cff8579f026185f721&#34;&gt;Stack downloads GHC for you&lt;/h3&gt;
+
+&lt;p&gt;Run&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack setup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you do not already have an appropriate version of GHC installed,
+Stack will &lt;em&gt;automatically&lt;/em&gt; download and install it for you, into an
+area in Stack&amp;rsquo;s configuration directory &lt;code&gt;~/.stack/&lt;/code&gt;. The important
+thing to note is that when using Stack, multiple versions of GHC can
+coexist as desired for different build configurations and setups. This
+feature is really important, because not everyone uses the same
+version of GHC and you can build your project against multiple
+versions of GHC easily.&lt;/p&gt;
+
+&lt;p&gt;This automatic-downloading feature is particularly useful for
+newcomers who don&amp;rsquo;t need to mess around with some kind of separate
+global installation requiring special privileges.&lt;/p&gt;
+
+&lt;p&gt;The output, if Stack needs to download anything:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;Preparing to install GHC to an isolated location.
+This will not interfere with any system-level installation.
+Downloaded ghc-7.10.2.
+Installed GHC.
+stack will use a locally installed GHC
+For more information on paths, see &#39;stack path&#39; and &#39;stack exec env&#39;
+To use this GHC and packages outside of a project, consider using:
+stack ghc, stack ghci, stack runghc, or stack exec
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;launching-the-ghci-repl:c37cfe20acfff0cff8579f026185f721&#34;&gt;Launching the GHCi REPL&lt;/h3&gt;
+
+&lt;p&gt;The most important thing for a newcomer to Haskell is to get started
+with the GHCi REPL, so let&amp;rsquo;s do that right away. Doing this within the
+context of a project while preloading the modules of the project is
+simple with Stack.&lt;/p&gt;
+
+&lt;p&gt;Run&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack ghci
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that &lt;strong&gt;only the first time&lt;/strong&gt; you do this (or other commands that
+require getting library dependencies), Stack may take a while to
+download and build them. The dependencies will actually end up being
+installed and cached such that &lt;em&gt;other projects&lt;/em&gt; in the future that use
+them can reuse them. This is a huge advantage of using Stack versus
+the old days before Stack, when there was always an issue of
+redownloading and recompiling the same libraries for different
+projects; that was a tremendous time and space waster! Stack
+intelligently figures out for you what can be shared consistently or
+not.&lt;/p&gt;
+
+&lt;p&gt;Stack launches a GHCi REPL with our modules preloaded:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;Ok, modules loaded: Lib, Main.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In &lt;code&gt;src/Lib.hs&lt;/code&gt; of the sample project, we have a silly module
+illustrating some &lt;a href=&#34;https://www.haskell.org/haddock/&#34;&gt;Haddock&lt;/a&gt;
+documentation comments:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;-- | A library to do stuff.
+module Lib
+    (
+      ourAdd
+    ) where
+
+-- | Add two &#39;Int&#39; values.
+ourAdd :: Int  -- ^ left
+       -&amp;gt; Int  -- ^ right
+       -&amp;gt; Int  -- ^ sum
+ourAdd x y = x + y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can access the &lt;code&gt;Lib&lt;/code&gt; module from the REPL:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; ourAdd 2 3
+5
+*Main&amp;gt; Lib.ourAdd 4 5
+9
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can also access &lt;code&gt;Main&lt;/code&gt;, which is defined in &lt;code&gt;app/Main.hs&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;module Main where
+
+import Lib (ourAdd)
+
+import Text.Printf (printf)
+
+main :: IO ()
+main = printf &amp;quot;2 + 3 = %d\n&amp;quot; (ourAdd 2 3)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; main
+2 + 3 = 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;building-and-running-the-project:c37cfe20acfff0cff8579f026185f721&#34;&gt;Building and running the project&lt;/h3&gt;
+
+&lt;p&gt;You could have explicitly compiled the project first, before launching
+the REPL. In practice in real projects, I start by compiling a project
+to get the dependencies compiled, before I use GHCi, but the above
+does it for you too:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack build
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Because I defined a native-compiled binary executable named
+&lt;code&gt;stack-template-demo&lt;/code&gt; in our Cabal file &lt;code&gt;stack-template-demo.cabal&lt;/code&gt;,
+we can run the executable:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack exec stack-template-demo
+2 + 3 = 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I supplied unit tests for &lt;code&gt;Lib&lt;/code&gt; in &lt;code&gt;test/LibSpec.hs&lt;/code&gt; that can be run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack test
+Lib
+  Lib
+    works
+    ourAdd is commutative
+
+Finished in 0.0007 seconds
+2 examples, 0 failures
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;installing-the-library-and-executable:c37cfe20acfff0cff8579f026185f721&#34;&gt;Installing the library and executable&lt;/h3&gt;
+
+&lt;p&gt;You can now install the library and executable for your own use later:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack install
+...
+...
+Copying from /Users/chen/stack-template-demo/.stack-work/install/x86_64-osx/lts-3.16/7.10.2/bin/stack-template-demo to /Users/chen/.local/bin/stack-template-demo
+
+Copied executables to /Users/chen/.local/bin:
+- stack-template-demo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For example (since &lt;code&gt;~/.local/bin&lt;/code&gt; is in my &lt;code&gt;PATH&lt;/code&gt;):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack-template-demo
+2 + 3 = 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;your-own-stack-template-configuration:c37cfe20acfff0cff8579f026185f721&#34;&gt;Your own Stack template configuration&lt;/h3&gt;
+
+&lt;p&gt;When using Stack templates, it&amp;rsquo;s useful to set up a
+configuration so that information can automatically be filled out for
+you when you generate new projects. The documentation for
+configuration is
+&lt;a href=&#34;http://docs.haskellstack.org/en/stable/yaml_configuration.html&#34;&gt;here&lt;/a&gt;. Create
+a file in
+&lt;code&gt;~/.stack/config.yaml&lt;/code&gt;. Mine has:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;templates:
+  params:
+    author-email: &amp;quot;franklinchen@franklinchen.com&amp;quot;
+    author-name: &amp;quot;Franklin Chen&amp;quot;
+    category: test
+    copyright: &amp;quot;2015&amp;quot;
+    github-username: &amp;quot;FranklinChen&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;other-bells-and-whistles:c37cfe20acfff0cff8579f026185f721&#34;&gt;Other bells and whistles&lt;/h3&gt;
+
+&lt;p&gt;I try to use &lt;a href=&#34;https://travis-ci.org/&#34;&gt;Travis CI&lt;/a&gt; for any public
+code I put up, so my template generates a &lt;code&gt;.travis.yml&lt;/code&gt; file that uses
+Stack. I&amp;rsquo;ve started to migrate my former Travis setups based on
+&lt;a href=&#34;https://github.com/hvr/multi-ghc-travis&#34;&gt;&lt;code&gt;multi-ghc-travis&lt;/code&gt;&lt;/a&gt; to use
+Stack instead.&lt;/p&gt;
+
+&lt;h2 id=&#34;creating-a-custom-stack-project-template:c37cfe20acfff0cff8579f026185f721&#34;&gt;Creating a custom Stack project template&lt;/h2&gt;
+
+&lt;p&gt;It was surprising to me that how to create a custom template is not
+covered in the main Stack documentation. Instead, I found it at the
+&lt;a href=&#34;https://github.com/commercialhaskell/stack-templates&#34;&gt;&lt;code&gt;stack-templates&lt;/code&gt;&lt;/a&gt;
+site.&lt;/p&gt;
+
+&lt;p&gt;The method of creating a custom template is kind of clumsy, involving
+creating a single file with embedded directives to indicate generated
+file name and directory structure, but it&amp;rsquo;s a start.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:c37cfe20acfff0cff8579f026185f721&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;For day 1 of my &amp;ldquo;24 days of Hackage, 2015&amp;rdquo;, I&amp;rsquo;ve briefly introduced
+how to use Stack, the Haskell tool that I&amp;rsquo;m using to build and run all
+the sample code for this article series.&lt;/p&gt;
+
+&lt;p&gt;Next up: some real code!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Report on my talk &#34;A gentle conceptual introduction to functional programming&#34;</title>
@@ -552,7 +890,7 @@ has a sizable community revolving around it.&lt;/p&gt;
 
 &lt;p&gt;The single most disturbing failure mode of the C++-based software product I worked on in 1995-1997 in C++ was segmentation faults resulting from mysteriously disappearing pointers. What I mean is, behavior like the following, where a container containing smart pointers to objects was meant to &lt;em&gt;own&lt;/em&gt; them, but there was no compile-time way to verify this fact, because of the nature of the object graph. If someone didn&amp;rsquo;t play by the uncheckable rules and inadvertently took ownership of (instead of &amp;ldquo;borrowing&amp;rdquo; through a raw pointer) something embedded in the collection, then &lt;code&gt;nullptr&lt;/code&gt; appeared, and a segmentation fault happened.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;vector&amp;gt;&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;vector&amp;gt;&lt;/span&gt;
 &lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;memory&amp;gt;&lt;/span&gt;
 &lt;span style=&#34;color: #BC7A00&#34;&gt;#include &amp;lt;iostream&amp;gt;&lt;/span&gt;
 
@@ -572,7 +910,7 @@ has a sizable community revolving around it.&lt;/p&gt;
     cout &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; endl;
 }
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;You can probably guess what some developers did to &amp;ldquo;fix&amp;rdquo; the segmentation fault. They started adding &lt;code&gt;nullptr&lt;/code&gt; checks everywhere to prevent crashing, but this only resulted in &lt;em&gt;corrupt user data and documents&lt;/em&gt;, because in fact, we lost data in those collections and smart pointers to the data should never have ended up &lt;code&gt;nullptr&lt;/code&gt;!!&lt;/p&gt;
 
@@ -582,7 +920,7 @@ has a sizable community revolving around it.&lt;/p&gt;
 
 &lt;p&gt;The Rust type-checker rejects any attempt to move ownership out of a collection. (Try to compile it in &lt;a href=&#34;http://is.gd/Om7wfr&#34;&gt;this playground&lt;/a&gt;.)&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;v&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;vec&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;[&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;box&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;i];&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
@@ -594,16 +932,16 @@ has a sizable community revolving around it.&lt;/p&gt;
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 }&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7:24: 7:28 error: cannot move out of dereference (dereference is implicit, due to indexing)&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7:24: 7:28 error: cannot move out of dereference (dereference is implicit, due to indexing)&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;                                                       ^~~~&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7:9: 7:21 note: attempting to move value to here&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;illegal_move_out_of_vector.rs:7     let pointer_to_5 = v[0];&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;                                        ^~~~~~~~~~~~&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;h3 id=&#34;often-you-do-want-to-share:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Often, you do want to share&lt;/h3&gt;
 
@@ -611,7 +949,7 @@ has a sizable community revolving around it.&lt;/p&gt;
 
 &lt;p&gt;But note that Rust is flexible: you don&amp;rsquo;t have to use Rust&amp;rsquo;s default pointer type! You can use one of Rust&amp;rsquo;s many other pointer types, such as &lt;a href=&#34;http://doc.rust-lang.org/guide.html#rc-and-arc&#34;&gt;&lt;code&gt;Rc&lt;/code&gt; or &lt;code&gt;Arc&lt;/code&gt;&lt;/a&gt;, that allow reference-counted shared ownership (like C++ &lt;code&gt;shared_ptr&lt;/code&gt;), if that&amp;rsquo;s what you really want. (&lt;a href=&#34;http://is.gd/HNi7SR&#34;&gt;Playground here&lt;/a&gt;.)&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Reference-counted smart pointer.&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Reference-counted smart pointer.&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;std&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;rc&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;Rc;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;fn&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;main()&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
@@ -625,13 +963,13 @@ has a sizable community revolving around it.&lt;/p&gt;
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;println&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{}&amp;quot;&lt;/span&gt;,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;v[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]);&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 }&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;h2 id=&#34;unsafe:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Unsafe&lt;/h2&gt;
 
 &lt;p&gt;Finally, Rust does allow you to go all out and write &lt;a href=&#34;http://doc.rust-lang.org/guide.html#unsafe&#34;&gt;unsafe&lt;/a&gt; code, if you truly need to for raw C performance or FFI reasons. Most of the time you do not need to, because the whole point of Rust is to compile down to the same kind of assembly code you would get from C.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extern&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;crate&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;libc;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;extern&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;crate&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;libc;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;libc&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;{size_t,&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;malloc};&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;use&lt;/span&gt;&lt;span style=&#34;color: #bbbbbb&#34;&gt; &lt;/span&gt;std&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;mem;&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
@@ -653,7 +991,7 @@ has a sizable community revolving around it.&lt;/p&gt;
 &lt;span style=&#34;color: #bbbbbb&#34;&gt;    &lt;/span&gt;}&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 }&lt;span style=&#34;color: #bbbbbb&#34;&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;h2 id=&#34;conclusion:e300201b2ae8bf2fc96c870d894e0bf5&#34;&gt;Conclusion&lt;/h2&gt;
 
@@ -956,38 +1294,38 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Defining lots and lots of types (whether synonyms or &lt;a href=&#34;http://www.haskell.org/haskellwiki/Newtype&#34;&gt;newtypes&lt;/a&gt; is standard practice when programming in a modern typed language. OK, so I defined a type synonym&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left reduce&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left reduce&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;But what about transducer? This is trickier.&lt;/p&gt;
 
 &lt;p&gt;An &lt;em&gt;invalid&lt;/em&gt; attempt at a type would be&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Illegal!&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Illegal!&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; b r
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;because the type variable &lt;code&gt;r&lt;/code&gt; is not bound in the type definition. And it would be incorrect to just randomly add &lt;code&gt;r&lt;/code&gt; on the left hand side as an extra parameter to the &lt;code&gt;Transducer&lt;/code&gt; type, because in fact it is &lt;em&gt;critical&lt;/em&gt; that a transducer &lt;em&gt;does not care&lt;/em&gt; about the underlying reducer&amp;rsquo;s return type &lt;code&gt;r&lt;/code&gt;. How do we write the desired type?&lt;/p&gt;
 
 &lt;p&gt;It turns out you need &lt;a href=&#34;http://www.haskell.org/haskellwiki/Rank-N_types&#34;&gt;higher-rank types&lt;/a&gt;. Rank-1 types are not sufficient; we need a rank-2 type to quantify &lt;code&gt;r&lt;/code&gt;, to say that a transducer from &lt;code&gt;a&lt;/code&gt; to &lt;code&gt;b&lt;/code&gt; is a transformation that takes a reducer to a specific &lt;code&gt;r&lt;/code&gt; and returns another reducer to the &lt;em&gt;same&lt;/em&gt; &lt;code&gt;r&lt;/code&gt;.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Here&amp;#39;s where the rank-2 type is needed&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Here&amp;#39;s where the rank-2 type is needed&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; forall r &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; b r
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;Now we can see more clearly some &lt;em&gt;completely generic&lt;/em&gt; ways to create a transducer:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
 &lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xf r (f a)
 
 &lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a a
 &lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; p xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; p a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; xf r a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; r
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;h4 id=&#34;a-bit-of-history:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;A bit of history&lt;/h4&gt;
 
@@ -1004,7 +1342,7 @@ whatever, input -&amp;gt; whatever
 &lt;li&gt;&lt;code&gt;conj&lt;/code&gt; and empty list &lt;code&gt;[]&lt;/code&gt; abstracted to a &lt;code&gt;class Conjable&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left fold&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left fold&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
   fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a (f a)
 
@@ -1012,7 +1350,7 @@ whatever, input -&amp;gt; whatever
   empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; f a
   conj &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a (f a)
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;Note our reliance on transducing and reducing from one type &lt;code&gt;a&lt;/code&gt; to another, &lt;code&gt;f a&lt;/code&gt;.&lt;/p&gt;
 
@@ -1020,16 +1358,16 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Unlike &lt;code&gt;mapping&lt;/code&gt; and &lt;code&gt;filtering&lt;/code&gt;, &lt;code&gt;flatmapping&lt;/code&gt; is &lt;em&gt;not completely generic&lt;/em&gt;, because it depends on something being &lt;code&gt;Foldable&lt;/code&gt; (implementing a &lt;code&gt;fold&lt;/code&gt;):&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
 &lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fold xf r (f a)
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;h4 id=&#34;conjable-constraint:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;&lt;code&gt;Conjable&lt;/code&gt; constraint&lt;/h4&gt;
 
 &lt;p&gt;Finally, here&amp;rsquo;s the originally list-specific code that now depends only on &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- I changed Rich Hickey&amp;#39;s code to be more general than just list&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- I changed Rich Hickey&amp;#39;s code to be more general than just list&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- but accept anything Conjable&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
 &lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; xf &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fold (xf conj) empty
@@ -1044,13 +1382,13 @@ whatever, input -&amp;gt; whatever
 &lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
 &lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; flatmapping f
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;h3 id=&#34;list-specific-stuff:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;List-specific stuff&lt;/h3&gt;
 
 &lt;p&gt;Here is the list-specific code:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Stuff specialized to lists.&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Stuff specialized to lists.&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- To use another type, just make it a Foldable and Conjable.&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
   fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl
@@ -1070,7 +1408,7 @@ whatever, input -&amp;gt; whatever
 &lt;span style=&#34;color: #0000FF&#34;&gt;munge&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; f &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;munge&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist xform
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;Notice some very important properties of this code:&lt;/p&gt;
 
@@ -1081,18 +1419,18 @@ whatever, input -&amp;gt; whatever
 
 &lt;p&gt;Example:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- munge a list&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- munge a list&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;example1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;]
 &lt;span style=&#34;color: #0000FF&#34;&gt;example1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; munge [&lt;span style=&#34;color: #666666&#34;&gt;1..5&lt;/span&gt;]
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;h3 id=&#34;implementing-another-type-to-illustrate-the-genericity-of-transducers:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Implementing another type to illustrate the genericity of transducers&lt;/h3&gt;
 
 &lt;p&gt;To illustrate Rich Hickey&amp;rsquo;s main point, I implemented instances of &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt; for a standard Haskell &lt;code&gt;Vector&lt;/code&gt; library as an alternate &amp;ldquo;collection-like&amp;rdquo; type.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- For example using Vector instead of list&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- For example using Vector instead of list&lt;/span&gt;
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; V
 
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Implement Foldable, Conjable type classes for Vector&lt;/span&gt;
@@ -1103,16 +1441,16 @@ whatever, input -&amp;gt; whatever
   empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;empty
   conj &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;snoc
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;And we can run &lt;code&gt;munge&lt;/code&gt; directly on a vector instead of a list, &lt;em&gt;without making any changes&lt;/em&gt;:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- return a vector rather than a list; note the fact that munge actually&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- return a vector rather than a list; note the fact that munge actually&lt;/span&gt;
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- internally uses a list&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;example2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;example2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; munge &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;enumFromN &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;This is &lt;em&gt;code reuse&lt;/em&gt; at its best.&lt;/p&gt;
 
@@ -1450,64 +1788,6 @@ mistaken as an accurate gauge of competence.&lt;/p&gt;
 &lt;p&gt;There were many good points that were made and so I had to reconsider some of my arguments. My overall viewpoint is still that the distinction between &amp;ldquo;public&amp;rdquo; and &amp;ldquo;private&amp;rdquo; is fluid, and that anything that seems significant enough that it feels like it should be tested should in fact be tested, ignoring the artifacts of how it is currently classified. One of the main counterpoints was that if you need to test it, then it should be factored out and made its own unit so that in essence, the rule against testing the private is maintained.&lt;/p&gt;
 
 &lt;p&gt;Anyway, I will put up my post once I actually collect all my thoughts together and finish it.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Pittsburgh Scala Meetup: Introduction to Reactive</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/</link>
-      <pubDate>Thu, 09 Jan 2014 21:29:20 -0500</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2014/01/09/pittsburgh-scala-meetup-introduction-to-reactive/</guid>
-      <description>
-
-&lt;p&gt;The &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/&#34;&gt;Pittsburgh Scala Meetup&lt;/a&gt; met with Josh presenting an &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581352/&#34;&gt;&amp;ldquo;Introduction to Reactive&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;It was great.&lt;/p&gt;
-
-&lt;h2 id=&#34;pre-meetup-dinner:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Pre-meetup dinner&lt;/h2&gt;
-
-&lt;p&gt;A couple of us (Justin, Josh, Chris, me) had an early dinner at Everyday Noodles before the meetup. Very filling!&lt;/p&gt;
-
-&lt;h2 id=&#34;turnout:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Turnout&lt;/h2&gt;
-
-&lt;p&gt;Ten of us showed up for this meeting.&lt;/p&gt;
-
-&lt;h2 id=&#34;presentation:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Presentation&lt;/h2&gt;
-
-&lt;h3 id=&#34;what-is-reactive-anyway:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;What is &amp;ldquo;reactive&amp;rdquo; anyway?&lt;/h3&gt;
-
-&lt;p&gt;In case you didn&amp;rsquo;t hear about it in the media, the term &amp;ldquo;reactive&amp;rdquo; has been popularized in recent months, and I &lt;a href=&#34;../blog/2013/12/31/review-of-the-free-coursera-course-principles-of-reactive-programming/&#34;&gt;reviewed the free Coursera course &amp;ldquo;Principles of Reactive Programming&amp;rdquo;&lt;/a&gt; that some of us in the Pittsburgh Scala group just completed, so check out my post for more on &amp;ldquo;reactive&amp;rdquo;.&lt;/p&gt;
-
-&lt;h3 id=&#34;futures:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Futures&lt;/h3&gt;
-
-&lt;p&gt;Josh did a live SBT session reviewing futures and promises.&lt;/p&gt;
-
-&lt;p&gt;He noted that futures have limitations as a component of reactive systems. (This had become apparent when &lt;a href=&#34;http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/&#34;&gt;I started using futures last year in my personal projects&lt;/a&gt; and then &lt;a href=&#34;../blog/2013/08/02/pittsburgh-ruby-python-social/&#34;&gt;for work&lt;/a&gt;.) By themselves, futures do not support cancellation or &lt;a href=&#34;http://en.wikipedia.org/wiki/Back_pressure&#34;&gt;back pressure&lt;/a&gt;. Futures are a low-level, limited mechanism that are the right tool only if you have a pipeline all the way through forward, no back channel.&lt;/p&gt;
-
-&lt;p&gt;An alternative to futures, of course, is to go all out and use Akka actors. But the drawback I&amp;rsquo;ve found with that is that this is a heavyweight mechanism for problems that don&amp;rsquo;t need the full power of actors. I&amp;rsquo;ve wanted something more structured and lightweight than using actors directly. I find it tricky to program using actors, because it is very easy to start writing spaghetti code that is spread out everywhere (which is what happened to me in the final project for the Coursera course).&lt;/p&gt;
-
-&lt;p&gt;It turns out, according to Josh, that Typesafe is working on precisely this problem! Nice. He&amp;rsquo;ll tell us more when it comes out.&lt;/p&gt;
-
-&lt;h4 id=&#34;update-of-2014-07-10:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;(Update of 2014-07-10)&lt;/h4&gt;
-
-&lt;p&gt;Half a year later, the promise was realized, as the Pittsburgh Scala Meetup had Josh &lt;a href=&#34;../blog/2014/07/10/pittsburgh-scala-meetup-reactive-streams/&#34;&gt;gave a talk on the new API called Reactive Streams&lt;/a&gt;!&lt;/p&gt;
-
-&lt;h3 id=&#34;play:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Play&lt;/h3&gt;
-
-&lt;p&gt;Josh demonstrated &lt;a href=&#34;http://typesafe.com/activator&#34;&gt;Typesafe Activator&lt;/a&gt;, the cool new Web browser-based platform for using Scala. He showed an app using Play that looks at blogs simultaneously and uses &lt;code&gt;recoverWith&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;random-other-questions-and-discussions:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Random other questions and discussions&lt;/h2&gt;
-
-&lt;p&gt;What I like about the Pittsburgh Scala Meetup is that even when we have a presentation, discussion often wanders off to related topics (or unrelated topics). Anything goes, and I usually learn a lot.&lt;/p&gt;
-
-&lt;p&gt;Someone asked about support for channels as in Go or Clojure&amp;rsquo;s &lt;a href=&#34;https://github.com/clojure/core.async&#34;&gt;&lt;code&gt;core.async&lt;/code&gt;&lt;/a&gt;. Josh said they&amp;rsquo;re working on this sort of thing with support for back pressure.&lt;/p&gt;
-
-&lt;p&gt;Someone asked about how to connect &lt;a href=&#34;http://www.playframework.com/documentation/2.0/Iteratees&#34;&gt;iteratees&lt;/a&gt; with actors. Josh said, you can feed from an iteratee to an actor, and then just let the actor do stuff. However, there is some controversy about the whole iteratee thing in Play.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:1fbca7bab37ee55bb74190d8ff39e5b7&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;This was a great Pittsburgh Scala Meetup session. I felt that a lot of questions that had built up in my mind after having gotten into reactive programming are being addressed with continuing work.&lt;/p&gt;
 </description>
     </item>
     
