@@ -61,7 +61,7 @@
             <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
             <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
             <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
-            <a href="http://ConscientiousProgrammer.com/index.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
         </li>
     </ul>
 
@@ -78,7 +78,7 @@
     <h1>Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack</h1>
     
 
-<p>A couple of days ago, I happened to see a
+<p>I happened to see a
 <a href="https://twitter.com/acid2/status/669882628695281669">tweet from Ollie Charles</a>
 that he didn&rsquo;t have time to do his usual annual December &ldquo;24 days of&hellip;&rdquo;
 Haskell blog posts this year (2015) and felt sad because I&rsquo;ve
@@ -92,15 +92,15 @@ he covered GHC language extensions.</p>
 <p>With some trepidation, I decided that I would do a &ldquo;24 days of
 Hackage&rdquo; series myself to cap off this year, to share a selection of
 the huge number of Haskell packages I find useful. I thought it would
-be particularly appropriate to do this given that 2015 was the year
-that I migrated to <em>using Haskell as my main language</em> for most new work and
-personal projects, and therefore this has been a year of considerable
+be particularly appropriate to do this given that 2015 was the year I
+migrated to using Haskell as my main language for most new work and
+personal projects, and therefore has been a year of considerable
 discovery for me.</p>
-
-<h2 id="all-the-code:c37cfe20acfff0cff8579f026185f721">All the code</h2>
 
 <p>All my code for my article series will be at
 <a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+<p>This is day 1.</p>
 
 <h2 id="my-selection-criteria:c37cfe20acfff0cff8579f026185f721">My selection criteria</h2>
 
@@ -111,10 +111,10 @@ daily basis, including modules that have inspired me, modules that
 have changed the way I think about code, and some modules that are so
 amazing I’m not even smart enough to use them!&rdquo;</p>
 
-<p>My own intention: some of what I&rsquo;ll cover is already popular and
-well-known, some may be just minor but useful utilities, some may be
-completely obscure, but the underlying theme will be &ldquo;stuff I use and
-can briefly say something useful about&rdquo;.</p>
+<p>Some of what I&rsquo;ll cover is already popular and well-known, some may be
+just minor but useful utilities, some may be completely obscure, but
+the underlying theme will be &ldquo;stuff I use and can briefly say
+something useful about&rdquo;.</p>
 
 <h2 id="stack:c37cfe20acfff0cff8579f026185f721">Stack</h2>
 
@@ -131,14 +131,10 @@ old projects to use it, and I use Stack for all new projects,
 including the
 <a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">repo for this article series</a>.</p>
 
-<p>I&rsquo;m not giving a full-blown tutorial on Stack here today, just a
-little taste, and you can read the
-<a href="http://haskellstack.org/">official documentation</a> for details, but
-what I want to emphasize is that Stack is useful not only for
-experienced developers, but especially also for newcomers, so part of
-today&rsquo;s article is geared specifically to newcomers (or those who
-tried Haskell once and are interested in a fresh start with better
-tooling).</p>
+<p>I&rsquo;m not giving a full-blown tutorial on Stack here today, and you can
+read the <a href="http://haskellstack.org/">official documentation</a> for
+details, but what I want to emphasize is that Stack is useful not only
+for experienced developers, but especially also for newcomers.</p>
 
 <h2 id="how-do-i-get-started-with-haskell:c37cfe20acfff0cff8579f026185f721">&ldquo;How do I get started with Haskell&rdquo;?</h2>
 
@@ -146,19 +142,17 @@ tooling).</p>
 in February this year (2015), I faced a huge hurdle: helping newcomers
 to Haskell get started. I created an introductory workshop session,
 but a huge number of people were discouraged by my best shot at
-creating <a href="https://github.com/pittsburgh-haskell/haskell-installation">a now-obsolete set of Haskell installation instructions</a> that would work for Mac OS,
+creating <a href="https://github.com/pittsburgh-haskell/haskell-installation">Haskell installation instructions</a> that would work for Mac OS,
 Windows, and Linux, and people had major problems installing a basic
 tool chain, and versioning issues if they already had an old version
-of GHC installed. Too much time was wasted on trying to help people with
-installation.</p>
+of GHC installed.</p>
 
-<p>Pittsburgh Haskell happened to go on hiatus in April as I got busy
-with many other things and there was no momentum at the time to keep
-it going, but I believe one huge problem in trying to create a new
-local Haskell community from newcomers was the tooling/setup
-annoyance.</p>
+<p>Pittsburgh Haskell went on hiatus in April as I got busy with many
+other things and there was no momentum to keep it going, but one huge
+reason was clearly the confusions over tooling for newcomers.</p>
 
-<p><strong>Stack solves this problem.</strong> If I gave an introductory Haskell workshop again, I would definitely use Stack.</p>
+<p><strong>Stack solves this problem.</strong> If I give an introductory workshop
+  again, I would definitely use Stack.</p>
 
 <h2 id="an-example-of-getting-started-with-stack-using-a-custom-template:c37cfe20acfff0cff8579f026185f721">An example of getting started with Stack using a custom template</h2>
 
@@ -172,10 +166,9 @@ but I think will become more and more important for newcomers, and is
 also of course useful for any of us who end up creating the same
 boilerplate project setups.</p>
 
-<h3 id="using-an-official-template:c37cfe20acfff0cff8579f026185f721">Using an official template</h3>
-
-<p>I&rsquo;ve created a custom template called <code>franklinchen</code> that is part of
-the official <a href="https://github.com/commercialhaskell/stack-templates"><code>stack-templates</code></a>
+<p>I&rsquo;ve created a custom template called <code>franklinchen</code> that I&rsquo;ve
+contributed to the
+<a href="https://github.com/commercialhaskell/stack-templates"><code>stack-templates</code></a>
 repo.</p>
 
 <p>If you run</p>
@@ -185,226 +178,13 @@ repo.</p>
 
 <p>you will be prompted for information to create a new project called <code>stack-template-demo</code>.</p>
 
-<h3 id="using-your-own-local-template:c37cfe20acfff0cff8579f026185f721">Using your own local template</h3>
-
-<p>Note that the template specified does <em>not</em> have to be in the official
-<code>stack-templates</code> repo. It can also be on your local file system. For
-example, before I submitted my template to <code>stack-templates</code>, I used
-to run</p>
-
-<pre><code class="language-console">$ stack new stack-template-demo /path/on/my/computer/to/franklinchen.hsfiles
-</code></pre>
-
-<p>where <code>franklinchen.hsfiles</code> is my template (read below on creating
-your own template).</p>
-
-<p>(I&rsquo;ve put up an instance of the generated project up
-<a href="https://github.com/FranklinChen/stack-template-demo">on GitHub</a> if
-you want to look at its structure without installing and running Stack
-right now.)</p>
-
-<h3 id="getting-started-with-the-newly-generated-project:c37cfe20acfff0cff8579f026185f721">Getting started with the newly generated project</h3>
-
-<p>Enter the project directory:</p>
-
-<pre><code class="language-console">$ cd stack-template-demo
-</code></pre>
-
-<h3 id="stack-downloads-ghc-for-you:c37cfe20acfff0cff8579f026185f721">Stack downloads GHC for you</h3>
-
-<p>Run</p>
-
-<pre><code class="language-console">$ stack setup
-</code></pre>
-
-<p>If you do not already have an appropriate version of GHC installed,
-Stack will <em>automatically</em> download and install it for you, into an
-area in Stack&rsquo;s configuration directory <code>~/.stack/</code>. The important
-thing to note is that when using Stack, multiple versions of GHC can
-coexist as desired for different build configurations and setups. This
-feature is really important, because not everyone uses the same
-version of GHC and you can build your project against multiple
-versions of GHC easily.</p>
-
-<p>This automatic-downloading feature is particularly useful for
-newcomers who don&rsquo;t need to mess around with some kind of separate
-global installation requiring special privileges.</p>
-
-<p>The output, if Stack needs to download anything:</p>
-
-<pre><code class="language-console">Preparing to install GHC to an isolated location.
-This will not interfere with any system-level installation.
-Downloaded ghc-7.10.2.
-Installed GHC.
-stack will use a locally installed GHC
-For more information on paths, see 'stack path' and 'stack exec env'
-To use this GHC and packages outside of a project, consider using:
-stack ghc, stack ghci, stack runghc, or stack exec
-</code></pre>
-
-<h3 id="launching-the-ghci-repl:c37cfe20acfff0cff8579f026185f721">Launching the GHCi REPL</h3>
-
-<p>The most important thing for a newcomer to Haskell is to get started
-with the GHCi REPL, so let&rsquo;s do that right away. Doing this within the
-context of a project while preloading the modules of the project is
-simple with Stack.</p>
-
-<p>Run</p>
-
-<pre><code class="language-console">$ stack ghci
-</code></pre>
-
-<p>Note that <strong>only the first time</strong> you do this (or other commands that
-require getting library dependencies), Stack may take a while to
-download and build them. The dependencies will actually end up being
-installed and cached such that <em>other projects</em> in the future that use
-them can reuse them. This is a huge advantage of using Stack versus
-the old days before Stack, when there was always an issue of
-redownloading and recompiling the same libraries for different
-projects; that was a tremendous time and space waster! Stack
-intelligently figures out for you what can be shared consistently or
-not.</p>
-
-<p>Stack launches a GHCi REPL with our modules preloaded:</p>
-
-<pre><code class="language-console">Ok, modules loaded: Lib, Main.
-</code></pre>
-
-<p>In <code>src/Lib.hs</code> of the sample project, we have a silly module
-illustrating some <a href="https://www.haskell.org/haddock/">Haddock</a>
-documentation comments:</p>
-
-<pre><code class="language-haskell">-- | A library to do stuff.
-module Lib
-    (
-      ourAdd
-    ) where
-
--- | Add two 'Int' values.
-ourAdd :: Int  -- ^ left
-       -&gt; Int  -- ^ right
-       -&gt; Int  -- ^ sum
-ourAdd x y = x + y
-</code></pre>
-
-<p>We can access the <code>Lib</code> module from the REPL:</p>
-
-<pre><code class="language-console">*Main&gt; ourAdd 2 3
-5
-*Main&gt; Lib.ourAdd 4 5
-9
-</code></pre>
-
-<p>We can also access <code>Main</code>, which is defined in <code>app/Main.hs</code>:</p>
-
-<pre><code class="language-haskell">module Main where
-
-import Lib (ourAdd)
-
-import Text.Printf (printf)
-
-main :: IO ()
-main = printf &quot;2 + 3 = %d\n&quot; (ourAdd 2 3)
-</code></pre>
-
-<pre><code class="language-console">*Main&gt; main
-2 + 3 = 5
-</code></pre>
-
-<h3 id="building-and-running-the-project:c37cfe20acfff0cff8579f026185f721">Building and running the project</h3>
-
-<p>You could have explicitly compiled the project first, before launching
-the REPL. In practice in real projects, I start by compiling a project
-to get the dependencies compiled, before I use GHCi, but the above
-does it for you too:</p>
-
-<pre><code class="language-console">$ stack build
-</code></pre>
-
-<p>Because I defined a native-compiled binary executable named
-<code>stack-template-demo</code> in our Cabal file <code>stack-template-demo.cabal</code>,
-we can run the executable:</p>
-
-<pre><code class="language-console">$ stack exec stack-template-demo
-2 + 3 = 5
-</code></pre>
-
-<p>I supplied unit tests for <code>Lib</code> in <code>test/LibSpec.hs</code> that can be run:</p>
-
-<pre><code class="language-console">$ stack test
-Lib
-  Lib
-    works
-    ourAdd is commutative
-
-Finished in 0.0007 seconds
-2 examples, 0 failures
-</code></pre>
-
-<h3 id="installing-the-library-and-executable:c37cfe20acfff0cff8579f026185f721">Installing the library and executable</h3>
-
-<p>You can now install the library and executable for your own use later:</p>
-
-<pre><code class="language-console">$ stack install
-...
-...
-Copying from /Users/chen/stack-template-demo/.stack-work/install/x86_64-osx/lts-3.16/7.10.2/bin/stack-template-demo to /Users/chen/.local/bin/stack-template-demo
-
-Copied executables to /Users/chen/.local/bin:
-- stack-template-demo
-</code></pre>
-
-<p>For example (since <code>~/.local/bin</code> is in my <code>PATH</code>):</p>
-
-<pre><code class="language-console">$ stack-template-demo
-2 + 3 = 5
-</code></pre>
-
-<h3 id="your-own-stack-template-configuration:c37cfe20acfff0cff8579f026185f721">Your own Stack template configuration</h3>
-
-<p>When using Stack templates, it&rsquo;s useful to set up a
-configuration so that information can automatically be filled out for
-you when you generate new projects. The documentation for
-configuration is
-<a href="http://docs.haskellstack.org/en/stable/yaml_configuration.html">here</a>. Create
-a file in
-<code>~/.stack/config.yaml</code>. Mine has:</p>
-
-<pre><code class="language-yaml">templates:
-  params:
-    author-email: &quot;franklinchen@franklinchen.com&quot;
-    author-name: &quot;Franklin Chen&quot;
-    category: test
-    copyright: &quot;2015&quot;
-    github-username: &quot;FranklinChen&quot;
-</code></pre>
-
-<h3 id="other-bells-and-whistles:c37cfe20acfff0cff8579f026185f721">Other bells and whistles</h3>
-
-<p>I try to use <a href="https://travis-ci.org/">Travis CI</a> for any public
-code I put up, so my template generates a <code>.travis.yml</code> file that uses
-Stack. I&rsquo;ve started to migrate my former Travis setups based on
-<a href="https://github.com/hvr/multi-ghc-travis"><code>multi-ghc-travis</code></a> to use
-Stack instead.</p>
-
-<h2 id="creating-a-custom-stack-project-template:c37cfe20acfff0cff8579f026185f721">Creating a custom Stack project template</h2>
-
-<p>It was surprising to me that how to create a custom template is not
-covered in the main Stack documentation. Instead, I found it at the
-<a href="https://github.com/commercialhaskell/stack-templates"><code>stack-templates</code></a>
-site.</p>
-
-<p>The method of creating a custom template is kind of clumsy, involving
-creating a single file with embedded directives to indicate generated
-file name and directory structure, but it&rsquo;s a start.</p>
+<h2 id="creating-a-custom-template:c37cfe20acfff0cff8579f026185f721">Creating a custom template</h2>
 
 <h2 id="conclusion:c37cfe20acfff0cff8579f026185f721">Conclusion</h2>
 
-<p>For day 1 of my &ldquo;24 days of Hackage, 2015&rdquo;, I&rsquo;ve briefly introduced
-how to use Stack, the Haskell tool that I&rsquo;m using to build and run all
-the sample code for this article series.</p>
-
-<p>Next up: some real code!</p>
+<p>For day 1 of my &ldquo;24 days of Hackage, 2015&rdquo;, I introduced Stack, the
+Haskell tool that I&rsquo;m using to build and run all the sample code for
+this article series.</p>
 
     <div id="disqus_thread"></div>
 <script type="text/javascript">

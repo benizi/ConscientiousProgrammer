@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Hackage on The Conscientious Programmer</title>
-    <link>http://ConscientiousProgrammer.com/categories/hackage/</link>
-    <description>Recent content in Hackage on The Conscientious Programmer</description>
+    <title>Haskell Stack on The Conscientious Programmer</title>
+    <link>http://ConscientiousProgrammer.com/categories/haskell-stack/</link>
+    <description>Recent content in Haskell Stack on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 30 Nov 2015 16:20:11 -0500</lastBuildDate>
-    <atom:link href="http://ConscientiousProgrammer.com/categories/hackage/atom/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://ConscientiousProgrammer.com/categories/haskell-stack/atom/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack</title>
