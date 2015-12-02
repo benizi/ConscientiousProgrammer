@@ -218,7 +218,7 @@ which has type
 listToMaybe :: [a] -> Maybe a
 ```
 
-so `listToMaybe . scan mediaRegex` has type `String -> (String, [String])`.
+so `listToMaybe . scan mediaRegex` has type `String -> Maybe (String, [String])`.
 
 ``` console
 *Main> (listToMaybe . scan mediaRegex) "@Media:\tfoo, audio, unlinked"
