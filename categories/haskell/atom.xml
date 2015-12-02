@@ -212,7 +212,7 @@ which has type&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;listToMaybe :: [a] -&amp;gt; Maybe a
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;so &lt;code&gt;listToMaybe . scan mediaRegex&lt;/code&gt; has type &lt;code&gt;String -&amp;gt; (String, [String])&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;so &lt;code&gt;listToMaybe . scan mediaRegex&lt;/code&gt; has type &lt;code&gt;String -&amp;gt; Maybe (String, [String])&lt;/code&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; (listToMaybe . scan mediaRegex) &amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;
 Just (&amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;,[&amp;quot;foo&amp;quot;,&amp;quot;audio&amp;quot;,&amp;quot;, unlinked&amp;quot;])

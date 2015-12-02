@@ -273,7 +273,7 @@ which has type</p>
 <pre><code class="language-haskell">listToMaybe :: [a] -&gt; Maybe a
 </code></pre>
 
-<p>so <code>listToMaybe . scan mediaRegex</code> has type <code>String -&gt; (String, [String])</code>.</p>
+<p>so <code>listToMaybe . scan mediaRegex</code> has type <code>String -&gt; Maybe (String, [String])</code>.</p>
 
 <pre><code class="language-console">*Main&gt; (listToMaybe . scan mediaRegex) &quot;@Media:\tfoo, audio, unlinked&quot;
 Just (&quot;@Media:\tfoo, audio, unlinked&quot;,[&quot;foo&quot;,&quot;audio&quot;,&quot;, unlinked&quot;])
