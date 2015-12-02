@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://conscientiousprogrammer.com/</loc>
-    <lastmod>2015-11-30T16:20:11-05:00</lastmod>
+    <lastmod>2015-12-02T07:50:12-05:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://conscientiousprogrammer.com/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/</loc>
+    <lastmod>2015-12-02T07:50:12-05:00</lastmod>
   </url>
   
   <url>

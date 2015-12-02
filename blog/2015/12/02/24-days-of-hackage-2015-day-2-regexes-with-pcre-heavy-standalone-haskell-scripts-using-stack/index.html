@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>24 days of Hackage, 2015: day 2: Regexes with pcre-heavy; standalone Haskell scripts using Stack &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/highlight/default.css">
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+        
+        <h1>Franklin Chen</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
+    </ul>
+
+    
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>24 days of Hackage, 2015: day 2: Regexes with pcre-heavy; standalone Haskell scripts using Stack</h1>
+    
+
+<p>This is day 2 of my <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">&ldquo;24 days of Hackage, 2015&rdquo; series</a>.</p>
+
+<p>Don&rsquo;t laugh, but once upon a time, I made Perl my main programming
+language of choice (between around 1999 and 2010). There were many
+reasons for this, but one reason was that Perl made it very easy to do
+text processing using regexes.</p>
+
+<p>If you are a seasoned Haskeller, you might be thinking, &ldquo;Why not use a
+real parser instead?&ldquo;, such as the venerable
+<a href="https://hackage.haskell.org/package/parsec">parsec</a>, which was covered in a
+<a href="https://ocharles.org.uk/blog/posts/2012-12-10-24-days-of-hackage-parsec.html">2012 day of Hackage</a>?
+(Or, today, one could consider one of several other newer alternative libraries
+for parsing. A later day of Hackage will say more about this!)</p>
+
+<p>After all, Jamie Zawinski famously once wrote, <em>&ldquo;Some people, when
+confronted with a problem, think &lsquo;I know, I&rsquo;ll use regular
+expressions.&rsquo;  Now they have two problems.&rdquo;</em> I even gave a talk at
+<a href="http://pghtechfest.com/">Pittsburgh Tech Fest</a> in 2013,
+<a href="http://www.slideshare.net/FranklinChen/handout-22302440">&ldquo;Stop overusing regular expressions!&rdquo;</a>,
+in which I promoted writing parsers rather than writing regexes.</p>
+
+<p>But, sometimes I do want to use a regex. In that case, I have been
+using an obscure but useful package, <a href="https://hackage.haskell.org/package/pcre-heavy"><code>pcre-heavy</code></a>.</p>
+
+<p>Today I&rsquo;ll show how to use <code>pcre-heavy</code>, and while at it, also show
+how to ship <em>one-file standalone Haskell scripts</em> that only require
+Stack.</p>
+
+<h2 id="why-use-regexes-at-all:73f9e85177be1c4a1d48f4dbe8d8b6bf">Why use regexes at all?</h2>
+
+<p>Before going into <code>pcre-heavy</code>, I thought I should explain when I use
+regexes.</p>
+
+<p>Back when I was doing a lot of text extraction, cleaning, including
+<em>correction</em>, restructuring of messy data, regexes seemed the only
+choice really. I had to not lose any &ldquo;intended&rdquo; information even if it
+was obscured by garbage or misspellings or the like. I therefore could
+not use some kind of approximate statistical technique, but had to
+iteratively do do a lot exploratory work with some interactive
+prompting in order to gradually clean up the data. Super-powerful
+regex constructs of the Perl variety seemed perfect for this task.</p>
+
+<p>But even outside of such use cases, there&rsquo;s no hiding from the fact
+that regexes can be very convenient for very simple tasks. Also,
+because regexes are used so much in our programming world in general,
+if we are migrating to Haskell some already-working regexes from
+already-written code in some other language, it&rsquo;s convenient to just
+stick with regexes.</p>
+
+<h2 id="which-haskell-regex-library-to-use:73f9e85177be1c4a1d48f4dbe8d8b6bf">Which Haskell regex library to use?!</h2>
+
+<p>A newcomer to Haskell must be overwhelmed by the lack of a single
+standard library and syntax for regexes. I mean, take a look at this
+<a href="https://wiki.haskell.org/Regular_expressions">wiki page</a>.</p>
+
+<p>Today, I&rsquo;m presenting
+<a href="https://hackage.haskell.org/package/pcre-heavy"><code>pcre-heavy</code></a>, a
+regex library that I&rsquo;ve been using when I want regexes at all (I try
+not to want them). It&rsquo;s pretty new and not even mentioned on that wiki
+page.</p>
+
+<p>Some of my criteria for choosing a regex library:</p>
+
+<ul>
+<li>I want Perl-style regexes. That&rsquo;s what I&rsquo;m used to and are a kind of
+standard across regex support in many programming languages.</li>
+<li>Nice syntax is a plus. One of the selling points of using regexes is
+that the conciseness of writing patterns, binding matches,
+etc. Without such conciseness, I just think &ldquo;Why not just write a
+real parser? It only takes a couple of lines in Haskell anyway.&rdquo;</li>
+<li>High performance is a perfectly legitimate reason to use regexes.</li>
+</ul>
+
+<p>Given these criteria, using a <a href="http://www.pcre.org/">PCRE</a>-based
+library seemed the way to go. OK, the wiki page lists a bunch of
+PCRE-based libraries.</p>
+
+<p><a href="https://hackage.haskell.org/package/pcre-light"><code>pcre-light</code></a> is a
+good way to go.</p>
+
+<p><strong>It does require installation of the C library for
+PCRE.</strong></p>
+
+<p>I&rsquo;m mainly on Mac OS X, so I have PCRE installed through
+Homebrew with <code>$ brew install pcre</code>. I have PCRE working on
+Linux. Unfortunately, I don&rsquo;t use Windows, so if someone can verify
+that <code>pcre-light</code> installs OK on Windows, that would be great. I would
+feel sad if I picked a library that is problematic for Windows users.</p>
+
+<p>Recently, out came
+<a href="https://hackage.haskell.org/package/pcre-heavy"><code>pcre-heavy</code></a>, a
+wrapper around <code>pcre-light</code> that uses
+<a href="https://wiki.haskell.org/Template_Haskell">Template Haskell</a>, and I
+liked it, so I use it.</p>
+
+<h2 id="example-program-using-pcre-heavy:73f9e85177be1c4a1d48f4dbe8d8b6bf">Example program using <code>pcre-heavy</code></h2>
+
+<p><code>pcre-heavy</code> has decent documentation on
+<a href="https://hackage.haskell.org/package/pcre-heavy">its Hackage page</a>, so
+I recommend reading that for the full details on how to use it. I&rsquo;ll
+give just a simple example here in the context of a complete program
+that does something.</p>
+
+<h3 id="specification-and-some-test-cases:73f9e85177be1c4a1d48f4dbe8d8b6bf">Specification and some test cases</h3>
+
+<p>Say we have a file of lines of text that are supposed to have a
+comma-separated format of</p>
+
+<ul>
+<li>a fixed header</li>
+<li>a text transcript&rsquo;s file path</li>
+<li>an &ldquo;audio&rdquo; or &ldquo;video&rdquo; field indicating the type of associated media</li>
+<li>an optional annotation about whether the associated media is missing
+or not yet linked into the transcript</li>
+</ul>
+
+<p>Examples that should match:</p>
+
+<pre><code class="language-text">@Media:	has-audio,   audio
+@Media:	has-video,video
+@Media:	has-audio-but-missing, audio, missing
+@Media:	has-video-but-unlinked  , video,      unlinked
+</code></pre>
+
+<p>Examples that should fail to match:</p>
+
+<pre><code class="language-text">@Media:	no-audio-or-video
+@Media:	missing-media-field, unlinked
+</code></pre>
+
+<h3 id="creating-a-regex:73f9e85177be1c4a1d48f4dbe8d8b6bf">Creating a regex</h3>
+
+<p>Here is a <code>pcre-heavy</code> regex, using the
+<a href="https://hackage.haskell.org/package/pcre-heavy-1.0.0.1/docs/Text-Regex-PCRE-Heavy.html#v:re"><code>re</code></a>
+Template Haskell
+<a href="https://wiki.haskell.org/Template_Haskell#QuasiQuoters">quasiquoter</a>
+that builds a PCRE-compiled
+<a href="https://hackage.haskell.org/package/pcre-heavy-1.0.0.1/docs/Text-Regex-PCRE-Heavy.html#t:Regex"><code>Regex</code></a>:</p>
+
+<pre><code class="language-haskell">mediaRegex :: Regex
+mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked))?|]
+</code></pre>
+
+<h2 id="regex-string-validated-at-haskell-compile-time:73f9e85177be1c4a1d48f4dbe8d8b6bf">Regex string validated at Haskell compile-time</h2>
+
+<p>One selling point of <code>pcre-heavy</code> for me is that because it uses
+Template Haskell, a bad regex string results in a Haskell-level
+compile-time error rather than a runtime error.</p>
+
+<p>Example of a compile-time error:</p>
+
+<pre><code class="language-haskell">-- This Haskell code fails to compile!
+mediaRegex :: Regex
+mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked)?|]
+</code></pre>
+
+<p>Loading this in GHCi or compiling with GHC results in</p>
+
+<pre><code class="language-console">    Exception when trying to run compile-time code:
+      Text.Regex.PCRE.Light: Error in regex: missing )
+    Code: template-haskell-2.10.0.0:Language.Haskell.TH.Quote.quoteExp
+            re
+            &quot;^@Media:\\t([^ ,]+)\\ *,\\ *(audio|video)(\\ *,\\ *(?:missing|unlinked)?&quot;
+</code></pre>
+
+<h2 id="using-the-regex:73f9e85177be1c4a1d48f4dbe8d8b6bf">Using the regex</h2>
+
+<p>We&rsquo;ll use
+<a href="https://hackage.haskell.org/package/pcre-heavy-1.0.0.1/docs/Text-Regex-PCRE-Heavy.html#v:scan"><code>scan</code></a>
+to extract the matches (if any) against our regex on a string.</p>
+
+<p><code>scan</code> returns a lazy list of all possible matches:</p>
+
+<pre><code class="language-haskell">-- Simplified type signature for our purposes.
+scan :: Regex -&gt; String -&gt; [(String, [String])]
+</code></pre>
+
+<p>Each match is a pair <code>(String, [String])</code>, where the first component
+is the whole string that matched, and the second is an ordered list of
+parenthesized groupings in the regex. In our regex, we had three
+parenthesized groupings, so a match could result in a three-element
+grouping list:</p>
+
+<pre><code class="language-console">*Main&gt; scan mediaRegex &quot;@Media:\tfoo, audio, unlinked&quot;
+[(&quot;@Media:\tfoo, audio, unlinked&quot;,[&quot;foo&quot;,&quot;audio&quot;,&quot;, unlinked&quot;])]
+</code></pre>
+
+<p>Since we only want
+the first match (if any), we can just compose it with
+<a href="https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Maybe.html#v:listToMaybe"><code>listToMaybe</code> from <code>Data.Maybe</code></a>,
+which has type</p>
+
+<pre><code class="language-haskell">listToMaybe :: [a] -&gt; Maybe a
+</code></pre>
+
+<p>so <code>listToMaybe . scan mediaRegex</code> has type <code>String -&gt; (String, [String])</code>.</p>
+
+<pre><code class="language-console">*Main&gt; (listToMaybe . scan mediaRegex) &quot;@Media:\tfoo, audio, unlinked&quot;
+Just (&quot;@Media:\tfoo, audio, unlinked&quot;,[&quot;foo&quot;,&quot;audio&quot;,&quot;, unlinked&quot;])
+</code></pre>
+
+<h2 id="extracting-useful-information:73f9e85177be1c4a1d48f4dbe8d8b6bf">Extracting useful information</h2>
+
+<p>Finally, what we really wanted to do after matching is apply
+additional business logic and get stuff into a real type as soon as
+possible, rather than engage in &ldquo;stringly-typed&rdquo; programming and
+context-dependent list lengths.</p>
+
+<p>Let&rsquo;s say that for our task, we only care about matched lines that are
+<em>not</em> missing or unlinked, and skip those that are missing or
+unlinked. We define a data type and use pattern matching to get out of
+the untyped world into the typed world of our data model.</p>
+
+<pre><code class="language-haskell">data Info =
+    Skip
+  | Audio FilePath
+  | Video FilePath
+    deriving (Eq, Show)
+
+-- | Extract information about a media file if it is present.
+extractIfPresent :: (String, [String]) -&gt; Info
+extractIfPresent (_, [name, &quot;audio&quot;]) = Audio name
+extractIfPresent (_, [name, &quot;video&quot;]) = Video name
+extractIfPresent (_, _) = Skip
+</code></pre>
+
+<h2 id="presentation-as-a-report:73f9e85177be1c4a1d48f4dbe8d8b6bf">Presentation as a report</h2>
+
+<p>Finally, now that we are done with the regex world, and have a data
+model, all that is left is a driver to complete an example
+command-line program.</p>
+
+<p>We have all the information needed to print out a report for each line.</p>
+
+<pre><code class="language-haskell">-- | Output a report.
+reportOnInfo :: Maybe Info -&gt; IO ()
+reportOnInfo Nothing = putStrLn &quot;no match&quot;
+reportOnInfo (Just Skip) = putStrLn &quot;match, but missing or unlinked&quot;
+reportOnInfo (Just (Audio path)) = printf &quot;audio at %s\n&quot; path
+reportOnInfo (Just (Video path)) = printf &quot;video at %s\n&quot; path
+</code></pre>
+
+<p>And the final driver, piping everything through from standard input:</p>
+
+<pre><code class="language-haskell">main :: IO ()
+main = do
+  s &lt;- getContents
+  mapM_ (reportOnInfo
+        . fmap extractIfPresent
+        . listToMaybe
+        . scan mediaRegex
+       ) (lines s)
+</code></pre>
+
+<h2 id="using-stack-to-ship-standalone-scripts:73f9e85177be1c4a1d48f4dbe8d8b6bf">Using Stack to ship standalone scripts</h2>
+
+<p>We can try our program from within the GHCi REPL by just typing <code>main</code>
+or <code>:main</code> at the REPL prompt and typing in lines of text. We can also
+do <code>stack build</code> to native-compile into a shippable binary.</p>
+
+<p>But another option is to ship the source code as a standalone one-file
+script. This can be very convenient in some circumstances, when you
+can rely on the recipient simply installing Stack.</p>
+
+<p>Here&rsquo;s how we can turn our program into such a standalone script: just
+add the following two lines and make the file executable:</p>
+
+<pre><code class="language-haskell">#!/usr/bin/env stack
+-- stack --install-ghc runghc --package pcre-heavy
+</code></pre>
+
+<p>Stack will read the embedded command in order to install GHC, if
+ needed, and first download and install the packages listed (here
+ <code>pcre-heavy</code>), if needed. (Note: in this case, because of FFI with a
+ C library, the recipient has to install PCRE first.)</p>
+
+<p>So if you have short programs that don&rsquo;t need to be organized into
+full-scale Cabal projects, you can treat Haskell as a &ldquo;scripting
+language&rdquo; with full access to the libraries of Hackage!</p>
+
+<pre><code class="language-console">$ app/PCREHeavyExampleMain.hs &lt; input.txt &gt; output.txt
+</code></pre>
+
+<h3 id="a-warning:73f9e85177be1c4a1d48f4dbe8d8b6bf">A warning</h3>
+
+<p>Although this Stack-as-Haskell-interpreter feature is kind of cool, I
+prefer to write modular, separately testable libraries, while having
+the <code>main</code> driver of the <code>Main</code> module of a program just use library
+modules that do most of the real work. Furthermore, I prefer to build
+and use native-compiled libraries and binaries because they&rsquo;re just
+much faster to start up and also run: <code>runghc</code> is a Haskell
+interpreter rather than a native optimizing compiler. But the beauty
+of the GHC Haskell world is you can run in either mode, and flip from
+one to the other seamlessly.</p>
+
+<h3 id="here-s-our-complete-example-standalone-program:73f9e85177be1c4a1d48f4dbe8d8b6bf">Here&rsquo;s our complete example standalone program</h3>
+
+<pre><code class="language-haskell">#!/usr/bin/env stack
+-- stack --install-ghc runghc --package pcre-heavy
+
+{-# LANGUAGE QuasiQuotes #-}
+
+module Main where
+
+import Text.Regex.PCRE.Heavy
+import Data.Maybe (listToMaybe)
+import Text.Printf (printf)
+
+-- | Match a media name, audio/video, and optional missing/unlinked.
+mediaRegex :: Regex
+mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked))?|]
+
+data Info =
+    Skip
+  | Audio FilePath
+  | Video FilePath
+    deriving (Eq, Show)
+
+-- | Extract information about a media file if it is present.
+extractIfPresent :: (String, [String]) -&gt; Info
+extractIfPresent (_, [name, &quot;audio&quot;]) = Audio name
+extractIfPresent (_, [name, &quot;video&quot;]) = Video name
+extractIfPresent (_, _) = Skip
+
+-- | Output a report.
+reportOnInfo :: Maybe Info -&gt; IO ()
+reportOnInfo Nothing = putStrLn &quot;no match&quot;
+reportOnInfo (Just Skip) = putStrLn &quot;match, but missing or unlinked&quot;
+reportOnInfo (Just (Audio path)) = printf &quot;audio at %s\n&quot; path
+reportOnInfo (Just (Video path)) = printf &quot;video at %s\n&quot; path
+
+-- | Driver, in traditional right-to-left syntax.
+main :: IO ()
+main = do
+  s &lt;- getContents
+  mapM_ (reportOnInfo
+        . fmap extractIfPresent
+        . listToMaybe
+        . scan mediaRegex
+       ) (lines s)
+</code></pre>
+
+<h2 id="some-additional-notes:73f9e85177be1c4a1d48f4dbe8d8b6bf">Some additional notes</h2>
+
+<p>One limitation faced by a short expository article with example code
+is that we don&rsquo;t like to waste space and attention, and therefore tend
+to present quick-and-dirty code, rather than production-level code
+(which is efficient, has sensible error recovery, well-commented). I&rsquo;ve
+been thinking about the dilemma of <em>how not to give the
+wrong impression and set a bad example by showing simplistic example
+code</em>. There&rsquo;s no easy answer, but I felt it might be useful to
+provide optional &ldquo;advanced&rdquo; notes sometimes, on how to write real code.</p>
+
+<p><code>pcre-heavy</code> allows matching not only of <code>String</code>, but also of
+<code>ByteString</code> and <code>Text</code> types. In practice, for efficiency, we
+want to use
+<a href="http://hackage.haskell.org/package/bytestring"><code>bytestring</code></a> and
+<a href="http://hackage.haskell.org/package/text"><code>text</code></a> as much as possible,
+rather than the inefficient <code>String</code> type. (<a href="https://ocharles.org.uk/blog/posts/2012-12-12-24-days-of-hackage-text.html">A 2012 day of hackage
+article talks about <code>text</code></a>.)
+Since the underlying PCRE C library uses bytes, I generally hand
+bytestrings to <code>pcre-heavy</code>.</p>
+
+<p>The sample driver code uses lazy I/O to get the lines from input. This
+is superficially elegant and concise for pedagogical purposes, but in
+real life is a source of resource leaks and other problems and even
+causes people to think &ldquo;Haskell is inefficient&rdquo;. For real work, I like
+to use <a href="http://hackage.haskell.org/package/pipes"><code>pipes</code></a>, which was
+covered in another
+<a href="https://ocharles.org.uk/blog/posts/2012-12-16-24-days-of-hackage-pipes.html">2012 day of Hackage</a>
+and also has an
+<a href="https://hackage.haskell.org/package/pipes-4.1.7/docs/Pipes-Tutorial.html">extensive, beautiful tutorial</a>
+by its author, Gabriel Gonzalez, who also has a fantastic,
+long-running, active blog
+<a href="http://www.haskellforall.com/">&ldquo;Haskell for all&rdquo;</a> that every
+Haskeller should follow.</p>
+
+<p>Finally, was a regex the right choice here? It was simple enough for
+this problem, but you can see from the ad hoc pattern matching and
+hardcoded strings and fragile positional ordering and number of groups
+that things could get error-prone really quickly if the regex got any
+more complex or we wanted to do proper error handling in case of a
+failed match.</p>
+
+<h2 id="conclusion:73f9e85177be1c4a1d48f4dbe8d8b6bf">Conclusion</h2>
+
+<p>Regex support is not a strong point of the Haskell ecosystem, which is
+geared to more structured parsing, but there are options if you really
+want to use regexes, and I like the Perl-style <code>pcre-light</code> family of
+libraries that now includes <code>pcre-heavy</code>.</p>
+
+<p>Also, I showed how to add two lines to the top of a Haskell program to
+turn it into a Stack script.</p>
+
+<h2 id="all-the-code:73f9e85177be1c4a1d48f4dbe8d8b6bf">All the code</h2>
+
+<p>All my code for my article series are at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/02\/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack\/';
+    var disqus_title = '24 days of Hackage, 2015: day 2: Regexes with pcre-heavy; standalone Haskell scripts using Stack';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/02\/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+<script src="http://ConscientiousProgrammer.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

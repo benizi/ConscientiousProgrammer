@@ -79,15 +79,57 @@
     
     <div class="post">
       <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack</a>
+        <a href="http://conscientiousprogrammer.com/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/">24 days of Hackage, 2015: day 2: Regexes with pcre-heavy; standalone Haskell scripts using Stack</a>
       </h1>
-      <span class="post-date">Nov 30, 2015 &middot; 4 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/#disqus_thread">Comments</a>
+      <span class="post-date">Dec 2, 2015 &middot; 11 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/#disqus_thread">Comments</a>
       
       <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/haskell-stack">Haskell Stack</a>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pcre-heavy">pcre-heavy</a><a class="label" href="http://ConscientiousProgrammer.com/categories/regexes">regexes</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parsers">parsers</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parsec">parsec</a><a class="label" href="http://ConscientiousProgrammer.com/categories/perl">Perl</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pcre">PCRE</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pittsburgh-techfest">Pittsburgh TechFest</a><a class="label" href="http://ConscientiousProgrammer.com/categories/template-haskell">Template Haskell</a>
       </span>
       
-      <p>I happened to see a
+      <p>This is day 2 of my <a href="./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">&ldquo;24 days of Hackage, 2015&rdquo; series</a>.</p>
+
+<p>Don&rsquo;t laugh, but once upon a time, I made Perl my main programming
+language of choice (between around 1999 and 2010). There were many
+reasons for this, but one reason was that Perl made it very easy to do
+text processing using regexes.</p>
+
+<p>If you are a seasoned Haskeller, you might be thinking, &ldquo;Why not use a
+real parser instead?&ldquo;, such as the venerable
+<a href="https://hackage.haskell.org/package/parsec">parsec</a>, which was covered in a
+<a href="https://ocharles.org.uk/blog/posts/2012-12-10-24-days-of-hackage-parsec.html">2012 day of Hackage</a>?
+(Or, today, one could consider one of several other newer alternative libraries
+for parsing. A later day of Hackage will say more about this!)</p>
+
+<p>After all, Jamie Zawinski famously once wrote, <em>&ldquo;Some people, when
+confronted with a problem, think &lsquo;I know, I&rsquo;ll use regular
+expressions.&rsquo;  Now they have two problems.&rdquo;</em> I even gave a talk at
+<a href="http://pghtechfest.com/">Pittsburgh Tech Fest</a> in 2013,
+<a href="http://www.slideshare.net/FranklinChen/handout-22302440">&ldquo;Stop overusing regular expressions!&rdquo;</a>,
+in which I promoted writing parsers rather than writing regexes.</p>
+
+<p>But, sometimes I do want to use a regex. In that case, I have been
+using an obscure but useful package, <a href="https://hackage.haskell.org/package/pcre-heavy"><code>pcre-heavy</code></a>.</p>
+
+<p>Today I&rsquo;ll show how to use <code>pcre-heavy</code>, and while at it, also show
+how to ship <em>one-file standalone Haskell scripts</em> that only require
+Stack.</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack</a>
+      </h1>
+      <span class="post-date">Nov 30, 2015 &middot; 8 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/stack">Stack</a>
+      </span>
+      
+      <p>A couple of days ago, I happened to see a
 <a href="https://twitter.com/acid2/status/669882628695281669">tweet from Ollie Charles</a>
 that he didn&rsquo;t have time to do his usual annual December &ldquo;24 days of&hellip;&rdquo;
 Haskell blog posts this year (2015) and felt sad because I&rsquo;ve
@@ -101,15 +143,15 @@ he covered GHC language extensions.</p>
 <p>With some trepidation, I decided that I would do a &ldquo;24 days of
 Hackage&rdquo; series myself to cap off this year, to share a selection of
 the huge number of Haskell packages I find useful. I thought it would
-be particularly appropriate to do this given that 2015 was the year I
-migrated to using Haskell as my main language for most new work and
-personal projects, and therefore has been a year of considerable
+be particularly appropriate to do this given that 2015 was the year
+that I migrated to <em>using Haskell as my main language</em> for most new work and
+personal projects, and therefore this has been a year of considerable
 discovery for me.</p>
+
+<h2 id="all-the-code:c37cfe20acfff0cff8579f026185f721">All the code</h2>
 
 <p>All my code for my article series will be at
 <a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
-
-<p>This is day 1.</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">Read On &rarr;</a>
       
@@ -322,33 +364,6 @@ time to migrate my blogs, to Octopress 3 or
 <p>I have a confession to make, which I have made before: I find it very difficult to understand ideas or code not presented with <em>types</em>. So I decided that the only way I could possibly understand what &ldquo;transducers&rdquo; are would be to actually implement them in a typed language. I ended up doing so and am sharing my findings here.</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/">Pittsburgh Code and Supply: Programming in journalism</a>
-      </h1>
-      <span class="post-date">Jul 17, 2014 &middot; 5 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/pittsburgh-code-and-supply">Pittsburgh Code and Supply</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pittsburgh">Pittsburgh</a><a class="label" href="http://ConscientiousProgrammer.com/categories/journalism">journalism</a><a class="label" href="http://ConscientiousProgrammer.com/categories/data">data</a><a class="label" href="http://ConscientiousProgrammer.com/categories/visualization">visualization</a><a class="label" href="http://ConscientiousProgrammer.com/categories/python">Python</a><a class="label" href="http://ConscientiousProgrammer.com/categories/django">Django</a><a class="label" href="http://ConscientiousProgrammer.com/categories/documentcloud">DocumentCloud</a><a class="label" href="http://ConscientiousProgrammer.com/categories/bootstrap">Bootstrap</a><a class="label" href="http://ConscientiousProgrammer.com/categories/git">Git</a><a class="label" href="http://ConscientiousProgrammer.com/categories/r">R</a><a class="label" href="http://ConscientiousProgrammer.com/categories/sql">SQL</a><a class="label" href="http://ConscientiousProgrammer.com/categories/openrefine">OpenRefine</a><a class="label" href="http://ConscientiousProgrammer.com/categories/d3">D3</a>
-      </span>
-      
-      
-<figure >
-    
-        <img src="http://static.squarespace.com/static/538f3cc8e4b00f52172b5560/t/53a4ec76e4b0488fb14c5a29/1403317372203/sign.png?format=500w" />
-    
-    
-</figure>
-
-
-<p>I finally attended my first ever <a href="http://www.codeandsupply.co/">Pittsburgh Code and Supply</a> meeting! The group, which posts its <a href="http://www.meetup.com/Pittsburgh-Code-Supply/">events on Meetup</a>, was created by local Pittsburgh software developer <a href="https://twitter.com/justinxreese">Justin Reese</a> just a few months ago, in March 2014. His vision is to create a local community that, unlike conventional specific language/technology-based meetups, is much more universal and broad. If you haven&rsquo;t do so already, read more about the <a href="http://www.codeandsupply.co/about">goals of Pittsburgh Code and Supply</a>. I&rsquo;m very excited about this new group!</p>
-
-<p>The Code and Supply meetup I just attended was about <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/186766512/">&ldquo;Programming in journalism&rdquo;</a>. This is a topic of huge importance, and I was excited to attend to hear more about what some local journalist/programmers are doing.</p>
-
-      <a href="http://conscientiousprogrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/">Read On &rarr;</a>
       
     </div>
     

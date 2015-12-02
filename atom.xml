@@ -6,8 +6,417 @@
     <description>Recent content on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 30 Nov 2015 16:20:11 -0500</lastBuildDate>
+    <lastBuildDate>Wed, 02 Dec 2015 07:50:12 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 2: Regexes with pcre-heavy; standalone Haskell scripts using Stack</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/</link>
+      <pubDate>Wed, 02 Dec 2015 07:50:12 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/</guid>
+      <description>
+
+&lt;p&gt;This is day 2 of my &lt;a href=&#34;./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;&amp;ldquo;24 days of Hackage, 2015&amp;rdquo; series&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Don&amp;rsquo;t laugh, but once upon a time, I made Perl my main programming
+language of choice (between around 1999 and 2010). There were many
+reasons for this, but one reason was that Perl made it very easy to do
+text processing using regexes.&lt;/p&gt;
+
+&lt;p&gt;If you are a seasoned Haskeller, you might be thinking, &amp;ldquo;Why not use a
+real parser instead?&amp;ldquo;, such as the venerable
+&lt;a href=&#34;https://hackage.haskell.org/package/parsec&#34;&gt;parsec&lt;/a&gt;, which was covered in a
+&lt;a href=&#34;https://ocharles.org.uk/blog/posts/2012-12-10-24-days-of-hackage-parsec.html&#34;&gt;2012 day of Hackage&lt;/a&gt;?
+(Or, today, one could consider one of several other newer alternative libraries
+for parsing. A later day of Hackage will say more about this!)&lt;/p&gt;
+
+&lt;p&gt;After all, Jamie Zawinski famously once wrote, &lt;em&gt;&amp;ldquo;Some people, when
+confronted with a problem, think &amp;lsquo;I know, I&amp;rsquo;ll use regular
+expressions.&amp;rsquo;  Now they have two problems.&amp;rdquo;&lt;/em&gt; I even gave a talk at
+&lt;a href=&#34;http://pghtechfest.com/&#34;&gt;Pittsburgh Tech Fest&lt;/a&gt; in 2013,
+&lt;a href=&#34;http://www.slideshare.net/FranklinChen/handout-22302440&#34;&gt;&amp;ldquo;Stop overusing regular expressions!&amp;rdquo;&lt;/a&gt;,
+in which I promoted writing parsers rather than writing regexes.&lt;/p&gt;
+
+&lt;p&gt;But, sometimes I do want to use a regex. In that case, I have been
+using an obscure but useful package, &lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy&#34;&gt;&lt;code&gt;pcre-heavy&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Today I&amp;rsquo;ll show how to use &lt;code&gt;pcre-heavy&lt;/code&gt;, and while at it, also show
+how to ship &lt;em&gt;one-file standalone Haskell scripts&lt;/em&gt; that only require
+Stack.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-use-regexes-at-all:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Why use regexes at all?&lt;/h2&gt;
+
+&lt;p&gt;Before going into &lt;code&gt;pcre-heavy&lt;/code&gt;, I thought I should explain when I use
+regexes.&lt;/p&gt;
+
+&lt;p&gt;Back when I was doing a lot of text extraction, cleaning, including
+&lt;em&gt;correction&lt;/em&gt;, restructuring of messy data, regexes seemed the only
+choice really. I had to not lose any &amp;ldquo;intended&amp;rdquo; information even if it
+was obscured by garbage or misspellings or the like. I therefore could
+not use some kind of approximate statistical technique, but had to
+iteratively do do a lot exploratory work with some interactive
+prompting in order to gradually clean up the data. Super-powerful
+regex constructs of the Perl variety seemed perfect for this task.&lt;/p&gt;
+
+&lt;p&gt;But even outside of such use cases, there&amp;rsquo;s no hiding from the fact
+that regexes can be very convenient for very simple tasks. Also,
+because regexes are used so much in our programming world in general,
+if we are migrating to Haskell some already-working regexes from
+already-written code in some other language, it&amp;rsquo;s convenient to just
+stick with regexes.&lt;/p&gt;
+
+&lt;h2 id=&#34;which-haskell-regex-library-to-use:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Which Haskell regex library to use?!&lt;/h2&gt;
+
+&lt;p&gt;A newcomer to Haskell must be overwhelmed by the lack of a single
+standard library and syntax for regexes. I mean, take a look at this
+&lt;a href=&#34;https://wiki.haskell.org/Regular_expressions&#34;&gt;wiki page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Today, I&amp;rsquo;m presenting
+&lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy&#34;&gt;&lt;code&gt;pcre-heavy&lt;/code&gt;&lt;/a&gt;, a
+regex library that I&amp;rsquo;ve been using when I want regexes at all (I try
+not to want them). It&amp;rsquo;s pretty new and not even mentioned on that wiki
+page.&lt;/p&gt;
+
+&lt;p&gt;Some of my criteria for choosing a regex library:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;I want Perl-style regexes. That&amp;rsquo;s what I&amp;rsquo;m used to and are a kind of
+standard across regex support in many programming languages.&lt;/li&gt;
+&lt;li&gt;Nice syntax is a plus. One of the selling points of using regexes is
+that the conciseness of writing patterns, binding matches,
+etc. Without such conciseness, I just think &amp;ldquo;Why not just write a
+real parser? It only takes a couple of lines in Haskell anyway.&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;High performance is a perfectly legitimate reason to use regexes.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Given these criteria, using a &lt;a href=&#34;http://www.pcre.org/&#34;&gt;PCRE&lt;/a&gt;-based
+library seemed the way to go. OK, the wiki page lists a bunch of
+PCRE-based libraries.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://hackage.haskell.org/package/pcre-light&#34;&gt;&lt;code&gt;pcre-light&lt;/code&gt;&lt;/a&gt; is a
+good way to go.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;It does require installation of the C library for
+PCRE.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m mainly on Mac OS X, so I have PCRE installed through
+Homebrew with &lt;code&gt;$ brew install pcre&lt;/code&gt;. I have PCRE working on
+Linux. Unfortunately, I don&amp;rsquo;t use Windows, so if someone can verify
+that &lt;code&gt;pcre-light&lt;/code&gt; installs OK on Windows, that would be great. I would
+feel sad if I picked a library that is problematic for Windows users.&lt;/p&gt;
+
+&lt;p&gt;Recently, out came
+&lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy&#34;&gt;&lt;code&gt;pcre-heavy&lt;/code&gt;&lt;/a&gt;, a
+wrapper around &lt;code&gt;pcre-light&lt;/code&gt; that uses
+&lt;a href=&#34;https://wiki.haskell.org/Template_Haskell&#34;&gt;Template Haskell&lt;/a&gt;, and I
+liked it, so I use it.&lt;/p&gt;
+
+&lt;h2 id=&#34;example-program-using-pcre-heavy:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Example program using &lt;code&gt;pcre-heavy&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;pcre-heavy&lt;/code&gt; has decent documentation on
+&lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy&#34;&gt;its Hackage page&lt;/a&gt;, so
+I recommend reading that for the full details on how to use it. I&amp;rsquo;ll
+give just a simple example here in the context of a complete program
+that does something.&lt;/p&gt;
+
+&lt;h3 id=&#34;specification-and-some-test-cases:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Specification and some test cases&lt;/h3&gt;
+
+&lt;p&gt;Say we have a file of lines of text that are supposed to have a
+comma-separated format of&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a fixed header&lt;/li&gt;
+&lt;li&gt;a text transcript&amp;rsquo;s file path&lt;/li&gt;
+&lt;li&gt;an &amp;ldquo;audio&amp;rdquo; or &amp;ldquo;video&amp;rdquo; field indicating the type of associated media&lt;/li&gt;
+&lt;li&gt;an optional annotation about whether the associated media is missing
+or not yet linked into the transcript&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Examples that should match:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;@Media:	has-audio,   audio
+@Media:	has-video,video
+@Media:	has-audio-but-missing, audio, missing
+@Media:	has-video-but-unlinked  , video,      unlinked
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Examples that should fail to match:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;@Media:	no-audio-or-video
+@Media:	missing-media-field, unlinked
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;creating-a-regex:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Creating a regex&lt;/h3&gt;
+
+&lt;p&gt;Here is a &lt;code&gt;pcre-heavy&lt;/code&gt; regex, using the
+&lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy-1.0.0.1/docs/Text-Regex-PCRE-Heavy.html#v:re&#34;&gt;&lt;code&gt;re&lt;/code&gt;&lt;/a&gt;
+Template Haskell
+&lt;a href=&#34;https://wiki.haskell.org/Template_Haskell#QuasiQuoters&#34;&gt;quasiquoter&lt;/a&gt;
+that builds a PCRE-compiled
+&lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy-1.0.0.1/docs/Text-Regex-PCRE-Heavy.html#t:Regex&#34;&gt;&lt;code&gt;Regex&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;mediaRegex :: Regex
+mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked))?|]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;regex-string-validated-at-haskell-compile-time:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Regex string validated at Haskell compile-time&lt;/h2&gt;
+
+&lt;p&gt;One selling point of &lt;code&gt;pcre-heavy&lt;/code&gt; for me is that because it uses
+Template Haskell, a bad regex string results in a Haskell-level
+compile-time error rather than a runtime error.&lt;/p&gt;
+
+&lt;p&gt;Example of a compile-time error:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;-- This Haskell code fails to compile!
+mediaRegex :: Regex
+mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked)?|]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Loading this in GHCi or compiling with GHC results in&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;    Exception when trying to run compile-time code:
+      Text.Regex.PCRE.Light: Error in regex: missing )
+    Code: template-haskell-2.10.0.0:Language.Haskell.TH.Quote.quoteExp
+            re
+            &amp;quot;^@Media:\\t([^ ,]+)\\ *,\\ *(audio|video)(\\ *,\\ *(?:missing|unlinked)?&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;using-the-regex:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Using the regex&lt;/h2&gt;
+
+&lt;p&gt;We&amp;rsquo;ll use
+&lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy-1.0.0.1/docs/Text-Regex-PCRE-Heavy.html#v:scan&#34;&gt;&lt;code&gt;scan&lt;/code&gt;&lt;/a&gt;
+to extract the matches (if any) against our regex on a string.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;scan&lt;/code&gt; returns a lazy list of all possible matches:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;-- Simplified type signature for our purposes.
+scan :: Regex -&amp;gt; String -&amp;gt; [(String, [String])]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Each match is a pair &lt;code&gt;(String, [String])&lt;/code&gt;, where the first component
+is the whole string that matched, and the second is an ordered list of
+parenthesized groupings in the regex. In our regex, we had three
+parenthesized groupings, so a match could result in a three-element
+grouping list:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; scan mediaRegex &amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;
+[(&amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;,[&amp;quot;foo&amp;quot;,&amp;quot;audio&amp;quot;,&amp;quot;, unlinked&amp;quot;])]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since we only want
+the first match (if any), we can just compose it with
+&lt;a href=&#34;https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Maybe.html#v:listToMaybe&#34;&gt;&lt;code&gt;listToMaybe&lt;/code&gt; from &lt;code&gt;Data.Maybe&lt;/code&gt;&lt;/a&gt;,
+which has type&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;listToMaybe :: [a] -&amp;gt; Maybe a
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;so &lt;code&gt;listToMaybe . scan mediaRegex&lt;/code&gt; has type &lt;code&gt;String -&amp;gt; (String, [String])&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; (listToMaybe . scan mediaRegex) &amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;
+Just (&amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;,[&amp;quot;foo&amp;quot;,&amp;quot;audio&amp;quot;,&amp;quot;, unlinked&amp;quot;])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;extracting-useful-information:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Extracting useful information&lt;/h2&gt;
+
+&lt;p&gt;Finally, what we really wanted to do after matching is apply
+additional business logic and get stuff into a real type as soon as
+possible, rather than engage in &amp;ldquo;stringly-typed&amp;rdquo; programming and
+context-dependent list lengths.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s say that for our task, we only care about matched lines that are
+&lt;em&gt;not&lt;/em&gt; missing or unlinked, and skip those that are missing or
+unlinked. We define a data type and use pattern matching to get out of
+the untyped world into the typed world of our data model.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;data Info =
+    Skip
+  | Audio FilePath
+  | Video FilePath
+    deriving (Eq, Show)
+
+-- | Extract information about a media file if it is present.
+extractIfPresent :: (String, [String]) -&amp;gt; Info
+extractIfPresent (_, [name, &amp;quot;audio&amp;quot;]) = Audio name
+extractIfPresent (_, [name, &amp;quot;video&amp;quot;]) = Video name
+extractIfPresent (_, _) = Skip
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;presentation-as-a-report:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Presentation as a report&lt;/h2&gt;
+
+&lt;p&gt;Finally, now that we are done with the regex world, and have a data
+model, all that is left is a driver to complete an example
+command-line program.&lt;/p&gt;
+
+&lt;p&gt;We have all the information needed to print out a report for each line.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;-- | Output a report.
+reportOnInfo :: Maybe Info -&amp;gt; IO ()
+reportOnInfo Nothing = putStrLn &amp;quot;no match&amp;quot;
+reportOnInfo (Just Skip) = putStrLn &amp;quot;match, but missing or unlinked&amp;quot;
+reportOnInfo (Just (Audio path)) = printf &amp;quot;audio at %s\n&amp;quot; path
+reportOnInfo (Just (Video path)) = printf &amp;quot;video at %s\n&amp;quot; path
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the final driver, piping everything through from standard input:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;main :: IO ()
+main = do
+  s &amp;lt;- getContents
+  mapM_ (reportOnInfo
+        . fmap extractIfPresent
+        . listToMaybe
+        . scan mediaRegex
+       ) (lines s)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;using-stack-to-ship-standalone-scripts:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Using Stack to ship standalone scripts&lt;/h2&gt;
+
+&lt;p&gt;We can try our program from within the GHCi REPL by just typing &lt;code&gt;main&lt;/code&gt;
+or &lt;code&gt;:main&lt;/code&gt; at the REPL prompt and typing in lines of text. We can also
+do &lt;code&gt;stack build&lt;/code&gt; to native-compile into a shippable binary.&lt;/p&gt;
+
+&lt;p&gt;But another option is to ship the source code as a standalone one-file
+script. This can be very convenient in some circumstances, when you
+can rely on the recipient simply installing Stack.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s how we can turn our program into such a standalone script: just
+add the following two lines and make the file executable:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;#!/usr/bin/env stack
+-- stack --install-ghc runghc --package pcre-heavy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Stack will read the embedded command in order to install GHC, if
+ needed, and first download and install the packages listed (here
+ &lt;code&gt;pcre-heavy&lt;/code&gt;), if needed. (Note: in this case, because of FFI with a
+ C library, the recipient has to install PCRE first.)&lt;/p&gt;
+
+&lt;p&gt;So if you have short programs that don&amp;rsquo;t need to be organized into
+full-scale Cabal projects, you can treat Haskell as a &amp;ldquo;scripting
+language&amp;rdquo; with full access to the libraries of Hackage!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ app/PCREHeavyExampleMain.hs &amp;lt; input.txt &amp;gt; output.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;a-warning:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;A warning&lt;/h3&gt;
+
+&lt;p&gt;Although this Stack-as-Haskell-interpreter feature is kind of cool, I
+prefer to write modular, separately testable libraries, while having
+the &lt;code&gt;main&lt;/code&gt; driver of the &lt;code&gt;Main&lt;/code&gt; module of a program just use library
+modules that do most of the real work. Furthermore, I prefer to build
+and use native-compiled libraries and binaries because they&amp;rsquo;re just
+much faster to start up and also run: &lt;code&gt;runghc&lt;/code&gt; is a Haskell
+interpreter rather than a native optimizing compiler. But the beauty
+of the GHC Haskell world is you can run in either mode, and flip from
+one to the other seamlessly.&lt;/p&gt;
+
+&lt;h3 id=&#34;here-s-our-complete-example-standalone-program:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Here&amp;rsquo;s our complete example standalone program&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;#!/usr/bin/env stack
+-- stack --install-ghc runghc --package pcre-heavy
+
+{-# LANGUAGE QuasiQuotes #-}
+
+module Main where
+
+import Text.Regex.PCRE.Heavy
+import Data.Maybe (listToMaybe)
+import Text.Printf (printf)
+
+-- | Match a media name, audio/video, and optional missing/unlinked.
+mediaRegex :: Regex
+mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked))?|]
+
+data Info =
+    Skip
+  | Audio FilePath
+  | Video FilePath
+    deriving (Eq, Show)
+
+-- | Extract information about a media file if it is present.
+extractIfPresent :: (String, [String]) -&amp;gt; Info
+extractIfPresent (_, [name, &amp;quot;audio&amp;quot;]) = Audio name
+extractIfPresent (_, [name, &amp;quot;video&amp;quot;]) = Video name
+extractIfPresent (_, _) = Skip
+
+-- | Output a report.
+reportOnInfo :: Maybe Info -&amp;gt; IO ()
+reportOnInfo Nothing = putStrLn &amp;quot;no match&amp;quot;
+reportOnInfo (Just Skip) = putStrLn &amp;quot;match, but missing or unlinked&amp;quot;
+reportOnInfo (Just (Audio path)) = printf &amp;quot;audio at %s\n&amp;quot; path
+reportOnInfo (Just (Video path)) = printf &amp;quot;video at %s\n&amp;quot; path
+
+-- | Driver, in traditional right-to-left syntax.
+main :: IO ()
+main = do
+  s &amp;lt;- getContents
+  mapM_ (reportOnInfo
+        . fmap extractIfPresent
+        . listToMaybe
+        . scan mediaRegex
+       ) (lines s)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;some-additional-notes:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Some additional notes&lt;/h2&gt;
+
+&lt;p&gt;One limitation faced by a short expository article with example code
+is that we don&amp;rsquo;t like to waste space and attention, and therefore tend
+to present quick-and-dirty code, rather than production-level code
+(which is efficient, has sensible error recovery, well-commented). I&amp;rsquo;ve
+been thinking about the dilemma of &lt;em&gt;how not to give the
+wrong impression and set a bad example by showing simplistic example
+code&lt;/em&gt;. There&amp;rsquo;s no easy answer, but I felt it might be useful to
+provide optional &amp;ldquo;advanced&amp;rdquo; notes sometimes, on how to write real code.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;pcre-heavy&lt;/code&gt; allows matching not only of &lt;code&gt;String&lt;/code&gt;, but also of
+&lt;code&gt;ByteString&lt;/code&gt; and &lt;code&gt;Text&lt;/code&gt; types. In practice, for efficiency, we
+want to use
+&lt;a href=&#34;http://hackage.haskell.org/package/bytestring&#34;&gt;&lt;code&gt;bytestring&lt;/code&gt;&lt;/a&gt; and
+&lt;a href=&#34;http://hackage.haskell.org/package/text&#34;&gt;&lt;code&gt;text&lt;/code&gt;&lt;/a&gt; as much as possible,
+rather than the inefficient &lt;code&gt;String&lt;/code&gt; type. (&lt;a href=&#34;https://ocharles.org.uk/blog/posts/2012-12-12-24-days-of-hackage-text.html&#34;&gt;A 2012 day of hackage
+article talks about &lt;code&gt;text&lt;/code&gt;&lt;/a&gt;.)
+Since the underlying PCRE C library uses bytes, I generally hand
+bytestrings to &lt;code&gt;pcre-heavy&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The sample driver code uses lazy I/O to get the lines from input. This
+is superficially elegant and concise for pedagogical purposes, but in
+real life is a source of resource leaks and other problems and even
+causes people to think &amp;ldquo;Haskell is inefficient&amp;rdquo;. For real work, I like
+to use &lt;a href=&#34;http://hackage.haskell.org/package/pipes&#34;&gt;&lt;code&gt;pipes&lt;/code&gt;&lt;/a&gt;, which was
+covered in another
+&lt;a href=&#34;https://ocharles.org.uk/blog/posts/2012-12-16-24-days-of-hackage-pipes.html&#34;&gt;2012 day of Hackage&lt;/a&gt;
+and also has an
+&lt;a href=&#34;https://hackage.haskell.org/package/pipes-4.1.7/docs/Pipes-Tutorial.html&#34;&gt;extensive, beautiful tutorial&lt;/a&gt;
+by its author, Gabriel Gonzalez, who also has a fantastic,
+long-running, active blog
+&lt;a href=&#34;http://www.haskellforall.com/&#34;&gt;&amp;ldquo;Haskell for all&amp;rdquo;&lt;/a&gt; that every
+Haskeller should follow.&lt;/p&gt;
+
+&lt;p&gt;Finally, was a regex the right choice here? It was simple enough for
+this problem, but you can see from the ad hoc pattern matching and
+hardcoded strings and fragile positional ordering and number of groups
+that things could get error-prone really quickly if the regex got any
+more complex or we wanted to do proper error handling in case of a
+failed match.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Regex support is not a strong point of the Haskell ecosystem, which is
+geared to more structured parsing, but there are options if you really
+want to use regexes, and I like the Perl-style &lt;code&gt;pcre-light&lt;/code&gt; family of
+libraries that now includes &lt;code&gt;pcre-heavy&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Also, I showed how to add two lines to the top of a Haskell program to
+turn it into a Stack script.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack</title>
@@ -17,7 +426,7 @@
       <guid>http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/</guid>
       <description>
 
-&lt;p&gt;I happened to see a
+&lt;p&gt;A couple of days ago, I happened to see a
 &lt;a href=&#34;https://twitter.com/acid2/status/669882628695281669&#34;&gt;tweet from Ollie Charles&lt;/a&gt;
 that he didn&amp;rsquo;t have time to do his usual annual December &amp;ldquo;24 days of&amp;hellip;&amp;rdquo;
 Haskell blog posts this year (2015) and felt sad because I&amp;rsquo;ve
@@ -31,15 +440,15 @@ he covered GHC language extensions.&lt;/p&gt;
 &lt;p&gt;With some trepidation, I decided that I would do a &amp;ldquo;24 days of
 Hackage&amp;rdquo; series myself to cap off this year, to share a selection of
 the huge number of Haskell packages I find useful. I thought it would
-be particularly appropriate to do this given that 2015 was the year I
-migrated to using Haskell as my main language for most new work and
-personal projects, and therefore has been a year of considerable
+be particularly appropriate to do this given that 2015 was the year
+that I migrated to &lt;em&gt;using Haskell as my main language&lt;/em&gt; for most new work and
+personal projects, and therefore this has been a year of considerable
 discovery for me.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:c37cfe20acfff0cff8579f026185f721&#34;&gt;All the code&lt;/h2&gt;
 
 &lt;p&gt;All my code for my article series will be at
 &lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;This is day 1.&lt;/p&gt;
 
 &lt;h2 id=&#34;my-selection-criteria:c37cfe20acfff0cff8579f026185f721&#34;&gt;My selection criteria&lt;/h2&gt;
 
@@ -50,10 +459,10 @@ daily basis, including modules that have inspired me, modules that
 have changed the way I think about code, and some modules that are so
 amazing I’m not even smart enough to use them!&amp;rdquo;&lt;/p&gt;
 
-&lt;p&gt;Some of what I&amp;rsquo;ll cover is already popular and well-known, some may be
-just minor but useful utilities, some may be completely obscure, but
-the underlying theme will be &amp;ldquo;stuff I use and can briefly say
-something useful about&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;My own intention: some of what I&amp;rsquo;ll cover is already popular and
+well-known, some may be just minor but useful utilities, some may be
+completely obscure, but the underlying theme will be &amp;ldquo;stuff I use and
+can briefly say something useful about&amp;rdquo;.&lt;/p&gt;
 
 &lt;h2 id=&#34;stack:c37cfe20acfff0cff8579f026185f721&#34;&gt;Stack&lt;/h2&gt;
 
@@ -70,10 +479,14 @@ old projects to use it, and I use Stack for all new projects,
 including the
 &lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;repo for this article series&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;I&amp;rsquo;m not giving a full-blown tutorial on Stack here today, and you can
-read the &lt;a href=&#34;http://haskellstack.org/&#34;&gt;official documentation&lt;/a&gt; for
-details, but what I want to emphasize is that Stack is useful not only
-for experienced developers, but especially also for newcomers.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m not giving a full-blown tutorial on Stack here today, just a
+little taste, and you can read the
+&lt;a href=&#34;http://haskellstack.org/&#34;&gt;official documentation&lt;/a&gt; for details, but
+what I want to emphasize is that Stack is useful not only for
+experienced developers, but especially also for newcomers, so part of
+today&amp;rsquo;s article is geared specifically to newcomers (or those who
+tried Haskell once and are interested in a fresh start with better
+tooling).&lt;/p&gt;
 
 &lt;h2 id=&#34;how-do-i-get-started-with-haskell:c37cfe20acfff0cff8579f026185f721&#34;&gt;&amp;ldquo;How do I get started with Haskell&amp;rdquo;?&lt;/h2&gt;
 
@@ -81,17 +494,19 @@ for experienced developers, but especially also for newcomers.&lt;/p&gt;
 in February this year (2015), I faced a huge hurdle: helping newcomers
 to Haskell get started. I created an introductory workshop session,
 but a huge number of people were discouraged by my best shot at
-creating &lt;a href=&#34;https://github.com/pittsburgh-haskell/haskell-installation&#34;&gt;Haskell installation instructions&lt;/a&gt; that would work for Mac OS,
+creating &lt;a href=&#34;https://github.com/pittsburgh-haskell/haskell-installation&#34;&gt;a now-obsolete set of Haskell installation instructions&lt;/a&gt; that would work for Mac OS,
 Windows, and Linux, and people had major problems installing a basic
 tool chain, and versioning issues if they already had an old version
-of GHC installed.&lt;/p&gt;
+of GHC installed. Too much time was wasted on trying to help people with
+installation.&lt;/p&gt;
 
-&lt;p&gt;Pittsburgh Haskell went on hiatus in April as I got busy with many
-other things and there was no momentum to keep it going, but one huge
-reason was clearly the confusions over tooling for newcomers.&lt;/p&gt;
+&lt;p&gt;Pittsburgh Haskell happened to go on hiatus in April as I got busy
+with many other things and there was no momentum at the time to keep
+it going, but I believe one huge problem in trying to create a new
+local Haskell community from newcomers was the tooling/setup
+annoyance.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Stack solves this problem.&lt;/strong&gt; If I give an introductory workshop
-  again, I would definitely use Stack.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Stack solves this problem.&lt;/strong&gt; If I gave an introductory Haskell workshop again, I would definitely use Stack.&lt;/p&gt;
 
 &lt;h2 id=&#34;an-example-of-getting-started-with-stack-using-a-custom-template:c37cfe20acfff0cff8579f026185f721&#34;&gt;An example of getting started with Stack using a custom template&lt;/h2&gt;
 
@@ -105,9 +520,10 @@ but I think will become more and more important for newcomers, and is
 also of course useful for any of us who end up creating the same
 boilerplate project setups.&lt;/p&gt;
 
-&lt;p&gt;I&amp;rsquo;ve created a custom template called &lt;code&gt;franklinchen&lt;/code&gt; that I&amp;rsquo;ve
-contributed to the
-&lt;a href=&#34;https://github.com/commercialhaskell/stack-templates&#34;&gt;&lt;code&gt;stack-templates&lt;/code&gt;&lt;/a&gt;
+&lt;h3 id=&#34;using-an-official-template:c37cfe20acfff0cff8579f026185f721&#34;&gt;Using an official template&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;ve created a custom template called &lt;code&gt;franklinchen&lt;/code&gt; that is part of
+the official &lt;a href=&#34;https://github.com/commercialhaskell/stack-templates&#34;&gt;&lt;code&gt;stack-templates&lt;/code&gt;&lt;/a&gt;
 repo.&lt;/p&gt;
 
 &lt;p&gt;If you run&lt;/p&gt;
@@ -117,13 +533,226 @@ repo.&lt;/p&gt;
 
 &lt;p&gt;you will be prompted for information to create a new project called &lt;code&gt;stack-template-demo&lt;/code&gt;.&lt;/p&gt;
 
-&lt;h2 id=&#34;creating-a-custom-template:c37cfe20acfff0cff8579f026185f721&#34;&gt;Creating a custom template&lt;/h2&gt;
+&lt;h3 id=&#34;using-your-own-local-template:c37cfe20acfff0cff8579f026185f721&#34;&gt;Using your own local template&lt;/h3&gt;
+
+&lt;p&gt;Note that the template specified does &lt;em&gt;not&lt;/em&gt; have to be in the official
+&lt;code&gt;stack-templates&lt;/code&gt; repo. It can also be on your local file system. For
+example, before I submitted my template to &lt;code&gt;stack-templates&lt;/code&gt;, I used
+to run&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack new stack-template-demo /path/on/my/computer/to/franklinchen.hsfiles
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;where &lt;code&gt;franklinchen.hsfiles&lt;/code&gt; is my template (read below on creating
+your own template).&lt;/p&gt;
+
+&lt;p&gt;(I&amp;rsquo;ve put up an instance of the generated project up
+&lt;a href=&#34;https://github.com/FranklinChen/stack-template-demo&#34;&gt;on GitHub&lt;/a&gt; if
+you want to look at its structure without installing and running Stack
+right now.)&lt;/p&gt;
+
+&lt;h3 id=&#34;getting-started-with-the-newly-generated-project:c37cfe20acfff0cff8579f026185f721&#34;&gt;Getting started with the newly generated project&lt;/h3&gt;
+
+&lt;p&gt;Enter the project directory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ cd stack-template-demo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;stack-downloads-ghc-for-you:c37cfe20acfff0cff8579f026185f721&#34;&gt;Stack downloads GHC for you&lt;/h3&gt;
+
+&lt;p&gt;Run&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack setup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you do not already have an appropriate version of GHC installed,
+Stack will &lt;em&gt;automatically&lt;/em&gt; download and install it for you, into an
+area in Stack&amp;rsquo;s configuration directory &lt;code&gt;~/.stack/&lt;/code&gt;. The important
+thing to note is that when using Stack, multiple versions of GHC can
+coexist as desired for different build configurations and setups. This
+feature is really important, because not everyone uses the same
+version of GHC and you can build your project against multiple
+versions of GHC easily.&lt;/p&gt;
+
+&lt;p&gt;This automatic-downloading feature is particularly useful for
+newcomers who don&amp;rsquo;t need to mess around with some kind of separate
+global installation requiring special privileges.&lt;/p&gt;
+
+&lt;p&gt;The output, if Stack needs to download anything:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;Preparing to install GHC to an isolated location.
+This will not interfere with any system-level installation.
+Downloaded ghc-7.10.2.
+Installed GHC.
+stack will use a locally installed GHC
+For more information on paths, see &#39;stack path&#39; and &#39;stack exec env&#39;
+To use this GHC and packages outside of a project, consider using:
+stack ghc, stack ghci, stack runghc, or stack exec
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;launching-the-ghci-repl:c37cfe20acfff0cff8579f026185f721&#34;&gt;Launching the GHCi REPL&lt;/h3&gt;
+
+&lt;p&gt;The most important thing for a newcomer to Haskell is to get started
+with the GHCi REPL, so let&amp;rsquo;s do that right away. Doing this within the
+context of a project while preloading the modules of the project is
+simple with Stack.&lt;/p&gt;
+
+&lt;p&gt;Run&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack ghci
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that &lt;strong&gt;only the first time&lt;/strong&gt; you do this (or other commands that
+require getting library dependencies), Stack may take a while to
+download and build them. The dependencies will actually end up being
+installed and cached such that &lt;em&gt;other projects&lt;/em&gt; in the future that use
+them can reuse them. This is a huge advantage of using Stack versus
+the old days before Stack, when there was always an issue of
+redownloading and recompiling the same libraries for different
+projects; that was a tremendous time and space waster! Stack
+intelligently figures out for you what can be shared consistently or
+not.&lt;/p&gt;
+
+&lt;p&gt;Stack launches a GHCi REPL with our modules preloaded:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;Ok, modules loaded: Lib, Main.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In &lt;code&gt;src/Lib.hs&lt;/code&gt; of the sample project, we have a silly module
+illustrating some &lt;a href=&#34;https://www.haskell.org/haddock/&#34;&gt;Haddock&lt;/a&gt;
+documentation comments:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;-- | A library to do stuff.
+module Lib
+    (
+      ourAdd
+    ) where
+
+-- | Add two &#39;Int&#39; values.
+ourAdd :: Int  -- ^ left
+       -&amp;gt; Int  -- ^ right
+       -&amp;gt; Int  -- ^ sum
+ourAdd x y = x + y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can access the &lt;code&gt;Lib&lt;/code&gt; module from the REPL:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; ourAdd 2 3
+5
+*Main&amp;gt; Lib.ourAdd 4 5
+9
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can also access &lt;code&gt;Main&lt;/code&gt;, which is defined in &lt;code&gt;app/Main.hs&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;module Main where
+
+import Lib (ourAdd)
+
+import Text.Printf (printf)
+
+main :: IO ()
+main = printf &amp;quot;2 + 3 = %d\n&amp;quot; (ourAdd 2 3)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; main
+2 + 3 = 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;building-and-running-the-project:c37cfe20acfff0cff8579f026185f721&#34;&gt;Building and running the project&lt;/h3&gt;
+
+&lt;p&gt;You could have explicitly compiled the project first, before launching
+the REPL. In practice in real projects, I start by compiling a project
+to get the dependencies compiled, before I use GHCi, but the above
+does it for you too:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack build
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Because I defined a native-compiled binary executable named
+&lt;code&gt;stack-template-demo&lt;/code&gt; in our Cabal file &lt;code&gt;stack-template-demo.cabal&lt;/code&gt;,
+we can run the executable:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack exec stack-template-demo
+2 + 3 = 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I supplied unit tests for &lt;code&gt;Lib&lt;/code&gt; in &lt;code&gt;test/LibSpec.hs&lt;/code&gt; that can be run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack test
+Lib
+  Lib
+    works
+    ourAdd is commutative
+
+Finished in 0.0007 seconds
+2 examples, 0 failures
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;installing-the-library-and-executable:c37cfe20acfff0cff8579f026185f721&#34;&gt;Installing the library and executable&lt;/h3&gt;
+
+&lt;p&gt;You can now install the library and executable for your own use later:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack install
+...
+...
+Copying from /Users/chen/stack-template-demo/.stack-work/install/x86_64-osx/lts-3.16/7.10.2/bin/stack-template-demo to /Users/chen/.local/bin/stack-template-demo
+
+Copied executables to /Users/chen/.local/bin:
+- stack-template-demo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For example (since &lt;code&gt;~/.local/bin&lt;/code&gt; is in my &lt;code&gt;PATH&lt;/code&gt;):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack-template-demo
+2 + 3 = 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;your-own-stack-template-configuration:c37cfe20acfff0cff8579f026185f721&#34;&gt;Your own Stack template configuration&lt;/h3&gt;
+
+&lt;p&gt;When using Stack templates, it&amp;rsquo;s useful to set up a
+configuration so that information can automatically be filled out for
+you when you generate new projects. The documentation for
+configuration is
+&lt;a href=&#34;http://docs.haskellstack.org/en/stable/yaml_configuration.html&#34;&gt;here&lt;/a&gt;. Create
+a file in
+&lt;code&gt;~/.stack/config.yaml&lt;/code&gt;. Mine has:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;templates:
+  params:
+    author-email: &amp;quot;franklinchen@franklinchen.com&amp;quot;
+    author-name: &amp;quot;Franklin Chen&amp;quot;
+    category: test
+    copyright: &amp;quot;2015&amp;quot;
+    github-username: &amp;quot;FranklinChen&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;other-bells-and-whistles:c37cfe20acfff0cff8579f026185f721&#34;&gt;Other bells and whistles&lt;/h3&gt;
+
+&lt;p&gt;I try to use &lt;a href=&#34;https://travis-ci.org/&#34;&gt;Travis CI&lt;/a&gt; for any public
+code I put up, so my template generates a &lt;code&gt;.travis.yml&lt;/code&gt; file that uses
+Stack. I&amp;rsquo;ve started to migrate my former Travis setups based on
+&lt;a href=&#34;https://github.com/hvr/multi-ghc-travis&#34;&gt;&lt;code&gt;multi-ghc-travis&lt;/code&gt;&lt;/a&gt; to use
+Stack instead.&lt;/p&gt;
+
+&lt;h2 id=&#34;creating-a-custom-stack-project-template:c37cfe20acfff0cff8579f026185f721&#34;&gt;Creating a custom Stack project template&lt;/h2&gt;
+
+&lt;p&gt;It was surprising to me that how to create a custom template is not
+covered in the main Stack documentation. Instead, I found it at the
+&lt;a href=&#34;https://github.com/commercialhaskell/stack-templates&#34;&gt;&lt;code&gt;stack-templates&lt;/code&gt;&lt;/a&gt;
+site.&lt;/p&gt;
+
+&lt;p&gt;The method of creating a custom template is kind of clumsy, involving
+creating a single file with embedded directives to indicate generated
+file name and directory structure, but it&amp;rsquo;s a start.&lt;/p&gt;
 
 &lt;h2 id=&#34;conclusion:c37cfe20acfff0cff8579f026185f721&#34;&gt;Conclusion&lt;/h2&gt;
 
-&lt;p&gt;For day 1 of my &amp;ldquo;24 days of Hackage, 2015&amp;rdquo;, I introduced Stack, the
-Haskell tool that I&amp;rsquo;m using to build and run all the sample code for
-this article series.&lt;/p&gt;
+&lt;p&gt;For day 1 of my &amp;ldquo;24 days of Hackage, 2015&amp;rdquo;, I&amp;rsquo;ve briefly introduced
+how to use Stack, the Haskell tool that I&amp;rsquo;m using to build and run all
+the sample code for this article series.&lt;/p&gt;
+
+&lt;p&gt;Next up: some real code!&lt;/p&gt;
 </description>
     </item>
     
@@ -1552,22 +2181,6 @@ mistaken as an accurate gauge of competence.&lt;/p&gt;
 &lt;h2 id=&#34;conclusion:e863a7ec4a3ba48279ebb2581682b028&#34;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;Justin gave a nice introduction to implicits. I think the live coding and experimentation is a great way to involve people in code suggestions and discussion of what things mean and do. It was a fun time.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>OpenHack Pittsburgh: a great place to share and learn</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/</link>
-      <pubDate>Mon, 27 Jan 2014 22:38:48 -0500</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/</guid>
-      <description>&lt;p&gt;Another month, another &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby/events/158236852/&#34;&gt;meeting of OpenHack Pittsburgh&lt;/a&gt;!&lt;/p&gt;
-
-&lt;p&gt;The project I worked on was writing a blog post on the controversial subject of &lt;a href=&#34;https://twitter.com/BillLaboon/status/427525236406243328&#34;&gt;unit testing private methods&lt;/a&gt;. I ended up not finishing the post, not only because there&amp;rsquo;s a lot to say, but also because I got sidetracked (in a good way) because of discussions with people while at OpenHack!&lt;/p&gt;
-
-&lt;p&gt;There were many good points that were made and so I had to reconsider some of my arguments. My overall viewpoint is still that the distinction between &amp;ldquo;public&amp;rdquo; and &amp;ldquo;private&amp;rdquo; is fluid, and that anything that seems significant enough that it feels like it should be tested should in fact be tested, ignoring the artifacts of how it is currently classified. One of the main counterpoints was that if you need to test it, then it should be factored out and made its own unit so that in essence, the rule against testing the private is maintained.&lt;/p&gt;
-
-&lt;p&gt;Anyway, I will put up my post once I actually collect all my thoughts together and finish it.&lt;/p&gt;
 </description>
     </item>
     
