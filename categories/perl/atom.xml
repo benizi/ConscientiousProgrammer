@@ -17,7 +17,11 @@
       <guid>http://conscientiousprogrammer.com/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/</guid>
       <description>
 
-&lt;p&gt;This is day 2 of my &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;&amp;ldquo;24 days of Hackage, 2015&amp;rdquo; series&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-2:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Day 2&lt;/h2&gt;
 
 &lt;p&gt;Don&amp;rsquo;t laugh, but once upon a time, I made Perl my main programming
 language of choice (between around 1999 and 2010). There were many
@@ -60,7 +64,7 @@ prompting in order to gradually clean up the data. Super-powerful
 regex constructs of the Perl variety seemed perfect for this task.&lt;/p&gt;
 
 &lt;p&gt;But even outside of such use cases, there&amp;rsquo;s no hiding from the fact
-that regexes can be very convenient for very simple tasks. Also,
+that regexes can be very convenient for simple tasks. Also,
 because regexes are used so much in our programming world in general,
 if we are migrating to Haskell some already-working regexes from
 already-written code in some other language, it&amp;rsquo;s convenient to just
@@ -132,6 +136,10 @@ comma-separated format of&lt;/p&gt;
 &lt;li&gt;an optional annotation about whether the associated media is missing
 or not yet linked into the transcript&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;p&gt;(I made up this example based on the structured text specification
+called CHAT that happens to include a single line of this format,
+e.g. &lt;a href=&#34;http://talkbank.org/data-orig/Meeting/SCOTUS/2008/08-205.cha&#34;&gt;this coded Supreme Court oral argument transcript for &amp;ldquo;Citizens United v. Federal Election Commission&amp;rdquo;&lt;/a&gt;.)&lt;/p&gt;
 
 &lt;p&gt;Examples that should match:&lt;/p&gt;
 

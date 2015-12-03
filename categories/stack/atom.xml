@@ -17,6 +17,15 @@
       <guid>http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/</guid>
       <description>
 
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:c37cfe20acfff0cff8579f026185f721&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Day 1: &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;Introduction and Stack&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 2: &lt;a href=&#34;../../blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/&#34;&gt;Regexes with pcre-heavy; standalone Haskell scripts using Stack&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
+
 &lt;p&gt;A couple of days ago, I happened to see a
 &lt;a href=&#34;https://twitter.com/acid2/status/669882628695281669&#34;&gt;tweet from Ollie Charles&lt;/a&gt;
 that he didn&amp;rsquo;t have time to do his usual annual December &amp;ldquo;24 days of&amp;hellip;&amp;rdquo;

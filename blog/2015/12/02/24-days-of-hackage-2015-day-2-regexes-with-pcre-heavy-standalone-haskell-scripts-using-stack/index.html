@@ -78,7 +78,11 @@
     <h1>24 days of Hackage, 2015: day 2: Regexes with pcre-heavy; standalone Haskell scripts using Stack</h1>
     
 
-<p>This is day 2 of my <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">&ldquo;24 days of Hackage, 2015&rdquo; series</a>.</p>
+<h2 id="table-of-contents-for-the-whole-series:73f9e85177be1c4a1d48f4dbe8d8b6bf">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-2:73f9e85177be1c4a1d48f4dbe8d8b6bf">Day 2</h2>
 
 <p>Don&rsquo;t laugh, but once upon a time, I made Perl my main programming
 language of choice (between around 1999 and 2010). There were many
@@ -121,7 +125,7 @@ prompting in order to gradually clean up the data. Super-powerful
 regex constructs of the Perl variety seemed perfect for this task.</p>
 
 <p>But even outside of such use cases, there&rsquo;s no hiding from the fact
-that regexes can be very convenient for very simple tasks. Also,
+that regexes can be very convenient for simple tasks. Also,
 because regexes are used so much in our programming world in general,
 if we are migrating to Haskell some already-working regexes from
 already-written code in some other language, it&rsquo;s convenient to just
@@ -193,6 +197,10 @@ comma-separated format of</p>
 <li>an optional annotation about whether the associated media is missing
 or not yet linked into the transcript</li>
 </ul>
+
+<p>(I made up this example based on the structured text specification
+called CHAT that happens to include a single line of this format,
+e.g. <a href="http://talkbank.org/data-orig/Meeting/SCOTUS/2008/08-205.cha">this coded Supreme Court oral argument transcript for &ldquo;Citizens United v. Federal Election Commission&rdquo;</a>.)</p>
 
 <p>Examples that should match:</p>
 
