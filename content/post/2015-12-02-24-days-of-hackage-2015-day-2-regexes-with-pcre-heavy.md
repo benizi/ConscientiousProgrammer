@@ -13,10 +13,13 @@ categories:
 comments: true
 date: 2015-12-02T07:50:12-05:00
 layout: post
-title: "24 days of Hackage, 2015: day 2: Regexes with pcre-heavy;
-standalone Haskell scripts using Stack"
+title: "24 days of Hackage, 2015: day 2: Regexes with pcre-heavy; standalone Haskell scripts using Stack"
 ---
-This is day 2 of my ["24 days of Hackage, 2015" series](/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/).
+## Table of contents for the whole series
+
+A table of contents is at the top of the article for [day 1](/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/).
+
+## Day 2
 
 Don't laugh, but once upon a time, I made Perl my main programming
 language of choice (between around 1999 and 2010). There were many
@@ -61,7 +64,7 @@ prompting in order to gradually clean up the data. Super-powerful
 regex constructs of the Perl variety seemed perfect for this task.
 
 But even outside of such use cases, there's no hiding from the fact
-that regexes can be very convenient for very simple tasks. Also,
+that regexes can be very convenient for simple tasks. Also,
 because regexes are used so much in our programming world in general,
 if we are migrating to Haskell some already-working regexes from
 already-written code in some other language, it's convenient to just
@@ -129,6 +132,10 @@ comma-separated format of
 - an "audio" or "video" field indicating the type of associated media
 - an optional annotation about whether the associated media is missing
   or not yet linked into the transcript
+
+(I made up this example based on the structured text specification
+called CHAT that happens to include a single line of this format,
+e.g. [this coded Supreme Court oral argument transcript for "Citizens United v. Federal Election Commission"](http://talkbank.org/data-orig/Meeting/SCOTUS/2008/08-205.cha).)
 
 Examples that should match:
 

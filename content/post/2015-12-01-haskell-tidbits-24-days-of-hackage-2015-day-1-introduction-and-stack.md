@@ -8,6 +8,13 @@ date: 2015-11-30T16:20:11-05:00
 layout: post
 title: "Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack"
 ---
+## Table of contents for the whole series
+
+- Day 1: [Introduction and Stack](/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/)
+- Day 2: [Regexes with pcre-heavy; standalone Haskell scripts using Stack](/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/)
+
+## Day 1
+
 A couple of days ago, I happened to see a
 [tweet from Ollie Charles](https://twitter.com/acid2/status/669882628695281669)
 that he didn't have time to do his usual annual December "24 days of..."
