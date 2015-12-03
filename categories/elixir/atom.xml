@@ -97,9 +97,16 @@ enough (and
 is in progress), but there is nothing wrong with writing tests today
 that someday you might turn into types.&lt;/p&gt;
 
+&lt;h3 id=&#34;breaking-news:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Breaking news!&lt;/h3&gt;
+
 &lt;p&gt;By sheer coincidence, a
-&lt;a href=&#34;https://blogs.janestreet.com/testing-with-expectations/&#34;&gt;new testing framework was just announced for OCaml&lt;/a&gt;. It&amp;rsquo;s
-great that testing is being taken more seriously everywhere and by
+&lt;a href=&#34;https://blogs.janestreet.com/testing-with-expectations/&#34;&gt;new testing framework was just announced for OCaml&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;And today, right after I initially published this article, I found in
+my news feed an announcement about &lt;a href=&#34;http://quickfuzz.org/&#34;&gt;QuickFuzz&lt;/a&gt;,
+a grammar fuzz tester for Haskell!&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s great that testing is being taken more seriously everywhere and by
 everyone.&lt;/p&gt;
 
 &lt;h2 id=&#34;why-hspec:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Why HSpec?&lt;/h2&gt;
