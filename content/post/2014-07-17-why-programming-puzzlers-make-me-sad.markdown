@@ -13,9 +13,9 @@ I recently saw a
 on a blog I follow, and this post presents mysterious Perl code for
 which the reader is asked to guess what it does:
 
-```console
+{{< highlight console >}}
 perl -le 'print(two + two == five ? "true" : "false")'
-```
+{{< /highlight >}}
 
 I looked at it briefly, got a headache, and didn't even want to solve
 it. This despite using Perl as one of my main programming languages

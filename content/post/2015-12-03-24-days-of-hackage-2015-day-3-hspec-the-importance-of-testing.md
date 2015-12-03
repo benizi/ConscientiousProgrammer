@@ -145,17 +145,17 @@ it from my sample project template described on
 so you can now generate a starter project with HSpec all ready to go
 by running
 
-``` console
+{{< highlight console >}}
 $ stack new my-new-project franklinchen
-```
+{{< /highlight >}}
 
 There is a `test/` directory with a single file in it, the
 auto-discovery file named `test/Spec.hs`, which has a single line of
 code, actually a comment:
 
-``` haskell
+{{< highlight haskell >}}
 {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
-```
+{{< /highlight >}}
 
 This works because when you have HSpec installed, a program
 `hspec-discover` also gets installed, and it's called by GHC to do the
@@ -183,7 +183,7 @@ embedding a domain-specific language (DSL), I retroactively wrote the
 most obvious code that shows how HSpec works without introducing
 non-HSpec considerations. (The code is on branch [`boilerplated-hspec`](https://github.com/FranklinChen/twenty-four-days2015-of-hackage/tree/boilerplated-hspec).)
 
-``` haskell
+{{< highlight haskell >}}
 module PCREHeavyExampleSpec where
 
 import PCREHeavyExample (mediaRegex)
@@ -209,7 +209,7 @@ spec =
         "@Media:\tno-audio-or-video" `shouldSatisfy` (not . (=~ mediaRegex))
       it "missing media field" $ do
         "@Media:\tmissing-media-field, unlinked" `shouldSatisfy` (not . (=~ mediaRegex))
-```
+{{< /highlight >}}
 
 The main thing to understand is that for simplest use (without
 fixtures, effects, etc.), a basic description-labeled spec item is
@@ -245,24 +245,24 @@ It is convenient to use
 [operator sectioning syntax](https://wiki.haskell.org/Section_of_an_infix_operator)
 above, but I could have written
 
-``` haskell
+{{< highlight haskell >}}
 text `shouldSatisfy` (\inputString -> inputString =~ mediaRegex)
-```
+{{< /highlight >}}
 
 Furthermore, it is also convenient to use
 [infix syntax for named functions](https://wiki.haskell.org/Infix_operator)
 when sensible, but it is not required. I could have written in
 bare-bones style
 
-``` haskell
+{{< highlight haskell >}}
 shouldSatisfy text (\inputString -> inputString =~ mediaRegex)
-```
+{{< /highlight >}}
 
 And the cute `(not . (=~ mediaRegex))` can be written as
 
-``` haskell
+{{< highlight haskell >}}
 \inputString -> not (inputString =~ mediaRegex)
-```
+{{< /highlight >}}
 
 I mention these facts about syntax because I have often been told by
 people looking into Haskell that it's confusing because of all the
@@ -297,7 +297,7 @@ you think. Would you prefer to read the following, which is what the
 `$` operator avoids requiring?
 
 
-``` haskell
+{{< highlight haskell >}}
 spec :: Spec
 spec =
   describe "pcre-heavy" (do
@@ -311,7 +311,7 @@ spec =
       -- ...
       )
     )
-```
+{{< /highlight >}}
 
 I personally think that languages with a `begin`/`end` kind of block
 (such as Pascal, Ruby) instead of braces or parentheses have an
@@ -340,16 +340,16 @@ write that something. In a typed setting, this means we get a
 compile-time error when first trying to run the test, which we fix by
 creating `PCREHeavyExample` as a new module with a stub:
 
-``` haskell
+{{< highlight haskell >}}
 module PCREHeavyExample (mediaRegex) where
 
 mediaRegex = undefined
-```
+{{< /highlight >}}
 
 Of course, every test fails (in the terminal, the failures are
 highlighted in red):
 
-``` console
+{{< highlight console >}}
 $ stack test
 PCREHeavyExample
   pcre-heavy
@@ -387,7 +387,7 @@ Failures:
   test/PCREHeavyExampleSpec.hs:24:
   6) PCREHeavyExample.pcre-heavy, no match, missing media field
        uncaught exception: ErrorCall (Prelude.undefined)
-```
+{{< /highlight >}}
 
 #### A tangent on GHC's error reporting
 
@@ -406,7 +406,7 @@ OK, let's assume we finished the implementation, which is simply
 writing the regex for `mediaRegex`. Then the tests pass (and in the
 terminal they display in green):
 
-``` console
+{{< highlight console >}}
 PCREHeavyExample
   pcre-heavy
     match
@@ -420,7 +420,7 @@ PCREHeavyExample
 
 Finished in 0.0010 seconds
 6 examples, 0 failures
-```
+{{< /highlight >}}
 
 ## Tests are code too!
 
@@ -441,7 +441,7 @@ composite `Spec`.
 Here is a table that pairs a test description with each example input
 string:
 
-``` haskell
+{{< highlight haskell >}}
 matchExamples :: [(String, String)]
 matchExamples =
   [ ( "has audio"
@@ -458,22 +458,22 @@ matchExamples =
     )
   ]
 
-```
+{{< /highlight >}}
 
 Here is a function that generates a spec item given a description/input pair.
 
-``` haskell
+{{< highlight haskell >}}
 matchSpec :: (String, String) -> Spec
 matchSpec (description, text) =
   it description $ do
     text `shouldSatisfy` (=~ mediaRegex)
-```
+{{< /highlight >}}
 
 Similarly for the non-matching examples.
 
 And the refactored `Spec`:
 
-``` haskell
+{{< highlight haskell >}}
 spec :: Spec
 spec =
   describe "pcre-heavy" $ do
@@ -481,7 +481,7 @@ spec =
       mapM_ matchSpec matchExamples
     describe "no match" $ do
       mapM_ nonMatchSpec nonMatchExamples
-```
+{{< /highlight >}}
 
 ### Refactoring, part 2
 
@@ -514,7 +514,7 @@ polymorphic* in the predicate type, replacing `matchSpec` and
 
 The final result:
 
-``` haskell
+{{< highlight haskell >}}
 spec :: Spec
 spec =
   describePredicate "pcre-heavy"
@@ -539,7 +539,7 @@ predSpec :: Show a => (a -> Bool) -> (String, a) -> Spec
 predSpec predicate (description, a) =
   it description $ do
     a `shouldSatisfy` predicate
-```
+{{< /highlight >}}
 
 Note that `describePredicate` and `predSpec` can then be pulled out
 into a test utilities module for use by other specs using the same

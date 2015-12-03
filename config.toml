@@ -28,7 +28,7 @@ defaultKeywords = "Franklin Chen, programming, blog"
 
 theme = "theme-base-0e"
 
-highlight = "default"
+#highlight = "default"
 tagline = "Humbly exploring what it means to do the right thing."
 home = "The Conscientious Programmer"
 

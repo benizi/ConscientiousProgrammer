@@ -139,19 +139,19 @@ e.g. [this coded Supreme Court oral argument transcript for "Citizens United v. 
 
 Examples that should match:
 
-``` text
+{{< highlight text >}}
 @Media:	has-audio,   audio
 @Media:	has-video,video
 @Media:	has-audio-but-missing, audio, missing
 @Media:	has-video-but-unlinked  , video,      unlinked
-```
+{{< /highlight >}}
 
 Examples that should fail to match:
 
-``` text
+{{< highlight text >}}
 @Media:	no-audio-or-video
 @Media:	missing-media-field, unlinked
-```
+{{< /highlight >}}
 
 ### Creating a regex
 
@@ -163,10 +163,10 @@ that builds a PCRE-compiled
 [`Regex`](https://hackage.haskell.org/package/pcre-heavy-1.0.0.1/docs/Text-Regex-PCRE-Heavy.html#t:Regex):
 
 
-``` haskell
+{{< highlight haskell >}}
 mediaRegex :: Regex
 mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked))?|]
-```
+{{< /highlight >}}
 
 ## Regex string validated at Haskell compile-time
 
@@ -176,21 +176,21 @@ compile-time error rather than a runtime error.
 
 Example of a compile-time error:
 
-``` haskell
+{{< highlight haskell >}}
 -- This Haskell code fails to compile!
 mediaRegex :: Regex
 mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked)?|]
-```
+{{< /highlight >}}
 
 Loading this in GHCi or compiling with GHC results in
 
-``` console
+{{< highlight console >}}
     Exception when trying to run compile-time code:
       Text.Regex.PCRE.Light: Error in regex: missing )
     Code: template-haskell-2.10.0.0:Language.Haskell.TH.Quote.quoteExp
             re
             "^@Media:\\t([^ ,]+)\\ *,\\ *(audio|video)(\\ *,\\ *(?:missing|unlinked)?"
-```
+{{< /highlight >}}
 
 ## Using the regex
 
@@ -200,10 +200,10 @@ to extract the matches (if any) against our regex on a string.
 
 `scan` returns a lazy list of all possible matches:
 
-``` haskell
+{{< highlight haskell >}}
 -- Simplified type signature for our purposes.
 scan :: Regex -> String -> [(String, [String])]
-```
+{{< /highlight >}}
 
 Each match is a pair `(String, [String])`, where the first component
 is the whole string that matched, and the second is an ordered list of
@@ -211,26 +211,26 @@ parenthesized groupings in the regex. In our regex, we had three
 parenthesized groupings, so a match could result in a three-element
 grouping list:
 
-``` console
+{{< highlight console >}}
 *Main> scan mediaRegex "@Media:\tfoo, audio, unlinked"
 [("@Media:\tfoo, audio, unlinked",["foo","audio",", unlinked"])]
-```
+{{< /highlight >}}
 
 Since we only want
 the first match (if any), we can just compose it with
 [`listToMaybe` from `Data.Maybe`](https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Maybe.html#v:listToMaybe),
 which has type
 
-``` haskell
+{{< highlight haskell >}}
 listToMaybe :: [a] -> Maybe a
-```
+{{< /highlight >}}
 
 so `listToMaybe . scan mediaRegex` has type `String -> Maybe (String, [String])`.
 
-``` console
+{{< highlight console >}}
 *Main> (listToMaybe . scan mediaRegex) "@Media:\tfoo, audio, unlinked"
 Just ("@Media:\tfoo, audio, unlinked",["foo","audio",", unlinked"])
-```
+{{< /highlight >}}
 
 ## Extracting useful information
 
@@ -244,7 +244,7 @@ Let's say that for our task, we only care about matched lines that are
 unlinked. We define a data type and use pattern matching to get out of
 the untyped world into the typed world of our data model.
 
-``` haskell
+{{< highlight haskell >}}
 data Info =
     Skip
   | Audio FilePath
@@ -256,7 +256,7 @@ extractIfPresent :: (String, [String]) -> Info
 extractIfPresent (_, [name, "audio"]) = Audio name
 extractIfPresent (_, [name, "video"]) = Video name
 extractIfPresent (_, _) = Skip
-```
+{{< /highlight >}}
 
 ## Presentation as a report
 
@@ -266,18 +266,18 @@ command-line program.
 
 We have all the information needed to print out a report for each line.
 
-``` haskell
+{{< highlight haskell >}}
 -- | Output a report.
 reportOnInfo :: Maybe Info -> IO ()
 reportOnInfo Nothing = putStrLn "no match"
 reportOnInfo (Just Skip) = putStrLn "match, but missing or unlinked"
 reportOnInfo (Just (Audio path)) = printf "audio at %s\n" path
 reportOnInfo (Just (Video path)) = printf "video at %s\n" path
-```
+{{< /highlight >}}
 
 And the final driver, piping everything through from standard input:
 
-``` haskell
+{{< highlight haskell >}}
 main :: IO ()
 main = do
   s <- getContents
@@ -286,7 +286,7 @@ main = do
         . listToMaybe
         . scan mediaRegex
        ) (lines s)
-```
+{{< /highlight >}}
 
 ## Using Stack to ship standalone scripts
 
@@ -301,10 +301,10 @@ can rely on the recipient simply installing Stack.
 Here's how we can turn our program into such a standalone script: just
 add the following two lines and make the file executable:
 
-``` haskell
+{{< highlight haskell >}}
 #!/usr/bin/env stack
 -- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy
-```
+{{< /highlight >}}
 
 Stack will read the embedded command in order to install GHC, if
  needed, and first download and install the packages listed (here
@@ -317,9 +317,9 @@ So if you have short programs that don't need to be organized into
 full-scale Cabal projects, you can treat Haskell as a "scripting
 language" with full access to the libraries of Hackage!
 
-``` console
+{{< highlight console >}}
 $ app/PCREHeavyExampleMain.hs < input.txt > output.txt
-```
+{{< /highlight >}}
 
 ### A warning
 
@@ -335,7 +335,7 @@ one to the other seamlessly.
 
 ### Here's our complete example standalone program
 
-``` haskell
+{{< highlight haskell >}}
 #!/usr/bin/env stack
 -- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy
 
@@ -379,7 +379,7 @@ main = do
         . listToMaybe
         . scan mediaRegex
        ) (lines s)
-```
+{{< /highlight >}}
 
 ## Some additional notes
 

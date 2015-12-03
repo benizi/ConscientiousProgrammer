@@ -120,9 +120,9 @@ repo.
 
 If you run
 
-``` console
+{{< highlight console >}}
 $ stack new stack-template-demo franklinchen
-```
+{{< /highlight >}}
 
 you will be prompted for information to create a new project called `stack-template-demo`.
 
@@ -133,9 +133,9 @@ Note that the template specified does *not* have to be in the official
 example, before I submitted my template to `stack-templates`, I used
 to run
 
-``` console
+{{< highlight console >}}
 $ stack new stack-template-demo /path/on/my/computer/to/franklinchen.hsfiles
-```
+{{< /highlight >}}
 
 where `franklinchen.hsfiles` is my template (read below on creating
 your own template).
@@ -149,17 +149,17 @@ right now.)
 
 Enter the project directory:
 
-``` console
+{{< highlight console >}}
 $ cd stack-template-demo
-```
+{{< /highlight >}}
 
 ### Stack downloads GHC for you
 
 Run
 
-``` console
+{{< highlight console >}}
 $ stack setup
-```
+{{< /highlight >}}
 
 If you do not already have an appropriate version of GHC installed,
 Stack will *automatically* download and install it for you, into an
@@ -176,7 +176,7 @@ global installation requiring special privileges.
 
 The output, if Stack needs to download anything:
 
-``` console
+{{< highlight console >}}
 Preparing to install GHC to an isolated location.
 This will not interfere with any system-level installation.
 Downloaded ghc-7.10.2.
@@ -185,7 +185,7 @@ stack will use a locally installed GHC
 For more information on paths, see 'stack path' and 'stack exec env'
 To use this GHC and packages outside of a project, consider using:
 stack ghc, stack ghci, stack runghc, or stack exec
-```
+{{< /highlight >}}
 
 ### Launching the GHCi REPL
 
@@ -196,9 +196,9 @@ simple with Stack.
 
 Run
 
-``` console
+{{< highlight console >}}
 $ stack ghci
-```
+{{< /highlight >}}
 
 Note that **only the first time** you do this (or other commands that
 require getting library dependencies), Stack may take a while to
@@ -213,15 +213,15 @@ not.
 
 Stack launches a GHCi REPL with our modules preloaded:
 
-``` console
+{{< highlight console >}}
 Ok, modules loaded: Lib, Main.
-```
+{{< /highlight >}}
 
 In `src/Lib.hs` of the sample project, we have a silly module
 illustrating some [Haddock](https://www.haskell.org/haddock/)
 documentation comments:
 
-``` haskell
+{{< highlight haskell >}}
 -- | A library to do stuff.
 module Lib
     (
@@ -233,20 +233,20 @@ ourAdd :: Int  -- ^ left
        -> Int  -- ^ right
        -> Int  -- ^ sum
 ourAdd x y = x + y
-```
+{{< /highlight >}}
 
 We can access the `Lib` module from the REPL:
 
-``` console
+{{< highlight console >}}
 *Main> ourAdd 2 3
 5
 *Main> Lib.ourAdd 4 5
 9
-```
+{{< /highlight >}}
 
 We can also access `Main`, which is defined in `app/Main.hs`:
 
-``` haskell
+{{< highlight haskell >}}
 module Main where
 
 import Lib (ourAdd)
@@ -255,12 +255,12 @@ import Text.Printf (printf)
 
 main :: IO ()
 main = printf "2 + 3 = %d\n" (ourAdd 2 3)
-```
+{{< /highlight >}}
 
-``` console
+{{< highlight console >}}
 *Main> main
 2 + 3 = 5
-```
+{{< /highlight >}}
 
 ### Building and running the project
 
@@ -269,22 +269,22 @@ the REPL. In practice in real projects, I start by compiling a project
 to get the dependencies compiled, before I use GHCi, but the above
 does it for you too:
 
-``` console
+{{< highlight console >}}
 $ stack build
-```
+{{< /highlight >}}
 
 Because I defined a native-compiled binary executable named
 `stack-template-demo` in our Cabal file `stack-template-demo.cabal`,
 we can run the executable:
 
-``` console
+{{< highlight console >}}
 $ stack exec stack-template-demo
 2 + 3 = 5
-```
+{{< /highlight >}}
 
 I supplied unit tests for `Lib` in `test/LibSpec.hs` that can be run:
 
-``` console
+{{< highlight console >}}
 $ stack test
 Lib
   Lib
@@ -293,13 +293,13 @@ Lib
 
 Finished in 0.0007 seconds
 2 examples, 0 failures
-```
+{{< /highlight >}}
 
 ### Installing the library and executable
 
 You can now install the library and executable for your own use later:
 
-``` console
+{{< highlight console >}}
 $ stack install
 ...
 ...
@@ -307,14 +307,14 @@ Copying from /Users/chen/stack-template-demo/.stack-work/install/x86_64-osx/lts-
 
 Copied executables to /Users/chen/.local/bin:
 - stack-template-demo
-```
+{{< /highlight >}}
 
 For example (since `~/.local/bin` is in my `PATH`):
 
-``` console
+{{< highlight console >}}
 $ stack-template-demo
 2 + 3 = 5
-```
+{{< /highlight >}}
 
 ### Your own Stack template configuration
 
@@ -326,7 +326,7 @@ configuration is
 a file in
 `~/.stack/config.yaml`. Mine has:
 
-``` yaml
+{{< highlight yaml >}}
 templates:
   params:
     author-email: "franklinchen@franklinchen.com"
@@ -334,7 +334,7 @@ templates:
     category: test
     copyright: "2015"
     github-username: "FranklinChen"
-```
+{{< /highlight >}}
 
 ### Other bells and whistles
 

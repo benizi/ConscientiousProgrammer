@@ -244,7 +244,6 @@ I submitted a `pygments.rb` [pull request](https://github.com/tmm1/pygments.rb/p
 {{< highlight console >}}
 /Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout': undefined method `zero?' for "100":String (NoMethodError)
     from /Users/chen/.gem/ruby/2.1.2/gems/pygments.rb-0.6.0/lib/pygments/popen.rb:220:in `mentos'
-```
 {{< /highlight >}}
 
 ### (Update of 2015-01-28)
