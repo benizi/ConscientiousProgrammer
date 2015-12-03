@@ -303,12 +303,14 @@ add the following two lines and make the file executable:
 
 ``` haskell
 #!/usr/bin/env stack
--- stack --install-ghc runghc --package pcre-heavy
+-- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy
 ```
 
 Stack will read the embedded command in order to install GHC, if
  needed, and first download and install the packages listed (here
- `pcre-heavy`), if needed. (Note: in this case, because of FFI with a
+ `pcre-heavy`), if needed. We have pinned down the exact version of
+ LTS in order to guarantee what versions of everything will be used by
+ Stack. (Note: in this case, because of FFI with a
  C library, the recipient has to install PCRE first.)
 
 So if you have short programs that don't need to be organized into
