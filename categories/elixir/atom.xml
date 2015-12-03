@@ -97,8 +97,7 @@ enough (and
 is in progress), but there is nothing wrong with writing tests today
 that someday you might turn into types.&lt;/p&gt;
 
-&lt;p&gt;TODO
-By sheer coincidence, a
+&lt;p&gt;By sheer coincidence, a
 &lt;a href=&#34;https://blogs.janestreet.com/testing-with-expectations/&#34;&gt;new testing framework was just announced for OCaml&lt;/a&gt;. It&amp;rsquo;s
 great that testing is being taken more seriously everywhere and by
 everyone.&lt;/p&gt;
