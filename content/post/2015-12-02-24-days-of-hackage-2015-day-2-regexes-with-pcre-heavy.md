@@ -337,7 +337,7 @@ one to the other seamlessly.
 
 ``` haskell
 #!/usr/bin/env stack
--- stack --install-ghc runghc --package pcre-heavy
+-- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy
 
 {-# LANGUAGE QuasiQuotes #-}
 
