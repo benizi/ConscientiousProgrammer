@@ -12,6 +12,7 @@ title: "Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack
 
 - Day 1: [Introduction and Stack](/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/)
 - Day 2: [Regexes with pcre-heavy; standalone Haskell scripts using Stack](/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/)
+- Day 3: [HSpec; the importance of testing](/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/)
 
 ## Day 1
 
