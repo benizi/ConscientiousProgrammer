@@ -10,6 +10,7 @@ categories:
 - Pittsburgh
 - Erlang
 - Elixir
+- test-driven development
 - TDD
 - testing
 - concurrency
@@ -28,6 +29,16 @@ categories:
 - Clojure
 - JavaScript
 - Racket
+- HSpec
+- QuickCheck
+- RSpec
+- pytest
+- Specs2
+- ScalaCheck
+- Midje
+- Jasmine
+- googletest
+- RackUnit
 ---
 It's been a long time since I went to an [OpenHack Pittsburgh](http://openhack.github.io/pittsburgh/) meeting. The last time was [five months ago](http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/). On June 24, there was an [OpenHack Pittsburgh](http://www.meetup.com/pittsburgh-ruby/events/120200292/) held at [4moms](http://www.4moms.com/), but I really needed to stay home and take it easy that evening, because of my busy schedule later in the week, including attending a [PittJUG meeting](/blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/) and preparing a [Pittsburgh Python talk](/blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/).
 
@@ -36,8 +47,6 @@ It's been a long time since I went to an [OpenHack Pittsburgh](http://openhack.g
 What happened was that he asked for feedback about who was planning to work on what, and said he planned to learn some [Elixir](http://elixir-lang.org/), a fairly new programming language built on top of the [Erlang](http://www.erlang.org/) runtime. Since this language had been on my list of things to look into, I decided that learning loves company, so I proposed to learn some Elixir in a test-driven way!
 
 What does that mean?
-
-{{< figure src="http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg" title="Franklin working on laptop" >}}
 
 <!--more-->
 
