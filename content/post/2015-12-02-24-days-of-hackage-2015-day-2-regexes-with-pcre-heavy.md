@@ -341,7 +341,7 @@ one to the other seamlessly.
 
 module Main where
 
-import Text.Regex.PCRE.Heavy
+import Text.Regex.PCRE.Heavy (Regex, re, scan)
 import Data.Maybe (listToMaybe)
 import Text.Printf (printf)
 
