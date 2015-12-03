@@ -97,9 +97,16 @@ enough (and
 is in progress), but there is nothing wrong with writing tests today
 that someday you might turn into types.
 
+### Breaking news!
+
 By sheer coincidence, a
-[new testing framework was just announced for OCaml](https://blogs.janestreet.com/testing-with-expectations/). It's
-great that testing is being taken more seriously everywhere and by
+[new testing framework was just announced for OCaml](https://blogs.janestreet.com/testing-with-expectations/).
+
+And today, right after I initially published this article, I found in
+my news feed an announcement about [QuickFuzz](http://quickfuzz.org/),
+a grammar fuzz tester for Haskell!
+
+It's great that testing is being taken more seriously everywhere and by
 everyone.
 
 ## Why HSpec?
