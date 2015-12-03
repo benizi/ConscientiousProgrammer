@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
 
-  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/highlight/default.css">
+  
   <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
@@ -206,15 +206,17 @@ it from my sample project template described on
 so you can now generate a starter project with HSpec all ready to go
 by running</p>
 
-<pre><code class="language-console">$ stack new my-new-project franklinchen
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack new my-new-project franklinchen
+</pre></div>
+
 
 <p>There is a <code>test/</code> directory with a single file in it, the
 auto-discovery file named <code>test/Spec.hs</code>, which has a single line of
 code, actually a comment:</p>
 
-<pre><code class="language-haskell">{-# OPTIONS_GHC -F -pgmF hspec-discover #-}
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# OPTIONS_GHC -F -pgmF hspec-discover #-}</span>
+</pre></div>
+
 
 <p>This works because when you have HSpec installed, a program
 <code>hspec-discover</code> also gets installed, and it&rsquo;s called by GHC to do the
@@ -242,32 +244,33 @@ embedding a domain-specific language (DSL), I retroactively wrote the
 most obvious code that shows how HSpec works without introducing
 non-HSpec considerations. (The code is on branch <a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage/tree/boilerplated-hspec"><code>boilerplated-hspec</code></a>.)</p>
 
-<pre><code class="language-haskell">module PCREHeavyExampleSpec where
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">PCREHeavyExampleSpec</span> <span style="color: #008000; font-weight: bold">where</span>
 
-import PCREHeavyExample (mediaRegex)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">PCREHeavyExample</span> (<span style="color: #0000FF">mediaRegex</span>)
 
-import Test.Hspec (Spec, describe, it, shouldSatisfy)
-import Text.Regex.PCRE.Heavy ((=~))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> (<span style="color: #B00040">Spec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>, <span style="color: #0000FF">shouldSatisfy</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Text.Regex.PCRE.Heavy</span> ((<span style="color: #666666">=~</span>))
 
--- | Required for auto-discovery.
-spec :: Spec
-spec =
-  describe &quot;pcre-heavy&quot; $ do
-    describe &quot;match&quot; $ do
-      it &quot;has audio&quot; $ do
-        &quot;@Media:\thas-audio,   audio&quot; `shouldSatisfy` (=~ mediaRegex)
-      it &quot;has video&quot; $ do
-        &quot;@Media:\thas-video,video&quot; `shouldSatisfy` (=~ mediaRegex)
-      it &quot;has audio but missing&quot; $ do
-        &quot;@Media:\thas-audio-but-missing, audio, missing&quot; `shouldSatisfy` (=~ mediaRegex)
-      it &quot;has video but unlinked&quot; $ do
-        &quot;@Media:\thas-video-but-unlinked  , video,      unlinked&quot; `shouldSatisfy` (=~ mediaRegex)
-    describe &quot;no match&quot; $ do
-      it &quot;no audio or video&quot; $ do
-        &quot;@Media:\tno-audio-or-video&quot; `shouldSatisfy` (not . (=~ mediaRegex))
-      it &quot;missing media field&quot; $ do
-        &quot;@Media:\tmissing-media-field, unlinked&quot; `shouldSatisfy` (not . (=~ mediaRegex))
-</code></pre>
+<span style="color: #408080; font-style: italic">-- | Required for auto-discovery.</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;pcre-heavy&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    describe <span style="color: #BA2121">&quot;match&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      it <span style="color: #BA2121">&quot;has audio&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+        <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">has-audio,   audio&quot;</span> `shouldSatisfy` (<span style="color: #666666">=~</span> mediaRegex)
+      it <span style="color: #BA2121">&quot;has video&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+        <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">has-video,video&quot;</span> `shouldSatisfy` (<span style="color: #666666">=~</span> mediaRegex)
+      it <span style="color: #BA2121">&quot;has audio but missing&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+        <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">has-audio-but-missing, audio, missing&quot;</span> `shouldSatisfy` (<span style="color: #666666">=~</span> mediaRegex)
+      it <span style="color: #BA2121">&quot;has video but unlinked&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+        <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">has-video-but-unlinked  , video,      unlinked&quot;</span> `shouldSatisfy` (<span style="color: #666666">=~</span> mediaRegex)
+    describe <span style="color: #BA2121">&quot;no match&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      it <span style="color: #BA2121">&quot;no audio or video&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+        <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">no-audio-or-video&quot;</span> `shouldSatisfy` (not <span style="color: #666666">.</span> (<span style="color: #666666">=~</span> mediaRegex))
+      it <span style="color: #BA2121">&quot;missing media field&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+        <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">missing-media-field, unlinked&quot;</span> `shouldSatisfy` (not <span style="color: #666666">.</span> (<span style="color: #666666">=~</span> mediaRegex))
+</pre></div>
+
 
 <p>The main thing to understand is that for simplest use (without
 fixtures, effects, etc.), a basic description-labeled spec item is
@@ -303,21 +306,24 @@ Haskell.</p>
 <a href="https://wiki.haskell.org/Section_of_an_infix_operator">operator sectioning syntax</a>
 above, but I could have written</p>
 
-<pre><code class="language-haskell">text `shouldSatisfy` (\inputString -&gt; inputString =~ mediaRegex)
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">text</span> `shouldSatisfy` (<span style="color: #0000FF">\</span>inputString <span style="color: #AA22FF; font-weight: bold">-&gt;</span> inputString <span style="color: #666666">=~</span> mediaRegex)
+</pre></div>
+
 
 <p>Furthermore, it is also convenient to use
 <a href="https://wiki.haskell.org/Infix_operator">infix syntax for named functions</a>
 when sensible, but it is not required. I could have written in
 bare-bones style</p>
 
-<pre><code class="language-haskell">shouldSatisfy text (\inputString -&gt; inputString =~ mediaRegex)
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">shouldSatisfy</span> text (<span style="color: #0000FF">\</span>inputString <span style="color: #AA22FF; font-weight: bold">-&gt;</span> inputString <span style="color: #666666">=~</span> mediaRegex)
+</pre></div>
+
 
 <p>And the cute <code>(not . (=~ mediaRegex))</code> can be written as</p>
 
-<pre><code class="language-haskell">\inputString -&gt; not (inputString =~ mediaRegex)
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">\</span>inputString <span style="color: #AA22FF; font-weight: bold">-&gt;</span> not (inputString <span style="color: #666666">=~</span> mediaRegex)
+</pre></div>
+
 
 <p>I mention these facts about syntax because I have often been told by
 people looking into Haskell that it&rsquo;s confusing because of all the
@@ -351,20 +357,21 @@ DSLs such HSpec, rather than parenthesize everything. I&rsquo;m curious what
 you think. Would you prefer to read the following, which is what the
 <code>$</code> operator avoids requiring?</p>
 
-<pre><code class="language-haskell">spec :: Spec
-spec =
-  describe &quot;pcre-heavy&quot; (do
-    describe &quot;match&quot; (do
-      it &quot;has audio&quot; (do
-        &quot;@Media:\thas-audio,   audio&quot; `shouldSatisfy` (=~ mediaRegex)
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;pcre-heavy&quot;</span> (<span style="color: #008000; font-weight: bold">do</span>
+    describe <span style="color: #BA2121">&quot;match&quot;</span> (<span style="color: #008000; font-weight: bold">do</span>
+      it <span style="color: #BA2121">&quot;has audio&quot;</span> (<span style="color: #008000; font-weight: bold">do</span>
+        <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">has-audio,   audio&quot;</span> `shouldSatisfy` (<span style="color: #666666">=~</span> mediaRegex)
         )
-      -- ...
+      <span style="color: #408080; font-style: italic">-- ...</span>
       )
-    describe &quot;no match&quot; (do
-      -- ...
+    describe <span style="color: #BA2121">&quot;no match&quot;</span> (<span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #408080; font-style: italic">-- ...</span>
       )
     )
-</code></pre>
+</pre></div>
+
 
 <p>I personally think that languages with a <code>begin</code>/<code>end</code> kind of block
 (such as Pascal, Ruby) instead of braces or parentheses have an
@@ -393,52 +400,54 @@ write that something. In a typed setting, this means we get a
 compile-time error when first trying to run the test, which we fix by
 creating <code>PCREHeavyExample</code> as a new module with a stub:</p>
 
-<pre><code class="language-haskell">module PCREHeavyExample (mediaRegex) where
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">PCREHeavyExample</span> (<span style="color: #0000FF">mediaRegex</span>) <span style="color: #008000; font-weight: bold">where</span>
 
-mediaRegex = undefined
-</code></pre>
+<span style="color: #0000FF">mediaRegex</span> <span style="color: #AA22FF; font-weight: bold">=</span> undefined
+</pre></div>
+
 
 <p>Of course, every test fails (in the terminal, the failures are
 highlighted in red):</p>
 
-<pre><code class="language-console">$ stack test
-PCREHeavyExample
-  pcre-heavy
-    match
-      has audio FAILED [1]
-      has video FAILED [2]
-      has audio but missing FAILED [3]
-      has video but unlinked FAILED [4]
-    no match
-      no audio or video FAILED [5]
-      missing media field FAILED [6]
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack <span style="color: #008000">test</span>
+<span style="color: #888888">PCREHeavyExample</span>
+<span style="color: #888888">  pcre-heavy</span>
+<span style="color: #888888">    match</span>
+<span style="color: #888888">      has audio FAILED [1]</span>
+<span style="color: #888888">      has video FAILED [2]</span>
+<span style="color: #888888">      has audio but missing FAILED [3]</span>
+<span style="color: #888888">      has video but unlinked FAILED [4]</span>
+<span style="color: #888888">    no match</span>
+<span style="color: #888888">      no audio or video FAILED [5]</span>
+<span style="color: #888888">      missing media field FAILED [6]</span>
 
-Failures:
+<span style="color: #888888">Failures:</span>
 
-  test/PCREHeavyExampleSpec.hs:13:
-  1) PCREHeavyExample.pcre-heavy.match has audio
-       uncaught exception: ErrorCall (Prelude.undefined)
+<span style="color: #888888">  test/PCREHeavyExampleSpec.hs:13:</span>
+<span style="color: #888888">  1) PCREHeavyExample.pcre-heavy.match has audio</span>
+<span style="color: #888888">       uncaught exception: ErrorCall (Prelude.undefined)</span>
 
-  test/PCREHeavyExampleSpec.hs:15:
-  2) PCREHeavyExample.pcre-heavy.match has video
-       uncaught exception: ErrorCall (Prelude.undefined)
+<span style="color: #888888">  test/PCREHeavyExampleSpec.hs:15:</span>
+<span style="color: #888888">  2) PCREHeavyExample.pcre-heavy.match has video</span>
+<span style="color: #888888">       uncaught exception: ErrorCall (Prelude.undefined)</span>
 
-  test/PCREHeavyExampleSpec.hs:17:
-  3) PCREHeavyExample.pcre-heavy.match has audio but missing
-       uncaught exception: ErrorCall (Prelude.undefined)
+<span style="color: #888888">  test/PCREHeavyExampleSpec.hs:17:</span>
+<span style="color: #888888">  3) PCREHeavyExample.pcre-heavy.match has audio but missing</span>
+<span style="color: #888888">       uncaught exception: ErrorCall (Prelude.undefined)</span>
 
-  test/PCREHeavyExampleSpec.hs:19:
-  4) PCREHeavyExample.pcre-heavy.match has video but unlinked
-       uncaught exception: ErrorCall (Prelude.undefined)
+<span style="color: #888888">  test/PCREHeavyExampleSpec.hs:19:</span>
+<span style="color: #888888">  4) PCREHeavyExample.pcre-heavy.match has video but unlinked</span>
+<span style="color: #888888">       uncaught exception: ErrorCall (Prelude.undefined)</span>
 
-  test/PCREHeavyExampleSpec.hs:22:
-  5) PCREHeavyExample.pcre-heavy, no match, no audio or video
-       uncaught exception: ErrorCall (Prelude.undefined)
+<span style="color: #888888">  test/PCREHeavyExampleSpec.hs:22:</span>
+<span style="color: #888888">  5) PCREHeavyExample.pcre-heavy, no match, no audio or video</span>
+<span style="color: #888888">       uncaught exception: ErrorCall (Prelude.undefined)</span>
 
-  test/PCREHeavyExampleSpec.hs:24:
-  6) PCREHeavyExample.pcre-heavy, no match, missing media field
-       uncaught exception: ErrorCall (Prelude.undefined)
-</code></pre>
+<span style="color: #888888">  test/PCREHeavyExampleSpec.hs:24:</span>
+<span style="color: #888888">  6) PCREHeavyExample.pcre-heavy, no match, missing media field</span>
+<span style="color: #888888">       uncaught exception: ErrorCall (Prelude.undefined)</span>
+</pre></div>
+</p>
 
 <h4 id="a-tangent-on-ghc-s-error-reporting:740606311d3fcf0ba2f14607a358bd73">A tangent on GHC&rsquo;s error reporting</h4>
 
@@ -457,20 +466,21 @@ errors without having to jump through hoops.</p>
 writing the regex for <code>mediaRegex</code>. Then the tests pass (and in the
 terminal they display in green):</p>
 
-<pre><code class="language-console">PCREHeavyExample
-  pcre-heavy
-    match
-      has audio
-      has video
-      has audio but missing
-      has video but unlinked
-    no match
-      no audio or video
-      missing media field
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">PCREHeavyExample</span>
+<span style="color: #888888">  pcre-heavy</span>
+<span style="color: #888888">    match</span>
+<span style="color: #888888">      has audio</span>
+<span style="color: #888888">      has video</span>
+<span style="color: #888888">      has audio but missing</span>
+<span style="color: #888888">      has video but unlinked</span>
+<span style="color: #888888">    no match</span>
+<span style="color: #888888">      no audio or video</span>
+<span style="color: #888888">      missing media field</span>
 
-Finished in 0.0010 seconds
-6 examples, 0 failures
-</code></pre>
+<span style="color: #888888">Finished in 0.0010 seconds</span>
+<span style="color: #888888">6 examples, 0 failures</span>
+</pre></div>
+</p>
 
 <h2 id="tests-are-code-too:740606311d3fcf0ba2f14607a358bd73">Tests are code too!</h2>
 
@@ -491,44 +501,46 @@ composite <code>Spec</code>.</p>
 <p>Here is a table that pairs a test description with each example input
 string:</p>
 
-<pre><code class="language-haskell">matchExamples :: [(String, String)]
-matchExamples =
-  [ ( &quot;has audio&quot;
-    , &quot;@Media:\thas-audio,   audio&quot;
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">matchExamples</span> <span style="color: #AA22FF; font-weight: bold">::</span> [(<span style="color: #B00040">String</span>, <span style="color: #B00040">String</span>)]
+<span style="color: #0000FF">matchExamples</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  [ ( <span style="color: #BA2121">&quot;has audio&quot;</span>
+    , <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">has-audio,   audio&quot;</span>
     )
-  , ( &quot;has video&quot;
-    , &quot;@Media:\thas-video,video&quot;
+  , ( <span style="color: #BA2121">&quot;has video&quot;</span>
+    , <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">has-video,video&quot;</span>
     )
-  , ( &quot;has audio but missing&quot;
-    , &quot;@Media:\thas-audio-but-missing, audio, missing&quot;
+  , ( <span style="color: #BA2121">&quot;has audio but missing&quot;</span>
+    , <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">has-audio-but-missing, audio, missing&quot;</span>
     )
-  , ( &quot;has video but unlinked&quot;
-    , &quot;@Media:\thas-video-but-unlinked  , video,      unlinked&quot;
+  , ( <span style="color: #BA2121">&quot;has video but unlinked&quot;</span>
+    , <span style="color: #BA2121">&quot;@Media:</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">has-video-but-unlinked  , video,      unlinked&quot;</span>
     )
   ]
-
-</code></pre>
+</pre></div>
+</p>
 
 <p>Here is a function that generates a spec item given a description/input pair.</p>
 
-<pre><code class="language-haskell">matchSpec :: (String, String) -&gt; Spec
-matchSpec (description, text) =
-  it description $ do
-    text `shouldSatisfy` (=~ mediaRegex)
-</code></pre>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">matchSpec</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">String</span>, <span style="color: #B00040">String</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">matchSpec</span> (description, text) <span style="color: #AA22FF; font-weight: bold">=</span>
+  it description <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    text `shouldSatisfy` (<span style="color: #666666">=~</span> mediaRegex)
+</pre></div>
+</p>
 
 <p>Similarly for the non-matching examples.</p>
 
 <p>And the refactored <code>Spec</code>:</p>
 
-<pre><code class="language-haskell">spec :: Spec
-spec =
-  describe &quot;pcre-heavy&quot; $ do
-    describe &quot;match&quot; $ do
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;pcre-heavy&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    describe <span style="color: #BA2121">&quot;match&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
       mapM_ matchSpec matchExamples
-    describe &quot;no match&quot; $ do
+    describe <span style="color: #BA2121">&quot;no match&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
       mapM_ nonMatchSpec nonMatchExamples
-</code></pre>
+</pre></div>
+</p>
 
 <h3 id="refactoring-part-2:740606311d3fcf0ba2f14607a358bd73">Refactoring, part 2</h3>
 
@@ -561,31 +573,32 @@ polymorphic</em> in the predicate type, replacing <code>matchSpec</code> and
 
 <p>The final result:</p>
 
-<pre><code class="language-haskell">spec :: Spec
-spec =
-  describePredicate &quot;pcre-heavy&quot;
-    (&quot;match&quot;, (=~ mediaRegex))
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describePredicate <span style="color: #BA2121">&quot;pcre-heavy&quot;</span>
+    (<span style="color: #BA2121">&quot;match&quot;</span>, (<span style="color: #666666">=~</span> mediaRegex))
     (matchExamples, nonMatchExamples)
 
-describePredicate :: Show a =&gt;
-     String                           -- ^ description
-  -&gt; (String, a -&gt; Bool)              -- ^ (base description, predicate)
-  -&gt; ( [(String, a)], [(String, a)] ) -- ^ positive and negative examples
-  -&gt; Spec
-describePredicate description
+<span style="color: #0000FF">describePredicate</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Show</span> a <span style="color: #AA22FF; font-weight: bold">=&gt;</span>
+     <span style="color: #B00040">String</span>                           <span style="color: #408080; font-style: italic">-- ^ description</span>
+  <span style="color: #AA22FF; font-weight: bold">-&gt;</span> (<span style="color: #B00040">String</span>, a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Bool</span>)              <span style="color: #408080; font-style: italic">-- ^ (base description, predicate)</span>
+  <span style="color: #AA22FF; font-weight: bold">-&gt;</span> ( [(<span style="color: #B00040">String</span>, a)], [(<span style="color: #B00040">String</span>, a)] ) <span style="color: #408080; font-style: italic">-- ^ positive and negative examples</span>
+  <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">describePredicate</span> description
                   (baseDescription, predicate)
-                  (positiveExamples, negativeExamples) =
-  describe description $ do
-    describe baseDescription $ do
+                  (positiveExamples, negativeExamples) <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe description <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    describe baseDescription <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
       mapM_ (predSpec predicate) positiveExamples
-    describe (&quot;not &quot; ++ baseDescription) $ do
-      mapM_ (predSpec (not . predicate)) negativeExamples
+    describe (<span style="color: #BA2121">&quot;not &quot;</span> <span style="color: #666666">++</span> baseDescription) <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      mapM_ (predSpec (not <span style="color: #666666">.</span> predicate)) negativeExamples
 
-predSpec :: Show a =&gt; (a -&gt; Bool) -&gt; (String, a) -&gt; Spec
-predSpec predicate (description, a) =
-  it description $ do
+<span style="color: #0000FF">predSpec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Show</span> a <span style="color: #AA22FF; font-weight: bold">=&gt;</span> (a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Bool</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> (<span style="color: #B00040">String</span>, a) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">predSpec</span> predicate (description, a) <span style="color: #AA22FF; font-weight: bold">=</span>
+  it description <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
     a `shouldSatisfy` predicate
-</code></pre>
+</pre></div>
+</p>
 
 <p>Note that <code>describePredicate</code> and <code>predSpec</code> can then be pulled out
 into a test utilities module for use by other specs using the same
@@ -660,8 +673,7 @@ some other testing framework.</p>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
 </div>
-<script src="http://ConscientiousProgrammer.com/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+
 
 <script>
   var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];

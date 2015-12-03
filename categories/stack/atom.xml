@@ -129,8 +129,9 @@ repo.&lt;/p&gt;
 
 &lt;p&gt;If you run&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack new stack-template-demo franklinchen
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack new stack-template-demo franklinchen
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;you will be prompted for information to create a new project called &lt;code&gt;stack-template-demo&lt;/code&gt;.&lt;/p&gt;
 
@@ -141,8 +142,9 @@ repo.&lt;/p&gt;
 example, before I submitted my template to &lt;code&gt;stack-templates&lt;/code&gt;, I used
 to run&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack new stack-template-demo /path/on/my/computer/to/franklinchen.hsfiles
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack new stack-template-demo /path/on/my/computer/to/franklinchen.hsfiles
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;where &lt;code&gt;franklinchen.hsfiles&lt;/code&gt; is my template (read below on creating
 your own template).&lt;/p&gt;
@@ -156,15 +158,17 @@ right now.)&lt;/p&gt;
 
 &lt;p&gt;Enter the project directory:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ cd stack-template-demo
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;cd &lt;/span&gt;stack-template-demo
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;h3 id=&#34;stack-downloads-ghc-for-you:c37cfe20acfff0cff8579f026185f721&#34;&gt;Stack downloads GHC for you&lt;/h3&gt;
 
 &lt;p&gt;Run&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack setup
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack setup
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;If you do not already have an appropriate version of GHC installed,
 Stack will &lt;em&gt;automatically&lt;/em&gt; download and install it for you, into an
@@ -181,15 +185,16 @@ global installation requiring special privileges.&lt;/p&gt;
 
 &lt;p&gt;The output, if Stack needs to download anything:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;Preparing to install GHC to an isolated location.
-This will not interfere with any system-level installation.
-Downloaded ghc-7.10.2.
-Installed GHC.
-stack will use a locally installed GHC
-For more information on paths, see &#39;stack path&#39; and &#39;stack exec env&#39;
-To use this GHC and packages outside of a project, consider using:
-stack ghc, stack ghci, stack runghc, or stack exec
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;Preparing to install GHC to an isolated location.&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;This will not interfere with any system-level installation.&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Downloaded ghc-7.10.2.&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Installed GHC.&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;stack will use a locally installed GHC&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;For more information on paths, see &amp;#39;stack path&amp;#39; and &amp;#39;stack exec env&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;To use this GHC and packages outside of a project, consider using:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;stack ghc, stack ghci, stack runghc, or stack exec&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;h3 id=&#34;launching-the-ghci-repl:c37cfe20acfff0cff8579f026185f721&#34;&gt;Launching the GHCi REPL&lt;/h3&gt;
 
@@ -200,8 +205,9 @@ simple with Stack.&lt;/p&gt;
 
 &lt;p&gt;Run&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack ghci
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack ghci
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;Note that &lt;strong&gt;only the first time&lt;/strong&gt; you do this (or other commands that
 require getting library dependencies), Stack may take a while to
@@ -216,49 +222,54 @@ not.&lt;/p&gt;
 
 &lt;p&gt;Stack launches a GHCi REPL with our modules preloaded:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;Ok, modules loaded: Lib, Main.
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;Ok, modules loaded: Lib, Main.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;In &lt;code&gt;src/Lib.hs&lt;/code&gt; of the sample project, we have a silly module
 illustrating some &lt;a href=&#34;https://www.haskell.org/haddock/&#34;&gt;Haddock&lt;/a&gt;
 documentation comments:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;-- | A library to do stuff.
-module Lib
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | A library to do stuff.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Lib&lt;/span&gt;
     (
-      ourAdd
-    ) where
+      &lt;span style=&#34;color: #0000FF&#34;&gt;ourAdd&lt;/span&gt;
+    ) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
 
--- | Add two &#39;Int&#39; values.
-ourAdd :: Int  -- ^ left
-       -&amp;gt; Int  -- ^ right
-       -&amp;gt; Int  -- ^ sum
-ourAdd x y = x + y
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Add two &amp;#39;Int&amp;#39; values.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;ourAdd&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ left&lt;/span&gt;
+       &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ right&lt;/span&gt;
+       &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ sum&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;ourAdd&lt;/span&gt; x y &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; x &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; y
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;We can access the &lt;code&gt;Lib&lt;/code&gt; module from the REPL:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; ourAdd 2 3
-5
-*Main&amp;gt; Lib.ourAdd 4 5
-9
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;*Main&amp;gt; ourAdd 2 3&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;5&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;*Main&amp;gt; Lib.ourAdd 4 5&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;9&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;We can also access &lt;code&gt;Main&lt;/code&gt;, which is defined in &lt;code&gt;app/Main.hs&lt;/code&gt;:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;module Main where
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Main&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
 
-import Lib (ourAdd)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Lib&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;ourAdd&lt;/span&gt;)
 
-import Text.Printf (printf)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Printf&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;printf&lt;/span&gt;)
 
-main :: IO ()
-main = printf &amp;quot;2 + 3 = %d\n&amp;quot; (ourAdd 2 3)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;2 + 3 = %d&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; (ourAdd &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; main
-2 + 3 = 5
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;*Main&amp;gt; main&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;2 + 3 = 5&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;building-and-running-the-project:c37cfe20acfff0cff8579f026185f721&#34;&gt;Building and running the project&lt;/h3&gt;
 
@@ -267,47 +278,52 @@ the REPL. In practice in real projects, I start by compiling a project
 to get the dependencies compiled, before I use GHCi, but the above
 does it for you too:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack build
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack build
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;Because I defined a native-compiled binary executable named
 &lt;code&gt;stack-template-demo&lt;/code&gt; in our Cabal file &lt;code&gt;stack-template-demo.cabal&lt;/code&gt;,
 we can run the executable:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack exec stack-template-demo
-2 + 3 = 5
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack &lt;span style=&#34;color: #008000&#34;&gt;exec &lt;/span&gt;stack-template-demo
+&lt;span style=&#34;color: #888888&#34;&gt;2 + 3 = 5&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;I supplied unit tests for &lt;code&gt;Lib&lt;/code&gt; in &lt;code&gt;test/LibSpec.hs&lt;/code&gt; that can be run:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack test
-Lib
-  Lib
-    works
-    ourAdd is commutative
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack &lt;span style=&#34;color: #008000&#34;&gt;test&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Lib&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  Lib&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    works&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    ourAdd is commutative&lt;/span&gt;
 
-Finished in 0.0007 seconds
-2 examples, 0 failures
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Finished in 0.0007 seconds&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;2 examples, 0 failures&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;installing-the-library-and-executable:c37cfe20acfff0cff8579f026185f721&#34;&gt;Installing the library and executable&lt;/h3&gt;
 
 &lt;p&gt;You can now install the library and executable for your own use later:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack install
-...
-...
-Copying from /Users/chen/stack-template-demo/.stack-work/install/x86_64-osx/lts-3.16/7.10.2/bin/stack-template-demo to /Users/chen/.local/bin/stack-template-demo
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack install
+&lt;span style=&#34;color: #888888&#34;&gt;...&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;...&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Copying from /Users/chen/stack-template-demo/.stack-work/install/x86_64-osx/lts-3.16/7.10.2/bin/stack-template-demo to /Users/chen/.local/bin/stack-template-demo&lt;/span&gt;
 
-Copied executables to /Users/chen/.local/bin:
-- stack-template-demo
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Copied executables to /Users/chen/.local/bin:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;- stack-template-demo&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;For example (since &lt;code&gt;~/.local/bin&lt;/code&gt; is in my &lt;code&gt;PATH&lt;/code&gt;):&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack-template-demo
-2 + 3 = 5
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack-template-demo
+&lt;span style=&#34;color: #888888&#34;&gt;2 + 3 = 5&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;your-own-stack-template-configuration:c37cfe20acfff0cff8579f026185f721&#34;&gt;Your own Stack template configuration&lt;/h3&gt;
 
@@ -319,14 +335,15 @@ configuration is
 a file in
 &lt;code&gt;~/.stack/config.yaml&lt;/code&gt;. Mine has:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;templates:
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;templates:
   params:
-    author-email: &amp;quot;franklinchen@franklinchen.com&amp;quot;
-    author-name: &amp;quot;Franklin Chen&amp;quot;
+    author-email: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;franklinchen@franklinchen.com&amp;quot;&lt;/span&gt;
+    author-name: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Franklin&lt;/span&gt;&lt;span style=&#34;color: #19177C&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;Chen&amp;quot;&lt;/span&gt;
     category: test
-    copyright: &amp;quot;2015&amp;quot;
-    github-username: &amp;quot;FranklinChen&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
+    copyright: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;2015&amp;quot;&lt;/span&gt;
+    github-username: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;FranklinChen&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;other-bells-and-whistles:c37cfe20acfff0cff8579f026185f721&#34;&gt;Other bells and whistles&lt;/h3&gt;
 

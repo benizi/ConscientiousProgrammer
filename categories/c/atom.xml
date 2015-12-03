@@ -460,8 +460,9 @@
 on a blog I follow, and this post presents mysterious Perl code for
 which the reader is asked to guess what it does:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;perl -le &#39;print(two + two == five ? &amp;quot;true&amp;quot; : &amp;quot;false&amp;quot;)&#39;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;perl -le &amp;#39;print(two + two == five ? &amp;quot;true&amp;quot; : &amp;quot;false&amp;quot;)&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;I looked at it briefly, got a headache, and didn&amp;rsquo;t even want to solve
 it. This despite using Perl as one of my main programming languages

@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
 
-  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/highlight/default.css">
+  
   <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
@@ -204,17 +204,19 @@ e.g. <a href="http://talkbank.org/data-orig/Meeting/SCOTUS/2008/08-205.cha">this
 
 <p>Examples that should match:</p>
 
-<pre><code class="language-text">@Media:	has-audio,   audio
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">@Media:	has-audio,   audio
 @Media:	has-video,video
 @Media:	has-audio-but-missing, audio, missing
 @Media:	has-video-but-unlinked  , video,      unlinked
-</code></pre>
+</pre></div>
+
 
 <p>Examples that should fail to match:</p>
 
-<pre><code class="language-text">@Media:	no-audio-or-video
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">@Media:	no-audio-or-video
 @Media:	missing-media-field, unlinked
-</code></pre>
+</pre></div>
+
 
 <h3 id="creating-a-regex:73f9e85177be1c4a1d48f4dbe8d8b6bf">Creating a regex</h3>
 
@@ -225,9 +227,10 @@ Template Haskell
 that builds a PCRE-compiled
 <a href="https://hackage.haskell.org/package/pcre-heavy-1.0.0.1/docs/Text-Regex-PCRE-Heavy.html#t:Regex"><code>Regex</code></a>:</p>
 
-<pre><code class="language-haskell">mediaRegex :: Regex
-mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked))?|]
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">mediaRegex</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Regex</span>
+<span style="color: #0000FF">mediaRegex</span> <span style="color: #AA22FF; font-weight: bold">=</span> [re<span style="color: #666666">|^@</span><span style="color: #B00040">Media:\</span>t([<span style="color: #666666">^</span> ,]<span style="color: #666666">+</span>)<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>,<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>(audio<span style="color: #666666">|</span>video)(<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>,<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>(<span style="color: #666666">?:</span>missing<span style="color: #666666">|</span>unlinked))<span style="color: #666666">?|</span>]
+</pre></div>
+
 
 <h2 id="regex-string-validated-at-haskell-compile-time:73f9e85177be1c4a1d48f4dbe8d8b6bf">Regex string validated at Haskell compile-time</h2>
 
@@ -237,19 +240,21 @@ compile-time error rather than a runtime error.</p>
 
 <p>Example of a compile-time error:</p>
 
-<pre><code class="language-haskell">-- This Haskell code fails to compile!
-mediaRegex :: Regex
-mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked)?|]
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- This Haskell code fails to compile!</span>
+<span style="color: #0000FF">mediaRegex</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Regex</span>
+<span style="color: #0000FF">mediaRegex</span> <span style="color: #AA22FF; font-weight: bold">=</span> [re<span style="color: #666666">|^@</span><span style="color: #B00040">Media:\</span>t([<span style="color: #666666">^</span> ,]<span style="color: #666666">+</span>)<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>,<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>(audio<span style="color: #666666">|</span>video)(<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>,<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>(<span style="color: #666666">?:</span>missing<span style="color: #666666">|</span>unlinked)<span style="color: #666666">?|</span>]
+</pre></div>
+
 
 <p>Loading this in GHCi or compiling with GHC results in</p>
 
-<pre><code class="language-console">    Exception when trying to run compile-time code:
-      Text.Regex.PCRE.Light: Error in regex: missing )
-    Code: template-haskell-2.10.0.0:Language.Haskell.TH.Quote.quoteExp
-            re
-            &quot;^@Media:\\t([^ ,]+)\\ *,\\ *(audio|video)(\\ *,\\ *(?:missing|unlinked)?&quot;
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">    Exception when trying to run compile-time code:</span>
+<span style="color: #888888">      Text.Regex.PCRE.Light: Error in regex: missing )</span>
+<span style="color: #888888">    Code: template-haskell-2.10.0.0:Language.Haskell.TH.Quote.quoteExp</span>
+<span style="color: #888888">            re</span>
+<span style="color: #888888">            &quot;^@Media:\\t([^ ,]+)\\ *,\\ *(audio|video)(\\ *,\\ *(?:missing|unlinked)?&quot;</span>
+</pre></div>
+
 
 <h2 id="using-the-regex:73f9e85177be1c4a1d48f4dbe8d8b6bf">Using the regex</h2>
 
@@ -259,9 +264,10 @@ to extract the matches (if any) against our regex on a string.</p>
 
 <p><code>scan</code> returns a lazy list of all possible matches:</p>
 
-<pre><code class="language-haskell">-- Simplified type signature for our purposes.
-scan :: Regex -&gt; String -&gt; [(String, [String])]
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- Simplified type signature for our purposes.</span>
+<span style="color: #0000FF">scan</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Regex</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">String</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> [(<span style="color: #B00040">String</span>, [<span style="color: #B00040">String</span>])]
+</pre></div>
+
 
 <p>Each match is a pair <code>(String, [String])</code>, where the first component
 is the whole string that matched, and the second is an ordered list of
@@ -269,23 +275,26 @@ parenthesized groupings in the regex. In our regex, we had three
 parenthesized groupings, so a match could result in a three-element
 grouping list:</p>
 
-<pre><code class="language-console">*Main&gt; scan mediaRegex &quot;@Media:\tfoo, audio, unlinked&quot;
-[(&quot;@Media:\tfoo, audio, unlinked&quot;,[&quot;foo&quot;,&quot;audio&quot;,&quot;, unlinked&quot;])]
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">*Main&gt; scan mediaRegex &quot;@Media:\tfoo, audio, unlinked&quot;</span>
+<span style="color: #888888">[(&quot;@Media:\tfoo, audio, unlinked&quot;,[&quot;foo&quot;,&quot;audio&quot;,&quot;, unlinked&quot;])]</span>
+</pre></div>
+
 
 <p>Since we only want
 the first match (if any), we can just compose it with
 <a href="https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Maybe.html#v:listToMaybe"><code>listToMaybe</code> from <code>Data.Maybe</code></a>,
 which has type</p>
 
-<pre><code class="language-haskell">listToMaybe :: [a] -&gt; Maybe a
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">listToMaybe</span> <span style="color: #AA22FF; font-weight: bold">::</span> [a] <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Maybe</span> a
+</pre></div>
+
 
 <p>so <code>listToMaybe . scan mediaRegex</code> has type <code>String -&gt; Maybe (String, [String])</code>.</p>
 
-<pre><code class="language-console">*Main&gt; (listToMaybe . scan mediaRegex) &quot;@Media:\tfoo, audio, unlinked&quot;
-Just (&quot;@Media:\tfoo, audio, unlinked&quot;,[&quot;foo&quot;,&quot;audio&quot;,&quot;, unlinked&quot;])
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">*Main&gt; (listToMaybe . scan mediaRegex) &quot;@Media:\tfoo, audio, unlinked&quot;</span>
+<span style="color: #888888">Just (&quot;@Media:\tfoo, audio, unlinked&quot;,[&quot;foo&quot;,&quot;audio&quot;,&quot;, unlinked&quot;])</span>
+</pre></div>
+
 
 <h2 id="extracting-useful-information:73f9e85177be1c4a1d48f4dbe8d8b6bf">Extracting useful information</h2>
 
@@ -299,18 +308,19 @@ context-dependent list lengths.</p>
 unlinked. We define a data type and use pattern matching to get out of
 the untyped world into the typed world of our data model.</p>
 
-<pre><code class="language-haskell">data Info =
-    Skip
-  | Audio FilePath
-  | Video FilePath
-    deriving (Eq, Show)
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">data</span> <span style="color: #B00040">Info</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+    <span style="color: #B00040">Skip</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">Audio</span> <span style="color: #B00040">FilePath</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">Video</span> <span style="color: #B00040">FilePath</span>
+    <span style="color: #008000; font-weight: bold">deriving</span> (<span style="color: #B00040">Eq</span>, <span style="color: #B00040">Show</span>)
 
--- | Extract information about a media file if it is present.
-extractIfPresent :: (String, [String]) -&gt; Info
-extractIfPresent (_, [name, &quot;audio&quot;]) = Audio name
-extractIfPresent (_, [name, &quot;video&quot;]) = Video name
-extractIfPresent (_, _) = Skip
-</code></pre>
+<span style="color: #408080; font-style: italic">-- | Extract information about a media file if it is present.</span>
+<span style="color: #0000FF">extractIfPresent</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">String</span>, [<span style="color: #B00040">String</span>]) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Info</span>
+<span style="color: #0000FF">extractIfPresent</span> (<span style="color: #008000; font-weight: bold">_</span>, [name, <span style="color: #BA2121">&quot;audio&quot;</span>]) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Audio</span> name
+<span style="color: #0000FF">extractIfPresent</span> (<span style="color: #008000; font-weight: bold">_</span>, [name, <span style="color: #BA2121">&quot;video&quot;</span>]) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Video</span> name
+<span style="color: #0000FF">extractIfPresent</span> (<span style="color: #008000; font-weight: bold">_</span>, <span style="color: #008000; font-weight: bold">_</span>) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Skip</span>
+</pre></div>
+
 
 <h2 id="presentation-as-a-report:73f9e85177be1c4a1d48f4dbe8d8b6bf">Presentation as a report</h2>
 
@@ -320,25 +330,27 @@ command-line program.</p>
 
 <p>We have all the information needed to print out a report for each line.</p>
 
-<pre><code class="language-haskell">-- | Output a report.
-reportOnInfo :: Maybe Info -&gt; IO ()
-reportOnInfo Nothing = putStrLn &quot;no match&quot;
-reportOnInfo (Just Skip) = putStrLn &quot;match, but missing or unlinked&quot;
-reportOnInfo (Just (Audio path)) = printf &quot;audio at %s\n&quot; path
-reportOnInfo (Just (Video path)) = printf &quot;video at %s\n&quot; path
-</code></pre>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | Output a report.</span>
+<span style="color: #0000FF">reportOnInfo</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Maybe</span> <span style="color: #B00040">Info</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
+<span style="color: #0000FF">reportOnInfo</span> <span style="color: #B00040">Nothing</span> <span style="color: #AA22FF; font-weight: bold">=</span> putStrLn <span style="color: #BA2121">&quot;no match&quot;</span>
+<span style="color: #0000FF">reportOnInfo</span> (<span style="color: #B00040">Just</span> <span style="color: #B00040">Skip</span>) <span style="color: #AA22FF; font-weight: bold">=</span> putStrLn <span style="color: #BA2121">&quot;match, but missing or unlinked&quot;</span>
+<span style="color: #0000FF">reportOnInfo</span> (<span style="color: #B00040">Just</span> (<span style="color: #B00040">Audio</span> path)) <span style="color: #AA22FF; font-weight: bold">=</span> printf <span style="color: #BA2121">&quot;audio at %s</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span> path
+<span style="color: #0000FF">reportOnInfo</span> (<span style="color: #B00040">Just</span> (<span style="color: #B00040">Video</span> path)) <span style="color: #AA22FF; font-weight: bold">=</span> printf <span style="color: #BA2121">&quot;video at %s</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span> path
+</pre></div>
+</p>
 
 <p>And the final driver, piping everything through from standard input:</p>
 
-<pre><code class="language-haskell">main :: IO ()
-main = do
-  s &lt;- getContents
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">main</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
+<span style="color: #0000FF">main</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  s <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getContents
   mapM_ (reportOnInfo
-        . fmap extractIfPresent
-        . listToMaybe
-        . scan mediaRegex
+        <span style="color: #666666">.</span> fmap extractIfPresent
+        <span style="color: #666666">.</span> listToMaybe
+        <span style="color: #666666">.</span> scan mediaRegex
        ) (lines s)
-</code></pre>
+</pre></div>
+</p>
 
 <h2 id="using-stack-to-ship-standalone-scripts:73f9e85177be1c4a1d48f4dbe8d8b6bf">Using Stack to ship standalone scripts</h2>
 
@@ -353,9 +365,10 @@ can rely on the recipient simply installing Stack.</p>
 <p>Here&rsquo;s how we can turn our program into such a standalone script: just
 add the following two lines and make the file executable:</p>
 
-<pre><code class="language-haskell">#!/usr/bin/env stack
--- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy
-</code></pre>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #666666">#!/</span>usr<span style="color: #666666">/</span>bin<span style="color: #666666">/</span>env stack
+<span style="color: #408080; font-style: italic">-- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy</span>
+</pre></div>
+</p>
 
 <p>Stack will read the embedded command in order to install GHC, if
  needed, and first download and install the packages listed (here
@@ -368,8 +381,9 @@ add the following two lines and make the file executable:</p>
 full-scale Cabal projects, you can treat Haskell as a &ldquo;scripting
 language&rdquo; with full access to the libraries of Hackage!</p>
 
-<pre><code class="language-console">$ app/PCREHeavyExampleMain.hs &lt; input.txt &gt; output.txt
-</code></pre>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> app/PCREHeavyExampleMain.hs &lt; input.txt &gt; output.txt
+</pre></div>
+</p>
 
 <h3 id="a-warning:73f9e85177be1c4a1d48f4dbe8d8b6bf">A warning</h3>
 
@@ -385,50 +399,51 @@ one to the other seamlessly.</p>
 
 <h3 id="here-s-our-complete-example-standalone-program:73f9e85177be1c4a1d48f4dbe8d8b6bf">Here&rsquo;s our complete example standalone program</h3>
 
-<pre><code class="language-haskell">#!/usr/bin/env stack
--- stack --install-ghc runghc --package pcre-heavy
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #666666">#!/</span>usr<span style="color: #666666">/</span>bin<span style="color: #666666">/</span>env stack
+<span style="color: #408080; font-style: italic">-- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy</span>
 
-{-# LANGUAGE QuasiQuotes #-}
+<span style="color: #408080; font-style: italic">{-# LANGUAGE QuasiQuotes #-}</span>
 
-module Main where
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">Main</span> <span style="color: #008000; font-weight: bold">where</span>
 
-import Text.Regex.PCRE.Heavy (Regex, re, scan)
-import Data.Maybe (listToMaybe)
-import Text.Printf (printf)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Text.Regex.PCRE.Heavy</span> (<span style="color: #B00040">Regex</span>, <span style="color: #0000FF">re</span>, <span style="color: #0000FF">scan</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Maybe</span> (<span style="color: #0000FF">listToMaybe</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Text.Printf</span> (<span style="color: #0000FF">printf</span>)
 
--- | Match a media name, audio/video, and optional missing/unlinked.
-mediaRegex :: Regex
-mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked))?|]
+<span style="color: #408080; font-style: italic">-- | Match a media name, audio/video, and optional missing/unlinked.</span>
+<span style="color: #0000FF">mediaRegex</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Regex</span>
+<span style="color: #0000FF">mediaRegex</span> <span style="color: #AA22FF; font-weight: bold">=</span> [re<span style="color: #666666">|^@</span><span style="color: #B00040">Media:\</span>t([<span style="color: #666666">^</span> ,]<span style="color: #666666">+</span>)<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>,<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>(audio<span style="color: #666666">|</span>video)(<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>,<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>(<span style="color: #666666">?:</span>missing<span style="color: #666666">|</span>unlinked))<span style="color: #666666">?|</span>]
 
-data Info =
-    Skip
-  | Audio FilePath
-  | Video FilePath
-    deriving (Eq, Show)
+<span style="color: #008000; font-weight: bold">data</span> <span style="color: #B00040">Info</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+    <span style="color: #B00040">Skip</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">Audio</span> <span style="color: #B00040">FilePath</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">Video</span> <span style="color: #B00040">FilePath</span>
+    <span style="color: #008000; font-weight: bold">deriving</span> (<span style="color: #B00040">Eq</span>, <span style="color: #B00040">Show</span>)
 
--- | Extract information about a media file if it is present.
-extractIfPresent :: (String, [String]) -&gt; Info
-extractIfPresent (_, [name, &quot;audio&quot;]) = Audio name
-extractIfPresent (_, [name, &quot;video&quot;]) = Video name
-extractIfPresent (_, _) = Skip
+<span style="color: #408080; font-style: italic">-- | Extract information about a media file if it is present.</span>
+<span style="color: #0000FF">extractIfPresent</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">String</span>, [<span style="color: #B00040">String</span>]) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Info</span>
+<span style="color: #0000FF">extractIfPresent</span> (<span style="color: #008000; font-weight: bold">_</span>, [name, <span style="color: #BA2121">&quot;audio&quot;</span>]) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Audio</span> name
+<span style="color: #0000FF">extractIfPresent</span> (<span style="color: #008000; font-weight: bold">_</span>, [name, <span style="color: #BA2121">&quot;video&quot;</span>]) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Video</span> name
+<span style="color: #0000FF">extractIfPresent</span> (<span style="color: #008000; font-weight: bold">_</span>, <span style="color: #008000; font-weight: bold">_</span>) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Skip</span>
 
--- | Output a report.
-reportOnInfo :: Maybe Info -&gt; IO ()
-reportOnInfo Nothing = putStrLn &quot;no match&quot;
-reportOnInfo (Just Skip) = putStrLn &quot;match, but missing or unlinked&quot;
-reportOnInfo (Just (Audio path)) = printf &quot;audio at %s\n&quot; path
-reportOnInfo (Just (Video path)) = printf &quot;video at %s\n&quot; path
+<span style="color: #408080; font-style: italic">-- | Output a report.</span>
+<span style="color: #0000FF">reportOnInfo</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Maybe</span> <span style="color: #B00040">Info</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
+<span style="color: #0000FF">reportOnInfo</span> <span style="color: #B00040">Nothing</span> <span style="color: #AA22FF; font-weight: bold">=</span> putStrLn <span style="color: #BA2121">&quot;no match&quot;</span>
+<span style="color: #0000FF">reportOnInfo</span> (<span style="color: #B00040">Just</span> <span style="color: #B00040">Skip</span>) <span style="color: #AA22FF; font-weight: bold">=</span> putStrLn <span style="color: #BA2121">&quot;match, but missing or unlinked&quot;</span>
+<span style="color: #0000FF">reportOnInfo</span> (<span style="color: #B00040">Just</span> (<span style="color: #B00040">Audio</span> path)) <span style="color: #AA22FF; font-weight: bold">=</span> printf <span style="color: #BA2121">&quot;audio at %s</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span> path
+<span style="color: #0000FF">reportOnInfo</span> (<span style="color: #B00040">Just</span> (<span style="color: #B00040">Video</span> path)) <span style="color: #AA22FF; font-weight: bold">=</span> printf <span style="color: #BA2121">&quot;video at %s</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span> path
 
--- | Driver, in traditional right-to-left syntax.
-main :: IO ()
-main = do
-  s &lt;- getContents
+<span style="color: #408080; font-style: italic">-- | Driver, in traditional right-to-left syntax.</span>
+<span style="color: #0000FF">main</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
+<span style="color: #0000FF">main</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  s <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getContents
   mapM_ (reportOnInfo
-        . fmap extractIfPresent
-        . listToMaybe
-        . scan mediaRegex
+        <span style="color: #666666">.</span> fmap extractIfPresent
+        <span style="color: #666666">.</span> listToMaybe
+        <span style="color: #666666">.</span> scan mediaRegex
        ) (lines s)
-</code></pre>
+</pre></div>
+</p>
 
 <h2 id="some-additional-notes:73f9e85177be1c4a1d48f4dbe8d8b6bf">Some additional notes</h2>
 
@@ -504,8 +519,7 @@ turn it into a Stack script.</p>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
 </div>
-<script src="http://ConscientiousProgrammer.com/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+
 
 <script>
   var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];

@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
 
-  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/highlight/default.css">
+  
   <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
@@ -190,8 +190,9 @@ repo.</p>
 
 <p>If you run</p>
 
-<pre><code class="language-console">$ stack new stack-template-demo franklinchen
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack new stack-template-demo franklinchen
+</pre></div>
+
 
 <p>you will be prompted for information to create a new project called <code>stack-template-demo</code>.</p>
 
@@ -202,8 +203,9 @@ repo.</p>
 example, before I submitted my template to <code>stack-templates</code>, I used
 to run</p>
 
-<pre><code class="language-console">$ stack new stack-template-demo /path/on/my/computer/to/franklinchen.hsfiles
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack new stack-template-demo /path/on/my/computer/to/franklinchen.hsfiles
+</pre></div>
+
 
 <p>where <code>franklinchen.hsfiles</code> is my template (read below on creating
 your own template).</p>
@@ -217,15 +219,17 @@ right now.)</p>
 
 <p>Enter the project directory:</p>
 
-<pre><code class="language-console">$ cd stack-template-demo
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> <span style="color: #008000">cd </span>stack-template-demo
+</pre></div>
+
 
 <h3 id="stack-downloads-ghc-for-you:c37cfe20acfff0cff8579f026185f721">Stack downloads GHC for you</h3>
 
 <p>Run</p>
 
-<pre><code class="language-console">$ stack setup
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack setup
+</pre></div>
+
 
 <p>If you do not already have an appropriate version of GHC installed,
 Stack will <em>automatically</em> download and install it for you, into an
@@ -242,15 +246,16 @@ global installation requiring special privileges.</p>
 
 <p>The output, if Stack needs to download anything:</p>
 
-<pre><code class="language-console">Preparing to install GHC to an isolated location.
-This will not interfere with any system-level installation.
-Downloaded ghc-7.10.2.
-Installed GHC.
-stack will use a locally installed GHC
-For more information on paths, see 'stack path' and 'stack exec env'
-To use this GHC and packages outside of a project, consider using:
-stack ghc, stack ghci, stack runghc, or stack exec
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">Preparing to install GHC to an isolated location.</span>
+<span style="color: #888888">This will not interfere with any system-level installation.</span>
+<span style="color: #888888">Downloaded ghc-7.10.2.</span>
+<span style="color: #888888">Installed GHC.</span>
+<span style="color: #888888">stack will use a locally installed GHC</span>
+<span style="color: #888888">For more information on paths, see &#39;stack path&#39; and &#39;stack exec env&#39;</span>
+<span style="color: #888888">To use this GHC and packages outside of a project, consider using:</span>
+<span style="color: #888888">stack ghc, stack ghci, stack runghc, or stack exec</span>
+</pre></div>
+
 
 <h3 id="launching-the-ghci-repl:c37cfe20acfff0cff8579f026185f721">Launching the GHCi REPL</h3>
 
@@ -261,8 +266,9 @@ simple with Stack.</p>
 
 <p>Run</p>
 
-<pre><code class="language-console">$ stack ghci
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack ghci
+</pre></div>
+
 
 <p>Note that <strong>only the first time</strong> you do this (or other commands that
 require getting library dependencies), Stack may take a while to
@@ -277,49 +283,54 @@ not.</p>
 
 <p>Stack launches a GHCi REPL with our modules preloaded:</p>
 
-<pre><code class="language-console">Ok, modules loaded: Lib, Main.
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">Ok, modules loaded: Lib, Main.</span>
+</pre></div>
+
 
 <p>In <code>src/Lib.hs</code> of the sample project, we have a silly module
 illustrating some <a href="https://www.haskell.org/haddock/">Haddock</a>
 documentation comments:</p>
 
-<pre><code class="language-haskell">-- | A library to do stuff.
-module Lib
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | A library to do stuff.</span>
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">Lib</span>
     (
-      ourAdd
-    ) where
+      <span style="color: #0000FF">ourAdd</span>
+    ) <span style="color: #008000; font-weight: bold">where</span>
 
--- | Add two 'Int' values.
-ourAdd :: Int  -- ^ left
-       -&gt; Int  -- ^ right
-       -&gt; Int  -- ^ sum
-ourAdd x y = x + y
-</code></pre>
+<span style="color: #408080; font-style: italic">-- | Add two &#39;Int&#39; values.</span>
+<span style="color: #0000FF">ourAdd</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>  <span style="color: #408080; font-style: italic">-- ^ left</span>
+       <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Int</span>  <span style="color: #408080; font-style: italic">-- ^ right</span>
+       <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Int</span>  <span style="color: #408080; font-style: italic">-- ^ sum</span>
+<span style="color: #0000FF">ourAdd</span> x y <span style="color: #AA22FF; font-weight: bold">=</span> x <span style="color: #666666">+</span> y
+</pre></div>
+
 
 <p>We can access the <code>Lib</code> module from the REPL:</p>
 
-<pre><code class="language-console">*Main&gt; ourAdd 2 3
-5
-*Main&gt; Lib.ourAdd 4 5
-9
-</code></pre>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">*Main&gt; ourAdd 2 3</span>
+<span style="color: #888888">5</span>
+<span style="color: #888888">*Main&gt; Lib.ourAdd 4 5</span>
+<span style="color: #888888">9</span>
+</pre></div>
+
 
 <p>We can also access <code>Main</code>, which is defined in <code>app/Main.hs</code>:</p>
 
-<pre><code class="language-haskell">module Main where
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">Main</span> <span style="color: #008000; font-weight: bold">where</span>
 
-import Lib (ourAdd)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Lib</span> (<span style="color: #0000FF">ourAdd</span>)
 
-import Text.Printf (printf)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Text.Printf</span> (<span style="color: #0000FF">printf</span>)
 
-main :: IO ()
-main = printf &quot;2 + 3 = %d\n&quot; (ourAdd 2 3)
-</code></pre>
+<span style="color: #0000FF">main</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
+<span style="color: #0000FF">main</span> <span style="color: #AA22FF; font-weight: bold">=</span> printf <span style="color: #BA2121">&quot;2 + 3 = %d</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span> (ourAdd <span style="color: #666666">2</span> <span style="color: #666666">3</span>)
+</pre></div>
+</p>
 
-<pre><code class="language-console">*Main&gt; main
-2 + 3 = 5
-</code></pre>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">*Main&gt; main</span>
+<span style="color: #888888">2 + 3 = 5</span>
+</pre></div>
+</p>
 
 <h3 id="building-and-running-the-project:c37cfe20acfff0cff8579f026185f721">Building and running the project</h3>
 
@@ -328,47 +339,52 @@ the REPL. In practice in real projects, I start by compiling a project
 to get the dependencies compiled, before I use GHCi, but the above
 does it for you too:</p>
 
-<pre><code class="language-console">$ stack build
-</code></pre>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack build
+</pre></div>
+</p>
 
 <p>Because I defined a native-compiled binary executable named
 <code>stack-template-demo</code> in our Cabal file <code>stack-template-demo.cabal</code>,
 we can run the executable:</p>
 
-<pre><code class="language-console">$ stack exec stack-template-demo
-2 + 3 = 5
-</code></pre>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack <span style="color: #008000">exec </span>stack-template-demo
+<span style="color: #888888">2 + 3 = 5</span>
+</pre></div>
+</p>
 
 <p>I supplied unit tests for <code>Lib</code> in <code>test/LibSpec.hs</code> that can be run:</p>
 
-<pre><code class="language-console">$ stack test
-Lib
-  Lib
-    works
-    ourAdd is commutative
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack <span style="color: #008000">test</span>
+<span style="color: #888888">Lib</span>
+<span style="color: #888888">  Lib</span>
+<span style="color: #888888">    works</span>
+<span style="color: #888888">    ourAdd is commutative</span>
 
-Finished in 0.0007 seconds
-2 examples, 0 failures
-</code></pre>
+<span style="color: #888888">Finished in 0.0007 seconds</span>
+<span style="color: #888888">2 examples, 0 failures</span>
+</pre></div>
+</p>
 
 <h3 id="installing-the-library-and-executable:c37cfe20acfff0cff8579f026185f721">Installing the library and executable</h3>
 
 <p>You can now install the library and executable for your own use later:</p>
 
-<pre><code class="language-console">$ stack install
-...
-...
-Copying from /Users/chen/stack-template-demo/.stack-work/install/x86_64-osx/lts-3.16/7.10.2/bin/stack-template-demo to /Users/chen/.local/bin/stack-template-demo
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack install
+<span style="color: #888888">...</span>
+<span style="color: #888888">...</span>
+<span style="color: #888888">Copying from /Users/chen/stack-template-demo/.stack-work/install/x86_64-osx/lts-3.16/7.10.2/bin/stack-template-demo to /Users/chen/.local/bin/stack-template-demo</span>
 
-Copied executables to /Users/chen/.local/bin:
-- stack-template-demo
-</code></pre>
+<span style="color: #888888">Copied executables to /Users/chen/.local/bin:</span>
+<span style="color: #888888">- stack-template-demo</span>
+</pre></div>
+</p>
 
 <p>For example (since <code>~/.local/bin</code> is in my <code>PATH</code>):</p>
 
-<pre><code class="language-console">$ stack-template-demo
-2 + 3 = 5
-</code></pre>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">$</span> stack-template-demo
+<span style="color: #888888">2 + 3 = 5</span>
+</pre></div>
+</p>
 
 <h3 id="your-own-stack-template-configuration:c37cfe20acfff0cff8579f026185f721">Your own Stack template configuration</h3>
 
@@ -380,14 +396,15 @@ configuration is
 a file in
 <code>~/.stack/config.yaml</code>. Mine has:</p>
 
-<pre><code class="language-yaml">templates:
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">templates:
   params:
-    author-email: &quot;franklinchen@franklinchen.com&quot;
-    author-name: &quot;Franklin Chen&quot;
+    author-email: <span style="color: #BA2121">&quot;franklinchen@franklinchen.com&quot;</span>
+    author-name: <span style="color: #BA2121">&quot;Franklin</span><span style="color: #19177C"> </span><span style="color: #BA2121">Chen&quot;</span>
     category: test
-    copyright: &quot;2015&quot;
-    github-username: &quot;FranklinChen&quot;
-</code></pre>
+    copyright: <span style="color: #BA2121">&quot;2015&quot;</span>
+    github-username: <span style="color: #BA2121">&quot;FranklinChen&quot;</span>
+</pre></div>
+</p>
 
 <h3 id="other-bells-and-whistles:c37cfe20acfff0cff8579f026185f721">Other bells and whistles</h3>
 
@@ -433,8 +450,7 @@ the sample code for this article series.</p>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
   </div>
 </div>
-<script src="http://ConscientiousProgrammer.com/js/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+
 
 <script>
   var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];

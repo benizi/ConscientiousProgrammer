@@ -145,15 +145,17 @@ it from my sample project template described on
 so you can now generate a starter project with HSpec all ready to go
 by running&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack new my-new-project franklinchen
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack new my-new-project franklinchen
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;There is a &lt;code&gt;test/&lt;/code&gt; directory with a single file in it, the
 auto-discovery file named &lt;code&gt;test/Spec.hs&lt;/code&gt;, which has a single line of
 code, actually a comment:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;{-# OPTIONS_GHC -F -pgmF hspec-discover #-}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# OPTIONS_GHC -F -pgmF hspec-discover #-}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;This works because when you have HSpec installed, a program
 &lt;code&gt;hspec-discover&lt;/code&gt; also gets installed, and it&amp;rsquo;s called by GHC to do the
@@ -181,32 +183,33 @@ embedding a domain-specific language (DSL), I retroactively wrote the
 most obvious code that shows how HSpec works without introducing
 non-HSpec considerations. (The code is on branch &lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage/tree/boilerplated-hspec&#34;&gt;&lt;code&gt;boilerplated-hspec&lt;/code&gt;&lt;/a&gt;.)&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;module PCREHeavyExampleSpec where
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;PCREHeavyExampleSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
 
-import PCREHeavyExample (mediaRegex)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;PCREHeavyExample&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt;)
 
-import Test.Hspec (Spec, describe, it, shouldSatisfy)
-import Text.Regex.PCRE.Heavy ((=~))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldSatisfy&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Regex.PCRE.Heavy&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt;))
 
--- | Required for auto-discovery.
-spec :: Spec
-spec =
-  describe &amp;quot;pcre-heavy&amp;quot; $ do
-    describe &amp;quot;match&amp;quot; $ do
-      it &amp;quot;has audio&amp;quot; $ do
-        &amp;quot;@Media:\thas-audio,   audio&amp;quot; `shouldSatisfy` (=~ mediaRegex)
-      it &amp;quot;has video&amp;quot; $ do
-        &amp;quot;@Media:\thas-video,video&amp;quot; `shouldSatisfy` (=~ mediaRegex)
-      it &amp;quot;has audio but missing&amp;quot; $ do
-        &amp;quot;@Media:\thas-audio-but-missing, audio, missing&amp;quot; `shouldSatisfy` (=~ mediaRegex)
-      it &amp;quot;has video but unlinked&amp;quot; $ do
-        &amp;quot;@Media:\thas-video-but-unlinked  , video,      unlinked&amp;quot; `shouldSatisfy` (=~ mediaRegex)
-    describe &amp;quot;no match&amp;quot; $ do
-      it &amp;quot;no audio or video&amp;quot; $ do
-        &amp;quot;@Media:\tno-audio-or-video&amp;quot; `shouldSatisfy` (not . (=~ mediaRegex))
-      it &amp;quot;missing media field&amp;quot; $ do
-        &amp;quot;@Media:\tmissing-media-field, unlinked&amp;quot; `shouldSatisfy` (not . (=~ mediaRegex))
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Required for auto-discovery.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;pcre-heavy&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;match&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;has audio&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;has-audio,   audio&amp;quot;&lt;/span&gt; `shouldSatisfy` (&lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex)
+      it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;has video&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;has-video,video&amp;quot;&lt;/span&gt; `shouldSatisfy` (&lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex)
+      it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;has audio but missing&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;has-audio-but-missing, audio, missing&amp;quot;&lt;/span&gt; `shouldSatisfy` (&lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex)
+      it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;has video but unlinked&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;has-video-but-unlinked  , video,      unlinked&amp;quot;&lt;/span&gt; `shouldSatisfy` (&lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex)
+    describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;no match&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;no audio or video&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;no-audio-or-video&amp;quot;&lt;/span&gt; `shouldSatisfy` (not &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; (&lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex))
+      it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;missing media field&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;missing-media-field, unlinked&amp;quot;&lt;/span&gt; `shouldSatisfy` (not &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; (&lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex))
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;The main thing to understand is that for simplest use (without
 fixtures, effects, etc.), a basic description-labeled spec item is
@@ -242,21 +245,24 @@ Haskell.&lt;/p&gt;
 &lt;a href=&#34;https://wiki.haskell.org/Section_of_an_infix_operator&#34;&gt;operator sectioning syntax&lt;/a&gt;
 above, but I could have written&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;text `shouldSatisfy` (\inputString -&amp;gt; inputString =~ mediaRegex)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;text&lt;/span&gt; `shouldSatisfy` (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;inputString &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; inputString &lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex)
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;Furthermore, it is also convenient to use
 &lt;a href=&#34;https://wiki.haskell.org/Infix_operator&#34;&gt;infix syntax for named functions&lt;/a&gt;
 when sensible, but it is not required. I could have written in
 bare-bones style&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;shouldSatisfy text (\inputString -&amp;gt; inputString =~ mediaRegex)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;shouldSatisfy&lt;/span&gt; text (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;inputString &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; inputString &lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex)
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;And the cute &lt;code&gt;(not . (=~ mediaRegex))&lt;/code&gt; can be written as&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;\inputString -&amp;gt; not (inputString =~ mediaRegex)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;inputString &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; not (inputString &lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex)
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;I mention these facts about syntax because I have often been told by
 people looking into Haskell that it&amp;rsquo;s confusing because of all the
@@ -290,20 +296,21 @@ DSLs such HSpec, rather than parenthesize everything. I&amp;rsquo;m curious what
 you think. Would you prefer to read the following, which is what the
 &lt;code&gt;$&lt;/code&gt; operator avoids requiring?&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;spec :: Spec
-spec =
-  describe &amp;quot;pcre-heavy&amp;quot; (do
-    describe &amp;quot;match&amp;quot; (do
-      it &amp;quot;has audio&amp;quot; (do
-        &amp;quot;@Media:\thas-audio,   audio&amp;quot; `shouldSatisfy` (=~ mediaRegex)
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;pcre-heavy&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;match&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;has audio&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;has-audio,   audio&amp;quot;&lt;/span&gt; `shouldSatisfy` (&lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex)
         )
-      -- ...
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ...&lt;/span&gt;
       )
-    describe &amp;quot;no match&amp;quot; (do
-      -- ...
+    describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;no match&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ...&lt;/span&gt;
       )
     )
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;I personally think that languages with a &lt;code&gt;begin&lt;/code&gt;/&lt;code&gt;end&lt;/code&gt; kind of block
 (such as Pascal, Ruby) instead of braces or parentheses have an
@@ -332,52 +339,54 @@ write that something. In a typed setting, this means we get a
 compile-time error when first trying to run the test, which we fix by
 creating &lt;code&gt;PCREHeavyExample&lt;/code&gt; as a new module with a stub:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;module PCREHeavyExample (mediaRegex) where
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;PCREHeavyExample&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt;) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
 
-mediaRegex = undefined
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; undefined
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;Of course, every test fails (in the terminal, the failures are
 highlighted in red):&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack test
-PCREHeavyExample
-  pcre-heavy
-    match
-      has audio FAILED [1]
-      has video FAILED [2]
-      has audio but missing FAILED [3]
-      has video but unlinked FAILED [4]
-    no match
-      no audio or video FAILED [5]
-      missing media field FAILED [6]
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack &lt;span style=&#34;color: #008000&#34;&gt;test&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;PCREHeavyExample&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  pcre-heavy&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    match&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      has audio FAILED [1]&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      has video FAILED [2]&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      has audio but missing FAILED [3]&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      has video but unlinked FAILED [4]&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    no match&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      no audio or video FAILED [5]&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      missing media field FAILED [6]&lt;/span&gt;
 
-Failures:
+&lt;span style=&#34;color: #888888&#34;&gt;Failures:&lt;/span&gt;
 
-  test/PCREHeavyExampleSpec.hs:13:
-  1) PCREHeavyExample.pcre-heavy.match has audio
-       uncaught exception: ErrorCall (Prelude.undefined)
+&lt;span style=&#34;color: #888888&#34;&gt;  test/PCREHeavyExampleSpec.hs:13:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  1) PCREHeavyExample.pcre-heavy.match has audio&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       uncaught exception: ErrorCall (Prelude.undefined)&lt;/span&gt;
 
-  test/PCREHeavyExampleSpec.hs:15:
-  2) PCREHeavyExample.pcre-heavy.match has video
-       uncaught exception: ErrorCall (Prelude.undefined)
+&lt;span style=&#34;color: #888888&#34;&gt;  test/PCREHeavyExampleSpec.hs:15:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  2) PCREHeavyExample.pcre-heavy.match has video&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       uncaught exception: ErrorCall (Prelude.undefined)&lt;/span&gt;
 
-  test/PCREHeavyExampleSpec.hs:17:
-  3) PCREHeavyExample.pcre-heavy.match has audio but missing
-       uncaught exception: ErrorCall (Prelude.undefined)
+&lt;span style=&#34;color: #888888&#34;&gt;  test/PCREHeavyExampleSpec.hs:17:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  3) PCREHeavyExample.pcre-heavy.match has audio but missing&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       uncaught exception: ErrorCall (Prelude.undefined)&lt;/span&gt;
 
-  test/PCREHeavyExampleSpec.hs:19:
-  4) PCREHeavyExample.pcre-heavy.match has video but unlinked
-       uncaught exception: ErrorCall (Prelude.undefined)
+&lt;span style=&#34;color: #888888&#34;&gt;  test/PCREHeavyExampleSpec.hs:19:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  4) PCREHeavyExample.pcre-heavy.match has video but unlinked&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       uncaught exception: ErrorCall (Prelude.undefined)&lt;/span&gt;
 
-  test/PCREHeavyExampleSpec.hs:22:
-  5) PCREHeavyExample.pcre-heavy, no match, no audio or video
-       uncaught exception: ErrorCall (Prelude.undefined)
+&lt;span style=&#34;color: #888888&#34;&gt;  test/PCREHeavyExampleSpec.hs:22:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  5) PCREHeavyExample.pcre-heavy, no match, no audio or video&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       uncaught exception: ErrorCall (Prelude.undefined)&lt;/span&gt;
 
-  test/PCREHeavyExampleSpec.hs:24:
-  6) PCREHeavyExample.pcre-heavy, no match, missing media field
-       uncaught exception: ErrorCall (Prelude.undefined)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  test/PCREHeavyExampleSpec.hs:24:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  6) PCREHeavyExample.pcre-heavy, no match, missing media field&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       uncaught exception: ErrorCall (Prelude.undefined)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h4 id=&#34;a-tangent-on-ghc-s-error-reporting:740606311d3fcf0ba2f14607a358bd73&#34;&gt;A tangent on GHC&amp;rsquo;s error reporting&lt;/h4&gt;
 
@@ -396,20 +405,21 @@ errors without having to jump through hoops.&lt;/p&gt;
 writing the regex for &lt;code&gt;mediaRegex&lt;/code&gt;. Then the tests pass (and in the
 terminal they display in green):&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;PCREHeavyExample
-  pcre-heavy
-    match
-      has audio
-      has video
-      has audio but missing
-      has video but unlinked
-    no match
-      no audio or video
-      missing media field
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;PCREHeavyExample&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  pcre-heavy&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    match&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      has audio&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      has video&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      has audio but missing&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      has video but unlinked&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    no match&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      no audio or video&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      missing media field&lt;/span&gt;
 
-Finished in 0.0010 seconds
-6 examples, 0 failures
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Finished in 0.0010 seconds&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;6 examples, 0 failures&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h2 id=&#34;tests-are-code-too:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Tests are code too!&lt;/h2&gt;
 
@@ -430,44 +440,46 @@ composite &lt;code&gt;Spec&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Here is a table that pairs a test description with each example input
 string:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;matchExamples :: [(String, String)]
-matchExamples =
-  [ ( &amp;quot;has audio&amp;quot;
-    , &amp;quot;@Media:\thas-audio,   audio&amp;quot;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;matchExamples&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [(&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;)]
+&lt;span style=&#34;color: #0000FF&#34;&gt;matchExamples&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  [ ( &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;has audio&amp;quot;&lt;/span&gt;
+    , &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;has-audio,   audio&amp;quot;&lt;/span&gt;
     )
-  , ( &amp;quot;has video&amp;quot;
-    , &amp;quot;@Media:\thas-video,video&amp;quot;
+  , ( &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;has video&amp;quot;&lt;/span&gt;
+    , &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;has-video,video&amp;quot;&lt;/span&gt;
     )
-  , ( &amp;quot;has audio but missing&amp;quot;
-    , &amp;quot;@Media:\thas-audio-but-missing, audio, missing&amp;quot;
+  , ( &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;has audio but missing&amp;quot;&lt;/span&gt;
+    , &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;has-audio-but-missing, audio, missing&amp;quot;&lt;/span&gt;
     )
-  , ( &amp;quot;has video but unlinked&amp;quot;
-    , &amp;quot;@Media:\thas-video-but-unlinked  , video,      unlinked&amp;quot;
+  , ( &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;has video but unlinked&amp;quot;&lt;/span&gt;
+    , &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;@Media:&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;has-video-but-unlinked  , video,      unlinked&amp;quot;&lt;/span&gt;
     )
   ]
-
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;Here is a function that generates a spec item given a description/input pair.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;matchSpec :: (String, String) -&amp;gt; Spec
-matchSpec (description, text) =
-  it description $ do
-    text `shouldSatisfy` (=~ mediaRegex)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;matchSpec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;matchSpec&lt;/span&gt; (description, text) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  it description &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    text `shouldSatisfy` (&lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;Similarly for the non-matching examples.&lt;/p&gt;
 
 &lt;p&gt;And the refactored &lt;code&gt;Spec&lt;/code&gt;:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;spec :: Spec
-spec =
-  describe &amp;quot;pcre-heavy&amp;quot; $ do
-    describe &amp;quot;match&amp;quot; $ do
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;pcre-heavy&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;match&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
       mapM_ matchSpec matchExamples
-    describe &amp;quot;no match&amp;quot; $ do
+    describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;no match&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
       mapM_ nonMatchSpec nonMatchExamples
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;refactoring-part-2:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Refactoring, part 2&lt;/h3&gt;
 
@@ -500,31 +512,32 @@ polymorphic&lt;/em&gt; in the predicate type, replacing &lt;code&gt;matchSpec&lt
 
 &lt;p&gt;The final result:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;spec :: Spec
-spec =
-  describePredicate &amp;quot;pcre-heavy&amp;quot;
-    (&amp;quot;match&amp;quot;, (=~ mediaRegex))
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describePredicate &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;pcre-heavy&amp;quot;&lt;/span&gt;
+    (&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;match&amp;quot;&lt;/span&gt;, (&lt;span style=&#34;color: #666666&#34;&gt;=~&lt;/span&gt; mediaRegex))
     (matchExamples, nonMatchExamples)
 
-describePredicate :: Show a =&amp;gt;
-     String                           -- ^ description
-  -&amp;gt; (String, a -&amp;gt; Bool)              -- ^ (base description, predicate)
-  -&amp;gt; ( [(String, a)], [(String, a)] ) -- ^ positive and negative examples
-  -&amp;gt; Spec
-describePredicate description
+&lt;span style=&#34;color: #0000FF&#34;&gt;describePredicate&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt;
+     &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;                           &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ description&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;, a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;)              &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ (base description, predicate)&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; ( [(&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;, a)], [(&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;, a)] ) &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ positive and negative examples&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;describePredicate&lt;/span&gt; description
                   (baseDescription, predicate)
-                  (positiveExamples, negativeExamples) =
-  describe description $ do
-    describe baseDescription $ do
+                  (positiveExamples, negativeExamples) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe description &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    describe baseDescription &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
       mapM_ (predSpec predicate) positiveExamples
-    describe (&amp;quot;not &amp;quot; ++ baseDescription) $ do
-      mapM_ (predSpec (not . predicate)) negativeExamples
+    describe (&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;not &amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; baseDescription) &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      mapM_ (predSpec (not &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; predicate)) negativeExamples
 
-predSpec :: Show a =&amp;gt; (a -&amp;gt; Bool) -&amp;gt; (String, a) -&amp;gt; Spec
-predSpec predicate (description, a) =
-  it description $ do
+&lt;span style=&#34;color: #0000FF&#34;&gt;predSpec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;, a) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;predSpec&lt;/span&gt; predicate (description, a) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  it description &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
     a `shouldSatisfy` predicate
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;Note that &lt;code&gt;describePredicate&lt;/code&gt; and &lt;code&gt;predSpec&lt;/code&gt; can then be pulled out
 into a test utilities module for use by other specs using the same
@@ -718,17 +731,19 @@ e.g. &lt;a href=&#34;http://talkbank.org/data-orig/Meeting/SCOTUS/2008/08-205.ch
 
 &lt;p&gt;Examples that should match:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;@Media:	has-audio,   audio
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;@Media:	has-audio,   audio
 @Media:	has-video,video
 @Media:	has-audio-but-missing, audio, missing
 @Media:	has-video-but-unlinked  , video,      unlinked
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;Examples that should fail to match:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;@Media:	no-audio-or-video
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;@Media:	no-audio-or-video
 @Media:	missing-media-field, unlinked
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;h3 id=&#34;creating-a-regex:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Creating a regex&lt;/h3&gt;
 
@@ -739,9 +754,10 @@ Template Haskell
 that builds a PCRE-compiled
 &lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy-1.0.0.1/docs/Text-Regex-PCRE-Heavy.html#t:Regex&#34;&gt;&lt;code&gt;Regex&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;mediaRegex :: Regex
-mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked))?|]
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Regex&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [re&lt;span style=&#34;color: #666666&#34;&gt;|^@&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Media:\&lt;/span&gt;t([&lt;span style=&#34;color: #666666&#34;&gt;^&lt;/span&gt; ,]&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt;)&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(audio&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;video)(&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;?:&lt;/span&gt;missing&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;unlinked))&lt;span style=&#34;color: #666666&#34;&gt;?|&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;h2 id=&#34;regex-string-validated-at-haskell-compile-time:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Regex string validated at Haskell compile-time&lt;/h2&gt;
 
@@ -751,19 +767,21 @@ compile-time error rather than a runtime error.&lt;/p&gt;
 
 &lt;p&gt;Example of a compile-time error:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;-- This Haskell code fails to compile!
-mediaRegex :: Regex
-mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked)?|]
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- This Haskell code fails to compile!&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Regex&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [re&lt;span style=&#34;color: #666666&#34;&gt;|^@&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Media:\&lt;/span&gt;t([&lt;span style=&#34;color: #666666&#34;&gt;^&lt;/span&gt; ,]&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt;)&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(audio&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;video)(&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;?:&lt;/span&gt;missing&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;unlinked)&lt;span style=&#34;color: #666666&#34;&gt;?|&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;Loading this in GHCi or compiling with GHC results in&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;    Exception when trying to run compile-time code:
-      Text.Regex.PCRE.Light: Error in regex: missing )
-    Code: template-haskell-2.10.0.0:Language.Haskell.TH.Quote.quoteExp
-            re
-            &amp;quot;^@Media:\\t([^ ,]+)\\ *,\\ *(audio|video)(\\ *,\\ *(?:missing|unlinked)?&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;    Exception when trying to run compile-time code:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      Text.Regex.PCRE.Light: Error in regex: missing )&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    Code: template-haskell-2.10.0.0:Language.Haskell.TH.Quote.quoteExp&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;            re&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;            &amp;quot;^@Media:\\t([^ ,]+)\\ *,\\ *(audio|video)(\\ *,\\ *(?:missing|unlinked)?&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;h2 id=&#34;using-the-regex:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Using the regex&lt;/h2&gt;
 
@@ -773,9 +791,10 @@ to extract the matches (if any) against our regex on a string.&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;scan&lt;/code&gt; returns a lazy list of all possible matches:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;-- Simplified type signature for our purposes.
-scan :: Regex -&amp;gt; String -&amp;gt; [(String, [String])]
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Simplified type signature for our purposes.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;scan&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Regex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [(&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;, [&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;])]
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;Each match is a pair &lt;code&gt;(String, [String])&lt;/code&gt;, where the first component
 is the whole string that matched, and the second is an ordered list of
@@ -783,23 +802,26 @@ parenthesized groupings in the regex. In our regex, we had three
 parenthesized groupings, so a match could result in a three-element
 grouping list:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; scan mediaRegex &amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;
-[(&amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;,[&amp;quot;foo&amp;quot;,&amp;quot;audio&amp;quot;,&amp;quot;, unlinked&amp;quot;])]
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;*Main&amp;gt; scan mediaRegex &amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;[(&amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;,[&amp;quot;foo&amp;quot;,&amp;quot;audio&amp;quot;,&amp;quot;, unlinked&amp;quot;])]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;Since we only want
 the first match (if any), we can just compose it with
 &lt;a href=&#34;https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Maybe.html#v:listToMaybe&#34;&gt;&lt;code&gt;listToMaybe&lt;/code&gt; from &lt;code&gt;Data.Maybe&lt;/code&gt;&lt;/a&gt;,
 which has type&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;listToMaybe :: [a] -&amp;gt; Maybe a
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;listToMaybe&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; a
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;so &lt;code&gt;listToMaybe . scan mediaRegex&lt;/code&gt; has type &lt;code&gt;String -&amp;gt; Maybe (String, [String])&lt;/code&gt;.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; (listToMaybe . scan mediaRegex) &amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;
-Just (&amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;,[&amp;quot;foo&amp;quot;,&amp;quot;audio&amp;quot;,&amp;quot;, unlinked&amp;quot;])
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;*Main&amp;gt; (listToMaybe . scan mediaRegex) &amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Just (&amp;quot;@Media:\tfoo, audio, unlinked&amp;quot;,[&amp;quot;foo&amp;quot;,&amp;quot;audio&amp;quot;,&amp;quot;, unlinked&amp;quot;])&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;h2 id=&#34;extracting-useful-information:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Extracting useful information&lt;/h2&gt;
 
@@ -813,18 +835,19 @@ context-dependent list lengths.&lt;/p&gt;
 unlinked. We define a data type and use pattern matching to get out of
 the untyped world into the typed world of our data model.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;data Info =
-    Skip
-  | Audio FilePath
-  | Video FilePath
-    deriving (Eq, Show)
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Info&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+    &lt;span style=&#34;color: #B00040&#34;&gt;Skip&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Audio&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;FilePath&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Video&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;FilePath&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;deriving&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt;)
 
--- | Extract information about a media file if it is present.
-extractIfPresent :: (String, [String]) -&amp;gt; Info
-extractIfPresent (_, [name, &amp;quot;audio&amp;quot;]) = Audio name
-extractIfPresent (_, [name, &amp;quot;video&amp;quot;]) = Video name
-extractIfPresent (_, _) = Skip
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Extract information about a media file if it is present.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractIfPresent&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;, [&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Info&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractIfPresent&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;, [name, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;audio&amp;quot;&lt;/span&gt;]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Audio&lt;/span&gt; name
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractIfPresent&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;, [name, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;video&amp;quot;&lt;/span&gt;]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Video&lt;/span&gt; name
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractIfPresent&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Skip&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;h2 id=&#34;presentation-as-a-report:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Presentation as a report&lt;/h2&gt;
 
@@ -834,25 +857,27 @@ command-line program.&lt;/p&gt;
 
 &lt;p&gt;We have all the information needed to print out a report for each line.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;-- | Output a report.
-reportOnInfo :: Maybe Info -&amp;gt; IO ()
-reportOnInfo Nothing = putStrLn &amp;quot;no match&amp;quot;
-reportOnInfo (Just Skip) = putStrLn &amp;quot;match, but missing or unlinked&amp;quot;
-reportOnInfo (Just (Audio path)) = printf &amp;quot;audio at %s\n&amp;quot; path
-reportOnInfo (Just (Video path)) = printf &amp;quot;video at %s\n&amp;quot; path
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Output a report.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Info&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Nothing&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;no match&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Skip&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;match, but missing or unlinked&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Audio&lt;/span&gt; path)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;audio at %s&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; path
+&lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Video&lt;/span&gt; path)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;video at %s&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; path
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;And the final driver, piping everything through from standard input:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;main :: IO ()
-main = do
-  s &amp;lt;- getContents
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  s &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getContents
   mapM_ (reportOnInfo
-        . fmap extractIfPresent
-        . listToMaybe
-        . scan mediaRegex
+        &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; fmap extractIfPresent
+        &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; listToMaybe
+        &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; scan mediaRegex
        ) (lines s)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h2 id=&#34;using-stack-to-ship-standalone-scripts:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Using Stack to ship standalone scripts&lt;/h2&gt;
 
@@ -867,9 +892,10 @@ can rely on the recipient simply installing Stack.&lt;/p&gt;
 &lt;p&gt;Here&amp;rsquo;s how we can turn our program into such a standalone script: just
 add the following two lines and make the file executable:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;#!/usr/bin/env stack
--- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #666666&#34;&gt;#!/&lt;/span&gt;usr&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;env stack
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;Stack will read the embedded command in order to install GHC, if
  needed, and first download and install the packages listed (here
@@ -882,8 +908,9 @@ add the following two lines and make the file executable:&lt;/p&gt;
 full-scale Cabal projects, you can treat Haskell as a &amp;ldquo;scripting
 language&amp;rdquo; with full access to the libraries of Hackage!&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ app/PCREHeavyExampleMain.hs &amp;lt; input.txt &amp;gt; output.txt
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; app/PCREHeavyExampleMain.hs &amp;lt; input.txt &amp;gt; output.txt
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;a-warning:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;A warning&lt;/h3&gt;
 
@@ -899,50 +926,51 @@ one to the other seamlessly.&lt;/p&gt;
 
 &lt;h3 id=&#34;here-s-our-complete-example-standalone-program:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Here&amp;rsquo;s our complete example standalone program&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;#!/usr/bin/env stack
--- stack --install-ghc runghc --package pcre-heavy
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #666666&#34;&gt;#!/&lt;/span&gt;usr&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;env stack
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy&lt;/span&gt;
 
-{-# LANGUAGE QuasiQuotes #-}
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE QuasiQuotes #-}&lt;/span&gt;
 
-module Main where
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Main&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
 
-import Text.Regex.PCRE.Heavy (Regex, re, scan)
-import Data.Maybe (listToMaybe)
-import Text.Printf (printf)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Regex.PCRE.Heavy&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Regex&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;re&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;scan&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Maybe&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;listToMaybe&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Printf&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;printf&lt;/span&gt;)
 
--- | Match a media name, audio/video, and optional missing/unlinked.
-mediaRegex :: Regex
-mediaRegex = [re|^@Media:\t([^ ,]+)\ *,\ *(audio|video)(\ *,\ *(?:missing|unlinked))?|]
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Match a media name, audio/video, and optional missing/unlinked.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Regex&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [re&lt;span style=&#34;color: #666666&#34;&gt;|^@&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Media:\&lt;/span&gt;t([&lt;span style=&#34;color: #666666&#34;&gt;^&lt;/span&gt; ,]&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt;)&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(audio&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;video)(&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;?:&lt;/span&gt;missing&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;unlinked))&lt;span style=&#34;color: #666666&#34;&gt;?|&lt;/span&gt;]
 
-data Info =
-    Skip
-  | Audio FilePath
-  | Video FilePath
-    deriving (Eq, Show)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Info&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+    &lt;span style=&#34;color: #B00040&#34;&gt;Skip&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Audio&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;FilePath&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Video&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;FilePath&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;deriving&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt;)
 
--- | Extract information about a media file if it is present.
-extractIfPresent :: (String, [String]) -&amp;gt; Info
-extractIfPresent (_, [name, &amp;quot;audio&amp;quot;]) = Audio name
-extractIfPresent (_, [name, &amp;quot;video&amp;quot;]) = Video name
-extractIfPresent (_, _) = Skip
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Extract information about a media file if it is present.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractIfPresent&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;, [&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Info&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractIfPresent&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;, [name, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;audio&amp;quot;&lt;/span&gt;]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Audio&lt;/span&gt; name
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractIfPresent&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;, [name, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;video&amp;quot;&lt;/span&gt;]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Video&lt;/span&gt; name
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractIfPresent&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Skip&lt;/span&gt;
 
--- | Output a report.
-reportOnInfo :: Maybe Info -&amp;gt; IO ()
-reportOnInfo Nothing = putStrLn &amp;quot;no match&amp;quot;
-reportOnInfo (Just Skip) = putStrLn &amp;quot;match, but missing or unlinked&amp;quot;
-reportOnInfo (Just (Audio path)) = printf &amp;quot;audio at %s\n&amp;quot; path
-reportOnInfo (Just (Video path)) = printf &amp;quot;video at %s\n&amp;quot; path
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Output a report.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Info&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Nothing&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;no match&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Skip&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;match, but missing or unlinked&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Audio&lt;/span&gt; path)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;audio at %s&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; path
+&lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Video&lt;/span&gt; path)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;video at %s&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; path
 
--- | Driver, in traditional right-to-left syntax.
-main :: IO ()
-main = do
-  s &amp;lt;- getContents
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Driver, in traditional right-to-left syntax.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  s &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getContents
   mapM_ (reportOnInfo
-        . fmap extractIfPresent
-        . listToMaybe
-        . scan mediaRegex
+        &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; fmap extractIfPresent
+        &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; listToMaybe
+        &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; scan mediaRegex
        ) (lines s)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h2 id=&#34;some-additional-notes:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Some additional notes&lt;/h2&gt;
 
@@ -1123,8 +1151,9 @@ repo.&lt;/p&gt;
 
 &lt;p&gt;If you run&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack new stack-template-demo franklinchen
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack new stack-template-demo franklinchen
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;you will be prompted for information to create a new project called &lt;code&gt;stack-template-demo&lt;/code&gt;.&lt;/p&gt;
 
@@ -1135,8 +1164,9 @@ repo.&lt;/p&gt;
 example, before I submitted my template to &lt;code&gt;stack-templates&lt;/code&gt;, I used
 to run&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack new stack-template-demo /path/on/my/computer/to/franklinchen.hsfiles
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack new stack-template-demo /path/on/my/computer/to/franklinchen.hsfiles
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;where &lt;code&gt;franklinchen.hsfiles&lt;/code&gt; is my template (read below on creating
 your own template).&lt;/p&gt;
@@ -1150,15 +1180,17 @@ right now.)&lt;/p&gt;
 
 &lt;p&gt;Enter the project directory:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ cd stack-template-demo
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;cd &lt;/span&gt;stack-template-demo
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;h3 id=&#34;stack-downloads-ghc-for-you:c37cfe20acfff0cff8579f026185f721&#34;&gt;Stack downloads GHC for you&lt;/h3&gt;
 
 &lt;p&gt;Run&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack setup
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack setup
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;If you do not already have an appropriate version of GHC installed,
 Stack will &lt;em&gt;automatically&lt;/em&gt; download and install it for you, into an
@@ -1175,15 +1207,16 @@ global installation requiring special privileges.&lt;/p&gt;
 
 &lt;p&gt;The output, if Stack needs to download anything:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;Preparing to install GHC to an isolated location.
-This will not interfere with any system-level installation.
-Downloaded ghc-7.10.2.
-Installed GHC.
-stack will use a locally installed GHC
-For more information on paths, see &#39;stack path&#39; and &#39;stack exec env&#39;
-To use this GHC and packages outside of a project, consider using:
-stack ghc, stack ghci, stack runghc, or stack exec
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;Preparing to install GHC to an isolated location.&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;This will not interfere with any system-level installation.&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Downloaded ghc-7.10.2.&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Installed GHC.&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;stack will use a locally installed GHC&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;For more information on paths, see &amp;#39;stack path&amp;#39; and &amp;#39;stack exec env&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;To use this GHC and packages outside of a project, consider using:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;stack ghc, stack ghci, stack runghc, or stack exec&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;h3 id=&#34;launching-the-ghci-repl:c37cfe20acfff0cff8579f026185f721&#34;&gt;Launching the GHCi REPL&lt;/h3&gt;
 
@@ -1194,8 +1227,9 @@ simple with Stack.&lt;/p&gt;
 
 &lt;p&gt;Run&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack ghci
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack ghci
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;Note that &lt;strong&gt;only the first time&lt;/strong&gt; you do this (or other commands that
 require getting library dependencies), Stack may take a while to
@@ -1210,49 +1244,54 @@ not.&lt;/p&gt;
 
 &lt;p&gt;Stack launches a GHCi REPL with our modules preloaded:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;Ok, modules loaded: Lib, Main.
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;Ok, modules loaded: Lib, Main.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;In &lt;code&gt;src/Lib.hs&lt;/code&gt; of the sample project, we have a silly module
 illustrating some &lt;a href=&#34;https://www.haskell.org/haddock/&#34;&gt;Haddock&lt;/a&gt;
 documentation comments:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;-- | A library to do stuff.
-module Lib
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | A library to do stuff.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Lib&lt;/span&gt;
     (
-      ourAdd
-    ) where
+      &lt;span style=&#34;color: #0000FF&#34;&gt;ourAdd&lt;/span&gt;
+    ) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
 
--- | Add two &#39;Int&#39; values.
-ourAdd :: Int  -- ^ left
-       -&amp;gt; Int  -- ^ right
-       -&amp;gt; Int  -- ^ sum
-ourAdd x y = x + y
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Add two &amp;#39;Int&amp;#39; values.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;ourAdd&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ left&lt;/span&gt;
+       &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ right&lt;/span&gt;
+       &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ sum&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;ourAdd&lt;/span&gt; x y &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; x &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; y
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;We can access the &lt;code&gt;Lib&lt;/code&gt; module from the REPL:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; ourAdd 2 3
-5
-*Main&amp;gt; Lib.ourAdd 4 5
-9
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;*Main&amp;gt; ourAdd 2 3&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;5&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;*Main&amp;gt; Lib.ourAdd 4 5&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;9&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
 
 &lt;p&gt;We can also access &lt;code&gt;Main&lt;/code&gt;, which is defined in &lt;code&gt;app/Main.hs&lt;/code&gt;:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;module Main where
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Main&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
 
-import Lib (ourAdd)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Lib&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;ourAdd&lt;/span&gt;)
 
-import Text.Printf (printf)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Printf&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;printf&lt;/span&gt;)
 
-main :: IO ()
-main = printf &amp;quot;2 + 3 = %d\n&amp;quot; (ourAdd 2 3)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;2 + 3 = %d&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; (ourAdd &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;*Main&amp;gt; main
-2 + 3 = 5
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;*Main&amp;gt; main&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;2 + 3 = 5&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;building-and-running-the-project:c37cfe20acfff0cff8579f026185f721&#34;&gt;Building and running the project&lt;/h3&gt;
 
@@ -1261,47 +1300,52 @@ the REPL. In practice in real projects, I start by compiling a project
 to get the dependencies compiled, before I use GHCi, but the above
 does it for you too:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack build
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack build
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;Because I defined a native-compiled binary executable named
 &lt;code&gt;stack-template-demo&lt;/code&gt; in our Cabal file &lt;code&gt;stack-template-demo.cabal&lt;/code&gt;,
 we can run the executable:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack exec stack-template-demo
-2 + 3 = 5
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack &lt;span style=&#34;color: #008000&#34;&gt;exec &lt;/span&gt;stack-template-demo
+&lt;span style=&#34;color: #888888&#34;&gt;2 + 3 = 5&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;I supplied unit tests for &lt;code&gt;Lib&lt;/code&gt; in &lt;code&gt;test/LibSpec.hs&lt;/code&gt; that can be run:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack test
-Lib
-  Lib
-    works
-    ourAdd is commutative
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack &lt;span style=&#34;color: #008000&#34;&gt;test&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Lib&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;  Lib&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    works&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    ourAdd is commutative&lt;/span&gt;
 
-Finished in 0.0007 seconds
-2 examples, 0 failures
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Finished in 0.0007 seconds&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;2 examples, 0 failures&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;installing-the-library-and-executable:c37cfe20acfff0cff8579f026185f721&#34;&gt;Installing the library and executable&lt;/h3&gt;
 
 &lt;p&gt;You can now install the library and executable for your own use later:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack install
-...
-...
-Copying from /Users/chen/stack-template-demo/.stack-work/install/x86_64-osx/lts-3.16/7.10.2/bin/stack-template-demo to /Users/chen/.local/bin/stack-template-demo
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack install
+&lt;span style=&#34;color: #888888&#34;&gt;...&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;...&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Copying from /Users/chen/stack-template-demo/.stack-work/install/x86_64-osx/lts-3.16/7.10.2/bin/stack-template-demo to /Users/chen/.local/bin/stack-template-demo&lt;/span&gt;
 
-Copied executables to /Users/chen/.local/bin:
-- stack-template-demo
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;Copied executables to /Users/chen/.local/bin:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;- stack-template-demo&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;For example (since &lt;code&gt;~/.local/bin&lt;/code&gt; is in my &lt;code&gt;PATH&lt;/code&gt;):&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack-template-demo
-2 + 3 = 5
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack-template-demo
+&lt;span style=&#34;color: #888888&#34;&gt;2 + 3 = 5&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;your-own-stack-template-configuration:c37cfe20acfff0cff8579f026185f721&#34;&gt;Your own Stack template configuration&lt;/h3&gt;
 
@@ -1313,14 +1357,15 @@ configuration is
 a file in
 &lt;code&gt;~/.stack/config.yaml&lt;/code&gt;. Mine has:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;templates:
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;templates:
   params:
-    author-email: &amp;quot;franklinchen@franklinchen.com&amp;quot;
-    author-name: &amp;quot;Franklin Chen&amp;quot;
+    author-email: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;franklinchen@franklinchen.com&amp;quot;&lt;/span&gt;
+    author-name: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Franklin&lt;/span&gt;&lt;span style=&#34;color: #19177C&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;Chen&amp;quot;&lt;/span&gt;
     category: test
-    copyright: &amp;quot;2015&amp;quot;
-    github-username: &amp;quot;FranklinChen&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
+    copyright: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;2015&amp;quot;&lt;/span&gt;
+    github-username: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;FranklinChen&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;other-bells-and-whistles:c37cfe20acfff0cff8579f026185f721&#34;&gt;Other bells and whistles&lt;/h3&gt;
 
@@ -2943,7 +2988,6 @@ You ordered NULL items.
 
 &lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&amp;#39;: undefined method `zero?&amp;#39; for &amp;quot;100&amp;quot;:String (NoMethodError)&lt;/span&gt;
 &lt;span style=&#34;color: #888888&#34;&gt;    from /Users/chen/.gem/ruby/2.1.2/gems/pygments.rb-0.6.0/lib/pygments/popen.rb:220:in `mentos&amp;#39;&lt;/span&gt;
-&lt;span style=&#34;color: #888888&#34;&gt;```&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
