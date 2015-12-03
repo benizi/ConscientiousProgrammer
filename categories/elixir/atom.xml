@@ -6,8 +6,577 @@
     <description>Recent content in Elixir on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 26 Aug 2013 22:09:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 03 Dec 2015 07:55:59 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/categories/elixir/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 3: HSpec; the importance of testing</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/</link>
+      <pubDate>Thu, 03 Dec 2015 07:55:59 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-3:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Day 3&lt;/h2&gt;
+
+&lt;p&gt;I spent my formative years writing software before &amp;ldquo;testing framework&amp;rdquo;
+was in my vocabulary, before
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Test-driven_development&#34;&gt;&amp;ldquo;test-driven development&amp;rdquo;&lt;/a&gt;
+was a thing. I shudder to think of those years, because now I&amp;rsquo;m a
+believer in tests and even in test-driven development (TDD), according to my
+interpretation of what that means (since everyone has a different
+definition).&lt;/p&gt;
+
+&lt;p&gt;There are a bunch of testing tools that have been available in the
+Haskell ecosystem for some time. In fact, Ollie in his &amp;ldquo;24 Days of
+Hackage&amp;rdquo; covered&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://hackage.haskell.org/package/QuickCheck&#34;&gt;&lt;code&gt;QuickCheck&lt;/code&gt;&lt;/a&gt;
+&lt;a href=&#34;https://ocharles.org.uk/blog/posts/2012-12-08-24-days-of-hackage.html&#34;&gt;in 2012&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://hackage.haskell.org/package/doctest&#34;&gt;&lt;code&gt;doctest&lt;/code&gt;&lt;/a&gt; &lt;a href=&#34;https://ocharles.org.uk/blog/posts/2013-12-18-doctest.html&#34;&gt;in 2013&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://documentup.com/feuerbach/tasty&#34;&gt;&lt;code&gt;tasty&lt;/code&gt;&lt;/a&gt; &lt;a href=&#34;https://ocharles.org.uk/blog/posts/2013-12-03-24-days-of-hackage-tasty.html&#34;&gt;in 2013&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;and I heartily recommend looking those up.&lt;/p&gt;
+
+&lt;p&gt;But today I&amp;rsquo;m going to show use of &lt;a href=&#34;http://hspec.github.io/&#34;&gt;&lt;code&gt;HSpec&lt;/code&gt;&lt;/a&gt;
+(noting that a framework like &lt;code&gt;tasty&lt;/code&gt; or
+&lt;a href=&#34;`https://batterseapower.github.io/test-framework/&#34;&gt;&lt;code&gt;test-framework&lt;/code&gt;&lt;/a&gt;
+are a lot fancier).&lt;/p&gt;
+
+&lt;h2 id=&#34;why-tests:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Why tests?&lt;/h2&gt;
+
+&lt;p&gt;I first got into writing tests for two reasons:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Using languages like Perl, it was essentially impossible to
+be productive without writing tests.&lt;/li&gt;
+&lt;li&gt;Such languages spawned the tooling to ease the pain of writing,
+running, and getting feedback from tests.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But after getting started, I didn&amp;rsquo;t look back, even when using other
+languages such as Scala and Haskell. Today, no matter what language
+I&amp;rsquo;m using, I expect there to be a decent testing framework I can
+immediately start using. I even did the experiment of
+&lt;a href=&#34;http://conscientiousprogrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/&#34;&gt;learning a brand new language, Elixir, through writing tests&lt;/a&gt;. I
+cannot take a language ecosystem seriously if there is not at least
+some reasonable default standard testing framework that is part of it.&lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s a myth (or joke) about using languages like Haskell that have
+a decent type system: that you don&amp;rsquo;t need tests because you have
+types. Hence the unfortunate phrase &amp;ldquo;tests versus types&amp;rdquo;. I completely
+disagree with this. I want my types and I want my tests too: I want to
+use every possible tool to help me design, verify, and troubleshoot my
+code! At &lt;a href=&#34;http://pghtechfest.com/&#34;&gt;Pittsburgh TechFest&lt;/a&gt; 2014, I gave a
+talk
+&lt;a href=&#34;http://www.slideshare.net/FranklinChen/presentation-37257104&#34;&gt;&amp;ldquo;Exploring type-directed, test-driven development&amp;rdquo;&lt;/a&gt;
+giving my personal view of making the best use of both types and tests
+as part of an iterative process of refining understanding and
+expression of a solution for a task
+(this was before the term &amp;ldquo;type-directed development&amp;rdquo; became the title
+of a coming book on using Idris,
+&lt;a href=&#34;https://www.manning.com/books/type-driven-development-with-idris&#34;&gt;&amp;ldquo;Type-directed development with Idris&amp;rdquo;&lt;/a&gt;,
+whose completion I look forward to!).&lt;/p&gt;
+
+&lt;p&gt;The general topic of how best to combine types and tests is well
+outside the scope of this article, but I just want to make one claim:
+the primary benefits of tests come from their role as &lt;em&gt;explicit
+documentation of intent during a design process&lt;/em&gt;. Ideally, we prefer to
+write down expressive types to fully encode intent, and dependently
+typed languages such as Idris enable transforming a lot of what used
+to be runtime tests into compile-time tests encoded as type checking,
+and you can do a bunch of this with Haskell already if you work hard
+enough (and
+&lt;a href=&#34;https://ghc.haskell.org/trac/ghc/wiki/DependentHaskell&#34;&gt;Dependent Haskell&lt;/a&gt;
+is in progress), but there is nothing wrong with writing tests today
+that someday you might turn into types.&lt;/p&gt;
+
+&lt;p&gt;TODO
+By sheer coincidence, a
+&lt;a href=&#34;https://blogs.janestreet.com/testing-with-expectations/&#34;&gt;new testing framework was just announced for OCaml&lt;/a&gt;. It&amp;rsquo;s
+great that testing is being taken more seriously everywhere and by
+everyone.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-hspec:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Why HSpec?&lt;/h2&gt;
+
+&lt;p&gt;Why do I use HSpec, and not one of the fancier testing frameworks? I&amp;rsquo;m
+not ruling out migrating to one of those in the future, but for now,
+HSpec just feels really easy and comfortable to use, and is good
+enough for me. I am so freaking lazy that I might not write tests if I
+get intimidated by any possible sources of friction. And I&amp;rsquo;ll admit
+that its &lt;a href=&#34;http://hspec.github.io/&#34;&gt;Web site&lt;/a&gt; is pretty good! Marketing
+matters, I guess.&lt;/p&gt;
+
+&lt;p&gt;Also, when I was using Ruby, I got accustomed to using
+&lt;a href=&#34;http://rspec.info/&#34;&gt;RSpec&lt;/a&gt;, which of course was the inspiration for
+HSpec.&lt;/p&gt;
+
+&lt;h2 id=&#34;it-s-all-about-auto-discovery:740606311d3fcf0ba2f14607a358bd73&#34;&gt;It&amp;rsquo;s all about auto-discovery&lt;/h2&gt;
+
+&lt;p&gt;Before even saying anything more about HSpec, I want to say that one
+selling point of HSpec for me was auto-discovery. Check out the
+&lt;a href=&#34;http://hspec.github.io/hspec-discover.html&#34;&gt;manual&lt;/a&gt; for full details.&lt;/p&gt;
+
+&lt;p&gt;Auto-discovery means that given a simple boilerplate setup, you can
+use &amp;ldquo;convention over configuration&amp;rdquo; and just give test module file
+names matching &lt;code&gt;*Spec.hs&lt;/code&gt; and sticking them anywhere embedded inside
+your &lt;code&gt;test/&lt;/code&gt; directory and they will all be picked up when you run
+&lt;code&gt;stack test&lt;/code&gt;. This means being able to write test modules at will,
+rename, delete, add, refactor them and not have to worry about
+manually writing a boilerplate driver module that tediously imports
+all the test modules and wires them up into a single project test
+suite.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the setup I have for all my projects that use HSpec. I provide
+it from my sample project template described on
+&lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;,
+so you can now generate a starter project with HSpec all ready to go
+by running&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack new my-new-project franklinchen
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There is a &lt;code&gt;test/&lt;/code&gt; directory with a single file in it, the
+auto-discovery file named &lt;code&gt;test/Spec.hs&lt;/code&gt;, which has a single line of
+code, actually a comment:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;{-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This works because when you have HSpec installed, a program
+&lt;code&gt;hspec-discover&lt;/code&gt; also gets installed, and it&amp;rsquo;s called by GHC to do the
+work of auto-discovery. Each test module should export &lt;code&gt;spec&lt;/code&gt;, because
+that&amp;rsquo;s what the auto-discovery program will collect to call.&lt;/p&gt;
+
+&lt;h2 id=&#34;writing-and-refactoring-tests:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Writing and refactoring tests&lt;/h2&gt;
+
+&lt;p&gt;I didn&amp;rsquo;t mention it in
+&lt;a href=&#34;../../blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/&#34;&gt;yesterday&amp;rsquo;s post about using a regex&lt;/a&gt;
+to solve a problem, but when I wrote out examples of strings that are
+supposed to match a regex and examples of strings that are not
+supposed to match it, I simply copied and pasted those examples from
+tests I had written.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s walk through writing &lt;code&gt;PCREHeavyExampleSpec.hs&lt;/code&gt;, step by
+step.&lt;/p&gt;
+
+&lt;h3 id=&#34;initial-version-of-test-code:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Initial version of test code&lt;/h3&gt;
+
+&lt;p&gt;First, I&amp;rsquo;ll present code that I never actually wrote initially, because I
+skipped this step and immediately refactored it in my mind. But I
+decided that to showcase Haskell&amp;rsquo;s strength as a language for
+embedding a domain-specific language (DSL), I retroactively wrote the
+most obvious code that shows how HSpec works without introducing
+non-HSpec considerations. (The code is on branch &lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage/tree/boilerplated-hspec&#34;&gt;&lt;code&gt;boilerplated-hspec&lt;/code&gt;&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;module PCREHeavyExampleSpec where
+
+import PCREHeavyExample (mediaRegex)
+
+import Test.Hspec (Spec, describe, it, shouldSatisfy)
+import Text.Regex.PCRE.Heavy ((=~))
+
+-- | Required for auto-discovery.
+spec :: Spec
+spec =
+  describe &amp;quot;pcre-heavy&amp;quot; $ do
+    describe &amp;quot;match&amp;quot; $ do
+      it &amp;quot;has audio&amp;quot; $ do
+        &amp;quot;@Media:\thas-audio,   audio&amp;quot; `shouldSatisfy` (=~ mediaRegex)
+      it &amp;quot;has video&amp;quot; $ do
+        &amp;quot;@Media:\thas-video,video&amp;quot; `shouldSatisfy` (=~ mediaRegex)
+      it &amp;quot;has audio but missing&amp;quot; $ do
+        &amp;quot;@Media:\thas-audio-but-missing, audio, missing&amp;quot; `shouldSatisfy` (=~ mediaRegex)
+      it &amp;quot;has video but unlinked&amp;quot; $ do
+        &amp;quot;@Media:\thas-video-but-unlinked  , video,      unlinked&amp;quot; `shouldSatisfy` (=~ mediaRegex)
+    describe &amp;quot;no match&amp;quot; $ do
+      it &amp;quot;no audio or video&amp;quot; $ do
+        &amp;quot;@Media:\tno-audio-or-video&amp;quot; `shouldSatisfy` (not . (=~ mediaRegex))
+      it &amp;quot;missing media field&amp;quot; $ do
+        &amp;quot;@Media:\tmissing-media-field, unlinked&amp;quot; `shouldSatisfy` (not . (=~ mediaRegex))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The main thing to understand is that for simplest use (without
+fixtures, effects, etc.), a basic description-labeled spec item is
+introduced with &lt;code&gt;it&lt;/code&gt;, and a labeled &lt;code&gt;describe&lt;/code&gt; can contain many of
+those as well as sub-&lt;code&gt;describe&lt;/code&gt;s.&lt;/p&gt;
+
+&lt;p&gt;Here, we have two sub-&lt;code&gt;Spec&lt;/code&gt;s, one for examples that &lt;em&gt;should match&lt;/em&gt; the regex
+and one for examples that &lt;em&gt;should not&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Note that we imported and used &lt;code&gt;mediaRegex&lt;/code&gt; from module
+&lt;code&gt;PCREHeavyExample&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Unlike in our example program yesterday, which used &lt;code&gt;scan&lt;/code&gt; from
+&lt;code&gt;pcre-heavy&lt;/code&gt; to collect match bindings, we only care whether something
+matched, so we use its &lt;code&gt;=~&lt;/code&gt; operator instead that takes an input
+string and a regex, and returns a &lt;code&gt;Bool&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The test code is concise enough, and the problem domain well
+understood enough, that even if the syntax looks strange, I hope it is
+clear &lt;em&gt;what&lt;/em&gt; is going on, even if not clear &lt;em&gt;how&lt;/em&gt; it&amp;rsquo;s being done.&lt;/p&gt;
+
+&lt;h3 id=&#34;a-note-on-syntax-in-haskell-code:740606311d3fcf0ba2f14607a358bd73&#34;&gt;A note on syntax in Haskell code&lt;/h3&gt;
+
+&lt;p&gt;Now is a good time to talk about the issue of syntax in Haskell code,
+because I&amp;rsquo;m expecting that if you are reading this, you might not
+already be familiar with HSpec, and I also cannot assume that you are
+already a seasoned Haskell developer, because I&amp;rsquo;m writing this article
+series not for advanced Haskellers but for those starting to dip into
+the library ecosystem and even friends with limited experience with
+Haskell.&lt;/p&gt;
+
+&lt;p&gt;It is convenient to use
+&lt;a href=&#34;https://wiki.haskell.org/Section_of_an_infix_operator&#34;&gt;operator sectioning syntax&lt;/a&gt;
+above, but I could have written&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;text `shouldSatisfy` (\inputString -&amp;gt; inputString =~ mediaRegex)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Furthermore, it is also convenient to use
+&lt;a href=&#34;https://wiki.haskell.org/Infix_operator&#34;&gt;infix syntax for named functions&lt;/a&gt;
+when sensible, but it is not required. I could have written in
+bare-bones style&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;shouldSatisfy text (\inputString -&amp;gt; inputString =~ mediaRegex)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the cute &lt;code&gt;(not . (=~ mediaRegex))&lt;/code&gt; can be written as&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;\inputString -&amp;gt; not (inputString =~ mediaRegex)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I mention these facts about syntax because I have often been told by
+people looking into Haskell that it&amp;rsquo;s confusing because of all the
+operator syntax. But you don&amp;rsquo;t have to use this syntax if you don&amp;rsquo;t
+want to: much that looks weird in Haskell is not something about the
+language itself, but just about optional syntax for which there is
+&amp;ldquo;normal&amp;rdquo; syntax if you prefer that. It&amp;rsquo;s not just about operators, but
+about a lot of other optional syntax as well; if you are still
+relatively new to Haskell syntax, Gabriel Gonzalez wrote a nice
+&amp;ldquo;syntax decoding&amp;rdquo; tutorial covering some of that
+&lt;a href=&#34;http://www.haskellforall.com/2014/10/how-to-desugar-haskell-code.html&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;But saying &amp;ldquo;you don&amp;rsquo;t have to write it&amp;rdquo; is no use if &amp;ldquo;everyone is doing
+it&amp;rdquo; and you have to &lt;em&gt;read&lt;/em&gt; it anyway. So it is the community as a whole
+that sets the tone for what gets written and what gets read.&lt;/p&gt;
+
+&lt;p&gt;One reason I like HSpec is that it does not go overboard with
+syntax. &lt;a href=&#34;https://hackage.haskell.org/package/HUnit&#34;&gt;HUnit&lt;/a&gt;, an older
+testing framework, provided funny operators that really turned me off,
+such as
+&lt;a href=&#34;https://hackage.haskell.org/package/HUnit-1.3.0.0/docs/Test-HUnit-Base.html&#34;&gt;&lt;code&gt;~=?&lt;/code&gt;&lt;/a&gt;. I
+like Gabriel Gonzalez&amp;rsquo;s article
+&lt;a href=&#34;http://www.haskellforall.com/2015/09/how-to-make-your-haskell-code-more.html&#34;&gt;&amp;ldquo;How to make your Haskell code more readable to non-Haskell programmers&amp;rdquo;&lt;/a&gt;. It
+applies also to making the code more readable to experienced Haskell
+programmers!&lt;/p&gt;
+
+&lt;p&gt;I admit to having been guilty of some practices he calls out. I have
+mixed feelings about giving them all up, all the time. For example, it
+seems idiomatic to use the infix function operator &lt;code&gt;$&lt;/code&gt; for embedded
+DSLs such HSpec, rather than parenthesize everything. I&amp;rsquo;m curious what
+you think. Would you prefer to read the following, which is what the
+&lt;code&gt;$&lt;/code&gt; operator avoids requiring?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;spec :: Spec
+spec =
+  describe &amp;quot;pcre-heavy&amp;quot; (do
+    describe &amp;quot;match&amp;quot; (do
+      it &amp;quot;has audio&amp;quot; (do
+        &amp;quot;@Media:\thas-audio,   audio&amp;quot; `shouldSatisfy` (=~ mediaRegex)
+        )
+      -- ...
+      )
+    describe &amp;quot;no match&amp;quot; (do
+      -- ...
+      )
+    )
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I personally think that languages with a &lt;code&gt;begin&lt;/code&gt;/&lt;code&gt;end&lt;/code&gt; kind of block
+(such as Pascal, Ruby) instead of braces or parentheses have an
+advantage because that is more readable (to me), and recent research
+&lt;a href=&#34;http://dl.acm.org/citation.cfm?id=2534973&#34;&gt;&amp;ldquo;An empirical investigation into programming language syntax&amp;rdquo;&lt;/a&gt;
+claims to have evidence of this.&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, we make do with the language we have, and learn and teach
+its quirks and features. It&amp;rsquo;s regrettable that English and Chinese are
+really hard languages to use too, but we make do if we want to be part
+of the community in the United States or in China. It goes both ways:
+if we want to be part of the community, we have to invest in
+understanding how it operates, and if the community wants to grow, it
+has to reach out to newcomers rather than just say &amp;ldquo;you&amp;rsquo;re on your
+own, deal with it&amp;rdquo;. Think of the immense amount of effort that goes
+into promoting universal literacy.&lt;/p&gt;
+
+&lt;h3 id=&#34;a-one-minute-review-of-test-driven-development:740606311d3fcf0ba2f14607a358bd73&#34;&gt;A one-minute review of test-driven development&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s continue with the test writing process.&lt;/p&gt;
+
+&lt;p&gt;When doing test-driven development, we write an HSpec spec first,
+&lt;em&gt;before even writing any implementation code&lt;/em&gt;. Test-driven development is
+where you show how something is supposed to work before you actually
+write that something. In a typed setting, this means we get a
+compile-time error when first trying to run the test, which we fix by
+creating &lt;code&gt;PCREHeavyExample&lt;/code&gt; as a new module with a stub:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;module PCREHeavyExample (mediaRegex) where
+
+mediaRegex = undefined
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Of course, every test fails (in the terminal, the failures are
+highlighted in red):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;$ stack test
+PCREHeavyExample
+  pcre-heavy
+    match
+      has audio FAILED [1]
+      has video FAILED [2]
+      has audio but missing FAILED [3]
+      has video but unlinked FAILED [4]
+    no match
+      no audio or video FAILED [5]
+      missing media field FAILED [6]
+
+Failures:
+
+  test/PCREHeavyExampleSpec.hs:13:
+  1) PCREHeavyExample.pcre-heavy.match has audio
+       uncaught exception: ErrorCall (Prelude.undefined)
+
+  test/PCREHeavyExampleSpec.hs:15:
+  2) PCREHeavyExample.pcre-heavy.match has video
+       uncaught exception: ErrorCall (Prelude.undefined)
+
+  test/PCREHeavyExampleSpec.hs:17:
+  3) PCREHeavyExample.pcre-heavy.match has audio but missing
+       uncaught exception: ErrorCall (Prelude.undefined)
+
+  test/PCREHeavyExampleSpec.hs:19:
+  4) PCREHeavyExample.pcre-heavy.match has video but unlinked
+       uncaught exception: ErrorCall (Prelude.undefined)
+
+  test/PCREHeavyExampleSpec.hs:22:
+  5) PCREHeavyExample.pcre-heavy, no match, no audio or video
+       uncaught exception: ErrorCall (Prelude.undefined)
+
+  test/PCREHeavyExampleSpec.hs:24:
+  6) PCREHeavyExample.pcre-heavy, no match, missing media field
+       uncaught exception: ErrorCall (Prelude.undefined)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;a-tangent-on-ghc-s-error-reporting:740606311d3fcf0ba2f14607a358bd73&#34;&gt;A tangent on GHC&amp;rsquo;s error reporting&lt;/h4&gt;
+
+&lt;p&gt;A super-annoying thing, and a long-standing embarrassment for GHC, is
+that using &lt;code&gt;undefined&lt;/code&gt; doesn&amp;rsquo;t trigger useful error reporting. I
+look forward to
+&lt;a href=&#34;https://ghc.haskell.org/trac/ghc/wiki/Status/GHC-8.0.1&#34;&gt;GHC 8.0&lt;/a&gt;&amp;rsquo;s
+new feature of
+&lt;a href=&#34;https://ghc.haskell.org/trac/ghc/wiki/ExplicitCallStack/ImplicitLocations&#34;&gt;implicit parameters providing callstacks/source locations&lt;/a&gt;. This
+stuff is important! It&amp;rsquo;s time we got line numbers and call stacks for
+errors without having to jump through hoops.&lt;/p&gt;
+
+&lt;h3 id=&#34;skipping-to-the-end-assume-we-finished-the-implementation:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Skipping to the end, assume we finished the implementation&lt;/h3&gt;
+
+&lt;p&gt;OK, let&amp;rsquo;s assume we finished the implementation, which is simply
+writing the regex for &lt;code&gt;mediaRegex&lt;/code&gt;. Then the tests pass (and in the
+terminal they display in green):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-console&#34;&gt;PCREHeavyExample
+  pcre-heavy
+    match
+      has audio
+      has video
+      has audio but missing
+      has video but unlinked
+    no match
+      no audio or video
+      missing media field
+
+Finished in 0.0010 seconds
+6 examples, 0 failures
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;tests-are-code-too:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Tests are code too!&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s easy to not take test code seriously and not hold it up to the
+same standards as &amp;ldquo;regular&amp;rdquo; code. That is a mistake: test code should
+actually be cleaner and tighter than main implementation code because
+it is our &lt;em&gt;executable documentation&lt;/em&gt; and what we need to make as easy
+to read, write, and modify as requirements change.&lt;/p&gt;
+
+&lt;h3 id=&#34;refactoring-part-1:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Refactoring, part 1&lt;/h3&gt;
+
+&lt;p&gt;Notice the tremendous amount of code duplication in the tests. We can
+do better than this item-by-item copy-and-paste job. We can write code
+to generate all the matching examples, by refactoring the relevant
+data into a table and a function that maps over the table to get a
+composite &lt;code&gt;Spec&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here is a table that pairs a test description with each example input
+string:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;matchExamples :: [(String, String)]
+matchExamples =
+  [ ( &amp;quot;has audio&amp;quot;
+    , &amp;quot;@Media:\thas-audio,   audio&amp;quot;
+    )
+  , ( &amp;quot;has video&amp;quot;
+    , &amp;quot;@Media:\thas-video,video&amp;quot;
+    )
+  , ( &amp;quot;has audio but missing&amp;quot;
+    , &amp;quot;@Media:\thas-audio-but-missing, audio, missing&amp;quot;
+    )
+  , ( &amp;quot;has video but unlinked&amp;quot;
+    , &amp;quot;@Media:\thas-video-but-unlinked  , video,      unlinked&amp;quot;
+    )
+  ]
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is a function that generates a spec item given a description/input pair.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;matchSpec :: (String, String) -&amp;gt; Spec
+matchSpec (description, text) =
+  it description $ do
+    text `shouldSatisfy` (=~ mediaRegex)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Similarly for the non-matching examples.&lt;/p&gt;
+
+&lt;p&gt;And the refactored &lt;code&gt;Spec&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;spec :: Spec
+spec =
+  describe &amp;quot;pcre-heavy&amp;quot; $ do
+    describe &amp;quot;match&amp;quot; $ do
+      mapM_ matchSpec matchExamples
+    describe &amp;quot;no match&amp;quot; $ do
+      mapM_ nonMatchSpec nonMatchExamples
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;refactoring-part-2:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Refactoring, part 2&lt;/h3&gt;
+
+&lt;p&gt;Uh oh, I said &amp;ldquo;similarly&amp;rdquo;. Usually when something is &amp;ldquo;similar&amp;rdquo;,
+there&amp;rsquo;s more refactoring that might be doable.&lt;/p&gt;
+
+&lt;p&gt;But &lt;strong&gt;Haskell makes refactoring joyful&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Haskell is a expressive language, where &amp;ldquo;might&amp;rdquo; usually means &amp;ldquo;can&amp;rdquo;,
+and &amp;ldquo;can&amp;rdquo; often means &amp;ldquo;should&amp;rdquo;. In my experience, Haskell&amp;rsquo;s &lt;em&gt;single
+best quality&lt;/em&gt; in terms of user experience is its support for
+refactoring at will and with confidence that everything will still
+mean exactly the same thing after as before the refactoring.&lt;/p&gt;
+
+&lt;p&gt;I particularly look forward to the
+ongoing development of a
+&lt;a href=&#34;https://github.com/haskell/haskell-ide-engine&#34;&gt;universal Haskell IDE engine&lt;/a&gt;
+refactoring even easier, e.g., folding in
+&lt;a href=&#34;http://www.cs.kent.ac.uk/projects/refactor-fp/&#34;&gt;&lt;code&gt;HaRe&lt;/code&gt;&lt;/a&gt; support.&lt;/p&gt;
+
+&lt;p&gt;We see a pattern of positive examples and negative examples using
+a predicate and its negation. Let&amp;rsquo;s abstract this pattern out. Let&amp;rsquo;s
+collect the positive and negative examples in one place. For
+simplicity, let&amp;rsquo;s tuple them.&lt;/p&gt;
+
+&lt;p&gt;And now that we&amp;rsquo;re dealing with arbitrary predicates, we no longer
+have to hardcode &lt;code&gt;(=~ mediaRegex)&lt;/code&gt; or &lt;code&gt;String&lt;/code&gt; everywhere. We can &lt;em&gt;go
+polymorphic&lt;/em&gt; in the predicate type, replacing &lt;code&gt;matchSpec&lt;/code&gt; and
+&lt;code&gt;nonMatchSpec&lt;/code&gt; with a single &lt;code&gt;predSpec&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The final result:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-haskell&#34;&gt;spec :: Spec
+spec =
+  describePredicate &amp;quot;pcre-heavy&amp;quot;
+    (&amp;quot;match&amp;quot;, (=~ mediaRegex))
+    (matchExamples, nonMatchExamples)
+
+describePredicate :: Show a =&amp;gt;
+     String                           -- ^ description
+  -&amp;gt; (String, a -&amp;gt; Bool)              -- ^ (base description, predicate)
+  -&amp;gt; ( [(String, a)], [(String, a)] ) -- ^ positive and negative examples
+  -&amp;gt; Spec
+describePredicate description
+                  (baseDescription, predicate)
+                  (positiveExamples, negativeExamples) =
+  describe description $ do
+    describe baseDescription $ do
+      mapM_ (predSpec predicate) positiveExamples
+    describe (&amp;quot;not &amp;quot; ++ baseDescription) $ do
+      mapM_ (predSpec (not . predicate)) negativeExamples
+
+predSpec :: Show a =&amp;gt; (a -&amp;gt; Bool) -&amp;gt; (String, a) -&amp;gt; Spec
+predSpec predicate (description, a) =
+  it description $ do
+    a `shouldSatisfy` predicate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that &lt;code&gt;describePredicate&lt;/code&gt; and &lt;code&gt;predSpec&lt;/code&gt; can then be pulled out
+into a test utilities module for use by other specs using the same
+pattern.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, this refactoring, although good in some ways, came with
+a cost. It doesn&amp;rsquo;t look so great to me. Does it to you?&lt;/p&gt;
+
+&lt;h3 id=&#34;refactoring-part-3:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Refactoring, part 3?&lt;/h3&gt;
+
+&lt;p&gt;One reason the refactored code doesn&amp;rsquo;t actually look so great now is
+that our refactoring led to many nested primitive types
+(&lt;a href=&#34;http://c2.com/cgi/wiki?PrimitiveObsession&#34;&gt;&amp;ldquo;primitive obsession&amp;rdquo;&lt;/a&gt;)
+and an explosion in number of positional arguments to our new
+&lt;code&gt;describePredicate&lt;/code&gt;. Let&amp;rsquo;s face it, calling &lt;code&gt;describePredicate&lt;/code&gt; is
+cryptic, calling out for &amp;ldquo;keyword arguments&amp;rdquo; (in a language that
+supports them).&lt;/p&gt;
+
+&lt;p&gt;In Haskell, &amp;ldquo;keyword arguments&amp;rdquo; means there&amp;rsquo;s a configuration data
+type crying to be defined. A related code smell is that documenting
+the parameters to &lt;code&gt;describePredicate&lt;/code&gt; is now super-awkward. Each of
+those parameters should be a thing in itself, not just parenthesized,
+bracketed, tupled glop.&lt;/p&gt;
+
+&lt;p&gt;If we are really serious about refactoring, we should wrap these
+things into new data types that are an explicit model of what we want
+to do when classifying and testing examples.  We might even turn the
+whole thing into its own embedded sub-DSL of HSpec.&lt;/p&gt;
+
+&lt;p&gt;This illustrates how refactoring can sometimes lead to new complexity
+that didn&amp;rsquo;t exist before. There are tradeoffs constantly. Abstraction
+for its own sake does not always make things clearer. For this reason,
+I did not actually go this far initially for the example code
+yesterday: I did not feel it was worth the trouble. I&amp;rsquo;ve left it in
+the &lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage/tree/refactoring-2&#34;&gt;&lt;code&gt;refactoring-2&lt;/code&gt;&lt;/a&gt; branch of the GitHub repo.&lt;/p&gt;
+
+&lt;h2 id=&#34;combining-testing-frameworks:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Combining testing frameworks&lt;/h2&gt;
+
+&lt;p&gt;One last thing about HSpec: you can use it within a larger testing
+framework, or you can embed another testing framework into it as
+well. For example, I like to use
+&lt;a href=&#34;http://hspec.github.io/quickcheck.html&#34;&gt;QuickCheck through HSpec&lt;/a&gt; as
+part of &amp;ldquo;type-directed development&amp;rdquo;.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:740606311d3fcf0ba2f14607a358bd73&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Testing is important, but few love to do it. Making it easy to write
+and use tests goes a long way toward actually doing it. I like HSpec
+because it&amp;rsquo;s easy to write, and because of auto-discovery. I hope you
+consider using it for your own projects if you don&amp;rsquo;t already use it or
+some other testing framework.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:740606311d3fcf0ba2f14607a358bd73&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>OpenHack Pittsburgh: learning Elixir test-driven and package-publishing</title>
@@ -24,20 +593,6 @@
 &lt;p&gt;What happened was that he asked for feedback about who was planning to work on what, and said he planned to learn some &lt;a href=&#34;http://elixir-lang.org/&#34;&gt;Elixir&lt;/a&gt;, a fairly new programming language built on top of the &lt;a href=&#34;http://www.erlang.org/&#34;&gt;Erlang&lt;/a&gt; runtime. Since this language had been on my list of things to look into, I decided that learning loves company, so I proposed to learn some Elixir in a test-driven way!&lt;/p&gt;
 
 &lt;p&gt;What does that mean?&lt;/p&gt;
-
-
-&lt;figure &gt;
-    
-        &lt;img src=&#34;http://distilleryimage10.ak.instagram.com/1e5597280ea711e3b2db22000aeb1b88_7.jpg&#34; /&gt;
-    
-    
-    &lt;figcaption&gt;
-        &lt;h4&gt;Franklin working on laptop&lt;/h4&gt;
-        
-    &lt;/figcaption&gt;
-    
-&lt;/figure&gt;
-
 
 &lt;h2 id=&#34;how-to-learn-a-programming-language:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;How to learn a programming language&lt;/h2&gt;
 

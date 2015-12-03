@@ -354,12 +354,14 @@ can rely on the recipient simply installing Stack.</p>
 add the following two lines and make the file executable:</p>
 
 <pre><code class="language-haskell">#!/usr/bin/env stack
--- stack --install-ghc runghc --package pcre-heavy
+-- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy
 </code></pre>
 
 <p>Stack will read the embedded command in order to install GHC, if
  needed, and first download and install the packages listed (here
- <code>pcre-heavy</code>), if needed. (Note: in this case, because of FFI with a
+ <code>pcre-heavy</code>), if needed. We have pinned down the exact version of
+ LTS in order to guarantee what versions of everything will be used by
+ Stack. (Note: in this case, because of FFI with a
  C library, the recipient has to install PCRE first.)</p>
 
 <p>So if you have short programs that don&rsquo;t need to be organized into
@@ -390,7 +392,7 @@ one to the other seamlessly.</p>
 
 module Main where
 
-import Text.Regex.PCRE.Heavy
+import Text.Regex.PCRE.Heavy (Regex, re, scan)
 import Data.Maybe (listToMaybe)
 import Text.Printf (printf)
 
