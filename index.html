@@ -79,6 +79,48 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/">24 days of Hackage, 2015: day 5: should-not-typecheck: making Haskell sort of dynamically typed with deferred type errors</a>
+      </h1>
+      <span class="post-date">Dec 5, 2015 &middot; 6 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/should-not-typecheck">should-not-typecheck</a><a class="label" href="http://ConscientiousProgrammer.com/categories/stack">Stack</a><a class="label" href="http://ConscientiousProgrammer.com/categories/dynamic">dynamic</a><a class="label" href="http://ConscientiousProgrammer.com/categories/deferred-type-errors">deferred type errors</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ghc-extensions">GHC extensions</a><a class="label" href="http://ConscientiousProgrammer.com/categories/testing">testing</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hspec">HSpec</a>
+      </span>
+      
+      <h2 id="table-of-contents-for-the-whole-series:60dd71330bbedef1aba1bef45daea5dd">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-5:60dd71330bbedef1aba1bef45daea5dd">Day 5</h2>
+
+<p>Have you ever been frustrated when using a statically typed language
+because there&rsquo;s a type error somewhere in your code base but you want
+to run your program anyway, either because you don&rsquo;t care about that
+remote type error that has nothing to do with what you&rsquo;re working on,
+or because you want to step through your code and debug what the type
+error really is? I certainly have.</p>
+
+<p>Also, have you ever wanted to write a unit test to verify that your
+typed code disallows code you want to disallow, but you are
+frustrated because how do you write code in a typed language that
+says, &ldquo;This code (that you won&rsquo;t typecheck) won&rsquo;t typecheck&rdquo; and passes
+the typechecker and runs?</p>
+
+<p>Welcome to the land of GHC&rsquo;s
+<a href="https://ghc.haskell.org/trac/ghc/wiki/DeferErrorsToRuntime">&ldquo;deferred type errors&rdquo;</a>,
+a feature that has been part of GHC <a href="https://downloads.haskell.org/~ghc/7.6.1/docs/html/users_guide/defer-type-errors.html">since version 7.6.1</a> in 2013. Since
+this was not covered in Ollie&rsquo;s
+<a href="https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html">2014 series &ldquo;24 Days of GHC Extensions&rdquo;</a>,
+I decided to bring it up here, and in the context of a cute package, <a href="https://hackage.haskell.org/package/should-not-typecheck"><code>should-not-typecheck</code></a>
+that hooks up with HSpec to make assertions that *something won&rsquo;t
+typecheck.</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/">24 days of Hackage, 2015: day 4: wreq: Web client programming; with notes on lens and operator syntax</a>
       </h1>
       <span class="post-date">Dec 4, 2015 &middot; 10 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/#disqus_thread">Comments</a>
@@ -220,7 +262,7 @@ Stack.</p>
       <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack</a>
       </h1>
-      <span class="post-date">Nov 30, 2015 &middot; 8 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/#disqus_thread">Comments</a>
+      <span class="post-date">Nov 30, 2015 &middot; 9 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/#disqus_thread">Comments</a>
       
       <br/>
       <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/stack">Stack</a>
@@ -234,6 +276,8 @@ Stack.</p>
 <li>Day 3: <a href="./blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/">HSpec; the importance of testing</a></li>
 <li>Day 4:
 <a href="./blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/">wreq: Web client programming; with notes on lens and operator syntax</a></li>
+<li>Day 5: <a href="./blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/">should-not-typecheck: making
+Haskell sort of dynamically typed with deferred type errors</a></li>
 </ul>
 
 <h2 id="day-1:c37cfe20acfff0cff8579f026185f721">Day 1</h2>
@@ -421,24 +465,6 @@ time to migrate my blogs, to Octopress 3 or
 <p>I&rsquo;ve been reading this magazine for <em>twenty-two years</em>! I haven&rsquo;t read any other magazine on any topic for this long.</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/">When a computer algebra program gives wrong answers</a>
-      </h1>
-      <span class="post-date">Nov 6, 2014 &middot; 3 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/mathematica">Mathematica</a><a class="label" href="http://ConscientiousProgrammer.com/categories/maple">Maple</a><a class="label" href="http://ConscientiousProgrammer.com/categories/trust">trust</a><a class="label" href="http://ConscientiousProgrammer.com/categories/bugs">bugs</a><a class="label" href="http://ConscientiousProgrammer.com/categories/testing">testing</a>
-      </span>
-      
-      <p>I read an interesting and disturbing report, <a href="http://www.ams.org/notices/201410/rnoti-p1249.pdf">&ldquo;The Misfortunes of a Trio of Mathematicians Using Computer Algebra Systems. Can We Trust in Them?&rdquo;</a> published in the Notices of the American Mathematical Society. I feel that all software developers should read this and reflect on the nature of our work, when people who are not programmers depend on it.</p>
-
-<p>This report was about mathematicians accidentally discovering a bug in a major computer algebra system, Mathematica.</p>
-
-      <a href="http://conscientiousprogrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/">Read On &rarr;</a>
       
     </div>
     

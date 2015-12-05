@@ -209,7 +209,7 @@ another using a builder pattern starting with the &lt;code&gt;wreq&lt;/code&gt; 
 &lt;p&gt;Then we parse the lazy &lt;code&gt;ByteString&lt;/code&gt; response, including the headers
 and the body, into an untyped JSON object, an &lt;code&gt;aeson&lt;/code&gt;
 &lt;a href=&#34;https://hackage.haskell.org/package/aeson-0.10.0.0/docs/Data-Aeson.html#t:Value&#34;&gt;&lt;code&gt;Value&lt;/code&gt;&lt;/a&gt;:
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt; jsonResponse &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; asValue response 
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  jsonResponse &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; asValue response
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 

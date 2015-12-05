@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://conscientiousprogrammer.com/</loc>
-    <lastmod>2015-12-04T17:05:23-05:00</lastmod>
+    <lastmod>2015-12-05T08:20:32-05:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://conscientiousprogrammer.com/blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/</loc>
+    <lastmod>2015-12-05T08:20:32-05:00</lastmod>
   </url>
   
   <url>

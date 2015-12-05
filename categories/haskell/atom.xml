@@ -6,8 +6,240 @@
     <description>Recent content in Haskell on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Dec 2015 17:05:23 -0500</lastBuildDate>
+    <lastBuildDate>Sat, 05 Dec 2015 08:20:32 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/categories/haskell/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 5: should-not-typecheck: making Haskell sort of dynamically typed with deferred type errors</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/</link>
+      <pubDate>Sat, 05 Dec 2015 08:20:32 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-5:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Day 5&lt;/h2&gt;
+
+&lt;p&gt;Have you ever been frustrated when using a statically typed language
+because there&amp;rsquo;s a type error somewhere in your code base but you want
+to run your program anyway, either because you don&amp;rsquo;t care about that
+remote type error that has nothing to do with what you&amp;rsquo;re working on,
+or because you want to step through your code and debug what the type
+error really is? I certainly have.&lt;/p&gt;
+
+&lt;p&gt;Also, have you ever wanted to write a unit test to verify that your
+typed code disallows code you want to disallow, but you are
+frustrated because how do you write code in a typed language that
+says, &amp;ldquo;This code (that you won&amp;rsquo;t typecheck) won&amp;rsquo;t typecheck&amp;rdquo; and passes
+the typechecker and runs?&lt;/p&gt;
+
+&lt;p&gt;Welcome to the land of GHC&amp;rsquo;s
+&lt;a href=&#34;https://ghc.haskell.org/trac/ghc/wiki/DeferErrorsToRuntime&#34;&gt;&amp;ldquo;deferred type errors&amp;rdquo;&lt;/a&gt;,
+a feature that has been part of GHC &lt;a href=&#34;https://downloads.haskell.org/~ghc/7.6.1/docs/html/users_guide/defer-type-errors.html&#34;&gt;since version 7.6.1&lt;/a&gt; in 2013. Since
+this was not covered in Ollie&amp;rsquo;s
+&lt;a href=&#34;https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html&#34;&gt;2014 series &amp;ldquo;24 Days of GHC Extensions&amp;rdquo;&lt;/a&gt;,
+I decided to bring it up here, and in the context of a cute package, &lt;a href=&#34;https://hackage.haskell.org/package/should-not-typecheck&#34;&gt;&lt;code&gt;should-not-typecheck&lt;/code&gt;&lt;/a&gt;
+that hooks up with HSpec to make assertions that *something won&amp;rsquo;t
+typecheck.&lt;/p&gt;
+
+&lt;h2 id=&#34;installation:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;Since LTS does not know about this obscure package, Stack helpfully
+tells us exactly what to add to our &lt;code&gt;stack.yaml&lt;/code&gt; to bring it in:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;extra-deps:
+- should-not-typecheck-2.0.1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;let-s-write-some-tests:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Let&amp;rsquo;s write some tests&lt;/h2&gt;
+
+&lt;p&gt;The full documentation of &lt;code&gt;should-not-typecheck&lt;/code&gt; is right there on
+&lt;a href=&#34;https://hackage.haskell.org/package/should-not-typecheck&#34;&gt;its Hackage page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;First, we need to enable the GHC option &lt;code&gt;-fdefer-type-errors&lt;/code&gt; in the
+test module, with a directive:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# OPTIONS_GHC -fdefer-type-errors #-}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;our-first-test:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Our first test&lt;/h3&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;ShouldNotTypecheckExample&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; ( &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;
+                  , &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldReturn&lt;/span&gt;
+                  , &lt;span style=&#34;color: #0000FF&#34;&gt;shouldThrow&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;anyException&lt;/span&gt;
+                  )
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.ShouldNotTypecheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;shouldNotTypecheck&lt;/span&gt;)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;should-not-typecheck&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;should not allow mapping negation over a list of strings&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      shouldNotTypecheck (map not [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;hello&amp;quot;&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;world&amp;quot;&lt;/span&gt;])
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;That&amp;rsquo;s self-explanatory. We can&amp;rsquo;t do a Boolean negation on a
+string. Haskell is not a &amp;ldquo;truthy&amp;rdquo;-based language, but a truth-based
+language.&lt;/p&gt;
+
+&lt;h2 id=&#34;some-puzzling-code:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Some puzzling code&lt;/h2&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s look at the &lt;code&gt;ShouldNotTypecheckExample&lt;/code&gt; module:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# OPTIONS_GHC -fdefer-type-errors #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;ShouldNotTypecheckExample&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;thisWorks&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;thisFails&lt;/span&gt;) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;thisWorks&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;thisWorks&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  fst (&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;hello&amp;quot;&lt;/span&gt;, [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;world&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;True&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;!&amp;quot;&lt;/span&gt;])
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;thisFails&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;thisFails&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  snd (&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;hello&amp;quot;&lt;/span&gt;, [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;world&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;True&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;!&amp;quot;&lt;/span&gt;])
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Pause for a moment, and think of what should happen when &lt;code&gt;thisWorks&lt;/code&gt;
+and &lt;code&gt;thisFails&lt;/code&gt; are used, and in what way, and why. In both cases, we
+have a tuple and are returning the first element or the second element of
+the tuple. The second element is a list that is clearly ill-typed,
+because it contains something that is nonsensical (division of a
+string by a boolean).&lt;/p&gt;
+
+&lt;h2 id=&#34;the-role-of-laziness:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;The role of laziness&lt;/h2&gt;
+
+&lt;p&gt;To understand what happens in the following tests, you need to
+understand how laziness works in Haskell. The word &amp;ldquo;lazy&amp;rdquo; has come to
+be used for many different ideas and constructs in different
+programming languages, but Haskell&amp;rsquo;s &amp;ldquo;laziness&amp;rdquo; is unique. A full
+discussion is outside the scope of this article, but I thought that
+showing what happens with deferred type errors might be a gateway
+toward better understanding the execution model of Haskell.&lt;/p&gt;
+
+&lt;h3 id=&#34;never-reached:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Never reached&lt;/h3&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;you can run code even if it contains ill-typed parts&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      thisWorks `shouldBe` &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;hello&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This works because tuples in Haskell are lazy, and therefore in
+ordinary typechecking, taking the first element of a well-typed tuple
+succeeds no matter what is in the second element of the tuple. The
+difference when operating in deferred typechecking mode is that the
+tuple doesn&amp;rsquo;t even need to be well-typed, and the second element can
+be complete junk, as it is here. So this example is straightforward if
+you consider that what GHC does is somehow push the type error into a
+reasonably small context so that outside of it, things still typecheck
+and run normally.&lt;/p&gt;
+
+&lt;h3 id=&#34;laziness-all-the-way-down:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Laziness all the way down&lt;/h3&gt;
+
+&lt;p&gt;So what happens if we get the second element of the tuple, it is junk,
+and take its length?&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;deferred type errors are only lazily reached&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      length thisFails `shouldBe` &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The answer is that everything is still fine, because the embedded list
+inside the lazy tuple is a lazy list (because lists in Haskell are
+lazy), and &lt;code&gt;length&lt;/code&gt; never looks at the elements of the list, only
+counts their number, so it passes over the junky thunk for &lt;code&gt;&amp;quot;world&amp;quot; /
+True&amp;quot;&lt;/code&gt; perfectly fine without needing to evaluate it.&lt;/p&gt;
+
+&lt;h3 id=&#34;forcing-the-laziness:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Forcing the laziness&lt;/h3&gt;
+
+&lt;p&gt;To explicitly force laziness into fully evaluated data (the kind of
+data in standard programming languages), we need to use the
+&lt;a href=&#34;https://hackage.haskell.org/package/deepseq&#34;&gt;&lt;code&gt;deepseq&lt;/code&gt;&lt;/a&gt; package. It&amp;rsquo;s
+work to fully, deeply evaluate something in Haskell! We use
+&lt;a href=&#34;https://hackage.haskell.org/package/deepseq-1.4.1.2/docs/Control-DeepSeq.html#v:force&#34;&gt;&lt;code&gt;force&lt;/code&gt;&lt;/a&gt;
+from that package.&lt;/p&gt;
+
+&lt;p&gt;In order to catch, in HSpec, the exception we expect to finally get, we
+also need to use
+&lt;a href=&#34;https://hackage.haskell.org/package/base-4.8.1.0/docs/Control-Exception.html#v:evaluate&#34;&gt;&lt;code&gt;evaluate&lt;/code&gt;&lt;/a&gt;
+from &lt;code&gt;Control.Exception&lt;/code&gt; in
+&lt;a href=&#34;https://hackage.haskell.org/package/base&#34;&gt;&lt;code&gt;base&lt;/code&gt;&lt;/a&gt;, the main package
+of the ecosystem (discussed
+in a &lt;a href=&#34;https://ocharles.org.uk/blog/posts/2012-12-23-24-days-of-hackage-base.html&#34;&gt;2012 Day of Hackage post&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Exception&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;evaluate&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.DeepSeq&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;force&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Our test (which for simplicity is coarse in that it catches any
+exception, rather than the specific typechecking exception):&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;deferred type errors cause an exception only when reached&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      evaluate (force thisFails) `shouldThrow` anyException
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The deep evaluation will go all the way down to the junky expression
+in the list in the tuple of our example, and a typechecking error is
+thrown there at run time, as expected.&lt;/p&gt;
+
+&lt;p&gt;Suppose we were just evaluating &lt;code&gt;thisFails&lt;/code&gt; from code, say within
+GHCi. This is what we get:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;*Main&amp;gt; import ShouldNotTypecheckExample&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;*Main ShouldNotTypecheckExample&amp;gt; thisFails&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;&amp;quot;*** Exception: /Users/chen/Sync/haskell/twenty-four-days2015-of-hackage/src/ShouldNotTypecheckExample.hs:14:26:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    No instance for (Fractional Char) arising from a use of ‘/’&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    In the expression: &amp;quot;world&amp;quot; / True&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    In the expression: [&amp;quot;world&amp;quot; / True, &amp;quot;!&amp;quot;]&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    In the first argument of ‘snd’, namely&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      ‘(&amp;quot;hello&amp;quot;, [&amp;quot;world&amp;quot; / True, &amp;quot;!&amp;quot;])’&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;(deferred type error)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;haskell-is-not-really-being-dynamic-here:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Haskell is not really being dynamic here&lt;/h2&gt;
+
+&lt;p&gt;So is Haskell dynamically typed then, when running in this mode? Not
+really. It&amp;rsquo;s faking it. What it&amp;rsquo;s basically doing is that the
+typechecker is &lt;em&gt;still finding the type error at compile time&lt;/em&gt;, but
+then secretly creating the exception information at the site of the
+crappy code and replacing that code with a call to throw that
+exception. The technical details are
+&lt;a href=&#34;http://dreixel.net/research/pdf/epdtecp.pdf&#34;&gt;in this paper&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is completely different from the dynamic checking where nothing
+is checked at compile time and an error is discovered during the
+course of run time execution. Here, the error is discovered up front,
+stashed away, and kept a secret until or unless it is demanded.&lt;/p&gt;
+
+&lt;h2 id=&#34;for-more-on-laziness-and-forcing:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;For more on laziness and forcing&lt;/h2&gt;
+
+&lt;p&gt;Simon Marlow&amp;rsquo;s free book
+&lt;a href=&#34;http://chimera.labs.oreilly.com/books/1230000000929&#34;&gt;&amp;ldquo;Parallel and Concurrent Programming in Haskell&amp;rdquo;&lt;/a&gt;
+has chapters on evaluation strategies, starting with &lt;a href=&#34;http://chimera.labs.oreilly.com/books/1230000000929/ch02.html#sec_par-eval-sudoku2&#34;&gt;chapter 2&lt;/a&gt;. This stuff is subtle.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;For day 5, I introduced the &lt;code&gt;should-not-typecheck&lt;/code&gt; package and briefly
+discussed Haskell&amp;rsquo;s lazy evaluation and how it interacts with GHC&amp;rsquo;s
+deferred type errors. A later Day of Hackage will venture into the
+world of doing &amp;ldquo;real&amp;rdquo; dynamic typing in Haskell.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 4: wreq: Web client programming; with notes on lens and operator syntax</title>
@@ -209,7 +441,7 @@ another using a builder pattern starting with the &lt;code&gt;wreq&lt;/code&gt; 
 &lt;p&gt;Then we parse the lazy &lt;code&gt;ByteString&lt;/code&gt; response, including the headers
 and the body, into an untyped JSON object, an &lt;code&gt;aeson&lt;/code&gt;
 &lt;a href=&#34;https://hackage.haskell.org/package/aeson-0.10.0.0/docs/Data-Aeson.html#t:Value&#34;&gt;&lt;code&gt;Value&lt;/code&gt;&lt;/a&gt;:
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt; jsonResponse &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; asValue response 
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  jsonResponse &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; asValue response
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -1462,6 +1694,8 @@ turn it into a Stack script.&lt;/p&gt;
 &lt;li&gt;Day 3: &lt;a href=&#34;../../blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/&#34;&gt;HSpec; the importance of testing&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 4:
 &lt;a href=&#34;../../blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/&#34;&gt;wreq: Web client programming; with notes on lens and operator syntax&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 5: &lt;a href=&#34;../../blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/&#34;&gt;should-not-typecheck: making
+Haskell sort of dynamically typed with deferred type errors&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
@@ -3586,130 +3820,6 @@ catching the exception if any:&lt;/p&gt;
 &lt;h2 id=&#34;update-of-2013-07-05:f22ea5ebd3bdd3bf49b63c00fa7f17d0&#34;&gt;(Update of 2013-07-05)&lt;/h2&gt;
 
 &lt;p&gt;An interesting &lt;a href=&#34;http://www.infoq.com/presentations/enterprise-api&#34;&gt;presentation on APIs in the enterprise&lt;/a&gt; came my way.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Introducing this new programming blog</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/</link>
-      <pubDate>Mon, 24 Jun 2013 09:40:00 +0000</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2013/06/24/introducing-this-new-programming-blog/</guid>
-      <description>
-
-&lt;p&gt;Hi. My name is Franklin Chen. I already have a &lt;a href=&#34;http://franklinchen.com/&#34;&gt;personal Web site and blog&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;But I ended up only writing &lt;a href=&#34;http://franklinchen.com/categories/programming/&#34;&gt;a little bit about programming on that blog&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;So I decided it was time to start a separate blog to devoted entirely to computer programming. The problem with the all-in-one personal blog was that I ended up never really working up a momentum to post the kinds of articles I wanted to write about programming.&lt;/p&gt;
-
-&lt;h2 id=&#34;why-the-conscientious-programmer:408b3167d100fed52fee95b6735e7853&#34;&gt;Why &amp;ldquo;The Conscientious Programmer&amp;rdquo;?&lt;/h2&gt;
-
-&lt;p&gt;At some point in the past year or two, I reflected on how I could best summarize my attitudes and aspirations as a programmer, as someone who loves programming and also works as a professional software developer.&lt;/p&gt;
-
-&lt;p&gt;I came up with the decidedly non-sexy term &lt;em&gt;conscientious programmer&lt;/em&gt;. It is also a term that requires explanation, because you could easily interpret it as having a connotation that is moralistic, pretentious, or boring!&lt;/p&gt;
-
-&lt;p&gt;It is impossible to summarize in a sound bite what I mean by the term, so I have created this blog in order to continually illustrate, by example, the kinds of technical and other issues that come up in software development that I grapple with.&lt;/p&gt;
-
-&lt;p&gt;However, since a sound bite is required in some circumstances, here&amp;rsquo;s what I currently have:&lt;/p&gt;
-
-&lt;blockquote&gt;
-I am a conscientious computer programmer, committed to designing, building, and testing correct, efficient, documented, maintainable software that meets users&#39; real needs.
-&lt;/blockquote&gt;
-
-&lt;p&gt;My material will come from my own experiences (successes and failures, past and present) as well as from those of others. See the &lt;a href=&#34;../../about/&#34;&gt;About page&lt;/a&gt; for more sound bites about what this blog will be about.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s start immediately with my personal experience from just the past couple of days!&lt;/p&gt;
-
-&lt;h2 id=&#34;future-topics:408b3167d100fed52fee95b6735e7853&#34;&gt;Future topics&lt;/h2&gt;
-
-&lt;p&gt;But first, here is a little sample of topics I will write about in the future:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;positive and negative experiences with statically typed languages&lt;/li&gt;
-&lt;li&gt;positive and negative experiences with dynamically typed languages&lt;/li&gt;
-&lt;li&gt;the good and bad of the polyglot programming world&lt;/li&gt;
-&lt;li&gt;what is object-oriented programming anyway?&lt;/li&gt;
-&lt;li&gt;what is functional programming anyway?&lt;/li&gt;
-&lt;li&gt;Agile notions&lt;/li&gt;
-&lt;li&gt;test-driven development, behavior-driven development, other testing topics&lt;/li&gt;
-&lt;li&gt;static analysis&lt;/li&gt;
-&lt;li&gt;code performance&lt;/li&gt;
-&lt;li&gt;human performance&lt;/li&gt;
-&lt;li&gt;controversies over the adjective &amp;ldquo;pragmatic&amp;rdquo;&lt;/li&gt;
-&lt;li&gt;how much theory should one know or use?&lt;/li&gt;
-&lt;li&gt;how to teach&lt;/li&gt;
-&lt;li&gt;how to learn&lt;/li&gt;
-&lt;li&gt;how to focus and not be a dilettante&lt;/li&gt;
-&lt;li&gt;how to spread ideas&lt;/li&gt;
-&lt;li&gt;is syntax important?&lt;/li&gt;
-&lt;li&gt;are macros a good idea?&lt;/li&gt;
-&lt;li&gt;are unsound type systems justified?&lt;/li&gt;
-&lt;li&gt;what is a type system anyway or what should it be?&lt;/li&gt;
-&lt;li&gt;monads&lt;/li&gt;
-&lt;li&gt;editors and IDEs&lt;/li&gt;
-&lt;li&gt;are software patterns a mistake in disguise?&lt;/li&gt;
-&lt;li&gt;software evolution and maintenance&lt;/li&gt;
-&lt;li&gt;planning for the future vs. getting it done today&lt;/li&gt;
-&lt;li&gt;role of emotion in decision making&lt;/li&gt;
-&lt;li&gt;what is &amp;ldquo;community&amp;rdquo;?&lt;/li&gt;
-&lt;li&gt;politics of open source vs. free software&lt;/li&gt;
-&lt;li&gt;open standards&lt;/li&gt;
-&lt;li&gt;questions of diversity in our profession&lt;/li&gt;
-&lt;li&gt;education&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;the-dilemmas-i-encountered-when-deciding-to-create-this-blog:408b3167d100fed52fee95b6735e7853&#34;&gt;The dilemmas I encountered when deciding to create this blog&lt;/h2&gt;
-
-&lt;p&gt;I already encountered a dilemma some years ago when I thought that I should have a personal blog to regularly post to. I had messed around with Blogger and WordPress and they were not at all suitable for me. Luckily, I discovered &lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt; and it got me going very quickly. I&amp;rsquo;m still using it.&lt;/p&gt;
-
-&lt;p&gt;If all were going smoothly with the personal blog, then I probably would not have any dilemma when deciding to create the new blog; I would just use exactly the same Octopress platform.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Or would I?&lt;/em&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;desire-for-novelty-good-or-bad:408b3167d100fed52fee95b6735e7853&#34;&gt;Desire for novelty: good or bad?&lt;/h3&gt;
-
-&lt;p&gt;I am not immune to the thrill of novelty. I am not an extreme &lt;a href=&#34;http://en.wikipedia.org/wiki/Early_adopter&#34;&gt;early adopter&lt;/a&gt;, but I also do not entirely subscribe to the philosophy &lt;a href=&#34;http://en.wiktionary.org/wiki/if_it_ain%27t_broke,_don%27t_fix_it&#34;&gt;&amp;ldquo;if it ain&amp;rsquo;t broke, don&amp;rsquo;t fix it&amp;rdquo;&lt;/a&gt;. I like opportunities for doing something differently and better than in the past, but I like to evaluate these rationally. This is an example of what I mean by &amp;ldquo;conscientious programmer&amp;rdquo;: &lt;em&gt;always be aware of risks and tradeoffs when making any kind of decision&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;One thing that is sometimes forgotten in the rush to make a decision is that it is premature to immediately start making lists of risks and tradeoffs. First, you have to step back and figure out what the real goals are. Many projects fail because the assessments and the followup actions were &lt;em&gt;correct&lt;/em&gt;, but toward the &lt;em&gt;wrong&lt;/em&gt; goal. &lt;em&gt;Solving the correct problem&lt;/em&gt; is more important than &lt;em&gt;solving the wrong problem correctly&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;In the case of choosing which software to use for my new blog, there were actually several considerations.&lt;/p&gt;
-
-&lt;h3 id=&#34;unstable-branch-of-octopress:408b3167d100fed52fee95b6735e7853&#34;&gt;Unstable branch of Octopress&lt;/h3&gt;
-
-&lt;p&gt;Octopress&amp;rsquo;s stable &lt;a href=&#34;https://github.com/imathis/octopress&#34;&gt;&lt;code&gt;master&lt;/code&gt; branch&lt;/a&gt; is a continuation of version 2.0. At some point for my personal blog, I got excited about trying out the &lt;a href=&#34;https://github.com/imathis/octopress/tree/2.1&#34;&gt;unstable &lt;code&gt;2.1&lt;/code&gt; branch&lt;/a&gt; because of various improvements. I migrated over, and periodically endured a surprising amount of pain. It wasn&amp;rsquo;t just because I had to manually move files around and resolve merge conflicts and refactor my config files, but also bugs kept popping up, and I had to spend time fixing them.&lt;/p&gt;
-
-&lt;p&gt;In retrospect, &lt;em&gt;it was a mistake being an early adopter&lt;/em&gt; of branch &lt;code&gt;2.1&lt;/code&gt;. I stopped pulling and merging over a month ago, when it became clear that the migration to &lt;a href=&#34;http://jekyllrb.com/&#34;&gt;Jekyll&lt;/a&gt; 1.0 was causing major refactorings by the developers of the Octopress &lt;code&gt;2.1&lt;/code&gt; branch that were breaking everything on my blog.&lt;/p&gt;
-
-&lt;p&gt;It would &lt;em&gt;not&lt;/em&gt; have been a mistake if my goal were to help test and develop Octopress. That is a noble goal, because Octopress has been a &lt;em&gt;huge&lt;/em&gt; positive contributor to the world of blogging, as a static site generator that is programmable and comes with a good default theme (which I still use). But my &lt;em&gt;real goal&lt;/em&gt; is to write and post content, not spend my time fixing or configuring Octopress.&lt;/p&gt;
-
-&lt;h3 id=&#34;coming-back-to-octopress-master-branch:408b3167d100fed52fee95b6735e7853&#34;&gt;Coming back to Octopress &lt;code&gt;master&lt;/code&gt; branch?&lt;/h3&gt;
-
-&lt;p&gt;The official recommendation of the Octopress team right now (&lt;a href=&#34;https://twitter.com/octopress/status/348465809624027136&#34;&gt;as of two days ago, June 22&lt;/a&gt;) is to use &lt;code&gt;master&lt;/code&gt;, because once &lt;code&gt;2.1&lt;/code&gt; is cleaned up, it will actually become &lt;code&gt;3.0&lt;/code&gt; and there will be a tested migration path from &lt;code&gt;2.0&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;I confess to having a psychological resistance to &amp;ldquo;downgrading&amp;rdquo;, for this new blog, from my &lt;code&gt;2.1&lt;/code&gt;-based setup on my personal blog, but this is exactly the moment when it is necessary to remember that I want to be a &lt;em&gt;conscientious&lt;/em&gt; programmer.&lt;/p&gt;
-
-&lt;h3 id=&#34;switching-to-a-new-blogging-platform:408b3167d100fed52fee95b6735e7853&#34;&gt;Switching to a new blogging platform?&lt;/h3&gt;
-
-&lt;p&gt;The idea also occurred to me to use a completely different blogging platform. &lt;a href=&#34;http://jaspervdj.be/hakyll/&#34;&gt;Hakyll&lt;/a&gt; has always seemed appealing to me, because it is driven by Haskell (Octopress is driven by Ruby). I prefer programming in Haskell to programming in Ruby, both because of the static type safety and because of the expected considerable performance improvement in site generation (right now, full generation of my personal blog takes a very long time).&lt;/p&gt;
-
-&lt;p&gt;But after looking at Hakyll, and being tempted to get into it, I decided that my real goal is &lt;em&gt;not&lt;/em&gt; to spend a lot of time hacking Haskell as a personal side project, and creating cool themes and features for Hakyll, but to get a blog up and running so that I can focus on content for the blog. &lt;a href=&#34;http://en.wiktionary.org/wiki/bikeshedding&#34;&gt;Bikeshedding&lt;/a&gt; is not what I&amp;rsquo;m here for.&lt;/p&gt;
-
-&lt;p&gt;So I used Octopress again for this new blog.&lt;/p&gt;
-
-&lt;p&gt;By the way, if you are interested in using Octopress, here is a great &lt;a href=&#34;http://webdesign.tutsplus.com/tutorials/applications/getting-started-with-octopress/&#34;&gt;tutorial&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;flexibility:408b3167d100fed52fee95b6735e7853&#34;&gt;Flexibility&lt;/h3&gt;
-
-&lt;p&gt;Another thing I try to remember is to avoid getting backed into a corner when it comes to decision-making. I like to think about the future as well as the present. &lt;em&gt;What if&amp;hellip;?&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;I know that if I wanted to, in the future I could switch blogging platforms at will, by doing some programming. The decisions that I am making &lt;em&gt;now&lt;/em&gt; are not irreversible. Using a programmable static site generator means that I have full control over paths, styles, generation of RSS feeds, insertion of JavaScript-based features (such as the &lt;a href=&#34;http://disqus.com/&#34;&gt;Disqus&lt;/a&gt; commenting system), etc.&lt;/p&gt;
-
-&lt;p&gt;Thinking up front about the future and how it might be different and what I might need or want to do in the future is not just idle daydreaming; I find it an essential final step in making a decision &lt;em&gt;now&lt;/em&gt; and focusing on action &lt;em&gt;now&lt;/em&gt;, with the peace of mind that I no longer have to worry about the future because I already have a &lt;a href=&#34;http://en.wikipedia.org/wiki/Plan_B&#34;&gt;Plan B&lt;/a&gt;. We must always assume possible failure and future change. But we don&amp;rsquo;t have to panic about it.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:408b3167d100fed52fee95b6735e7853&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I&amp;rsquo;ve started this new programming blog, using the stable &lt;code&gt;master&lt;/code&gt; branch of Octopress. I hope we&amp;rsquo;ll share some interesting experiences here!&lt;/p&gt;
 </description>
     </item>
     

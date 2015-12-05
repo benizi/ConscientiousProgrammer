@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>24 days of Hackage, 2015: day 5: should-not-typecheck: making Haskell sort of dynamically typed with deferred type errors &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+        
+        <h1>The Conscientious Programmer</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
+    </ul>
+
+    
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>24 days of Hackage, 2015: day 5: should-not-typecheck: making Haskell sort of dynamically typed with deferred type errors</h1>
+    
+
+<h2 id="table-of-contents-for-the-whole-series:60dd71330bbedef1aba1bef45daea5dd">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-5:60dd71330bbedef1aba1bef45daea5dd">Day 5</h2>
+
+<p>Have you ever been frustrated when using a statically typed language
+because there&rsquo;s a type error somewhere in your code base but you want
+to run your program anyway, either because you don&rsquo;t care about that
+remote type error that has nothing to do with what you&rsquo;re working on,
+or because you want to step through your code and debug what the type
+error really is? I certainly have.</p>
+
+<p>Also, have you ever wanted to write a unit test to verify that your
+typed code disallows code you want to disallow, but you are
+frustrated because how do you write code in a typed language that
+says, &ldquo;This code (that you won&rsquo;t typecheck) won&rsquo;t typecheck&rdquo; and passes
+the typechecker and runs?</p>
+
+<p>Welcome to the land of GHC&rsquo;s
+<a href="https://ghc.haskell.org/trac/ghc/wiki/DeferErrorsToRuntime">&ldquo;deferred type errors&rdquo;</a>,
+a feature that has been part of GHC <a href="https://downloads.haskell.org/~ghc/7.6.1/docs/html/users_guide/defer-type-errors.html">since version 7.6.1</a> in 2013. Since
+this was not covered in Ollie&rsquo;s
+<a href="https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html">2014 series &ldquo;24 Days of GHC Extensions&rdquo;</a>,
+I decided to bring it up here, and in the context of a cute package, <a href="https://hackage.haskell.org/package/should-not-typecheck"><code>should-not-typecheck</code></a>
+that hooks up with HSpec to make assertions that *something won&rsquo;t
+typecheck.</p>
+
+<h2 id="installation:60dd71330bbedef1aba1bef45daea5dd">Installation</h2>
+
+<p>Since LTS does not know about this obscure package, Stack helpfully
+tells us exactly what to add to our <code>stack.yaml</code> to bring it in:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">extra-deps:
+- should-not-typecheck-2.0.1
+</pre></div>
+
+
+<h2 id="let-s-write-some-tests:60dd71330bbedef1aba1bef45daea5dd">Let&rsquo;s write some tests</h2>
+
+<p>The full documentation of <code>should-not-typecheck</code> is right there on
+<a href="https://hackage.haskell.org/package/should-not-typecheck">its Hackage page</a>.</p>
+
+<p>First, we need to enable the GHC option <code>-fdefer-type-errors</code> in the
+test module, with a directive:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# OPTIONS_GHC -fdefer-type-errors #-}</span>
+</pre></div>
+
+
+<h3 id="our-first-test:60dd71330bbedef1aba1bef45daea5dd">Our first test</h3>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">ShouldNotTypecheckExample</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> ( <span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>
+                  , <span style="color: #0000FF">shouldBe</span>, <span style="color: #0000FF">shouldReturn</span>
+                  , <span style="color: #0000FF">shouldThrow</span>, <span style="color: #0000FF">anyException</span>
+                  )
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.ShouldNotTypecheck</span> (<span style="color: #0000FF">shouldNotTypecheck</span>)
+
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;should-not-typecheck&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    it <span style="color: #BA2121">&quot;should not allow mapping negation over a list of strings&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      shouldNotTypecheck (map not [<span style="color: #BA2121">&quot;hello&quot;</span>, <span style="color: #BA2121">&quot;world&quot;</span>])
+</pre></div>
+
+
+<p>That&rsquo;s self-explanatory. We can&rsquo;t do a Boolean negation on a
+string. Haskell is not a &ldquo;truthy&rdquo;-based language, but a truth-based
+language.</p>
+
+<h2 id="some-puzzling-code:60dd71330bbedef1aba1bef45daea5dd">Some puzzling code</h2>
+
+<p>Now let&rsquo;s look at the <code>ShouldNotTypecheckExample</code> module:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# OPTIONS_GHC -fdefer-type-errors #-}</span>
+
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">ShouldNotTypecheckExample</span> (<span style="color: #0000FF">thisWorks</span>, <span style="color: #0000FF">thisFails</span>) <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #0000FF">thisWorks</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span>
+<span style="color: #0000FF">thisWorks</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  fst (<span style="color: #BA2121">&quot;hello&quot;</span>, [<span style="color: #BA2121">&quot;world&quot;</span> <span style="color: #666666">/</span> <span style="color: #B00040">True</span>, <span style="color: #BA2121">&quot;!&quot;</span>])
+
+<span style="color: #0000FF">thisFails</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span>
+<span style="color: #0000FF">thisFails</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  snd (<span style="color: #BA2121">&quot;hello&quot;</span>, [<span style="color: #BA2121">&quot;world&quot;</span> <span style="color: #666666">/</span> <span style="color: #B00040">True</span>, <span style="color: #BA2121">&quot;!&quot;</span>])
+</pre></div>
+
+
+<p>Pause for a moment, and think of what should happen when <code>thisWorks</code>
+and <code>thisFails</code> are used, and in what way, and why. In both cases, we
+have a tuple and are returning the first element or the second element of
+the tuple. The second element is a list that is clearly ill-typed,
+because it contains something that is nonsensical (division of a
+string by a boolean).</p>
+
+<h2 id="the-role-of-laziness:60dd71330bbedef1aba1bef45daea5dd">The role of laziness</h2>
+
+<p>To understand what happens in the following tests, you need to
+understand how laziness works in Haskell. The word &ldquo;lazy&rdquo; has come to
+be used for many different ideas and constructs in different
+programming languages, but Haskell&rsquo;s &ldquo;laziness&rdquo; is unique. A full
+discussion is outside the scope of this article, but I thought that
+showing what happens with deferred type errors might be a gateway
+toward better understanding the execution model of Haskell.</p>
+
+<h3 id="never-reached:60dd71330bbedef1aba1bef45daea5dd">Never reached</h3>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    it <span style="color: #BA2121">&quot;you can run code even if it contains ill-typed parts&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      thisWorks `shouldBe` <span style="color: #BA2121">&quot;hello&quot;</span>
+</pre></div>
+
+
+<p>This works because tuples in Haskell are lazy, and therefore in
+ordinary typechecking, taking the first element of a well-typed tuple
+succeeds no matter what is in the second element of the tuple. The
+difference when operating in deferred typechecking mode is that the
+tuple doesn&rsquo;t even need to be well-typed, and the second element can
+be complete junk, as it is here. So this example is straightforward if
+you consider that what GHC does is somehow push the type error into a
+reasonably small context so that outside of it, things still typecheck
+and run normally.</p>
+
+<h3 id="laziness-all-the-way-down:60dd71330bbedef1aba1bef45daea5dd">Laziness all the way down</h3>
+
+<p>So what happens if we get the second element of the tuple, it is junk,
+and take its length?</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    it <span style="color: #BA2121">&quot;deferred type errors are only lazily reached&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      length thisFails `shouldBe` <span style="color: #666666">2</span>
+</pre></div>
+
+
+<p>The answer is that everything is still fine, because the embedded list
+inside the lazy tuple is a lazy list (because lists in Haskell are
+lazy), and <code>length</code> never looks at the elements of the list, only
+counts their number, so it passes over the junky thunk for <code>&quot;world&quot; /
+True&quot;</code> perfectly fine without needing to evaluate it.</p>
+
+<h3 id="forcing-the-laziness:60dd71330bbedef1aba1bef45daea5dd">Forcing the laziness</h3>
+
+<p>To explicitly force laziness into fully evaluated data (the kind of
+data in standard programming languages), we need to use the
+<a href="https://hackage.haskell.org/package/deepseq"><code>deepseq</code></a> package. It&rsquo;s
+work to fully, deeply evaluate something in Haskell! We use
+<a href="https://hackage.haskell.org/package/deepseq-1.4.1.2/docs/Control-DeepSeq.html#v:force"><code>force</code></a>
+from that package.</p>
+
+<p>In order to catch, in HSpec, the exception we expect to finally get, we
+also need to use
+<a href="https://hackage.haskell.org/package/base-4.8.1.0/docs/Control-Exception.html#v:evaluate"><code>evaluate</code></a>
+from <code>Control.Exception</code> in
+<a href="https://hackage.haskell.org/package/base"><code>base</code></a>, the main package
+of the ecosystem (discussed
+in a <a href="https://ocharles.org.uk/blog/posts/2012-12-23-24-days-of-hackage-base.html">2012 Day of Hackage post</a>).</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Exception</span> (<span style="color: #0000FF">evaluate</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.DeepSeq</span> (<span style="color: #0000FF">force</span>)
+</pre></div>
+</p>
+
+<p>Our test (which for simplicity is coarse in that it catches any
+exception, rather than the specific typechecking exception):</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    it <span style="color: #BA2121">&quot;deferred type errors cause an exception only when reached&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      evaluate (force thisFails) `shouldThrow` anyException
+</pre></div>
+</p>
+
+<p>The deep evaluation will go all the way down to the junky expression
+in the list in the tuple of our example, and a typechecking error is
+thrown there at run time, as expected.</p>
+
+<p>Suppose we were just evaluating <code>thisFails</code> from code, say within
+GHCi. This is what we get:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">*Main&gt; import ShouldNotTypecheckExample</span>
+<span style="color: #888888">*Main ShouldNotTypecheckExample&gt; thisFails</span>
+<span style="color: #888888">&quot;*** Exception: /Users/chen/Sync/haskell/twenty-four-days2015-of-hackage/src/ShouldNotTypecheckExample.hs:14:26:</span>
+<span style="color: #888888">    No instance for (Fractional Char) arising from a use of ‘/’</span>
+<span style="color: #888888">    In the expression: &quot;world&quot; / True</span>
+<span style="color: #888888">    In the expression: [&quot;world&quot; / True, &quot;!&quot;]</span>
+<span style="color: #888888">    In the first argument of ‘snd’, namely</span>
+<span style="color: #888888">      ‘(&quot;hello&quot;, [&quot;world&quot; / True, &quot;!&quot;])’</span>
+<span style="color: #888888">(deferred type error)</span>
+</pre></div>
+</p>
+
+<h2 id="haskell-is-not-really-being-dynamic-here:60dd71330bbedef1aba1bef45daea5dd">Haskell is not really being dynamic here</h2>
+
+<p>So is Haskell dynamically typed then, when running in this mode? Not
+really. It&rsquo;s faking it. What it&rsquo;s basically doing is that the
+typechecker is <em>still finding the type error at compile time</em>, but
+then secretly creating the exception information at the site of the
+crappy code and replacing that code with a call to throw that
+exception. The technical details are
+<a href="http://dreixel.net/research/pdf/epdtecp.pdf">in this paper</a>.</p>
+
+<p>This is completely different from the dynamic checking where nothing
+is checked at compile time and an error is discovered during the
+course of run time execution. Here, the error is discovered up front,
+stashed away, and kept a secret until or unless it is demanded.</p>
+
+<h2 id="for-more-on-laziness-and-forcing:60dd71330bbedef1aba1bef45daea5dd">For more on laziness and forcing</h2>
+
+<p>Simon Marlow&rsquo;s free book
+<a href="http://chimera.labs.oreilly.com/books/1230000000929">&ldquo;Parallel and Concurrent Programming in Haskell&rdquo;</a>
+has chapters on evaluation strategies, starting with <a href="http://chimera.labs.oreilly.com/books/1230000000929/ch02.html#sec_par-eval-sudoku2">chapter 2</a>. This stuff is subtle.</p>
+
+<h2 id="conclusion:60dd71330bbedef1aba1bef45daea5dd">Conclusion</h2>
+
+<p>For day 5, I introduced the <code>should-not-typecheck</code> package and briefly
+discussed Haskell&rsquo;s lazy evaluation and how it interacts with GHC&rsquo;s
+deferred type errors. A later Day of Hackage will venture into the
+world of doing &ldquo;real&rdquo; dynamic typing in Haskell.</p>
+
+<h2 id="all-the-code:60dd71330bbedef1aba1bef45daea5dd">All the code</h2>
+
+<p>All my code for my article series are at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/05\/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors\/';
+    var disqus_title = '24 days of Hackage, 2015: day 5: should-not-typecheck: making Haskell sort of dynamically typed with deferred type errors';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/05\/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

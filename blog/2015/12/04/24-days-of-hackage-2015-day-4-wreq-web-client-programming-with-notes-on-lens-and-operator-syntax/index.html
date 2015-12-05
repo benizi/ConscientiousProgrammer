@@ -270,7 +270,7 @@ another using a builder pattern starting with the <code>wreq</code> <code>defaul
 <p>Then we parse the lazy <code>ByteString</code> response, including the headers
 and the body, into an untyped JSON object, an <code>aeson</code>
 <a href="https://hackage.haskell.org/package/aeson-0.10.0.0/docs/Data-Aeson.html#t:Value"><code>Value</code></a>:
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"> jsonResponse <span style="color: #AA22FF; font-weight: bold">&lt;-</span> asValue response 
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  jsonResponse <span style="color: #AA22FF; font-weight: bold">&lt;-</span> asValue response
 </pre></div>
 </p>
 
