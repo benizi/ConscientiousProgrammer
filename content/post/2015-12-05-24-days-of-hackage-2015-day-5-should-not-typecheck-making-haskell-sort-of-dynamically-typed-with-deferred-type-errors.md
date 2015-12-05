@@ -40,7 +40,7 @@ a feature that has been part of GHC [since version 7.6.1](https://downloads.hask
 this was not covered in Ollie's
 [2014 series "24 Days of GHC Extensions"](https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html),
 I decided to bring it up here, and in the context of a cute package, [`should-not-typecheck`](https://hackage.haskell.org/package/should-not-typecheck)
-that hooks up with HSpec to make assertions that *something won't
+that hooks up with HSpec to make assertions that something won't
 typecheck.
 
 <!--more-->
