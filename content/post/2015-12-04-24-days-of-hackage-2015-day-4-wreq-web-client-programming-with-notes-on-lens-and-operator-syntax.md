@@ -214,8 +214,9 @@ getMeetupEventInfos groupId = do
 Then we parse the lazy `ByteString` response, including the headers
 and the body, into an untyped JSON object, an `aeson`
 [`Value`](https://hackage.haskell.org/package/aeson-0.10.0.0/docs/Data-Aeson.html#t:Value):
-{{< highlight haskell >}} jsonResponse <- asValue response {{<
-/highlight >}}
+{{< highlight haskell >}}
+  jsonResponse <- asValue response
+{{< /highlight >}}
 
 More precisely, [`Value` is unityped](https://hackage.haskell.org/package/aeson-0.10.0.0/docs/src/Data-Aeson-Types-Internal.html#Value):
 
