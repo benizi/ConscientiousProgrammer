@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>24 days of Hackage, 2015: day 4: wreq: Web client programming; with notes on lens and operator syntax &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+        
+        <h1>The Conscientious Programmer</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
+    </ul>
+
+    
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>24 days of Hackage, 2015: day 4: wreq: Web client programming; with notes on lens and operator syntax</h1>
+    
+
+<h2 id="table-of-contents-for-the-whole-series:de6d56fd6945d7d59fdd3a84148a0b85">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-4:de6d56fd6945d7d59fdd3a84148a0b85">Day 4</h2>
+
+<p>In the late 1990s, I eagerly bought the book
+<a href="http://www.oreilly.com/openbook/webclient/">&ldquo;Web Client Programming with Perl&rdquo;</a>
+and used the <a href="http://search.cpan.org/dist/libwww-perl/lib/LWP.pm">LWP</a>
+library to scrape the Web in automated fashion. I continued doing that
+into the 2000s. I am happy that nowadays, I can just use Haskell to do
+this kind of programming, in a succinct way also.</p>
+
+<p>Today&rsquo;s topic is <a href="http://www.serpentine.com/wreq/"><code>wreq</code></a>,
+<a href="http://www.serpentine.com/blog/">Bryan O&rsquo;Sullivan</a>&rsquo;s high-level
+library for doing Web client programming designed specifically for
+usability.</p>
+
+<p><code>wreq</code> makes use of the
+<a href="https://hackage.haskell.org/package/aeson"><code>aeson</code></a> ecosystem for JSON
+and <a href="https://hackage.haskell.org/package/lens"><code>lens</code></a> and ecosystem,
+including
+<a href="https://hackage.haskell.org/package/lens-aeson"><code>lens-aeson</code></a>, so you
+may want to check out Ollie&rsquo;s 2012 Days of Hackage posts on
+<a href="https://ocharles.org.uk/blog/posts/2012-12-07-24-days-of-hackage-aeson.html">aeson</a>
+and <a href="https://ocharles.org.uk/blog/posts/2012-12-09-24-days-of-hackage-lens.html">lens</a>.</p>
+
+<p>Since <code>wreq</code> already has an extensive
+<a href="http://www.serpentine.com/wreq/">tutorial and reference documentation</a>,
+I&rsquo;m not going to repeat its explanations. Instead, I&rsquo;m going to give an
+example of use that should be simple enough to be understood from
+context, then discuss the issue of using operator syntax in Haskell.</p>
+
+<h2 id="the-task:de6d56fd6945d7d59fdd3a84148a0b85">The task</h2>
+
+<p>I&rsquo;m a member of many groups on <a href="http://www.meetup.com/">Meetup</a>. It&rsquo;s
+often useful for me to get information using the official
+<a href="http://www.meetup.com/meetup_api/">Meetup API</a> rather than go around
+clicking on a Web site on or a mobile app. Why do by hand what I can
+do much more efficiently and correctly with code?</p>
+
+<p>Here&rsquo;s a very simplified example of something I might want to do with
+Meetup. I&rsquo;ve been active in the
+<a href="http://www.codeandsupply.co/">Pittsburgh Code and Supply</a> community,
+which has a
+<a href="http://www.meetup.com/Pittsburgh-Code-Supply/">Meetup site</a> with a
+packed calendar of events (it&rsquo;s on hiatus now in December for the
+holidays, but is otherwise very active). Maybe I want to find out what
+upcoming events they are, and search for events of interest according
+to some criteria. For our toy example here, let&rsquo;s say I want to find
+the ten upcoming events and get their names and venue names, and make
+sure there&rsquo;s at least one event that has a name and venue name already
+set up (sometimes, an event is proposed but no venue has been found
+yet).</p>
+
+<h2 id="a-test:de6d56fd6945d7d59fdd3a84148a0b85">A test</h2>
+
+<p>Yesterday,
+<a href="../../../../../blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/">day 3</a>
+of this article series, I mentioned liking using HSpec, so let&rsquo;s use
+HSpec.</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE OverloadedStrings #-}</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">WreqExample</span> (<span style="color: #B00040">GroupId</span>, <span style="color: #0000FF">eventName</span>, <span style="color: #0000FF">venueName</span>, <span style="color: #0000FF">getMeetupEventInfos</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> ( <span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>
+                  , <span style="color: #0000FF">shouldSatisfy</span>, <span style="color: #0000FF">shouldNotSatisfy</span>
+                  )
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.Text</span> <span style="color: #008000; font-weight: bold">as</span> Text
+</pre></div>
+
+
+<p>We are using the <a href="https://hackage.haskell.org/package/text"><code>text</code></a>
+packed Unicode string type, because that&rsquo;s what <code>wreq</code>
+uses. <code>OverloadedStrings</code> is a convenient GHC extension that allows
+string literals in code to be treated as <code>Text</code> values rather than
+<code>String</code>. Ollie discusses this extension in his <a href="https://ocharles.org.uk/blog/posts/2014-12-17-overloaded-strings.html">2014 Days of GHC Extensions</a>.</p>
+
+<p>Also, since I&rsquo;m operating in test-driven development style, I wrote
+this test first, before writing the <code>WreqExample</code> module: I only wrote
+the imports for what I need for the test.</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;wreq&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    it <span style="color: #BA2121">&quot;there are named, located Pittsburgh Code and Supply events coming up&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #408080; font-style: italic">-- Warning! This is a stateful test going out to the Web.</span>
+      events <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getMeetupEventInfos pittsburghCodeAndSupplyId
+      events `shouldNotSatisfy` null
+      events `shouldSatisfy` any
+        (<span style="color: #0000FF">\</span>event <span style="color: #AA22FF; font-weight: bold">-&gt;</span> (not <span style="color: #666666">.</span> <span style="color: #B00040">Text</span><span style="color: #666666">.</span>null <span style="color: #666666">.</span> eventName) event
+                   <span style="color: #666666">&amp;&amp;</span> (not <span style="color: #666666">.</span> <span style="color: #B00040">Text</span><span style="color: #666666">.</span>null <span style="color: #666666">.</span> venueName) event)
+
+<span style="color: #0000FF">pittsburghCodeAndSupplyId</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span>
+<span style="color: #0000FF">pittsburghCodeAndSupplyId</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&quot;13452572&quot;</span>
+</pre></div>
+
+
+<h2 id="module-signatures:de6d56fd6945d7d59fdd3a84148a0b85">Module signatures</h2>
+
+<p>If Haskell had
+<a href="http://jozefg.bitbucket.org/posts/2015-01-08-modules.html">module signatures, like Standard ML and OCaml do</a>,
+I would write an explicit module signature for the module I intend to
+implement that will conform to that signature, but Haskell doesn&rsquo;t, so
+the best we can do is operate in &ldquo;duck typing&rdquo; manner at the module
+level, relying implicitly on compilation to fail on import of a
+conforming module implementation rather than on matching against an
+explicit signature without the need for an implementation.</p>
+
+<p>Here are the types we need (in a pseudo-syntax as though Haskell had
+module signatures):</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">GroupId</span>    <span style="color: #408080; font-style: italic">-- abstract</span>
+
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">EventInfo</span>  <span style="color: #408080; font-style: italic">-- abstract</span>
+
+<span style="color: #408080; font-style: italic">-- abstract type accessors</span>
+<span style="color: #0000FF">eventName</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">EventInfo</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Text</span>
+<span style="color: #0000FF">venueName</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">EventInfo</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Text</span>
+
+<span style="color: #0000FF">getMeetupEventInfos</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">IO</span> [<span style="color: #B00040">EventInfo</span>]
+</pre></div>
+
+
+<h2 id="implementation:de6d56fd6945d7d59fdd3a84148a0b85">Implementation</h2>
+
+<h3 id="imports:de6d56fd6945d7d59fdd3a84148a0b85">Imports</h3>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Network.Wreq</span> (<span style="color: #B00040">Options</span>, <span style="color: #0000FF">defaults</span>, <span style="color: #0000FF">param</span>, <span style="color: #0000FF">getWith</span>, <span style="color: #0000FF">asValue</span>, <span style="color: #0000FF">responseBody</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Text</span> (<span style="color: #B00040">Text</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Aeson</span> (<span style="color: #B00040">Value</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Lens</span> (<span style="color: #0000FF">view</span>, <span style="color: #0000FF">set</span>, <span style="color: #0000FF">toListOf</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Aeson.Lens</span> (<span style="color: #0000FF">key</span>, <span style="color: #0000FF">_Array</span>, <span style="color: #0000FF">_String</span>)
+</pre></div>
+
+
+<h3 id="types:de6d56fd6945d7d59fdd3a84148a0b85">Types</h3>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | Information that we care about from a Meetup event.</span>
+<span style="color: #008000; font-weight: bold">data</span> <span style="color: #B00040">EventInfo</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #B00040">EventInfo</span> { eventName <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Text</span>
+            , venueName <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Text</span>
+            }
+  <span style="color: #008000; font-weight: bold">deriving</span> (<span style="color: #B00040">Show</span>)
+
+<span style="color: #408080; font-style: italic">-- | A valid Meetup group ID.</span>
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">GroupId</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Text</span>
+</pre></div>
+
+
+<h3 id="the-web-client-part:de6d56fd6945d7d59fdd3a84148a0b85">The Web client part</h3>
+
+<p>Since we&rsquo;re only making one request, and are not doing any error
+handling, but letting <code>wreq</code> throw exceptions instead, the Web client
+part is very brief. The Meetup API allows returning information as
+JSON.</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">meetupEventsUrl</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span>
+<span style="color: #0000FF">meetupEventsUrl</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&quot;https://api.meetup.com/2/events&quot;</span>
+</pre></div>
+
+
+<p>We perform a <code>GET</code> with query parameters. <code>wreq</code> uses lens as its
+domain-specific language for creating options for <code>GET</code>, so let&rsquo;s
+create a <code>wreq</code> <code>Options</code> value, by setting the parameters one after
+another using a builder pattern starting with the <code>wreq</code> <code>defaults</code>:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">eventsOptions</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span>
+              <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Options</span>
+<span style="color: #0000FF">eventsOptions</span> groupId <span style="color: #AA22FF; font-weight: bold">=</span>
+  set (param <span style="color: #BA2121">&quot;page&quot;</span>) [<span style="color: #BA2121">&quot;10&quot;</span>] (
+    set (param <span style="color: #BA2121">&quot;order&quot;</span>) [<span style="color: #BA2121">&quot;time&quot;</span>] (
+      set (param <span style="color: #BA2121">&quot;status&quot;</span>) [<span style="color: #BA2121">&quot;upcoming&quot;</span>] (
+        set (param <span style="color: #BA2121">&quot;group_id&quot;</span>) [groupId] (
+          set (param <span style="color: #BA2121">&quot;format&quot;</span>) [<span style="color: #BA2121">&quot;json&quot;</span>] defaults))))
+</pre></div>
+
+
+<p>We begin by going out to the Web to get back a response, which is a
+<a href="https://hackage.haskell.org/package/bytestring-0.10.6.0/docs/Data-ByteString-Lazy.html">lazy <code>ByteString</code></a>:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">getMeetupEventInfos</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">IO</span> [<span style="color: #B00040">EventInfo</span>]
+<span style="color: #0000FF">getMeetupEventInfos</span> groupId <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  response <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getWith (eventsOptions groupId) meetupEventsUrl
+</pre></div>
+</p>
+
+<h3 id="the-json-part:de6d56fd6945d7d59fdd3a84148a0b85">The JSON part</h3>
+
+<p>Then we parse the lazy <code>ByteString</code> response, including the headers
+and the body, into an untyped JSON object, an <code>aeson</code>
+<a href="https://hackage.haskell.org/package/aeson-0.10.0.0/docs/Data-Aeson.html#t:Value"><code>Value</code></a>:
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"> jsonResponse <span style="color: #AA22FF; font-weight: bold">&lt;-</span> asValue response 
+</pre></div>
+</p>
+
+<p>More precisely, <a href="https://hackage.haskell.org/package/aeson-0.10.0.0/docs/src/Data-Aeson-Types-Internal.html#Value"><code>Value</code> is unityped</a>:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Object</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">HashMap</span> <span style="color: #B00040">Text</span> <span style="color: #B00040">Value</span>
+
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Array</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Vector</span> <span style="color: #B00040">Value</span>
+
+<span style="color: #008000; font-weight: bold">data</span> <span style="color: #B00040">Value</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Object</span> <span style="color: #666666">!</span><span style="color: #B00040">Object</span>
+           <span style="color: #666666">|</span> <span style="color: #B00040">Array</span> <span style="color: #666666">!</span><span style="color: #B00040">Array</span>
+           <span style="color: #666666">|</span> <span style="color: #B00040">String</span> <span style="color: #666666">!</span><span style="color: #B00040">Text</span>
+           <span style="color: #666666">|</span> <span style="color: #B00040">Number</span> <span style="color: #666666">!</span><span style="color: #B00040">Scientific</span>
+           <span style="color: #666666">|</span> <span style="color: #B00040">Bool</span> <span style="color: #666666">!</span><span style="color: #B00040">Bool</span>
+           <span style="color: #666666">|</span> <span style="color: #B00040">Null</span>
+</pre></div>
+</p>
+
+<h3 id="the-lens-part:de6d56fd6945d7d59fdd3a84148a0b85">The lens part</h3>
+
+<p>It was annoying figuring out from the official
+Meetup API site what fields I needed from the response and what their
+types were supposed to be. In practice I just saved off JSON from a
+representative query and looked at some events to see what I wanted. I
+was told where to find the
+<a href="meetup.json">automatically generated documentation of all the API methods</a>
+but it was not ideal. A later Day of Hackage will discuss what I did
+about this problem.</p>
+
+<p>We extract the list of events, using a traversal to get the whole
+list, which is encoded as a JSON array in the top level JSON object&rsquo;s
+<code>results</code> field:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #008000; font-weight: bold">let</span> events <span style="color: #AA22FF; font-weight: bold">=</span> toListOf (responseBody
+                         <span style="color: #666666">.</span> key <span style="color: #BA2121">&quot;results&quot;</span>
+                         <span style="color: #666666">.</span> _Array <span style="color: #666666">.</span> traverse
+                        ) jsonResponse
+</pre></div>
+</p>
+
+<p>Here we use <code>toListOf</code> from lens with a traversal and a JSON object to
+pull out everything from that traversal.</p>
+
+<p>Finally, since we only want, for each event, its name and
+its venue&rsquo;s name (the venue&rsquo;s name is actually a field in a venue
+object):</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  return (map jsonToEventInfo events)
+</pre></div>
+</p>
+
+<p>We again use lens, at the level of an individual event object, to
+extract what we want from it:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | Extract our typed data model from an untyped JSON object.</span>
+<span style="color: #0000FF">jsonToEventInfo</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Value</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">EventInfo</span>
+<span style="color: #0000FF">jsonToEventInfo</span> json <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #B00040">EventInfo</span> { eventName <span style="color: #AA22FF; font-weight: bold">=</span> view (key <span style="color: #BA2121">&quot;name&quot;</span> <span style="color: #666666">.</span> _String) json
+            , venueName <span style="color: #AA22FF; font-weight: bold">=</span> view (key <span style="color: #BA2121">&quot;venue&quot;</span>
+                                <span style="color: #666666">.</span> key <span style="color: #BA2121">&quot;name&quot;</span> <span style="color: #666666">.</span> _String) json
+            }
+</pre></div>
+</p>
+
+<p>Here we use the <code>view</code> function of <code>lens</code>, to apply a lens to the JSON
+object to pull a field out of it.</p>
+
+<p>And we&rsquo;re done! We&rsquo;ve written a script that looks pretty much like
+what you&rsquo;d write in Perl or Python. It will also &ldquo;fail&rdquo; in similar
+ways, because we&rsquo;re basically not using any types at all; even the
+final result just has strings, which may or may not be empty, whatever
+that&rsquo;s supposed to mean. For example, if you try to find a field by a
+string key that doesn&rsquo;t exist, the particular code here will just
+silently give back an empty string. Can we do better? Yes, there are
+various ways to do better. Stay tuned for a later Day of Hackage.</p>
+
+<h2 id="lens-operator-syntax:de6d56fd6945d7d59fdd3a84148a0b85">Lens operator syntax</h2>
+
+<p>If you&rsquo;ve already used <code>wreq</code> or <code>lens</code>, you may have noticed
+something strange above: I didn&rsquo;t use any <code>lens</code> operator syntax. This
+was deliberate. Although the <code>wreq</code> tutorial gives a
+<a href="http://www.serpentine.com/wreq/tutorial.html#a-quick-lens-backgrounder">little bit of background on <code>lens</code></a>,
+the reality is that when some friends who were not experienced lensers
+or Haskellers asked me how I do Web client programming in Haskell, and
+I pointed to <code>wreq</code> as being pretty cool, they got immediately stuck
+on the lens stuff. Looking back at the tutorial, I do see that it
+jumps straight into operator soup. This is unfortunate. You can
+immediately use libraries like <code>wreq</code> without having the lens
+operators memorized already. You have to understand some facts (such
+as the use of the function composition operator to compose lenses) and
+have an idea of how the types work out, but one thing you don&rsquo;t need
+is the funny operators. I think it&rsquo;s best to understand how to do
+things without operators before starting to use them as a convenient
+shortcut.</p>
+
+<p>For example, an idiomatic way to set the options object, as presented
+in the &ldquo;whirlwind tour&rdquo; section of the <code>wreq</code> tutorial, is:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Lens</span> ((<span style="color: #666666">&amp;</span>), (<span style="color: #666666">.~</span>))
+
+<span style="color: #0000FF">eventsOptions</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span>
+              <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Options</span>
+<span style="color: #0000FF">eventsOptions</span> groupId <span style="color: #AA22FF; font-weight: bold">=</span> defaults
+  <span style="color: #666666">&amp;</span> param <span style="color: #BA2121">&quot;format&quot;</span> <span style="color: #666666">.~</span> [<span style="color: #BA2121">&quot;json&quot;</span>]
+  <span style="color: #666666">&amp;</span> param <span style="color: #BA2121">&quot;group_id&quot;</span> <span style="color: #666666">.~</span> [groupId]
+  <span style="color: #666666">&amp;</span> param <span style="color: #BA2121">&quot;status&quot;</span> <span style="color: #666666">.~</span> [<span style="color: #BA2121">&quot;upcoming&quot;</span>]
+  <span style="color: #666666">&amp;</span> param <span style="color: #BA2121">&quot;order&quot;</span> <span style="color: #666666">.~</span> [<span style="color: #BA2121">&quot;time&quot;</span>]
+  <span style="color: #666666">&amp;</span> param <span style="color: #BA2121">&quot;page&quot;</span> <span style="color: #666666">.~</span> [<span style="color: #BA2121">&quot;10&quot;</span>]
+</pre></div>
+</p>
+
+<p>I don&rsquo;t like the idea of newcomers to this library just copying and
+pasting stuff without understanding what it does, or getting the
+impression that these operators are somehow built into the Haskell
+language or required for using the library. People really do get these
+impressions.</p>
+
+<p>I happen to like the reverse function operator <code>&amp;</code> a lot, although
+it&rsquo;s not as suggestive as the exact same reverse function operator in
+many other languages (such as F#, OCaml, Elm, Elixir) in the form of a pipe
+instead
+<a href="http://package.elm-lang.org/packages/elm-lang/core/3.0.0/Basics#|%3E"><code>|&gt;</code></a>,
+so I feel OK about using it.</p>
+
+<p>But the <code>.~</code> is I think not very suggestive to newcomers to
+<code>lens</code>. Is <code>set lens newValue object</code> so much worse to write or read than
+<code>object &amp; lens .~ newValue</code>?</p>
+
+<h2 id="code-golf:de6d56fd6945d7d59fdd3a84148a0b85">Code golf?</h2>
+
+<p>To illustrate both the up sides and down sides of using operators (but
+in this case mostly down sides, I think), here is a code golf version
+of the entire code:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Network.Wreq</span> (<span style="color: #B00040">Options</span>, <span style="color: #0000FF">defaults</span>, <span style="color: #0000FF">param</span>, <span style="color: #0000FF">getWith</span>, <span style="color: #0000FF">asValue</span>, <span style="color: #0000FF">responseBody</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Text</span> (<span style="color: #B00040">Text</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Lens</span> ((<span style="color: #666666">&amp;</span>), (<span style="color: #666666">.~</span>), (<span style="color: #666666">^.</span>), (<span style="color: #666666">^..</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Aeson.Lens</span> (<span style="color: #0000FF">key</span>, <span style="color: #0000FF">_Array</span>, <span style="color: #0000FF">_String</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Arrow</span> ((<span style="color: #666666">&gt;&gt;&gt;</span>), (<span style="color: #666666">&amp;&amp;&amp;</span>))
+
+<span style="color: #0000FF">meetupEventsUrl</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span>
+<span style="color: #0000FF">meetupEventsUrl</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&quot;https://api.meetup.com/2/events&quot;</span>
+
+<span style="color: #408080; font-style: italic">-- | A valid Meetup group ID.</span>
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">GroupId</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Text</span>
+
+<span style="color: #408080; font-style: italic">-- | For searching for events in a Meetup group.</span>
+<span style="color: #0000FF">eventsOptions</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span>
+              <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Options</span>
+<span style="color: #0000FF">eventsOptions</span> groupId <span style="color: #AA22FF; font-weight: bold">=</span> defaults
+  <span style="color: #666666">&amp;</span> param <span style="color: #BA2121">&quot;format&quot;</span> <span style="color: #666666">.~</span> [<span style="color: #BA2121">&quot;json&quot;</span>]
+  <span style="color: #666666">&amp;</span> param <span style="color: #BA2121">&quot;group_id&quot;</span> <span style="color: #666666">.~</span> [groupId]
+  <span style="color: #666666">&amp;</span> param <span style="color: #BA2121">&quot;status&quot;</span> <span style="color: #666666">.~</span> [<span style="color: #BA2121">&quot;upcoming&quot;</span>]
+  <span style="color: #666666">&amp;</span> param <span style="color: #BA2121">&quot;order&quot;</span> <span style="color: #666666">.~</span> [<span style="color: #BA2121">&quot;time&quot;</span>]
+  <span style="color: #666666">&amp;</span> param <span style="color: #BA2121">&quot;page&quot;</span> <span style="color: #666666">.~</span> [<span style="color: #BA2121">&quot;10&quot;</span>]
+
+<span style="color: #408080; font-style: italic">-- | Code golf version. Don&#39;t do this?</span>
+<span style="color: #0000FF">getMeetupNameAndVenues</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">IO</span> [(<span style="color: #B00040">Text</span>, <span style="color: #B00040">Text</span>)]
+<span style="color: #0000FF">getMeetupNameAndVenues</span> groupId <span style="color: #AA22FF; font-weight: bold">=</span>
+  getWith (eventsOptions groupId) meetupEventsUrl
+  <span style="color: #666666">&gt;&gt;=</span> asValue
+  <span style="color: #666666">&gt;&gt;=</span> ((<span style="color: #666666">^..</span> responseBody
+        <span style="color: #666666">.</span> key <span style="color: #BA2121">&quot;results&quot;</span>
+        <span style="color: #666666">.</span> _Array <span style="color: #666666">.</span> traverse)
+       <span style="color: #666666">&gt;&gt;&gt;</span> map ((<span style="color: #666666">^.</span> key <span style="color: #BA2121">&quot;name&quot;</span> <span style="color: #666666">.</span> _String)
+                 <span style="color: #666666">&amp;&amp;&amp;</span> (<span style="color: #666666">^.</span> key <span style="color: #BA2121">&quot;venue&quot;</span>
+                      <span style="color: #666666">.</span> key <span style="color: #BA2121">&quot;name&quot;</span> <span style="color: #666666">.</span> _String)
+                 )
+       <span style="color: #666666">&gt;&gt;&gt;</span> return
+      )
+</pre></div>
+</p>
+
+<p>In a way, this looks cool because the piping left to right reads well
+and naturally, if you know all the operators and are happy with
+operator sectioning syntax and point-free combinators. But when I
+showed this to friends who are not so fluent in Haskell, they didn&rsquo;t
+like this. Also, note that I made concessions in order to arrange this
+pipeline. I lost the comments, the intermediate named sub-computations
+(very useful for finer-grained testing), and even my custom result
+type (resorting to just tupling). I feel something has been lost by
+writing in this style even though part of me secretly likes it.</p>
+
+<h2 id="an-interview-with-bryan-o-sullivan:de6d56fd6945d7d59fdd3a84148a0b85">An interview with Bryan O&rsquo;Sullivan</h2>
+
+<p>Recently (September 2015), <a href="http://www.haskellcast.com/">The Haskell Cast</a> interviewed Bryan
+O&rsquo;Sullivan. I highly recommend listening to <a href="http://www.haskellcast.com/episode/010-bryan-osullivan-on-performance-and-efficiency/">the whole thing</a>. He
+had stories to tell about how he got into Haskell, how he ended up
+writing all these libraries, and how he goes about designing them and
+what his goals are when implementing them. Note that <code>aeson</code> and
+<code>text</code>, which everyone uses, are his creations. Thank you, Bryan, for
+all you&rsquo;ve done for the Haskell community!</p>
+
+<h2 id="lens-resources:de6d56fd6945d7d59fdd3a84148a0b85">Lens resources</h2>
+
+<p>Gabriel Gonzalez wrote a
+<a href="https://hackage.haskell.org/package/lens-tutorial">lens tutorial</a>
+that is useful. Thank you, Gabriel, for writing tutorials not only on
+your own libraries, but for others as well!</p>
+
+<h2 id="conclusion:de6d56fd6945d7d59fdd3a84148a0b85">Conclusion</h2>
+
+<p>For day 4, I presented a tiny example of use of <code>wreq</code> with <code>aeson</code>
+and <code>lens</code> to perform a simple task of getting information from the
+Web, and tried to make <code>wreq</code> more accessible by not requiring use of
+<code>lens</code> operators up front.</p>
+
+<h2 id="all-the-code:de6d56fd6945d7d59fdd3a84148a0b85">All the code</h2>
+
+<p>All my code for my article series are at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/04\/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax\/';
+    var disqus_title = '24 days of Hackage, 2015: day 4: wreq: Web client programming; with notes on lens and operator syntax';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/04\/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

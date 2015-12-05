@@ -6,8 +6,423 @@
     <description>Recent content in Posts on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 03 Dec 2015 07:55:59 -0500</lastBuildDate>
+    <lastBuildDate>Fri, 04 Dec 2015 17:05:23 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/post/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 4: wreq: Web client programming; with notes on lens and operator syntax</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/</link>
+      <pubDate>Fri, 04 Dec 2015 17:05:23 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-4:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Day 4&lt;/h2&gt;
+
+&lt;p&gt;In the late 1990s, I eagerly bought the book
+&lt;a href=&#34;http://www.oreilly.com/openbook/webclient/&#34;&gt;&amp;ldquo;Web Client Programming with Perl&amp;rdquo;&lt;/a&gt;
+and used the &lt;a href=&#34;http://search.cpan.org/dist/libwww-perl/lib/LWP.pm&#34;&gt;LWP&lt;/a&gt;
+library to scrape the Web in automated fashion. I continued doing that
+into the 2000s. I am happy that nowadays, I can just use Haskell to do
+this kind of programming, in a succinct way also.&lt;/p&gt;
+
+&lt;p&gt;Today&amp;rsquo;s topic is &lt;a href=&#34;http://www.serpentine.com/wreq/&#34;&gt;&lt;code&gt;wreq&lt;/code&gt;&lt;/a&gt;,
+&lt;a href=&#34;http://www.serpentine.com/blog/&#34;&gt;Bryan O&amp;rsquo;Sullivan&lt;/a&gt;&amp;rsquo;s high-level
+library for doing Web client programming designed specifically for
+usability.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;wreq&lt;/code&gt; makes use of the
+&lt;a href=&#34;https://hackage.haskell.org/package/aeson&#34;&gt;&lt;code&gt;aeson&lt;/code&gt;&lt;/a&gt; ecosystem for JSON
+and &lt;a href=&#34;https://hackage.haskell.org/package/lens&#34;&gt;&lt;code&gt;lens&lt;/code&gt;&lt;/a&gt; and ecosystem,
+including
+&lt;a href=&#34;https://hackage.haskell.org/package/lens-aeson&#34;&gt;&lt;code&gt;lens-aeson&lt;/code&gt;&lt;/a&gt;, so you
+may want to check out Ollie&amp;rsquo;s 2012 Days of Hackage posts on
+&lt;a href=&#34;https://ocharles.org.uk/blog/posts/2012-12-07-24-days-of-hackage-aeson.html&#34;&gt;aeson&lt;/a&gt;
+and &lt;a href=&#34;https://ocharles.org.uk/blog/posts/2012-12-09-24-days-of-hackage-lens.html&#34;&gt;lens&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Since &lt;code&gt;wreq&lt;/code&gt; already has an extensive
+&lt;a href=&#34;http://www.serpentine.com/wreq/&#34;&gt;tutorial and reference documentation&lt;/a&gt;,
+I&amp;rsquo;m not going to repeat its explanations. Instead, I&amp;rsquo;m going to give an
+example of use that should be simple enough to be understood from
+context, then discuss the issue of using operator syntax in Haskell.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-task:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;The task&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;m a member of many groups on &lt;a href=&#34;http://www.meetup.com/&#34;&gt;Meetup&lt;/a&gt;. It&amp;rsquo;s
+often useful for me to get information using the official
+&lt;a href=&#34;http://www.meetup.com/meetup_api/&#34;&gt;Meetup API&lt;/a&gt; rather than go around
+clicking on a Web site on or a mobile app. Why do by hand what I can
+do much more efficiently and correctly with code?&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a very simplified example of something I might want to do with
+Meetup. I&amp;rsquo;ve been active in the
+&lt;a href=&#34;http://www.codeandsupply.co/&#34;&gt;Pittsburgh Code and Supply&lt;/a&gt; community,
+which has a
+&lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/&#34;&gt;Meetup site&lt;/a&gt; with a
+packed calendar of events (it&amp;rsquo;s on hiatus now in December for the
+holidays, but is otherwise very active). Maybe I want to find out what
+upcoming events they are, and search for events of interest according
+to some criteria. For our toy example here, let&amp;rsquo;s say I want to find
+the ten upcoming events and get their names and venue names, and make
+sure there&amp;rsquo;s at least one event that has a name and venue name already
+set up (sometimes, an event is proposed but no venue has been found
+yet).&lt;/p&gt;
+
+&lt;h2 id=&#34;a-test:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;A test&lt;/h2&gt;
+
+&lt;p&gt;Yesterday,
+&lt;a href=&#34;../blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/&#34;&gt;day 3&lt;/a&gt;
+of this article series, I mentioned liking using HSpec, so let&amp;rsquo;s use
+HSpec.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE OverloadedStrings #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;WreqExample&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;eventName&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;venueName&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; ( &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;
+                  , &lt;span style=&#34;color: #0000FF&#34;&gt;shouldSatisfy&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldNotSatisfy&lt;/span&gt;
+                  )
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Text&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Text
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We are using the &lt;a href=&#34;https://hackage.haskell.org/package/text&#34;&gt;&lt;code&gt;text&lt;/code&gt;&lt;/a&gt;
+packed Unicode string type, because that&amp;rsquo;s what &lt;code&gt;wreq&lt;/code&gt;
+uses. &lt;code&gt;OverloadedStrings&lt;/code&gt; is a convenient GHC extension that allows
+string literals in code to be treated as &lt;code&gt;Text&lt;/code&gt; values rather than
+&lt;code&gt;String&lt;/code&gt;. Ollie discusses this extension in his &lt;a href=&#34;https://ocharles.org.uk/blog/posts/2014-12-17-overloaded-strings.html&#34;&gt;2014 Days of GHC Extensions&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Also, since I&amp;rsquo;m operating in test-driven development style, I wrote
+this test first, before writing the &lt;code&gt;WreqExample&lt;/code&gt; module: I only wrote
+the imports for what I need for the test.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;wreq&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;there are named, located Pittsburgh Code and Supply events coming up&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Warning! This is a stateful test going out to the Web.&lt;/span&gt;
+      events &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getMeetupEventInfos pittsburghCodeAndSupplyId
+      events `shouldNotSatisfy` null
+      events `shouldSatisfy` any
+        (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;event &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (not &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;null &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; eventName) event
+                   &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; (not &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;null &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; venueName) event)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;pittsburghCodeAndSupplyId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;pittsburghCodeAndSupplyId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;13452572&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;module-signatures:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Module signatures&lt;/h2&gt;
+
+&lt;p&gt;If Haskell had
+&lt;a href=&#34;http://jozefg.bitbucket.org/posts/2015-01-08-modules.html&#34;&gt;module signatures, like Standard ML and OCaml do&lt;/a&gt;,
+I would write an explicit module signature for the module I intend to
+implement that will conform to that signature, but Haskell doesn&amp;rsquo;t, so
+the best we can do is operate in &amp;ldquo;duck typing&amp;rdquo; manner at the module
+level, relying implicitly on compilation to fail on import of a
+conforming module implementation rather than on matching against an
+explicit signature without the need for an implementation.&lt;/p&gt;
+
+&lt;p&gt;Here are the types we need (in a pseudo-syntax as though Haskell had
+module signatures):&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- abstract&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- abstract&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- abstract type accessors&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventName&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;venueName&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;implementation:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Implementation&lt;/h2&gt;
+
+&lt;h3 id=&#34;imports:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Imports&lt;/h3&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Network.Wreq&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;defaults&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;param&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;getWith&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;asValue&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;responseBody&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Text&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Aeson&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Lens&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;view&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;set&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;toListOf&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Aeson.Lens&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;key&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;_Array&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;_String&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;types:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Types&lt;/h3&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Information that we care about from a Meetup event.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt; { eventName &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+            , venueName &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+            }
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;deriving&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | A valid Meetup group ID.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;the-web-client-part:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;The Web client part&lt;/h3&gt;
+
+&lt;p&gt;Since we&amp;rsquo;re only making one request, and are not doing any error
+handling, but letting &lt;code&gt;wreq&lt;/code&gt; throw exceptions instead, the Web client
+part is very brief. The Meetup API allows returning information as
+JSON.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;meetupEventsUrl&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;meetupEventsUrl&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://api.meetup.com/2/events&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We perform a &lt;code&gt;GET&lt;/code&gt; with query parameters. &lt;code&gt;wreq&lt;/code&gt; uses lens as its
+domain-specific language for creating options for &lt;code&gt;GET&lt;/code&gt;, so let&amp;rsquo;s
+create a &lt;code&gt;wreq&lt;/code&gt; &lt;code&gt;Options&lt;/code&gt; value, by setting the parameters one after
+another using a builder pattern starting with the &lt;code&gt;wreq&lt;/code&gt; &lt;code&gt;defaults&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptions&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt;
+              &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptions&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;page&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;10&amp;quot;&lt;/span&gt;] (
+    set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;order&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;] (
+      set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;upcoming&amp;quot;&lt;/span&gt;] (
+        set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;group_id&amp;quot;&lt;/span&gt;) [groupId] (
+          set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;format&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;json&amp;quot;&lt;/span&gt;] defaults))))
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We begin by going out to the Web to get back a response, which is a
+&lt;a href=&#34;https://hackage.haskell.org/package/bytestring-0.10.6.0/docs/Data-ByteString-Lazy.html&#34;&gt;lazy &lt;code&gt;ByteString&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;]
+&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  response &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getWith (eventsOptions groupId) meetupEventsUrl
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;the-json-part:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;The JSON part&lt;/h3&gt;
+
+&lt;p&gt;Then we parse the lazy &lt;code&gt;ByteString&lt;/code&gt; response, including the headers
+and the body, into an untyped JSON object, an &lt;code&gt;aeson&lt;/code&gt;
+&lt;a href=&#34;https://hackage.haskell.org/package/aeson-0.10.0.0/docs/Data-Aeson.html#t:Value&#34;&gt;&lt;code&gt;Value&lt;/code&gt;&lt;/a&gt;:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt; jsonResponse &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; asValue response 
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;More precisely, &lt;a href=&#34;https://hackage.haskell.org/package/aeson-0.10.0.0/docs/src/Data-Aeson-Types-Internal.html#Value&#34;&gt;&lt;code&gt;Value&lt;/code&gt; is unityped&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Object&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;HashMap&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Object&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Object&lt;/span&gt;
+           &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Array&lt;/span&gt;
+           &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+           &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Number&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Scientific&lt;/span&gt;
+           &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;
+           &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Null&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;the-lens-part:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;The lens part&lt;/h3&gt;
+
+&lt;p&gt;It was annoying figuring out from the official
+Meetup API site what fields I needed from the response and what their
+types were supposed to be. In practice I just saved off JSON from a
+representative query and looked at some events to see what I wanted. I
+was told where to find the
+&lt;a href=&#34;meetup.json&#34;&gt;automatically generated documentation of all the API methods&lt;/a&gt;
+but it was not ideal. A later Day of Hackage will discuss what I did
+about this problem.&lt;/p&gt;
+
+&lt;p&gt;We extract the list of events, using a traversal to get the whole
+list, which is encoded as a JSON array in the top level JSON object&amp;rsquo;s
+&lt;code&gt;results&lt;/code&gt; field:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; events &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; toListOf (responseBody
+                         &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; key &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;results&amp;quot;&lt;/span&gt;
+                         &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; _Array &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; traverse
+                        ) jsonResponse
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Here we use &lt;code&gt;toListOf&lt;/code&gt; from lens with a traversal and a JSON object to
+pull out everything from that traversal.&lt;/p&gt;
+
+&lt;p&gt;Finally, since we only want, for each event, its name and
+its venue&amp;rsquo;s name (the venue&amp;rsquo;s name is actually a field in a venue
+object):&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  return (map jsonToEventInfo events)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;We again use lens, at the level of an individual event object, to
+extract what we want from it:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Extract our typed data model from an untyped JSON object.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;jsonToEventInfo&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;jsonToEventInfo&lt;/span&gt; json &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt; { eventName &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; view (key &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; _String) json
+            , venueName &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; view (key &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;venue&amp;quot;&lt;/span&gt;
+                                &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; key &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; _String) json
+            }
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Here we use the &lt;code&gt;view&lt;/code&gt; function of &lt;code&gt;lens&lt;/code&gt;, to apply a lens to the JSON
+object to pull a field out of it.&lt;/p&gt;
+
+&lt;p&gt;And we&amp;rsquo;re done! We&amp;rsquo;ve written a script that looks pretty much like
+what you&amp;rsquo;d write in Perl or Python. It will also &amp;ldquo;fail&amp;rdquo; in similar
+ways, because we&amp;rsquo;re basically not using any types at all; even the
+final result just has strings, which may or may not be empty, whatever
+that&amp;rsquo;s supposed to mean. For example, if you try to find a field by a
+string key that doesn&amp;rsquo;t exist, the particular code here will just
+silently give back an empty string. Can we do better? Yes, there are
+various ways to do better. Stay tuned for a later Day of Hackage.&lt;/p&gt;
+
+&lt;h2 id=&#34;lens-operator-syntax:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Lens operator syntax&lt;/h2&gt;
+
+&lt;p&gt;If you&amp;rsquo;ve already used &lt;code&gt;wreq&lt;/code&gt; or &lt;code&gt;lens&lt;/code&gt;, you may have noticed
+something strange above: I didn&amp;rsquo;t use any &lt;code&gt;lens&lt;/code&gt; operator syntax. This
+was deliberate. Although the &lt;code&gt;wreq&lt;/code&gt; tutorial gives a
+&lt;a href=&#34;http://www.serpentine.com/wreq/tutorial.html#a-quick-lens-backgrounder&#34;&gt;little bit of background on &lt;code&gt;lens&lt;/code&gt;&lt;/a&gt;,
+the reality is that when some friends who were not experienced lensers
+or Haskellers asked me how I do Web client programming in Haskell, and
+I pointed to &lt;code&gt;wreq&lt;/code&gt; as being pretty cool, they got immediately stuck
+on the lens stuff. Looking back at the tutorial, I do see that it
+jumps straight into operator soup. This is unfortunate. You can
+immediately use libraries like &lt;code&gt;wreq&lt;/code&gt; without having the lens
+operators memorized already. You have to understand some facts (such
+as the use of the function composition operator to compose lenses) and
+have an idea of how the types work out, but one thing you don&amp;rsquo;t need
+is the funny operators. I think it&amp;rsquo;s best to understand how to do
+things without operators before starting to use them as a convenient
+shortcut.&lt;/p&gt;
+
+&lt;p&gt;For example, an idiomatic way to set the options object, as presented
+in the &amp;ldquo;whirlwind tour&amp;rdquo; section of the &lt;code&gt;wreq&lt;/code&gt; tutorial, is:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Lens&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;), (&lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt;))
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptions&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt;
+              &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptions&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; defaults
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;format&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;json&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;group_id&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt; [groupId]
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;upcoming&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;order&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;page&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;10&amp;quot;&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I don&amp;rsquo;t like the idea of newcomers to this library just copying and
+pasting stuff without understanding what it does, or getting the
+impression that these operators are somehow built into the Haskell
+language or required for using the library. People really do get these
+impressions.&lt;/p&gt;
+
+&lt;p&gt;I happen to like the reverse function operator &lt;code&gt;&amp;amp;&lt;/code&gt; a lot, although
+it&amp;rsquo;s not as suggestive as the exact same reverse function operator in
+many other languages (such as F#, OCaml, Elm, Elixir) in the form of a pipe
+instead
+&lt;a href=&#34;http://package.elm-lang.org/packages/elm-lang/core/3.0.0/Basics#|%3E&#34;&gt;&lt;code&gt;|&amp;gt;&lt;/code&gt;&lt;/a&gt;,
+so I feel OK about using it.&lt;/p&gt;
+
+&lt;p&gt;But the &lt;code&gt;.~&lt;/code&gt; is I think not very suggestive to newcomers to
+&lt;code&gt;lens&lt;/code&gt;. Is &lt;code&gt;set lens newValue object&lt;/code&gt; so much worse to write or read than
+&lt;code&gt;object &amp;amp; lens .~ newValue&lt;/code&gt;?&lt;/p&gt;
+
+&lt;h2 id=&#34;code-golf:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Code golf?&lt;/h2&gt;
+
+&lt;p&gt;To illustrate both the up sides and down sides of using operators (but
+in this case mostly down sides, I think), here is a code golf version
+of the entire code:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Network.Wreq&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;defaults&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;param&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;getWith&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;asValue&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;responseBody&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Text&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Lens&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;), (&lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt;), (&lt;span style=&#34;color: #666666&#34;&gt;^.&lt;/span&gt;), (&lt;span style=&#34;color: #666666&#34;&gt;^..&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Aeson.Lens&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;key&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;_Array&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;_String&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Arrow&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;), (&lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&amp;amp;&amp;amp;&lt;/span&gt;))
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;meetupEventsUrl&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;meetupEventsUrl&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://api.meetup.com/2/events&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | A valid Meetup group ID.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | For searching for events in a Meetup group.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptions&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt;
+              &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptions&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; defaults
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;format&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;json&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;group_id&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt; [groupId]
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;upcoming&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;order&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;page&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.~&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;10&amp;quot;&lt;/span&gt;]
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Code golf version. Don&amp;#39;t do this?&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupNameAndVenues&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [(&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;)]
+&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupNameAndVenues&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  getWith (eventsOptions groupId) meetupEventsUrl
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;=&lt;/span&gt; asValue
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;=&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;^..&lt;/span&gt; responseBody
+        &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; key &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;results&amp;quot;&lt;/span&gt;
+        &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; _Array &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; traverse)
+       &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; map ((&lt;span style=&#34;color: #666666&#34;&gt;^.&lt;/span&gt; key &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; _String)
+                 &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&amp;amp;&amp;amp;&lt;/span&gt; (&lt;span style=&#34;color: #666666&#34;&gt;^.&lt;/span&gt; key &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;venue&amp;quot;&lt;/span&gt;
+                      &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; key &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; _String)
+                 )
+       &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; return
+      )
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;In a way, this looks cool because the piping left to right reads well
+and naturally, if you know all the operators and are happy with
+operator sectioning syntax and point-free combinators. But when I
+showed this to friends who are not so fluent in Haskell, they didn&amp;rsquo;t
+like this. Also, note that I made concessions in order to arrange this
+pipeline. I lost the comments, the intermediate named sub-computations
+(very useful for finer-grained testing), and even my custom result
+type (resorting to just tupling). I feel something has been lost by
+writing in this style even though part of me secretly likes it.&lt;/p&gt;
+
+&lt;h2 id=&#34;an-interview-with-bryan-o-sullivan:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;An interview with Bryan O&amp;rsquo;Sullivan&lt;/h2&gt;
+
+&lt;p&gt;Recently (September 2015), &lt;a href=&#34;http://www.haskellcast.com/&#34;&gt;The Haskell Cast&lt;/a&gt; interviewed Bryan
+O&amp;rsquo;Sullivan. I highly recommend listening to &lt;a href=&#34;http://www.haskellcast.com/episode/010-bryan-osullivan-on-performance-and-efficiency/&#34;&gt;the whole thing&lt;/a&gt;. He
+had stories to tell about how he got into Haskell, how he ended up
+writing all these libraries, and how he goes about designing them and
+what his goals are when implementing them. Note that &lt;code&gt;aeson&lt;/code&gt; and
+&lt;code&gt;text&lt;/code&gt;, which everyone uses, are his creations. Thank you, Bryan, for
+all you&amp;rsquo;ve done for the Haskell community!&lt;/p&gt;
+
+&lt;h2 id=&#34;lens-resources:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Lens resources&lt;/h2&gt;
+
+&lt;p&gt;Gabriel Gonzalez wrote a
+&lt;a href=&#34;https://hackage.haskell.org/package/lens-tutorial&#34;&gt;lens tutorial&lt;/a&gt;
+that is useful. Thank you, Gabriel, for writing tutorials not only on
+your own libraries, but for others as well!&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;For day 4, I presented a tiny example of use of &lt;code&gt;wreq&lt;/code&gt; with &lt;code&gt;aeson&lt;/code&gt;
+and &lt;code&gt;lens&lt;/code&gt; to perform a simple task of getting information from the
+Web, and tried to make &lt;code&gt;wreq&lt;/code&gt; more accessible by not requiring use of
+&lt;code&gt;lens&lt;/code&gt; operators up front.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 3: HSpec; the importance of testing</title>
@@ -1045,6 +1460,8 @@ turn it into a Stack script.&lt;/p&gt;
 &lt;li&gt;Day 1: &lt;a href=&#34;../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;Introduction and Stack&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 2: &lt;a href=&#34;../blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/&#34;&gt;Regexes with pcre-heavy; standalone Haskell scripts using Stack&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 3: &lt;a href=&#34;../blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/&#34;&gt;HSpec; the importance of testing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 4:
+&lt;a href=&#34;../blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/&#34;&gt;wreq: Web client programming; with notes on lens and operator syntax&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
@@ -2763,20 +3180,6 @@ mistaken as an accurate gauge of competence.&lt;/p&gt;
 &lt;h2 id=&#34;update-of-2014-07-17:0ca97438327f3bcfe743d5a186e4af3e&#34;&gt;(Update of 2014-07-17)&lt;/h2&gt;
 
 &lt;p&gt;It&amp;rsquo;s crunch time. My Rust version of the talk, &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/events/183483622/&#34;&gt;&amp;ldquo;Type-Directed TDD in Rust&amp;rdquo;&lt;/a&gt; is coming next week.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>OpenHack Pittsburgh: working on a private project</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/02/24/openhack-pittsburgh-working-on-a-private-project/</link>
-      <pubDate>Mon, 24 Feb 2014 18:46:39 -0500</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2014/02/24/openhack-pittsburgh-working-on-a-private-project/</guid>
-      <description>&lt;p&gt;Last month at OpenHack Pittsburgh, I had a rather &lt;a href=&#34;../blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/&#34;&gt;social time&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby/events/163727212/&#34;&gt;This month&lt;/a&gt;, I kept entirely to myself. I didn&amp;rsquo;t even speak up to say what I was working on. I was in a somber mood, and didn&amp;rsquo;t really want to talk. I worked on a private project that I will share when I am ready.&lt;/p&gt;
-
-&lt;p&gt;It did feel consoling to be around other people, even while keeping to myself. Sometimes I just need to know that I am not alone.&lt;/p&gt;
 </description>
     </item>
     

@@ -23,6 +23,8 @@
 &lt;li&gt;Day 1: &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;Introduction and Stack&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 2: &lt;a href=&#34;../../blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/&#34;&gt;Regexes with pcre-heavy; standalone Haskell scripts using Stack&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 3: &lt;a href=&#34;../../blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/&#34;&gt;HSpec; the importance of testing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 4:
+&lt;a href=&#34;../../blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/&#34;&gt;wreq: Web client programming; with notes on lens and operator syntax&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
