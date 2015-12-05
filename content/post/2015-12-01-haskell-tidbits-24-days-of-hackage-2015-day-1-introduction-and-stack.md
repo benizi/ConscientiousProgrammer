@@ -15,6 +15,8 @@ title: "Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack
 - Day 3: [HSpec; the importance of testing](/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/)
 - Day 4:
   [wreq: Web client programming; with notes on lens and operator syntax](/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/)
+- Day 5: [should-not-typecheck: making
+Haskell sort of dynamically typed with deferred type errors](/blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/)
 
 ## Day 1
 
