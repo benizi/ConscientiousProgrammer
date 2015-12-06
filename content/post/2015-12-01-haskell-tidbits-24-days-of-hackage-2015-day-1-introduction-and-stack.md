@@ -19,6 +19,8 @@ title: "Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack
 Haskell sort of dynamically typed with deferred type errors](/blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/)
 - Day 6: [finding utilities with Hoogle
 and Hayoo: MissingH, extra](/blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/)
+- Day 7: [semigroups; NonEmpty list and
+a case study of types and tests](/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/)
 
 ## Day 1
 

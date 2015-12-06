@@ -77,8 +77,8 @@ function creatively named `replace`:
     replace "abc" "d" "123abc123abc" `shouldBe` "123d123d"
 {{< /highlight >}}
 
-Sure, it would not be hard to write code to do this, but why not use
-see if it's out there already for me to use?
+Sure, it would not be hard to write code to do this, but why not see
+if it's out there already for me to use?
 
 What type should we search for? Maybe
 
