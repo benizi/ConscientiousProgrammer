@@ -103,7 +103,7 @@ a feature that has been part of GHC <a href="https://downloads.haskell.org/~ghc/
 this was not covered in Ollie&rsquo;s
 <a href="https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html">2014 series &ldquo;24 Days of GHC Extensions&rdquo;</a>,
 I decided to bring it up here, and in the context of a cute package, <a href="https://hackage.haskell.org/package/should-not-typecheck"><code>should-not-typecheck</code></a>
-that hooks up with HSpec to make assertions that *something won&rsquo;t
+that hooks up with HSpec to make assertions that something won&rsquo;t
 typecheck.</p>
 
 <h2 id="installation:60dd71330bbedef1aba1bef45daea5dd">Installation</h2>
@@ -133,7 +133,7 @@ test module, with a directive:</p>
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">ShouldNotTypecheckExample</span>
 
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> ( <span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>
-                  , <span style="color: #0000FF">shouldBe</span>, <span style="color: #0000FF">shouldReturn</span>
+                  , <span style="color: #0000FF">shouldBe</span>
                   , <span style="color: #0000FF">shouldThrow</span>, <span style="color: #0000FF">anyException</span>
                   )
 <span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.ShouldNotTypecheck</span> (<span style="color: #0000FF">shouldNotTypecheck</span>)

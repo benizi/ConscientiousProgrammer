@@ -6,8 +6,282 @@
     <description>Recent content in Posts on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 05 Dec 2015 08:20:32 -0500</lastBuildDate>
+    <lastBuildDate>Sun, 06 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/post/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 6: finding utilities with Hoogle and Hayoo: MissingH, extra</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/</link>
+      <pubDate>Sun, 06 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-6:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;Day 6&lt;/h2&gt;
+
+&lt;p&gt;It will never be the case that everything everyone will find useful
+will already be in the &amp;ldquo;standard library&amp;rdquo; for any language
+ecosystem. However, one of the coolest features of the Haskell
+ecosystem (which wows all non-Haskellers when I show them), is the ability to search for useful functions by type
+signature, using &lt;a href=&#34;https://www.haskell.org/hoogle/&#34;&gt;&lt;code&gt;Hoogle&lt;/code&gt;&lt;/a&gt; or
+&lt;a href=&#34;http://hayoo.fh-wedel.de/examples&#34;&gt;&lt;code&gt;Hayoo&lt;/code&gt;&lt;/a&gt;. You can use other
+criteria also, such as names; this can be useful if you have a guess
+at what some useful function might be named.&lt;/p&gt;
+
+&lt;p&gt;There seem to be two philosophies as far as using other people&amp;rsquo;s
+utility libraries (or even making one&amp;rsquo;s own to share between different
+projects):&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;reuse is great, let&amp;rsquo;s do it&lt;/li&gt;
+&lt;li&gt;every dependency is a potential liability, so it&amp;rsquo;s better to
+reinvent, or copy and paste, rather than use something of uncertain
+quality or maintainability&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I tend to prefer reuse, but there have been times when I have copied
+(and even modified) only just what I need, because I don&amp;rsquo;t want the
+rest of what is inside a sprawling library that depends transitively
+on a whole lot of stuff I don&amp;rsquo;t need. I think this is a granularity
+issue. Many people have proposed the idea that since we have a Web
+now, in theory the concept of &amp;ldquo;library&amp;rdquo; should go obsolete in favor of
+micro-libraries, so to speak, maybe sometimes even to the level of
+single standalone functions, and maybe even having a unique
+identifier, but this topic is outside the scope of this article. (For
+just one idea, check out Gabriel Gonzalez&amp;rsquo;s
+&lt;a href=&#34;http://www.haskellforall.com/2015/05/the-internet-of-code.html&#34;&gt;&amp;ldquo;The internet of code&amp;rdquo;&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;The situation is also complicated by the fact that often, so much can
+be reinvented with only a couple of lines of Haskell code, so why even
+bother looking for someone&amp;rsquo;s implementation of it?&lt;/p&gt;
+
+&lt;p&gt;But let&amp;rsquo;s assume for this article that you are interested in finding
+and using utility libraries. I show how to find some example functions
+and reach two utility libraries that I use, very cleverly and
+informatively named
+&lt;a href=&#34;http://hackage.haskell.org/package/MissingH&#34;&gt;&lt;code&gt;MissingH&lt;/code&gt;&lt;/a&gt; and
+&lt;a href=&#34;http://hackage.haskell.org/package/extra&#34;&gt;&lt;code&gt;extra&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;list-string-example:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;List/string example&lt;/h2&gt;
+
+&lt;p&gt;A while ago I was manipulating strings (I was given &lt;code&gt;String&lt;/code&gt;, as
+opposed to &lt;code&gt;Text&lt;/code&gt; or &lt;code&gt;ByteString&lt;/code&gt;) and needed to replace all
+occurrences of a substring in a file path with a different
+substring. For example, as an HSpec test item for a hypothetical
+function creatively named &lt;code&gt;replace&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;replaces all substrings within a string&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    replace &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;abc&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;123abc123abc&amp;quot;&lt;/span&gt; `shouldBe` &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;123d123d&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Sure, it would not be hard to write code to do this, but why not use
+see if it&amp;rsquo;s out there already for me to use?&lt;/p&gt;
+
+&lt;p&gt;What type should we search for? Maybe&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;i.e.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;     &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ matching substring&lt;/span&gt;
+&lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ replacement for the match&lt;/span&gt;
+&lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ original string&lt;/span&gt;
+&lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ result string&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;OK, let&amp;rsquo;s try this type as a
+&lt;a href=&#34;http://hayoo.fh-wedel.de/?query=String+-%3E+String+-%3E+String+-%3E+String&#34;&gt;Hayoo search&lt;/a&gt;. Hmm,
+the results are not too promising. At the top is some weird
+undocumented regex thing, and that&amp;rsquo;s probably not what we want.&lt;/p&gt;
+
+&lt;h2 id=&#34;an-important-search-technique-make-the-fewest-assumptions:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;An important search technique: make the fewest assumptions&lt;/h2&gt;
+
+&lt;p&gt;Probably the single most important tip for getting good search results
+from a type is to make the type as generic as possible: &lt;em&gt;the more type
+variables, the better&lt;/em&gt;, and also use only type class constraints you
+need. The operation we want is not really
+string-specific. Rather, it was a list operation. So the real type we
+want is&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This utility function makes the &lt;em&gt;least&lt;/em&gt; assumptions necessary to get
+the job done, while working for &lt;code&gt;String&lt;/code&gt; because &lt;code&gt;String&lt;/code&gt; is just
+&lt;code&gt;[Char]&lt;/code&gt; and &lt;code&gt;Char&lt;/code&gt; is an instance of the &lt;code&gt;Eq&lt;/code&gt; type class. But for the
+purpose of replacements, we don&amp;rsquo;t care about whether we&amp;rsquo;re comparing
+characters: we only care that whatever element type is involved in
+these subsequences, we can compare for equality.&lt;/p&gt;
+
+&lt;p&gt;The
+&lt;a href=&#34;http://hayoo.fh-wedel.de/?query=Eq+a+%3D%3E+[a]+-%3E+[a]+-%3E+[a]+-%3E+[a]&#34;&gt;Hayoo search&lt;/a&gt;
+immediately brings up much more promising results than with &lt;code&gt;String&lt;/code&gt;,
+from packages such as &lt;code&gt;utility-ht&lt;/code&gt;, &lt;code&gt;MissingH&lt;/code&gt;, and &lt;code&gt;extra&lt;/code&gt;. &lt;code&gt;pandoc&lt;/code&gt;
+also popped up, but that&amp;rsquo;s a
+&lt;a href=&#34;http://pandoc.org/&#34;&gt;huge text-processing tool&lt;/a&gt;, not a library I would
+pull in for just one tiny utility function!&lt;/p&gt;
+
+&lt;p&gt;The
+&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=Eq+a+%3D%3E+[a]+-%3E+[a]+-%3E+[a]+-%3E+[a]&#34;&gt;Hoogle search&lt;/a&gt;
+search didn&amp;rsquo;t work so well.&lt;/p&gt;
+
+&lt;h2 id=&#34;modifying-our-tests-to-check-the-function-with-the-more-generic-type:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;Modifying our tests to check the function with the more generic type&lt;/h2&gt;
+
+&lt;p&gt;I briefly mentioned refactoring HSpec tests on
+&lt;a href=&#34;../blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/&#34;&gt;day 3&lt;/a&gt;. Here&amp;rsquo;s
+how to test multiple implementations of the same desired function
+(let&amp;rsquo;s go with &lt;code&gt;MissingH&lt;/code&gt; and &lt;code&gt;extra&lt;/code&gt;), and also test &lt;code&gt;replace&lt;/code&gt; on
+different input types: both &lt;code&gt;String&lt;/code&gt; (which is just &lt;code&gt;[Char]&lt;/code&gt;) and &lt;code&gt;[Int]&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;MissingHExtraExampleSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | From MissingH&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List.Utils&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; ListUtils
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | From extra&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List.Extra&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; ListExtra
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Required for auto-discovery.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;MissingH and extra&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    describeReplace &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;MissingH&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ListUtils&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;replace
+    describeReplace &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;extra&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ListExtra&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;replace
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;But the following fails to compile! Why?&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Fails to compile!&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;describeReplace&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ description&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a])  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ replace&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;describeReplace&lt;/span&gt; description replace &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe description &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;replaces all substrings within a string&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      replace &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;abc&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;123abc123abc&amp;quot;&lt;/span&gt; `shouldBe` &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;123d123d&amp;quot;&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;replaces all int sublists within an int list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      replace [&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;] [&lt;span style=&#34;color: #666666&#34;&gt;100&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;101&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;102&lt;/span&gt;] [&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;4&lt;/span&gt;]
+        `shouldBe` [&lt;span style=&#34;color: #666666&#34;&gt;100&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;101&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;102&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;100&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;101&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;102&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;4&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;a-note-on-the-critical-use-of-higher-rank-types-for-refactoring:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;A note on the critical use of higher-rank types for refactoring&lt;/h3&gt;
+
+&lt;p&gt;The error message is useful if you know what is going on, but not
+useful but if not. Yes, we need higher-rank types.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;    Illegal polymorphic or qualified type:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      Eq a =&amp;gt; [a] -&amp;gt; [a] -&amp;gt; [a] -&amp;gt; [a]&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    Perhaps you intended to use RankNTypes or Rank2Types&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;    In the type signature for ‘describeReplace’:&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;      describeReplace :: String&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;                         -&amp;gt; (Eq a =&amp;gt; [a] -&amp;gt; [a] -&amp;gt; [a] -&amp;gt; [a]) -&amp;gt; Spec&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Higher-rank types are a
+supported GHC extension discussed in a
+&lt;a href=&#34;https://ocharles.org.uk/blog/guest-posts/2014-12-18-rank-n-types.html&#34;&gt;2014 Day of GHC Extensions&lt;/a&gt;. Higher-rank
+types are tremendously useful and a feature that is missing from type
+systems in most other languages.&lt;/p&gt;
+
+&lt;p&gt;Briefly, the &lt;code&gt;replace&lt;/code&gt; function we want has the type&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;forall&lt;/span&gt; a&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a]
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;where we have explicitly quantified the type variable &lt;code&gt;a&lt;/code&gt; so that the
+&lt;code&gt;Eq&lt;/code&gt; constraint applies inside its scope. Read the type as &amp;ldquo;for all
+types &lt;code&gt;a&lt;/code&gt; such that &lt;code&gt;a&lt;/code&gt; is a member of the &lt;code&gt;Eq&lt;/code&gt; type class, &lt;code&gt;[a] -&amp;gt;
+[a] -&amp;gt; [a] -&amp;gt; [a]&lt;/code&gt;&amp;rdquo;. Ordinary Haskell without the extension doesn&amp;rsquo;t
+allow you to write down this type as a parameter into some function,
+because it doesn&amp;rsquo;t have explicit &lt;code&gt;forall&lt;/code&gt; and implicitly inserts a
+&lt;code&gt;forall&lt;/code&gt; for you at the top level for everything, but then that is the
+wrong scoping for what we want to say.&lt;/p&gt;
+
+&lt;p&gt;So we need to add the directive and change the &lt;code&gt;replace&lt;/code&gt; parameter
+type to have explicit quantification, and all is OK:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE RankNTypes #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;describeReplace&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ description&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (forall a&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a])  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ replace&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;a-note-on-implicit-quantification-in-haskell-and-related-languages:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;A note on implicit quantification in Haskell and related languages&lt;/h3&gt;
+
+&lt;p&gt;I kind of wish type variable quantification were explicit in Haskell,
+i.e., &lt;em&gt;requiring&lt;/em&gt; &lt;code&gt;forall&lt;/code&gt; annotations, as
+&lt;a href=&#34;http://www.purescript.org/&#34;&gt;PureScript&lt;/a&gt;
+&lt;a href=&#34;https://github.com/purescript/purescript/wiki/Differences-from-Haskell&#34;&gt;does&lt;/a&gt;,
+because understanding type variable quantification is important for
+fully understanding what is going on at the type level in languages
+such as ML and Haskell.&lt;/p&gt;
+
+&lt;p&gt;For example, here&amp;rsquo;s a good article about
+&lt;a href=&#34;http://jozefg.bitbucket.org/posts/2015-03-27-unsafe.html&#34;&gt;how to understand the value restriction and monomorphism restriction&lt;/a&gt;,
+which can be puzzling if you don&amp;rsquo;t have the mental model of what is going
+on underneath.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-joy-of-browsing-libraries:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;The joy of browsing libraries&lt;/h2&gt;
+
+&lt;p&gt;One thing that can happen if you find a utility function useful, is
+you can browse around in the module that contains it, or the whole
+library, just looking for stuff you might find useful in the
+future. For example, I find Neil Mitchell&amp;rsquo;s &lt;code&gt;extra&lt;/code&gt; pleasant enough
+(good names and great documentation on Hackage) that I use it when I
+can, and I recommend checking it out. The GitHub repo of &lt;code&gt;MissingH&lt;/code&gt;
+suggests that it is not really being updated any more, so I&amp;rsquo;m
+downplaying my use of it.&lt;/p&gt;
+
+&lt;p&gt;In the world of physical books and magazines, I still go to my local
+libraries and browse both the new book/magazine/DVD shelves as well as
+the look around on the shelf of an item I find in the stacks to see if
+there&amp;rsquo;s something related that I might enjoy checking out.&lt;/p&gt;
+
+&lt;h2 id=&#34;digging-more-deeply:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;Digging more deeply&lt;/h2&gt;
+
+&lt;p&gt;Also, note that if you&amp;rsquo;re on the hunt for possibly useful libraries,
+but without an immediate need, you can also find them just by looking
+at the dependency list that popular libraries already use. I confess
+that I have sometimes clicked away on dependencies on a Hackage
+page. If you transitively click around on Edward Kmett&amp;rsquo;s
+&lt;a href=&#34;https://hackage.haskell.org/package/lens&#34;&gt;&lt;code&gt;lens&lt;/code&gt;&lt;/a&gt; dependencies, you
+will reach a huge number of useful libraries, because he is the master
+of the universe of code reuse.&lt;/p&gt;
+
+&lt;p&gt;The physical book or paper analogy here, of course, is looking at the
+references or bibliography to find more things to read.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;For day 6, I gave an example of how to search for a function on Hoogle
+and Hayoo, and go polymorphic for a good result. I recommend using the
+quality &lt;code&gt;extra&lt;/code&gt; utility library.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 5: should-not-typecheck: making Haskell sort of dynamically typed with deferred type errors</title>
@@ -42,7 +316,7 @@ a feature that has been part of GHC &lt;a href=&#34;https://downloads.haskell.or
 this was not covered in Ollie&amp;rsquo;s
 &lt;a href=&#34;https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html&#34;&gt;2014 series &amp;ldquo;24 Days of GHC Extensions&amp;rdquo;&lt;/a&gt;,
 I decided to bring it up here, and in the context of a cute package, &lt;a href=&#34;https://hackage.haskell.org/package/should-not-typecheck&#34;&gt;&lt;code&gt;should-not-typecheck&lt;/code&gt;&lt;/a&gt;
-that hooks up with HSpec to make assertions that *something won&amp;rsquo;t
+that hooks up with HSpec to make assertions that something won&amp;rsquo;t
 typecheck.&lt;/p&gt;
 
 &lt;h2 id=&#34;installation:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Installation&lt;/h2&gt;
@@ -72,7 +346,7 @@ test module, with a directive:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;ShouldNotTypecheckExample&lt;/span&gt;
 
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; ( &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;
-                  , &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldReturn&lt;/span&gt;
+                  , &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;
                   , &lt;span style=&#34;color: #0000FF&#34;&gt;shouldThrow&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;anyException&lt;/span&gt;
                   )
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.ShouldNotTypecheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;shouldNotTypecheck&lt;/span&gt;)
@@ -1696,6 +1970,8 @@ turn it into a Stack script.&lt;/p&gt;
 &lt;a href=&#34;../blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/&#34;&gt;wreq: Web client programming; with notes on lens and operator syntax&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 5: &lt;a href=&#34;../blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/&#34;&gt;should-not-typecheck: making
 Haskell sort of dynamically typed with deferred type errors&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 6: &lt;a href=&#34;../blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/&#34;&gt;finding utilities with Hoogle
+and Hayoo: MissingH, extra&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
@@ -3268,104 +3544,6 @@ whatever, input -&amp;gt; whatever
 &lt;h2 id=&#34;conclusion:5ceb897fd4e46960a338a7fd3d6cf4e6&#34;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;I was very excited to attend my first Pittsburgh Code and Supply meetup, on the fascinating topic of programming in journalism. I felt I learned a lot about what is at stake and how programming is being used in journalism to better inform people of what is going on in the world.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Why programming puzzlers make me sad</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/07/17/why-programming-puzzlers-make-me-sad/</link>
-      <pubDate>Thu, 17 Jul 2014 23:01:52 +0000</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2014/07/17/why-programming-puzzlers-make-me-sad/</guid>
-      <description>
-
-&lt;p&gt;I recently saw a
-&lt;a href=&#34;http://blog.plover.com/2014/07/17/&#34;&gt;&amp;ldquo;guess what this does&amp;rdquo; article&lt;/a&gt;
-on a blog I follow, and this post presents mysterious Perl code for
-which the reader is asked to guess what it does:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;perl -le &amp;#39;print(two + two == five ? &amp;quot;true&amp;quot; : &amp;quot;false&amp;quot;)&amp;#39;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;I looked at it briefly, got a headache, and didn&amp;rsquo;t even want to solve
-it. This despite using Perl as one of my main programming languages
-from 1993-2010 and considering myself fairly proficient at Perl.&lt;/p&gt;
-
-&lt;p&gt;Programming puzzlers just in general make me sad.&lt;/p&gt;
-
-&lt;h2 id=&#34;i-know-every-programming-language-has-quirks:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;I know every programming language has quirks&lt;/h2&gt;
-
-&lt;p&gt;It is a human reality, given human imperfection, that the languages we
-invent have quirks of some kind. You might expect that, unlike natural
-languages like English and Chinese, which have the burden of no
-centralized design and hundreds or thousands of year of history and
-random evolution, computer languages would be designed up front to
-avoid ambiguity and just plain confusion. But the human desire to make
-some things &amp;ldquo;easy&amp;rdquo; through clever defaults or implicit assumptions
-always results in an invented computer language that has
-irregularities or unexpected behavior somewhere.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-strange-love-of-puzzlers:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;The strange love of puzzlers&lt;/h2&gt;
-
-&lt;p&gt;Still, it makes me sad when I see &amp;ldquo;puzzlers&amp;rdquo;, and especially how they
-are used. For some reason, in some circles, it is considered a sign of
-intelligence or competence to be able to decode strange
-puzzlers. Many academic homework assignments and exams tend to focus
-on weird puzzlers as a way of supposedly testing proficiency in
-programming. Java certification exams and job interview questions
-often throw in puzzlers. I deplore this situation.&lt;/p&gt;
-
-&lt;p&gt;I understand that in specialized circumstances, you would want to
-value someone who was really good at puzzlers: someone who could write
-a conforming compiler for a language, diagnose strange bugs, etc. But
-that is not what most of us do or need to do. And too many puzzlers
-makes non-programmers wince and stay away from a field they consider
-to be pointlessly capricious.&lt;/p&gt;
-
-&lt;h2 id=&#34;when-to-understand-puzzlers:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;When to understand puzzlers&lt;/h2&gt;
-
-&lt;p&gt;The exception I make is when a &amp;ldquo;puzzler&amp;rdquo; is not actually rare code,
-but typical code that has some kind of mistake. Some languages have
-more of these puzzlers that are actually critical to understand in
-order to be functional at working with code in them. For example,
-almost all normally used features of C could be considered puzzlers!&lt;/p&gt;
-
-&lt;h2 id=&#34;languages-with-puzzler-books:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;Languages with &amp;ldquo;puzzler&amp;rdquo; books&lt;/h2&gt;
-
-&lt;p&gt;Many languages have spawned &amp;ldquo;puzzler&amp;rdquo; books or sites. You can look
-them up for yourself if you are curious about puzzlers in your
-favorite languages. I won&amp;rsquo;t list any here because I wouldn&amp;rsquo;t know
-where to stop. I didn&amp;rsquo;t mean to pick on Perl, of course, when writing
-this article.&lt;/p&gt;
-
-&lt;h2 id=&#34;an-idea-how-about-learning-from-all-the-puzzlers:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;An idea: how about learning from all the puzzlers?&lt;/h2&gt;
-
-&lt;p&gt;I have an idea: how about pooling together all the puzzlers in all the
-languages that currently exist, classifying the language misfeatures
-that resulted in those puzzlers, and coming up with a plan to&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;teach the puzzlers in a systematic polyglot way&lt;/li&gt;
-&lt;li&gt;fix as many of these puzzlers as possible in the languages (I expect
-this to be very difficult because of compatibility needs)&lt;/li&gt;
-&lt;li&gt;write up a guide to what &lt;em&gt;not&lt;/em&gt; to do in future &lt;em&gt;new&lt;/em&gt; languages&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Do you think there would be value in mining existing puzzlers for
-  the purpose of a systematic resource for learning about programming
-  language design?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:ead468025bb952e03fb2d2ce3057bf00&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I don&amp;rsquo;t like programming puzzlers. They are supposed to be funny, and
-maybe sometimes they are, but often they are abused for status and
-mistaken as an accurate gauge of competence.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;How do you feel about puzzlers? Do you use them for assessing your
-  own or others&amp;rsquo; knowledge? Do you solve them for entertainment? Do
-  you think minimizing the existence of puzzlers should be a criterion
-  for design of any new programming languages?&lt;/strong&gt;&lt;/p&gt;
 </description>
     </item>
     

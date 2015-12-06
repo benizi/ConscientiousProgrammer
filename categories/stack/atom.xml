@@ -42,7 +42,7 @@ a feature that has been part of GHC &lt;a href=&#34;https://downloads.haskell.or
 this was not covered in Ollie&amp;rsquo;s
 &lt;a href=&#34;https://ocharles.org.uk/blog/pages/2014-12-01-24-days-of-ghc-extensions.html&#34;&gt;2014 series &amp;ldquo;24 Days of GHC Extensions&amp;rdquo;&lt;/a&gt;,
 I decided to bring it up here, and in the context of a cute package, &lt;a href=&#34;https://hackage.haskell.org/package/should-not-typecheck&#34;&gt;&lt;code&gt;should-not-typecheck&lt;/code&gt;&lt;/a&gt;
-that hooks up with HSpec to make assertions that *something won&amp;rsquo;t
+that hooks up with HSpec to make assertions that something won&amp;rsquo;t
 typecheck.&lt;/p&gt;
 
 &lt;h2 id=&#34;installation:60dd71330bbedef1aba1bef45daea5dd&#34;&gt;Installation&lt;/h2&gt;
@@ -72,7 +72,7 @@ test module, with a directive:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;ShouldNotTypecheckExample&lt;/span&gt;
 
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; ( &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;
-                  , &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldReturn&lt;/span&gt;
+                  , &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;
                   , &lt;span style=&#34;color: #0000FF&#34;&gt;shouldThrow&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;anyException&lt;/span&gt;
                   )
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.ShouldNotTypecheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;shouldNotTypecheck&lt;/span&gt;)
@@ -259,6 +259,8 @@ world of doing &amp;ldquo;real&amp;rdquo; dynamic typing in Haskell.&lt;/p&gt;
 &lt;a href=&#34;../../blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/&#34;&gt;wreq: Web client programming; with notes on lens and operator syntax&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 5: &lt;a href=&#34;../../blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/&#34;&gt;should-not-typecheck: making
 Haskell sort of dynamically typed with deferred type errors&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 6: &lt;a href=&#34;../../blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/&#34;&gt;finding utilities with Hoogle
+and Hayoo: MissingH, extra&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
