@@ -73,7 +73,7 @@ test module, with a directive:
 import ShouldNotTypecheckExample
 
 import Test.Hspec ( Spec, hspec, describe, it
-                  , shouldBe, shouldReturn
+                  , shouldBe
                   , shouldThrow, anyException
                   )
 import Test.ShouldNotTypecheck (shouldNotTypecheck)
