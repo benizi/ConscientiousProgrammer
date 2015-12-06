@@ -25,7 +25,7 @@ It will never be the case that everything everyone will find useful
 will already be in the "standard library" for any language
 ecosystem. However, one of the coolest features of the Haskell
 ecosystem (which wows all non-Haskellers when I show them), is the ability to search for useful functions by type
-signature, using [`Hoogle`](https://www.haskell.org/hoogle/) or
+signature, using [`Hoogle`](http://hoogle.haskell.org/) or
 [`Hayoo`](http://hayoo.fh-wedel.de/examples). You can use other
 criteria also, such as names; this can be useful if you have a guess
 at what some useful function might be named.
@@ -129,8 +129,9 @@ also popped up, but that's a
 pull in for just one tiny utility function!
 
 The
-[Hoogle search](https://www.haskell.org/hoogle/?hoogle=Eq+a+%3D%3E+[a]+-%3E+[a]+-%3E+[a]+-%3E+[a])
-search didn't work so well.
+[Hoogle search at `hoogle.haskell.org`](http://hoogle.haskell.org/?hoogle=Eq+a+%3D%3E+[a]+-%3E+[a]+-%3E+[a]+-%3E+[a]&scope=set%3Astackage)
+search works pretty well also. (Note that the Hoogle search at the old
+site [gives bad results](https://www.haskell.org/hoogle/?hoogle=Eq+a+%3D%3E+[a]+-%3E+[a]+-%3E+[a]+-%3E+[a]).)
 
 ## Modifying our tests to check the function with the more generic type
 
