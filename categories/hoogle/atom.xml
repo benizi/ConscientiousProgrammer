@@ -27,7 +27,7 @@
 will already be in the &amp;ldquo;standard library&amp;rdquo; for any language
 ecosystem. However, one of the coolest features of the Haskell
 ecosystem (which wows all non-Haskellers when I show them), is the ability to search for useful functions by type
-signature, using &lt;a href=&#34;https://www.haskell.org/hoogle/&#34;&gt;&lt;code&gt;Hoogle&lt;/code&gt;&lt;/a&gt; or
+signature, using &lt;a href=&#34;http://hoogle.haskell.org/&#34;&gt;&lt;code&gt;Hoogle&lt;/code&gt;&lt;/a&gt; or
 &lt;a href=&#34;http://hayoo.fh-wedel.de/examples&#34;&gt;&lt;code&gt;Hayoo&lt;/code&gt;&lt;/a&gt;. You can use other
 criteria also, such as names; this can be useful if you have a guess
 at what some useful function might be named.&lt;/p&gt;
@@ -131,8 +131,9 @@ also popped up, but that&amp;rsquo;s a
 pull in for just one tiny utility function!&lt;/p&gt;
 
 &lt;p&gt;The
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=Eq+a+%3D%3E+[a]+-%3E+[a]+-%3E+[a]+-%3E+[a]&#34;&gt;Hoogle search&lt;/a&gt;
-search didn&amp;rsquo;t work so well.&lt;/p&gt;
+&lt;a href=&#34;http://hoogle.haskell.org/?hoogle=Eq+a+%3D%3E+[a]+-%3E+[a]+-%3E+[a]+-%3E+[a]&amp;amp;scope=set%3Astackage&#34;&gt;Hoogle search at &lt;code&gt;hoogle.haskell.org&lt;/code&gt;&lt;/a&gt;
+search works pretty well also. (Note that the Hoogle search at the old
+site &lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=Eq+a+%3D%3E+[a]+-%3E+[a]+-%3E+[a]+-%3E+[a]&#34;&gt;gives bad results&lt;/a&gt;.)&lt;/p&gt;
 
 &lt;h2 id=&#34;modifying-our-tests-to-check-the-function-with-the-more-generic-type:d5469b5c0bbdfa17c4766f6abf5754f6&#34;&gt;Modifying our tests to check the function with the more generic type&lt;/h2&gt;
 
