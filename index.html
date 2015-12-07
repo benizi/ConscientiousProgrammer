@@ -87,7 +87,39 @@
       <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/semigroups">semigroups</a><a class="label" href="http://ConscientiousProgrammer.com/categories/nonempty-lists">nonempty lists</a><a class="label" href="http://ConscientiousProgrammer.com/categories/"></a><a class="label" href="http://ConscientiousProgrammer.com/categories/types">types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parsec">parsec</a><a class="label" href="http://ConscientiousProgrammer.com/categories/monoids">monoids</a><a class="label" href="http://ConscientiousProgrammer.com/categories/algebra">algebra</a><a class="label" href="http://ConscientiousProgrammer.com/categories/split">split</a><a class="label" href="http://ConscientiousProgrammer.com/categories/safe">safe</a>
       </span>
       
-      Table of contents for the whole series A table of contents is at the top of the article for day 1. Day 7 How often has the following runtime error happened to you, whether in Haskell or in some other language? *** Exception: Prelude.head: empty list Basically, code blew up that assumed a list was nonempty but it wasn&rsquo;t. In fact, posted on Reddit recently was a question about code that failed with ** Exception: Prelude.foldl1: empty list which is the same problem.
+      <h2 id="table-of-contents-for-the-whole-series:958db8f82ca76230f48a5dece0db5e88">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-7:958db8f82ca76230f48a5dece0db5e88">Day 7</h2>
+
+<p>How often has the following runtime error happened to you, whether in
+Haskell or in some other language?</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">*** Exception: Prelude.head: empty list</span>
+</pre></div>
+
+
+<p>Basically, code blew up that assumed a list was nonempty but it
+wasn&rsquo;t.</p>
+
+<p>In fact,
+<a href="https://www.reddit.com/r/haskell/comments/3vlb8v/reading_data_problems/">posted on Reddit recently</a>
+was a question about code that failed with</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">** Exception: Prelude.foldl1: empty list</span>
+</pre></div>
+
+
+<p>which is the same problem.</p>
+
+<p>Today, I present a case study: refactoring that code to take advantage
+of an important data type that is going to be part of the Haskell
+standard library, the <code>NonEmpty</code> list type. This is part of Edward
+Kmett&rsquo;s <a href="http://hackage.haskell.org/package/semigroups"><code>semigroups</code></a>
+package that is
+<a href="https://prime.haskell.org/wiki/Libraries/Proposals/SemigroupMonoid">going into the standard library</a>.</p>
+
       <a href="http://conscientiousprogrammer.com/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/">Read On &rarr;</a>
       
     </div>

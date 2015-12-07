@@ -50,8 +50,6 @@ Kmett&amp;rsquo;s &lt;a href=&#34;http://hackage.haskell.org/package/semigroups&
 package that is
 &lt;a href=&#34;https://prime.haskell.org/wiki/Libraries/Proposals/SemigroupMonoid&#34;&gt;going into the standard library&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&amp;lt;&amp;ndash;!more&amp;ndash;&amp;gt;&lt;/p&gt;
-
 &lt;h2 id=&#34;in-general-should-we-adopt-defensive-or-confident-programming:958db8f82ca76230f48a5dece0db5e88&#34;&gt;In general, should we adopt defensive or confident programming?&lt;/h2&gt;
 
 &lt;p&gt;It&amp;rsquo;s easy to say, &amp;ldquo;well, we should program &lt;em&gt;defensively&lt;/em&gt; and not call
