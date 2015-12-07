@@ -6,8 +6,589 @@
     <description>Recent content in Haskell on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 06 Dec 2015 08:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Mon, 07 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/categories/haskell/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 7: semigroups; NonEmpty list and a case study of types and tests</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/</link>
+      <pubDate>Mon, 07 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-7:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Day 7&lt;/h2&gt;
+
+&lt;p&gt;How often has the following runtime error happened to you, whether in
+Haskell or in some other language?&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;*** Exception: Prelude.head: empty list&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Basically, code blew up that assumed a list was nonempty but it
+wasn&amp;rsquo;t.&lt;/p&gt;
+
+&lt;p&gt;In fact,
+&lt;a href=&#34;https://www.reddit.com/r/haskell/comments/3vlb8v/reading_data_problems/&#34;&gt;posted on Reddit recently&lt;/a&gt;
+was a question about code that failed with&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;** Exception: Prelude.foldl1: empty list&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;which is the same problem.&lt;/p&gt;
+
+&lt;p&gt;Today, I present a case study: refactoring that code to take advantage
+of an important data type that is going to be part of the Haskell
+standard library, the &lt;code&gt;NonEmpty&lt;/code&gt; list type. This is part of Edward
+Kmett&amp;rsquo;s &lt;a href=&#34;http://hackage.haskell.org/package/semigroups&#34;&gt;&lt;code&gt;semigroups&lt;/code&gt;&lt;/a&gt;
+package that is
+&lt;a href=&#34;https://prime.haskell.org/wiki/Libraries/Proposals/SemigroupMonoid&#34;&gt;going into the standard library&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;&amp;ndash;!more&amp;ndash;&amp;gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;in-general-should-we-adopt-defensive-or-confident-programming:958db8f82ca76230f48a5dece0db5e88&#34;&gt;In general, should we adopt defensive or confident programming?&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s easy to say, &amp;ldquo;well, we should program &lt;em&gt;defensively&lt;/em&gt; and not call
+unsafe functions like &lt;code&gt;head&lt;/code&gt; and &lt;code&gt;foldl1&lt;/code&gt; but should always check for an empty
+list&amp;rdquo;. But what if we &lt;em&gt;know&lt;/em&gt; that the list is supposed to have at
+least one element, perhaps because we validated that fact earlier on
+in our data model. For example, say you are buying tickets for a
+concert. You have to buy at least one, but could buy more than one. So
+the business logic for the ticket pickup should always assume that
+there is at least one ticket for you. It should not perpetually check
+for emptiness because that should have been caught up front when you
+ordered.&lt;/p&gt;
+
+&lt;p&gt;The situation is exactly analogous to the problem of &lt;code&gt;NULL&lt;/code&gt; in many
+languages: languages that use &lt;code&gt;NULL&lt;/code&gt; don&amp;rsquo;t distinguish at the &lt;em&gt;type&lt;/em&gt;
+level between something that is &lt;em&gt;possibly-nonexistent&lt;/em&gt; (0 or 1
+element) and something that is always there (1 element). It is
+unfortunate when we know something about our data but aren&amp;rsquo;t saying it
+in our type. In the case of lists, the situation is that a
+&lt;em&gt;possibly-empty&lt;/em&gt; list can have 0 or more elements, while a nonempty
+list can have 1 or more elements. Both situations are extremely common
+(think of regex matching that distinguishes between &lt;code&gt;x*&lt;/code&gt; and &lt;code&gt;x+&lt;/code&gt;) and
+should be modeled by different types!&lt;/p&gt;
+
+&lt;p&gt;I believe that the real solution to this kind of problem is not to go
+&lt;em&gt;defensive&lt;/em&gt; and litter all our code with random &lt;code&gt;NULL&lt;/code&gt; or &lt;code&gt;isEmpty&lt;/code&gt;
+kinds of runtime checks. The solution is also not to just go &amp;ldquo;cowboy
+hacker&amp;rdquo; and invite possible and actual runtime exceptions by skipping
+all checking.&lt;/p&gt;
+
+&lt;p&gt;Instead, the solution, when practical, is to &lt;em&gt;use the right types&lt;/em&gt; so
+that in the appropriate delimited scope of our code, runtime
+exceptions &lt;em&gt;cannot possibly occur&lt;/em&gt; and therefore within that scope we
+can program &lt;em&gt;confidently&lt;/em&gt; rather than &lt;em&gt;defensively&lt;/em&gt;. If we don&amp;rsquo;t use
+our language&amp;rsquo;s type system to our advantage, we are just doing
+ordinary dynamically typed programming in a typed language and missing
+out on the full benefits of types. Since we made some sacrifices in
+adopting a statically typed language instead of a dynamically typed
+one, we should take advantage of what we got ourselves into. There&amp;rsquo;s
+an interesting asymmetry in the programming world: it is &lt;em&gt;impossible&lt;/em&gt;
+to write statically typed code in a dynamically typed language, but it
+is &lt;em&gt;easy&lt;/em&gt; to write dynamically typed code in a statically typed
+language!&lt;/p&gt;
+
+&lt;h2 id=&#34;a-nonempty-list-type:958db8f82ca76230f48a5dece0db5e88&#34;&gt;A nonempty list type&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at the &lt;code&gt;NonEmpty&lt;/code&gt; list. You can already use it today before
+it becomes part of the standard library, by just adding &lt;code&gt;semigroups&lt;/code&gt;
+to your dependencies.&lt;/p&gt;
+
+&lt;h3 id=&#34;what-are-the-requirements-for-a-nonempty-list:958db8f82ca76230f48a5dece0db5e88&#34;&gt;What are the requirements for a nonempty list?&lt;/h3&gt;
+
+&lt;p&gt;Roughly, a &lt;code&gt;NonEmpty&lt;/code&gt; list should&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;support operations to interconvert with a regular possibly-empty list&lt;/li&gt;
+&lt;li&gt;support analogues of standard list operations (like &lt;code&gt;map&lt;/code&gt; and
+&lt;code&gt;filter&lt;/code&gt;) that carefully take into account whether the output is possibly-empty.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;quickcheck-for-specifying-laws-properties:958db8f82ca76230f48a5dece0db5e88&#34;&gt;QuickCheck for specifying laws (properties)&lt;/h3&gt;
+
+&lt;p&gt;On
+&lt;a href=&#34;../../blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/&#34;&gt;day 3&lt;/a&gt;,
+I mentioned that QuickCheck is very useful for specifying requirements
+when designing a new module. Ideally, when designing an API around a
+new type, we treat it as an abstract data type and check the behavior
+of operations on that type. The &lt;code&gt;NonEmpty&lt;/code&gt; list is simple enough that you
+might think it&amp;rsquo;s overkill to do that, but I just wanted to present a
+taste of what one might do up front if one were starting out with
+property test-driven development. Let&amp;rsquo;s imagine we are creating a
+module &lt;code&gt;Data.List.NonEmpty&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE ScopedTypeVariables #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Part of a hypothetical test module for the semigroups package.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;HypotheticalSemigroupsSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List.NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; NonEmpty
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldSatisfy&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.QuickCheck&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; QuickCheck
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Maybe&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Maybe
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;semigroups&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Data.List.NonEmpty&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;constructor NonEmpty.nonEmpty&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;fails on trying to construct from an empty regular list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+          &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;nonEmpty (&lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;]) `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;Nothing&lt;/span&gt;
+        prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;succeeds on any nonempty list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+          &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;QuickCheck&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; (xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;])) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;nonEmpty xs `shouldSatisfy` &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;isJust
+      describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;conversion to regular list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;converts back to the original regular list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+          &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;QuickCheck&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; (xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;])) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; nonEmptyXs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;nonEmpty xs
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toList nonEmptyXs `shouldBe` xs
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Basically, &lt;code&gt;nonEmpty&lt;/code&gt; is a safe constructor:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;nonEmpty&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; a)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There is also an unsafe constructor called &lt;code&gt;fromList&lt;/code&gt;. I wouldn&amp;rsquo;t use
+that except in case I really know that a list was not empty, because
+it was returned from an API that guaranteed it but not in a typed
+way. For example, I&amp;rsquo;ve faced this annoying problem when writing
+parsers using libraries such as
+&lt;a href=&#34;https://hackage.haskell.org/package/parsec&#34;&gt;&lt;code&gt;parsec&lt;/code&gt;&lt;/a&gt;, because
+combinators such as &lt;code&gt;many1&lt;/code&gt; have a type&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;many1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Stream&lt;/span&gt; s m t &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ParsecT&lt;/span&gt; s u m a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ParsecT&lt;/span&gt; s u m [a]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;even though the library &lt;em&gt;guarantees&lt;/em&gt; that if the parse succeeds, the
+resulting list has at least one element! So in a situation like this,
+I would feel justified in using the unsafe &lt;code&gt;NonEmpty.fromList&lt;/code&gt; to
+&lt;em&gt;immediately&lt;/em&gt; unsafely wrap to get my known-to-be-nonempty-list into a
+more refined type.&lt;/p&gt;
+
+&lt;p&gt;A note on QuickCheck internals: &lt;code&gt;QuickCheck.NonEmpty&lt;/code&gt; (ignore the
+coincidence of the token &lt;code&gt;NonEmpty&lt;/code&gt; in common with our module and type
+in question!) is just a
+&lt;a href=&#34;https://hackage.haskell.org/package/QuickCheck-2.8.1/docs/Test-QuickCheck.html#t:NonEmptyList&#34;&gt;newtype in QuickCheck&lt;/a&gt;
+to generate regular lists &lt;code&gt;[a]&lt;/code&gt; that happen to be nonempty at runtime
+(as in they are of the form &lt;code&gt;(x:xs)&lt;/code&gt;). Imagine if QuickCheck had been
+written when the &lt;code&gt;NonEmpty&lt;/code&gt; type we want had existed. Then it could
+just generate a real &lt;code&gt;NonEmpty&lt;/code&gt; rather than a fake newtype!&lt;/p&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t use QuickCheck or similar generative testing libraries,
+check them out! These methods of testing are far more useful than the
+example-based tests that I&amp;rsquo;ve provided so far in these articles just
+for illustrative purposes. When possible, generative tests should be
+written instead of manual example-based tests.&lt;/p&gt;
+
+&lt;p&gt;(The use of &lt;code&gt;[Int]&lt;/code&gt; type annotations is because QuickCheck requires a
+monomorphic type in order to generate concrete data to
+test. &lt;code&gt;ScopedTypeVariables&lt;/code&gt; is a GHC extension that I wish were just
+part of the standard Haskell language; it was &lt;a href=&#34;https://ocharles.org.uk/blog/guest-posts/2014-12-20-scoped-type-variables.html&#34;&gt;covered in a 2014 Day of
+GHC Extensions&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;h2 id=&#34;a-few-notes-on-the-full-nonempty-api:958db8f82ca76230f48a5dece0db5e88&#34;&gt;A few notes on the full &lt;code&gt;NonEmpty&lt;/code&gt; API&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;map&lt;/code&gt; behaves as expected, because it doesn&amp;rsquo;t change the number of
+elements and therefore mapping over a &lt;code&gt;NonEmpty&lt;/code&gt; is clearly a &lt;code&gt;NonEmpty&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;map&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; b
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;However, &lt;code&gt;filter&lt;/code&gt; on a &lt;code&gt;NonEmpty&lt;/code&gt; returns a regular possibly-empty
+list, as it should, because the predicate can potentially fail on
+every element:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;filter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And &lt;code&gt;foldl1&lt;/code&gt;, unlike that of the regular list, is &lt;em&gt;safe&lt;/em&gt;. It cannot
+fail, because it always starts off the reduction with the first
+element as the seed.&lt;/p&gt;
+
+&lt;p&gt;There are a whole bunch of other useful list functions.&lt;/p&gt;
+
+&lt;p&gt;Oh, and the &lt;a href=&#34;http://hackage.haskell.org/package/semigroups-0.18.0.1/docs/src/Data-List-NonEmpty.html#NonEmpty&#34;&gt;internal implementation&lt;/a&gt; is what you might suspect: it&amp;rsquo;s
+just a tuple of the first element with the possibly-empty tail, with a
+special &amp;ldquo;cons&amp;rdquo; operator &lt;code&gt;:|&lt;/code&gt; that resembles the normal list&amp;rsquo;s &lt;code&gt;:&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; a &lt;span style=&#34;color: #B00040&#34;&gt;:|&lt;/span&gt; [a]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;a-case-study-in-refactoring:958db8f82ca76230f48a5dece0db5e88&#34;&gt;A case study in refactoring&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at refactoring some
+&lt;a href=&#34;https://www.reddit.com/r/haskell/comments/3vlb8v/reading_data_problems/&#34;&gt;code posted on Reddit&lt;/a&gt;
+that was throwing an exception unexpectedly at run time.&lt;/p&gt;
+
+&lt;p&gt;We won&amp;rsquo;t go into how the code might be written in a completely
+different way, but just focus on identifying and removing unsafe code
+that might throw exceptions.&lt;/p&gt;
+
+&lt;p&gt;The code uses the excellent package
+&lt;a href=&#34;http://hackage.haskell.org/package/split&#34;&gt;&lt;code&gt;split&lt;/code&gt;&lt;/a&gt; which I am a happy
+user of. I have taken the liberty of adding comments to the code and
+explicit imports for presentation here.&lt;/p&gt;
+
+&lt;h3 id=&#34;original-unsafe-code:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Original unsafe code&lt;/h3&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List.Split&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Split
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;totalArea&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [(&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;totalArea&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;acc x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (acc &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; partialArea x)) &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; xs
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;partialArea&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;partialArea&lt;/span&gt; (l, w, h) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (l&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;w &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; w&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;h &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; h&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;l) &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; slack
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt; areas       &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [l, w, h]
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- &amp;#39;maximum&amp;#39; is unsafe&lt;/span&gt;
+        smallSides  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; filter (&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt; maximum areas) areas
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- &amp;#39;foldl1&amp;#39; is unsafe&lt;/span&gt;
+        slack       &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl1 (&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;) smallSides
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;parseFile&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [(&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)]
+&lt;span style=&#34;color: #0000FF&#34;&gt;parseFile&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; map (splitDimensions) (breakLines xs)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;breakLines&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;]
+&lt;span style=&#34;color: #0000FF&#34;&gt;breakLines&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Split&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;splitOn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | &amp;#39;read&amp;#39; is unsafe. &amp;#39;(!!)&amp;#39; is unsafe.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;splitDimensions&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;splitDimensions&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; (item &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;, item &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;, item &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;)
+                   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt; item n &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; read ((&lt;span style=&#34;color: #B00040&#34;&gt;Split&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;splitOn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; xs)&lt;span style=&#34;color: #666666&#34;&gt;!!&lt;/span&gt;n)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This crashes on &lt;code&gt;foldl1&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;UnsafeListExample&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;totalArea crashes for a particular input&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; contents &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;1 x 1 x 1&amp;quot;&lt;/span&gt;
+      evaluate (totalArea (parseFile contents)) `shouldThrow` anyException
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve already identified the problems above.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll ignore the fact that &lt;code&gt;read&lt;/code&gt; and list indexing &lt;code&gt;(!!)&lt;/code&gt; are unsafe,
+because that&amp;rsquo;s not what is of interest here today.&lt;/p&gt;
+
+&lt;p&gt;But &lt;code&gt;maximum&lt;/code&gt; and &lt;code&gt;foldl1&lt;/code&gt; are both unsafe on lists because they crash
+on empty lists.&lt;/p&gt;
+
+&lt;p&gt;It turns out &lt;em&gt;from manual inspection, acting as a human static
+analyzer&lt;/em&gt; that the use of &lt;code&gt;maximum&lt;/code&gt; is OK here, because it&amp;rsquo;s operating
+on a 3-element list &lt;code&gt;[l, w, h]&lt;/code&gt; created just before being passed to
+&lt;code&gt;maximum&lt;/code&gt;. But this safety is not reflected in the types.&lt;/p&gt;
+
+&lt;p&gt;How about &lt;code&gt;foldl1&lt;/code&gt;? If you carefully think about what &lt;code&gt;filter&lt;/code&gt;
+returns, you can deduce that it might return an empty list, and if you
+can&amp;rsquo;t guarantee that it&amp;rsquo;s nonempty, then the &lt;code&gt;foldl1&lt;/code&gt; will crash
+hard. And it does.&lt;/p&gt;
+
+&lt;p&gt;That was a lot of human thinking we had to do. Luckily, tests were run
+that discovered the bug, but still, the code ended up posted to Reddit
+asking what the bug was, so it&amp;rsquo;s not trivial to find these kinds of
+lurking bugs. Is there a better way?&lt;/p&gt;
+
+&lt;h3 id=&#34;refactoring-to-nonempty-lists:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Refactoring to &lt;code&gt;NonEmpty&lt;/code&gt; lists&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s use &lt;code&gt;NonEmpty&lt;/code&gt;. First of all, we change &lt;code&gt;totalArea&lt;/code&gt; to take a
+&lt;code&gt;NonEmpty&lt;/code&gt; because that&amp;rsquo;s what we really want.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;totalArea&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;totalArea&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;acc x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (acc &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; partialArea x)) &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; xs
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note that we only had to change the type of the parameter, not any of
+the code, because &lt;code&gt;foldl&lt;/code&gt; has been implemented on &lt;code&gt;NonEmpty&lt;/code&gt; as well
+as regular lists.&lt;/p&gt;
+
+&lt;p&gt;Next, we change the body of &lt;code&gt;partialArea&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;partialArea&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;partialArea&lt;/span&gt; (l, w, h) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (l&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;w &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; w&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;h &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; h&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;l) &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; slack
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+    areas &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+    areas &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList [l, w, h]
+
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- &amp;#39;maximum&amp;#39; is safe on &amp;#39;NonEmpty&amp;#39;&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- But &amp;#39;smallSides&amp;#39; can be empty because of &amp;#39;NonEmpty.filter&amp;#39;,&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- and &amp;#39;NonEmpty.fromList&amp;#39; is unsafe!&lt;/span&gt;
+    smallSides &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;]
+    smallSides &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;filter (&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt; maximum areas) areas
+
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- unsafe!&lt;/span&gt;
+    smallSides1 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+    smallSides1 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList smallSides
+
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- &amp;#39;foldl1&amp;#39; is safe on &amp;#39;NonEmpty&amp;#39;&lt;/span&gt;
+    slack &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl1 (&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;) smallSides1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;We made a number of changes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;since we&amp;rsquo;re creating a nonempty list, we turn it immediately into a
+&lt;code&gt;NonEmpty&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;maximum&lt;/code&gt; is defined for &lt;code&gt;NonEmpty&lt;/code&gt; so we don&amp;rsquo;t have to change the
+text of the code, but we know that &lt;code&gt;maximum&lt;/code&gt; is &lt;em&gt;guaranteed&lt;/em&gt; to be
+safe for &lt;code&gt;NonEmpty&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;NonEmpty.filter&lt;/code&gt;, as we discussed, returns a regular list, &lt;em&gt;not&lt;/em&gt; a
+&lt;code&gt;NonEmpty&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;at the end, we want to safely compute &lt;code&gt;slack&lt;/code&gt;, but we can&amp;rsquo;t unless
+we use a safe &lt;code&gt;foldl1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;working backwards, we must convert a regular list to a &lt;code&gt;NonEmpty&lt;/code&gt;,
+but there&amp;rsquo;s only one way to do that, and it&amp;rsquo;s unsafe!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So by refining the types used in the program, we have identified the
+exact point at which &lt;em&gt;we could not write the necessary code&lt;/em&gt; without
+resorting to &lt;code&gt;NonEmpty.fromList&lt;/code&gt;. So, strictly speaking, we haven&amp;rsquo;t
+made a run time error turn into a compile time error, but we have
+narrowed down what is going on purely mechanically by means of
+following the types.&lt;/p&gt;
+
+&lt;p&gt;The real problem in the code here seems to be that we wanted
+&lt;code&gt;smallSides&lt;/code&gt; to be nonempty. The attempt to use only safe code
+automatically resolved one possible source of unsafety (&lt;code&gt;maximum&lt;/code&gt;) and
+pointed at a more complicated situation requiring a proof obligation
+on the result of the &lt;code&gt;filter&lt;/code&gt;. &lt;code&gt;partialArea&lt;/code&gt; could be written to avoid
+the proof obligation, by not using a list type at all for &lt;code&gt;areas&lt;/code&gt; to
+perform the desired logic.&lt;/p&gt;
+
+&lt;h3 id=&#34;maybe-the-real-problem-is-that-we-shouldn-t-use-lists-at-all-here:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Maybe the real problem is that we shouldn&amp;rsquo;t use lists at all here&lt;/h3&gt;
+
+&lt;p&gt;You may have protested at this entire &lt;code&gt;NonEmpty&lt;/code&gt; exercise all this
+time, because &lt;code&gt;NonEmpty&lt;/code&gt; is just the wrong type for all of this work!
+&lt;strong&gt;There&amp;rsquo;s no point in trying to use some kind of fancy type that
+doesn&amp;rsquo;t fit the problem.&lt;/strong&gt; There was no reason for the list
+&lt;code&gt;[l, w, h]&lt;/code&gt; to be created at all. If you&amp;rsquo;re using a type and you still
+run into proof obligations, often that means the type is not the right
+one.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code&gt;partialArea&lt;/code&gt;, if we state the logic of what we really wanted (the
+two smallest values out of three), then we can just write what we
+mean:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Don&amp;#39;t use lists at all!&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;bestPartialArea&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;bestPartialArea&lt;/span&gt; (l, w, h) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (l&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;w &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; w&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;h &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; h&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;l) &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; slack
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+    (side0, side1, &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; sort3 (l, w, h)
+    slack &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; side0 &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; side1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;where we created a utility module &lt;code&gt;Sort3&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Sort3&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;sort3&lt;/span&gt;) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Sort exactly 3 values.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;sort3&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Ord&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a, a, a) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (a, a, a)
+&lt;span style=&#34;color: #0000FF&#34;&gt;sort3&lt;/span&gt; (a0, a1, a2) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; a0 &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; a1
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; a0 &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; a2
+       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; a2 &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt; a1
+               &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; (a2, a1, a0)
+               &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; (a1, a2, a0)
+       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; (a1, a0, a2)
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; a1 &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; a2
+       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; a0 &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; a2
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; (a2, a0, a1)
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; (a0, a2, a1)
+       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; (a0, a1, a2)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Yes, I did look on Hoogle (as recommended in my article yesterday on
+searching for utility modules), and although I did not find this exact
+function, I found the logic for it embedded in a context of optimal
+sorting of vectors, in the
+&lt;a href=&#34;https://hackage.haskell.org/package/vector-algorithms-0.7.0.1/docs/Data-Vector-Algorithms-Optimal.html&#34;&gt;&lt;code&gt;Data.Vector.Algorithms.Optimal&lt;/code&gt; module&lt;/a&gt;
+of the
+excellent
+&lt;a href=&#34;https://hackage.haskell.org/package/vector-algorithms&#34;&gt;&lt;code&gt;vector-algorithms&lt;/code&gt; package&lt;/a&gt;
+that I highly recommend when working with vectors. I copied and
+pasted the logic in order to work on a simple triple.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-value-of-tests:958db8f82ca76230f48a5dece0db5e88&#34;&gt;The value of tests&lt;/h3&gt;
+
+&lt;p&gt;QuickCheck is a great tool. Suppose we didn&amp;rsquo;t want to or couldn&amp;rsquo;t
+refine the types in our code, for some reason. We can often still make of
+testing to try to weed out easy-to-discover bugs. For example, we
+could have written a sanity check test on &lt;code&gt;totalArea&lt;/code&gt; by generating a
+whole bunch of random input and checking that the result is what we
+expect, or at least something reasonable:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UnsafeListExample&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;totalArea&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;parseFile&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldSatisfy&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldThrow&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;anyException&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Positive&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Exception&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;evaluate&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Printf&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;printf&lt;/span&gt;)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;UnsafeListExample&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;totalArea crashes for a particular input&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; contents &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;1 x 1 x 1&amp;quot;&lt;/span&gt;
+      evaluate (totalArea (parseFile contents)) `shouldThrow` anyException
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;totalArea gives something reasonable on any triple of ints&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;Positive&lt;/span&gt; (l &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)) (&lt;span style=&#34;color: #B00040&#34;&gt;Positive&lt;/span&gt; (w &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)) (&lt;span style=&#34;color: #B00040&#34;&gt;Positive&lt;/span&gt; (h &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; contents &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%d x %d x %d&amp;quot;&lt;/span&gt; l w h
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;in&lt;/span&gt; totalArea (parseFile contents) `shouldSatisfy` (&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Very quickly we get a counterexample reported by QuickCheck:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;  1) UnsafeListExample totalArea does not crash on any triple of ints&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       uncaught exception: ErrorCall (Prelude.foldl1: empty list) (after 4 tests)&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       Positive {getPositive = 2}&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       Positive {getPositive = 2}&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       Positive {getPositive = 2}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Also, you may have wondered about that complicated optimal sort of 3
+values. Did I copy and paste the logic correctly? For peace of mind, I
+wrote a QuickCheck test for it:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Sort3&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sort3 sorts correctly&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(triple &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; (a0&amp;#39;, a1&amp;#39;, a2&amp;#39;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Sort3&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;sort3 triple
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;in&lt;/span&gt; a0&amp;#39; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;=&lt;/span&gt; a1&amp;#39; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; a1&amp;#39; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;=&lt;/span&gt; a2&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I love QuickCheck. What would life be without it?&lt;/p&gt;
+
+&lt;h3 id=&#34;some-bonus-refactorings:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Some bonus refactorings&lt;/h3&gt;
+
+&lt;p&gt;Some other type-oriented refactorings into &lt;code&gt;NonEmpty&lt;/code&gt; as much as
+possible that I won&amp;rsquo;t discuss in detail because they were mostly
+irrelevant here:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;parseFile&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;parseFile&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;map (splitDimensions) (breakLines xs)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | We ended up not needing the fact that the input is nonempty, and&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- converted it to a regular list.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;breakLines&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;breakLines&lt;/span&gt; string1 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; ourSplitOn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toList string1)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | &amp;#39;read&amp;#39; is unsafe. &amp;#39;(!!)&amp;#39; is unsafe.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;splitDimensions&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;splitDimensions&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; (item &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;, item &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;, item &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;)
+                   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt; item n &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; read ((&lt;span style=&#34;color: #B00040&#34;&gt;Split&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;splitOn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; xs)&lt;span style=&#34;color: #666666&#34;&gt;!!&lt;/span&gt;n)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Using unsafe &amp;#39;NonEmpty.fromList&amp;#39; is safe because we know&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- the result &amp;#39;from Split.splitOn&amp;#39; is nonempty. Note that the elements&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- themselves can be empty.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;ourSplitOn&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; [a]
+&lt;span style=&#34;color: #0000FF&#34;&gt;ourSplitOn&lt;/span&gt; subList list &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList (&lt;span style=&#34;color: #B00040&#34;&gt;Split&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;splitOn subList list)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The most interesting thing was a tangential observation that
+&lt;code&gt;Split.splitOn&lt;/code&gt; always returns a nonempty list of lists. So in
+principle we could wrap the result into a &lt;code&gt;NonEmpty&lt;/code&gt;. I even wrote a
+little passing QuickCheck test:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;split&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;splitOn always results in nonempty list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;subList (list &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #B00040&#34;&gt;Split&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;splitOn subList list `shouldSatisfy` not &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; null
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note: &lt;code&gt;split&lt;/code&gt; already has a &lt;a href=&#34;http://hub.darcs.net/byorgey/split/browse/test/&#34;&gt;huge set of property tests for its own
+purposes&lt;/a&gt;. I love the
+&lt;code&gt;split&lt;/code&gt; library. I think it&amp;rsquo;s been very well-tested. Check it out.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-brief-note-on-semigroups-semigroup-http-hackage-haskell-org-package-semigroups-0-18-0-1-docs-data-semigroup-html:958db8f82ca76230f48a5dece0db5e88&#34;&gt;A brief note on semigroups &lt;a href=&#34;http://hackage.haskell.org/package/semigroups-0.18.0.1/docs/Data-Semigroup.html&#34;&gt;&lt;code&gt;Semigroup&lt;/code&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;A &lt;code&gt;Semigroup&lt;/code&gt; is a type class representing an algebraic structure
+requiring a single associative operation to be defined on it,
+&amp;ldquo;append&amp;rdquo;, which in this library is provided as an operator &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Semigroup&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt;))
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;A QuickCheck test verifying what we already know, which is that
+&lt;code&gt;String&lt;/code&gt; has a &lt;code&gt;Semigroup&lt;/code&gt; instance, string append, and is associative as required:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Data.Semigroup.Semigroup&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&amp;lt;&amp;gt; is associative for String&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;) y z &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (x &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; y) &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; z `shouldBe` x &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; (y &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; z)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;You may already use this operator &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; in
+&lt;a href=&#34;https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Monoid.html&#34;&gt;&lt;code&gt;Monoid&lt;/code&gt;, which is already in the standard library&lt;/a&gt;,
+but the &lt;code&gt;Monoid&lt;/code&gt; type class should really be a subclass of &lt;code&gt;Monoid&lt;/code&gt;
+and that&amp;rsquo;s what&amp;rsquo;s going to happen in a future version of Haskell
+(conceptually, it should have been there all along, but Haskell was
+invented 25 years ago in 1990 and &lt;code&gt;Semigroup&lt;/code&gt; was apparently not
+considered important enough to put into the type class hierarchy then). The difference is that a &lt;code&gt;Monoid&lt;/code&gt; also requires
+an identity element &lt;code&gt;mempty&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s no space here to say anything about why semigroups and monoids
+are useful in computing. Monoids in particular have become an everyday
+word in Big Data circles because of MapReduce, which based on monoids for performance.&lt;/p&gt;
+
+&lt;p&gt;A few Haskell oriented resources on monoids to check out:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikibooks.org/wiki/Haskell/Monoids&#34;&gt;On Wikibooks&lt;/a&gt;
+(The &lt;a href=&#34;https://en.wikibooks.org/wiki/Haskell&#34;&gt;Haskell Wikibook&lt;/a&gt; is a great resource for Haskell in general)&lt;/li&gt;
+&lt;li&gt;A really nice article with code &lt;a href=&#34;https://izbicki.me/blog/gausian-distributions-are-monoids&#34;&gt;&amp;ldquo;Gaussian distributions are monoids&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;conclusion:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;The main takeaways today: consider using &lt;code&gt;NonEmpty&lt;/code&gt; when you have a
+list that you know is not empty, so that you can confidently perform
+operations on it without throwing an exception.  It&amp;rsquo;s just one
+additional Cabal dependency away! Also make sure that you actually
+wanted a list, and not a tuple or fixed-size vector or something like
+that. And use QuickCheck.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:958db8f82ca76230f48a5dece0db5e88&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 6: finding utilities with Hoogle and Hayoo: MissingH, extra</title>
@@ -79,8 +660,8 @@ function creatively named &lt;code&gt;replace&lt;/code&gt;:&lt;/p&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Sure, it would not be hard to write code to do this, but why not use
-see if it&amp;rsquo;s out there already for me to use?&lt;/p&gt;
+&lt;p&gt;Sure, it would not be hard to write code to do this, but why not see
+if it&amp;rsquo;s out there already for me to use?&lt;/p&gt;
 
 &lt;p&gt;What type should we search for? Maybe&lt;/p&gt;
 
@@ -1973,6 +2554,8 @@ turn it into a Stack script.&lt;/p&gt;
 Haskell sort of dynamically typed with deferred type errors&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 6: &lt;a href=&#34;../../blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/&#34;&gt;finding utilities with Hoogle
 and Hayoo: MissingH, extra&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 7: &lt;a href=&#34;../../blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/&#34;&gt;semigroups; NonEmpty list and
+a case study of types and tests&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
@@ -3690,258 +4273,6 @@ You ordered NULL items.
 &lt;h2 id=&#34;conclusion:4a05566a34ea27820d7f737863a690ea&#34;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;I was happy to see interest in functional programming in the local JavaScript community. Richard gave an introductory talk on it that I thought was very useful as a starting point for those who are new to it. I made note of some omissions or inaccuracies in order to improve my thinking about how I can contribute in the future to improving people&amp;rsquo;s understanding and application of functional programming principles.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>nil, non-determinism, exceptions: a journey in debugging the software that generates my blog</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/</link>
-      <pubDate>Sat, 29 Jun 2013 18:15:00 +0000</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2013/06/29/nil-non-determinism-exceptions/</guid>
-      <description>
-
-&lt;p&gt;I mentioned in my &lt;a href=&#34;../../blog/2013/06/24/introducing-this-new-programming-blog/&#34;&gt;initial post for this blog&lt;/a&gt; that I have had some problems with the software I use to generate my personal blog, &lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt;, and was thinking of migrating to a different platform that might in some ways be more robust to such problems. I ended up not doing so, and I still stand by that decision, but I just yet again ran into a problem with Octopress.&lt;/p&gt;
-
-&lt;p&gt;Here I report on how I figured out the problem and begin a conversation about the nature of error handling and API design.&lt;/p&gt;
-
-&lt;h2 id=&#34;a-disclaimer:08c2e7a867293a37060f4f671511a7f1&#34;&gt;A disclaimer&lt;/h2&gt;
-
-&lt;p&gt;I want to emphasize that although I will be critiquing some code, I do not mean to imply that I am a perfect programmer or that this software is of really poor quality. I have written software in the past that has crapped out with &lt;code&gt;null&lt;/code&gt; or &lt;code&gt;nil&lt;/code&gt; errors. In addition, the fact that I basically trust and use this software to drive my blogs is a reflection of the fact that it mostly works. Almost all software that has been written, is being written now, and will be written in the future has bugs. Every day we all trust and use software that we know has bugs. And this blogging platform I use is the product of many, many volunteers who contribute to the world through open source through the goodness of their hearts. I happily use this software, warts and all, and am grateful to everyone who works to maintain and improve it!&lt;/p&gt;
-
-&lt;h2 id=&#34;blog-generation:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Blog generation&lt;/h2&gt;
-
-&lt;p&gt;The problem arose when I tried to generate &lt;a href=&#34;http://franklinchen.com/&#34;&gt;my personal blog&lt;/a&gt;. I got a &lt;a href=&#34;http://franklinchen.com/blog/2012/09/06/my-pittsburgh-ruby-talk-nil/&#34;&gt;&lt;code&gt;nil&lt;/code&gt;&lt;/a&gt; failure.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s the error message (I have omitted the 46-line stack trace):&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;      Generating... Liquid Exception: undefined method `sub&amp;#39; for nil:NilClass in atom.xml&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;This is, unfortunately, an example of an error message that is next to useless, and should &lt;em&gt;never&lt;/em&gt; appear. I have stated that &lt;a href=&#34;../../blog/2013/06/26/we-should-not-create-this-kind-of-terrible-error-message-for-the-end-user/&#34;&gt;we as programmers should not generate useless end user error messages&lt;/a&gt;, and of course, in context, I am an end user of the blog generating software I use.&lt;/p&gt;
-
-&lt;h2 id=&#34;debugging-and-finding-the-root-cause:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Debugging and finding the root cause&lt;/h2&gt;
-
-&lt;p&gt;Thanks to all the Ruby libraries being open source and installed on my machine, by using the stack trace and &lt;code&gt;debugger&lt;/code&gt;, I figured out the immediate cause of the stray &lt;code&gt;nil&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;It turns out that Octopress uses Jekyll, which uses &lt;a href=&#34;https://github.com/tmm1/pygments.rb&#34;&gt;pygments.rb&lt;/a&gt; to do HTML highlighting of code blocks. (I use Octopress precisely because of its built-in support for code block highlighting.)&lt;/p&gt;
-
-&lt;p&gt;The bug is that the code in Jekyll that does syntax highlighting using Pygments makes an assumption that the return value of &lt;code&gt;Pygments.highlight()&lt;/code&gt; is never &lt;code&gt;nil&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;              &lt;span style=&#34;color: #19177C&#34;&gt;@renderer&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;||=&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;Class&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;new(&lt;span style=&#34;color: #880000&#34;&gt;Redcarpet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;Render&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;HTML&lt;/span&gt;) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
-                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;block_code&lt;/span&gt;(code, lang)
-                  lang &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; lang &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; lang&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;split&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;first &lt;span style=&#34;color: #666666&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;
-                  output &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; add_code_tags(
-                    &lt;span style=&#34;color: #880000&#34;&gt;Pygments&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;highlight(code, &lt;span style=&#34;color: #19177C&#34;&gt;:lexer&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt; lang, &lt;span style=&#34;color: #19177C&#34;&gt;:options&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt; { &lt;span style=&#34;color: #19177C&#34;&gt;:encoding&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt; }),
-                    lang
-                  )
-                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-
-                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;add_code_tags&lt;/span&gt;(code, lang)
-                  code &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; code&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;sub(&lt;span style=&#34;color: #BB6688&#34;&gt;/&amp;lt;pre&amp;gt;/&lt;/span&gt;,&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;&amp;lt;pre&amp;gt;&amp;lt;code class=&amp;quot;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; lang &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;&amp;quot;&amp;gt;&amp;#39;&lt;/span&gt;)
-                  code &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; code&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;sub(&lt;span style=&#34;color: #BB6688&#34;&gt;/&amp;lt;\/pre&amp;gt;/&lt;/span&gt;,&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;&amp;quot;&lt;/span&gt;)
-                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-              &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Well, it &lt;em&gt;can&lt;/em&gt; be &lt;code&gt;nil&lt;/code&gt; and was for me, and therefore &lt;code&gt;add_code_tags&lt;/code&gt; was calling &lt;code&gt;code.sub()&lt;/code&gt; with &lt;code&gt;code&lt;/code&gt; being &lt;code&gt;nil&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The bug exists in all the more recent versions of pygments.rb, including 0.4.2 (which is used for my personal blog) and 0.3.7 (which is used for this blog) and the latest released version, 0.5.1. The bug was actually reported by someone two weeks ago, and I added extra commentary, but &lt;a href=&#34;https://github.com/tmm1/pygments.rb/issues/78&#34;&gt;it has not yet been fixed&lt;/a&gt;, so I plan to contribute a fix and submit a pull request.&lt;/p&gt;
-
-&lt;h2 id=&#34;whose-responsibility-to-check-for-nil:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Whose responsibility to check for &lt;code&gt;nil&lt;/code&gt;?&lt;/h2&gt;
-
-&lt;p&gt;Whenever there is an error, one has to ask whose responsibility it was to&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;detect the error&lt;/li&gt;
-&lt;li&gt;handle the error&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I think it is poor practice to engage in random and spotty &amp;ldquo;defensive programming&amp;rdquo; that checks for &lt;code&gt;nil&lt;/code&gt; here and there, willy-nilly, just to avoid a big program crash. There should be clearly delineated boundaries of error handling.&lt;/p&gt;
-
-&lt;p&gt;In this case, it is surprising that a syntax highlighter for some text could return &lt;code&gt;nil&lt;/code&gt;. One would think that if a syntax highlighter got confused, it could return the text verbatim, for example, without any special formatting. (By the way, don&amp;rsquo;t get me started on the abominable use of HTML string hacking in this code instead of, say, building a proper HTML AST; I&amp;rsquo;ll write about that topic later.)&lt;/p&gt;
-
-&lt;h2 id=&#34;documentation-of-api:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Documentation of API&lt;/h2&gt;
-
-&lt;p&gt;Unfortunately, the documentation of the Pygments API was incomplete in &lt;code&gt;lib/pygments/popen.rb&lt;/code&gt;, where &lt;code&gt;highlight&lt;/code&gt; is defined:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Public: Highlight code.&lt;/span&gt;
-    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;#&lt;/span&gt;
-    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Takes a first-position argument of the code to be highlighted, and a&lt;/span&gt;
-    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# second-position hash of various arguments specifiying highlighting properties.&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;highlight&lt;/span&gt;(code, opts&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;{})
-      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# If the caller didn&amp;#39;t give us any code, we have nothing to do,&lt;/span&gt;
-      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# so return right away.&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; code &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; code&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;nil? &lt;span style=&#34;color: #666666&#34;&gt;||&lt;/span&gt; code&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;empty?
-
-      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Callers pass along options in the hash&lt;/span&gt;
-      opts&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #19177C&#34;&gt;:options&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;||=&lt;/span&gt; {}
-
-      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Default to utf-8 for the output encoding, if not given.&lt;/span&gt;
-      opts&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #19177C&#34;&gt;:options&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color: #19177C&#34;&gt;:outencoding&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;||=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;
-
-      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Get back the string from mentos and force encoding if we can&lt;/span&gt;
-      str &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; mentos(&lt;span style=&#34;color: #19177C&#34;&gt;:highlight&lt;/span&gt;, &lt;span style=&#34;color: #008000&#34;&gt;nil&lt;/span&gt;, opts, code)
-      str&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;force_encoding(opts&lt;span style=&#34;color: #666666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #19177C&#34;&gt;:options&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;][&lt;/span&gt;&lt;span style=&#34;color: #19177C&#34;&gt;:outencoding&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;]&lt;/span&gt;) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; str&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;respond_to?(&lt;span style=&#34;color: #19177C&#34;&gt;:force_encoding&lt;/span&gt;)
-      str
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;h2 id=&#34;a-problem-with-dynamically-typed-language-culture:08c2e7a867293a37060f4f671511a7f1&#34;&gt;A problem with dynamically typed language culture&lt;/h2&gt;
-
-&lt;p&gt;The documentation doesn&amp;rsquo;t actually fully specify what the arguments can be, and does not specify what the result should be either! This is a glaring drawback of most code that I have seen in dynamically typed languages such as Ruby. People don&amp;rsquo;t document exactly what can come in or out. A newcomer to a code base (such as me in this situation) cannot just read off the types and know immediately what is going on and what has been promised and what is delivered by a function. As a result, the code reader has to play compiler and read a lot more code to try to figure out what is going on.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;In principle&lt;/em&gt;, someone writing code in a dynamically typed language could provide very helpful comments that amount to informal type annotations, but in practice people do not. I have found in my two decades of programming that human psychology trumps theoretical possibility any day. If something is optional, people won&amp;rsquo;t do it, unless there is a very strong de facto community standard. (It turns out, for example, that what I really admire about the Ruby community is that for some reason, there is a very strong de facto community standard of doing at least some &lt;em&gt;unit testing&lt;/em&gt; as part of the whole development process. I find this sadly missing in some statically typed language communities.)&lt;/p&gt;
-
-&lt;p&gt;In code in a statically typed language such as OCaml (or Haskell or Scala), I would expect to see:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; highlight &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;code &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;opts &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; my_map&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;//...&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;and expect that the return value should be a &lt;code&gt;String&lt;/code&gt;, or&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; highlight &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;code &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;(&lt;/span&gt;opts &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; my_map&lt;span style=&#34;color: #666666&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; option &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;//...&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;to indicate that the return value could be either &lt;code&gt;Some(formatted_code)&lt;/code&gt; or &lt;code&gt;None&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;nil-all-over-the-place:08c2e7a867293a37060f4f671511a7f1&#34;&gt;&lt;code&gt;nil&lt;/code&gt; all over the place&lt;/h2&gt;
-
-&lt;p&gt;Reading the Ruby code, I saw that the situation is even more complex than I thought:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# If the caller didn&amp;#39;t give us any code, we have nothing to do,&lt;/span&gt;
-      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# so return right away.&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; code &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; code&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;nil? &lt;span style=&#34;color: #666666&#34;&gt;||&lt;/span&gt; code&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;empty?
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Wow: &lt;code&gt;code&lt;/code&gt; can be &lt;code&gt;nil&lt;/code&gt;, in which case &lt;code&gt;nil&lt;/code&gt; is returned.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;All code that can return &lt;code&gt;nil&lt;/code&gt; should document this fact so that the caller knows what to do.&lt;/em&gt; Ideally, the writer of pygments.rb should have documented this fact, and then the writer of Jekyll would in turn have added &lt;code&gt;nil&lt;/code&gt; checking in its rendering code.&lt;/p&gt;
-
-&lt;p&gt;Furthermore, it turns out that &lt;code&gt;mentos()&lt;/code&gt; can return &lt;code&gt;nil&lt;/code&gt; on a non-&lt;code&gt;nil&lt;/code&gt; code string! This was a surprise to me.&lt;/p&gt;
-
-&lt;h2 id=&#34;nil-is-not-even-the-real-problem-here-non-determinism-is:08c2e7a867293a37060f4f671511a7f1&#34;&gt;&lt;code&gt;nil&lt;/code&gt; is not even the real problem here: non-determinism is&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;mentos()&lt;/code&gt; is not very well documented. Until I read this code, I didn&amp;rsquo;t realize that pygments.rb actually embeds a call to the Python interpreter to execute the Python Pygments parser to do the real work! In &lt;code&gt;lib/pygments/popen.rb&lt;/code&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Our &amp;#39;rpc&amp;#39;-ish request to mentos. Requires a method name, and then optional&lt;/span&gt;
-    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# args, kwargs, code.&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;mentos&lt;/span&gt;(&lt;span style=&#34;color: #008000&#34;&gt;method&lt;/span&gt;, args&lt;span style=&#34;color: #666666&#34;&gt;=[]&lt;/span&gt;, kwargs&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;{}, original_code&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;nil&lt;/span&gt;)
-      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Open the pipe if necessary&lt;/span&gt;
-      start &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;unless&lt;/span&gt; alive?
-
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;begin&lt;/span&gt;
-        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Timeout requests that take too long.&lt;/span&gt;
-        timeout_time &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;8&lt;/span&gt;
-
-        &lt;span style=&#34;color: #880000&#34;&gt;Timeout&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;timeout(timeout_time) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
-          &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# ...[I omitted some code]&lt;/span&gt;
-        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;rescue&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;Timeout&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;Error&lt;/span&gt;
-        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# If we timeout, we need to clear out the pipe and start over.&lt;/span&gt;
-        &lt;span style=&#34;color: #19177C&#34;&gt;@log&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;error &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;[&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;#{&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;Time&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;now&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;iso8601&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;] Timeout on a mentos &lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;#{&lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;method&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt; call&amp;quot;&lt;/span&gt;
-        stop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Timeout on mentos &lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;#{&lt;/span&gt;&lt;span style=&#34;color: #008000&#34;&gt;method&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt; call.&amp;quot;&lt;/span&gt;
-      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;rescue&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;Errno&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #880000&#34;&gt;EPIPE&lt;/span&gt;, &lt;span style=&#34;color: #880000&#34;&gt;EOFError&lt;/span&gt;
-    stop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;EPIPE&amp;quot;&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;raise&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;MentosError&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;EPIPE&amp;quot;&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;It turns out that fundamental problem is not &lt;code&gt;nil&lt;/code&gt; so much as &lt;em&gt;non-determinism&lt;/em&gt;: my computer was under heavy load when I was generating my blog, and therefore the timeout kicked in and caused a failure to communicate with the Python process and therefore for &lt;code&gt;nil&lt;/code&gt; to end up being returned. This non-determinism is worse than &lt;code&gt;nil&lt;/code&gt;. I think that in a situation like this, an &lt;em&gt;exception&lt;/em&gt; is called for. &lt;code&gt;highlight()&lt;/code&gt; should actually raise an exception, which would then be propagated to Jekyll, which could give a useful error message about the timeout. I think this is a better design than return &lt;code&gt;nil&lt;/code&gt; (or if using a statically typed language, a &lt;code&gt;None&lt;/code&gt;).&lt;/p&gt;
-
-&lt;p&gt;I was also disappointed that logging was used in this code, indicating that it was known that bad things could happen, but the logged information was not used in generating a useful exception.&lt;/p&gt;
-
-&lt;p&gt;Amusingly, upon discovering the logging code, I used it, setting the magic environment variable &lt;code&gt;MENTOS_LOG&lt;/code&gt; (from reading the code) to a file, so that I could see what happens, and verify that the timeout happened:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;#&lt;/span&gt; Logfile created on 2013-06-29 10:26:19 -0400 by logger.rb/36483
-&lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Starting pid 16533 with fd 10.&lt;/span&gt;
-&lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:19-04:00] Out header: {&amp;quot;method&amp;quot;:&amp;quot;highlight&amp;quot;,&amp;quot;args&amp;quot;:null,&amp;quot;kwargs&amp;quot;:{&amp;quot;lexer&amp;quot;:&amp;quot;console&amp;quot;,&amp;quot;options&amp;quot;:{&amp;quot;encoding&amp;quot;:&amp;quot;utf-8&amp;quot;,&amp;quot;outencoding&amp;quot;:&amp;quot;utf-8&amp;quot;},&amp;quot;fd&amp;quot;:10,&amp;quot;id&amp;quot;:&amp;quot;TVQSJNBV&amp;quot;,&amp;quot;bytes&amp;quot;:147}}&lt;/span&gt;
-&lt;span style=&#34;color: #888888&#34;&gt;E, [2013-06-29 10:26 #13799] ERROR -- : [2013-06-29T10:26:27-04:00] Timeout on a mentos highlight call&lt;/span&gt;
-&lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: 16533. Reason: Timeout on mentos highlight call.&lt;/span&gt;
-&lt;span style=&#34;color: #888888&#34;&gt;I, [2013-06-29 10:26 #13799]  INFO -- : [2013-06-29T10:26:27-04:00] Killing pid: . Reason: Exiting&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;h2 id=&#34;testing:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Testing&lt;/h2&gt;
-
-&lt;p&gt;It turns out that there &lt;em&gt;is&lt;/em&gt; a place where the intended behavior is in a sense documented: the unit tests in &lt;code&gt;test_pygments.rb&lt;/code&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;test_returns_nil_on_timeout&lt;/span&gt;
-    large_code &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #880000&#34;&gt;REDIS_CODE&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;300&lt;/span&gt;
-    code &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; P&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;highlight(large_code) &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# a 30 mb highlight request will timeout&lt;/span&gt;
-    assert_equal &lt;span style=&#34;color: #008000&#34;&gt;nil&lt;/span&gt;, code
-  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;end&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;The test creates some huge string in hope of triggering a timeout, and then asserts that the result should be &lt;code&gt;nil&lt;/code&gt;!&lt;/p&gt;
-
-&lt;p&gt;OK, fair enough: assuming that the Jekyll authors knew of this intention, then it was Jekyll&amp;rsquo;s responsibility to test for &lt;code&gt;nil&lt;/code&gt; in the call to &lt;code&gt;Pygments.highlight()&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The test is not very satisfactory because it artificially tries to generate a timeout. Instead, one could do some mocking or refactoring of &lt;code&gt;mentos()&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;nil-is-still-not-ok-but-are-exceptions-ok:08c2e7a867293a37060f4f671511a7f1&#34;&gt;&lt;code&gt;nil&lt;/code&gt; is still not OK; but are exceptions OK?&lt;/h2&gt;
-
-&lt;p&gt;So everything is OK, now that we can take &lt;code&gt;nil&lt;/code&gt; to mean a timeout, right? No, actually, &lt;code&gt;highlight()&lt;/code&gt; can still return a &lt;code&gt;nil&lt;/code&gt; just because &lt;code&gt;code&lt;/code&gt; was &lt;code&gt;nil&lt;/code&gt;. It is bad to bin random different failure modes into one return value. Personally, I would choose to enforce that the input &lt;code&gt;code&lt;/code&gt; is never &lt;code&gt;nil&lt;/code&gt; and that the output is never &lt;code&gt;nil&lt;/code&gt;, and that an exception is raised if there is a timeout.&lt;/p&gt;
-
-&lt;p&gt;An alternative is to not use an exception, but use a union success/failure type instead. This is the route that &lt;a href=&#34;http://blog.stackmob.com/2013/03/why-we-avoid-throwing-exceptions-at-stackmob/&#34;&gt;StackMob uses for its Scala code&lt;/a&gt;. Other Scala developers such as &lt;a href=&#34;http://blog.jessitron.com/2013/06/whats-dirtier-than-comments-exceptions.html&#34;&gt;Jessica Kerr have been arguing against the use of exceptions also&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Google&amp;rsquo;s systems-level statically typed language &lt;a href=&#34;http://golang.org/&#34;&gt;Go&lt;/a&gt; deliberately &lt;a href=&#34;http://golang.org/doc/faq#exceptions&#34;&gt;does not even have exceptions&lt;/a&gt;, and therefore mandates a style of error handling that involves &lt;a href=&#34;http://golang.org/doc/articles/error_handling.html&#34;&gt;returning a success and failure everywhere&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I think there are situations for exceptions and situations for reifying errors as ordinary values in a success/failure object. I will explore this topic further in this blog. Note that even in the Haskell community, there is continued debate over how to handle errors; a famous post compares &lt;a href=&#34;http://blog.ezyang.com/2011/08/8-ways-to-report-errors-in-haskell-revisited/&#34;&gt;eight different ways to handle errors in Haskell&lt;/a&gt;. There is no consensus because there are a lot of tradeoffs involved when it comes to error handling.&lt;/p&gt;
-
-&lt;h2 id=&#34;my-fix:08c2e7a867293a37060f4f671511a7f1&#34;&gt;My fix&lt;/h2&gt;
-
-&lt;p&gt;For now, before I propose to pygments.rb that an exception be raised (this would be least intrusive to Jekyll, whose source code would not need to be changed for the exception to propagate usefully), I simply hacked &lt;code&gt;8&lt;/code&gt; to &lt;code&gt;80&lt;/code&gt; to avoid a timeout!&lt;/p&gt;
-
-&lt;h3 id=&#34;update-of-2013-12-18:08c2e7a867293a37060f4f671511a7f1&#34;&gt;(Update of 2013-12-18)&lt;/h3&gt;
-
-&lt;p&gt;The &lt;code&gt;pygments.rb&lt;/code&gt; library &lt;a href=&#34;https://github.com/tmm1/pygments.rb/commit/e0ed7f73f03aa59680b469f4f26e208d3cf8d999&#34;&gt;has finally been updated with a &lt;code&gt;MENTOS_TIMEOUT&lt;/code&gt; environment variable&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;This is obviously a short-term hack, and I don&amp;rsquo;t see how a typical Octopress user would even find out about this new environment variable, but until I implement a better solution and submit a pull request to the &lt;code&gt;pygments.rb&lt;/code&gt; team, I have no right to complain!&lt;/p&gt;
-
-&lt;h3 id=&#34;update-of-2014-08-08:08c2e7a867293a37060f4f671511a7f1&#34;&gt;(Update of 2014-08-08)&lt;/h3&gt;
-
-&lt;p&gt;I submitted a &lt;code&gt;pygments.rb&lt;/code&gt; &lt;a href=&#34;https://github.com/tmm1/pygments.rb/pull/132&#34;&gt;pull request&lt;/a&gt; to fix a regression bug in which any use of
-&lt;code&gt;MENTOS_TIMEOUT&lt;/code&gt; caused an instant type error:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;/Users/chen/.rubies/ruby-2.1.2/lib/ruby/2.1.0/timeout.rb:76:in `timeout&amp;#39;: undefined method `zero?&amp;#39; for &amp;quot;100&amp;quot;:String (NoMethodError)&lt;/span&gt;
-&lt;span style=&#34;color: #888888&#34;&gt;    from /Users/chen/.gem/ruby/2.1.2/gems/pygments.rb-0.6.0/lib/pygments/popen.rb:220:in `mentos&amp;#39;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;h3 id=&#34;update-of-2015-01-28:08c2e7a867293a37060f4f671511a7f1&#34;&gt;(Update of 2015-01-28)&lt;/h3&gt;
-
-&lt;p&gt;It took over 5 months (!) for my pull request to be looked at, after I
-begged that the bug be fixed because it was a show-stopper for anyone
-using the environment variable &lt;code&gt;MENTOS_TIMEOUT&lt;/code&gt;. A problem was found
-in my fix for the case where the environment variable is &lt;code&gt;nil&lt;/code&gt; (ugh, I
-didn&amp;rsquo;t check the &lt;code&gt;nil&lt;/code&gt; case: it&amp;rsquo;s so easy to forget about &lt;code&gt;nil&lt;/code&gt;
-cases), but I resolved it, and finally my fixed pull request was
-merged into &lt;code&gt;pygments.rb&lt;/code&gt; version 0.6.2. Thus ended a two-year journey
-to finally fix a cascade of show-stopping type errors.&lt;/p&gt;
-
-&lt;p&gt;The final diff involved trying to parse a string into an integer and
-catching the exception if any:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #A00000&#34;&gt;-        timeout_time = ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;] || 8&lt;/span&gt;
-&lt;span style=&#34;color: #00A000&#34;&gt;+        # Invalid MENTOS_TIMEOUT results in just using default.&lt;/span&gt;
-&lt;span style=&#34;color: #00A000&#34;&gt;+        timeout_time = Integer(ENV[&amp;quot;MENTOS_TIMEOUT&amp;quot;]) rescue 8&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:08c2e7a867293a37060f4f671511a7f1&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I&amp;rsquo;ve used my recent frustration at being unable to publish my personal blog as a vehicle to begin a conversation about error handling and the issues of API design and documentation in the face of errors. I hope you enjoyed the ride.&lt;/p&gt;
 </description>
     </item>
     

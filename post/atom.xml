@@ -6,8 +6,589 @@
     <description>Recent content in Posts on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 06 Dec 2015 08:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Mon, 07 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/post/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 7: semigroups; NonEmpty list and a case study of types and tests</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/</link>
+      <pubDate>Mon, 07 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-7:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Day 7&lt;/h2&gt;
+
+&lt;p&gt;How often has the following runtime error happened to you, whether in
+Haskell or in some other language?&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;*** Exception: Prelude.head: empty list&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Basically, code blew up that assumed a list was nonempty but it
+wasn&amp;rsquo;t.&lt;/p&gt;
+
+&lt;p&gt;In fact,
+&lt;a href=&#34;https://www.reddit.com/r/haskell/comments/3vlb8v/reading_data_problems/&#34;&gt;posted on Reddit recently&lt;/a&gt;
+was a question about code that failed with&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;** Exception: Prelude.foldl1: empty list&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;which is the same problem.&lt;/p&gt;
+
+&lt;p&gt;Today, I present a case study: refactoring that code to take advantage
+of an important data type that is going to be part of the Haskell
+standard library, the &lt;code&gt;NonEmpty&lt;/code&gt; list type. This is part of Edward
+Kmett&amp;rsquo;s &lt;a href=&#34;http://hackage.haskell.org/package/semigroups&#34;&gt;&lt;code&gt;semigroups&lt;/code&gt;&lt;/a&gt;
+package that is
+&lt;a href=&#34;https://prime.haskell.org/wiki/Libraries/Proposals/SemigroupMonoid&#34;&gt;going into the standard library&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;&amp;ndash;!more&amp;ndash;&amp;gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;in-general-should-we-adopt-defensive-or-confident-programming:958db8f82ca76230f48a5dece0db5e88&#34;&gt;In general, should we adopt defensive or confident programming?&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s easy to say, &amp;ldquo;well, we should program &lt;em&gt;defensively&lt;/em&gt; and not call
+unsafe functions like &lt;code&gt;head&lt;/code&gt; and &lt;code&gt;foldl1&lt;/code&gt; but should always check for an empty
+list&amp;rdquo;. But what if we &lt;em&gt;know&lt;/em&gt; that the list is supposed to have at
+least one element, perhaps because we validated that fact earlier on
+in our data model. For example, say you are buying tickets for a
+concert. You have to buy at least one, but could buy more than one. So
+the business logic for the ticket pickup should always assume that
+there is at least one ticket for you. It should not perpetually check
+for emptiness because that should have been caught up front when you
+ordered.&lt;/p&gt;
+
+&lt;p&gt;The situation is exactly analogous to the problem of &lt;code&gt;NULL&lt;/code&gt; in many
+languages: languages that use &lt;code&gt;NULL&lt;/code&gt; don&amp;rsquo;t distinguish at the &lt;em&gt;type&lt;/em&gt;
+level between something that is &lt;em&gt;possibly-nonexistent&lt;/em&gt; (0 or 1
+element) and something that is always there (1 element). It is
+unfortunate when we know something about our data but aren&amp;rsquo;t saying it
+in our type. In the case of lists, the situation is that a
+&lt;em&gt;possibly-empty&lt;/em&gt; list can have 0 or more elements, while a nonempty
+list can have 1 or more elements. Both situations are extremely common
+(think of regex matching that distinguishes between &lt;code&gt;x*&lt;/code&gt; and &lt;code&gt;x+&lt;/code&gt;) and
+should be modeled by different types!&lt;/p&gt;
+
+&lt;p&gt;I believe that the real solution to this kind of problem is not to go
+&lt;em&gt;defensive&lt;/em&gt; and litter all our code with random &lt;code&gt;NULL&lt;/code&gt; or &lt;code&gt;isEmpty&lt;/code&gt;
+kinds of runtime checks. The solution is also not to just go &amp;ldquo;cowboy
+hacker&amp;rdquo; and invite possible and actual runtime exceptions by skipping
+all checking.&lt;/p&gt;
+
+&lt;p&gt;Instead, the solution, when practical, is to &lt;em&gt;use the right types&lt;/em&gt; so
+that in the appropriate delimited scope of our code, runtime
+exceptions &lt;em&gt;cannot possibly occur&lt;/em&gt; and therefore within that scope we
+can program &lt;em&gt;confidently&lt;/em&gt; rather than &lt;em&gt;defensively&lt;/em&gt;. If we don&amp;rsquo;t use
+our language&amp;rsquo;s type system to our advantage, we are just doing
+ordinary dynamically typed programming in a typed language and missing
+out on the full benefits of types. Since we made some sacrifices in
+adopting a statically typed language instead of a dynamically typed
+one, we should take advantage of what we got ourselves into. There&amp;rsquo;s
+an interesting asymmetry in the programming world: it is &lt;em&gt;impossible&lt;/em&gt;
+to write statically typed code in a dynamically typed language, but it
+is &lt;em&gt;easy&lt;/em&gt; to write dynamically typed code in a statically typed
+language!&lt;/p&gt;
+
+&lt;h2 id=&#34;a-nonempty-list-type:958db8f82ca76230f48a5dece0db5e88&#34;&gt;A nonempty list type&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at the &lt;code&gt;NonEmpty&lt;/code&gt; list. You can already use it today before
+it becomes part of the standard library, by just adding &lt;code&gt;semigroups&lt;/code&gt;
+to your dependencies.&lt;/p&gt;
+
+&lt;h3 id=&#34;what-are-the-requirements-for-a-nonempty-list:958db8f82ca76230f48a5dece0db5e88&#34;&gt;What are the requirements for a nonempty list?&lt;/h3&gt;
+
+&lt;p&gt;Roughly, a &lt;code&gt;NonEmpty&lt;/code&gt; list should&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;support operations to interconvert with a regular possibly-empty list&lt;/li&gt;
+&lt;li&gt;support analogues of standard list operations (like &lt;code&gt;map&lt;/code&gt; and
+&lt;code&gt;filter&lt;/code&gt;) that carefully take into account whether the output is possibly-empty.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;quickcheck-for-specifying-laws-properties:958db8f82ca76230f48a5dece0db5e88&#34;&gt;QuickCheck for specifying laws (properties)&lt;/h3&gt;
+
+&lt;p&gt;On
+&lt;a href=&#34;../blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/&#34;&gt;day 3&lt;/a&gt;,
+I mentioned that QuickCheck is very useful for specifying requirements
+when designing a new module. Ideally, when designing an API around a
+new type, we treat it as an abstract data type and check the behavior
+of operations on that type. The &lt;code&gt;NonEmpty&lt;/code&gt; list is simple enough that you
+might think it&amp;rsquo;s overkill to do that, but I just wanted to present a
+taste of what one might do up front if one were starting out with
+property test-driven development. Let&amp;rsquo;s imagine we are creating a
+module &lt;code&gt;Data.List.NonEmpty&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE ScopedTypeVariables #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Part of a hypothetical test module for the semigroups package.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;HypotheticalSemigroupsSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List.NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; NonEmpty
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldSatisfy&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.QuickCheck&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; QuickCheck
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Maybe&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Maybe
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;semigroups&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Data.List.NonEmpty&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;constructor NonEmpty.nonEmpty&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;fails on trying to construct from an empty regular list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+          &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;nonEmpty (&lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;]) `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;Nothing&lt;/span&gt;
+        prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;succeeds on any nonempty list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+          &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;QuickCheck&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; (xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;])) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;nonEmpty xs `shouldSatisfy` &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;isJust
+      describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;conversion to regular list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;converts back to the original regular list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+          &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;QuickCheck&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; (xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;])) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; nonEmptyXs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;nonEmpty xs
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toList nonEmptyXs `shouldBe` xs
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Basically, &lt;code&gt;nonEmpty&lt;/code&gt; is a safe constructor:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;nonEmpty&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; a)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There is also an unsafe constructor called &lt;code&gt;fromList&lt;/code&gt;. I wouldn&amp;rsquo;t use
+that except in case I really know that a list was not empty, because
+it was returned from an API that guaranteed it but not in a typed
+way. For example, I&amp;rsquo;ve faced this annoying problem when writing
+parsers using libraries such as
+&lt;a href=&#34;https://hackage.haskell.org/package/parsec&#34;&gt;&lt;code&gt;parsec&lt;/code&gt;&lt;/a&gt;, because
+combinators such as &lt;code&gt;many1&lt;/code&gt; have a type&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;many1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Stream&lt;/span&gt; s m t &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ParsecT&lt;/span&gt; s u m a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ParsecT&lt;/span&gt; s u m [a]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;even though the library &lt;em&gt;guarantees&lt;/em&gt; that if the parse succeeds, the
+resulting list has at least one element! So in a situation like this,
+I would feel justified in using the unsafe &lt;code&gt;NonEmpty.fromList&lt;/code&gt; to
+&lt;em&gt;immediately&lt;/em&gt; unsafely wrap to get my known-to-be-nonempty-list into a
+more refined type.&lt;/p&gt;
+
+&lt;p&gt;A note on QuickCheck internals: &lt;code&gt;QuickCheck.NonEmpty&lt;/code&gt; (ignore the
+coincidence of the token &lt;code&gt;NonEmpty&lt;/code&gt; in common with our module and type
+in question!) is just a
+&lt;a href=&#34;https://hackage.haskell.org/package/QuickCheck-2.8.1/docs/Test-QuickCheck.html#t:NonEmptyList&#34;&gt;newtype in QuickCheck&lt;/a&gt;
+to generate regular lists &lt;code&gt;[a]&lt;/code&gt; that happen to be nonempty at runtime
+(as in they are of the form &lt;code&gt;(x:xs)&lt;/code&gt;). Imagine if QuickCheck had been
+written when the &lt;code&gt;NonEmpty&lt;/code&gt; type we want had existed. Then it could
+just generate a real &lt;code&gt;NonEmpty&lt;/code&gt; rather than a fake newtype!&lt;/p&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t use QuickCheck or similar generative testing libraries,
+check them out! These methods of testing are far more useful than the
+example-based tests that I&amp;rsquo;ve provided so far in these articles just
+for illustrative purposes. When possible, generative tests should be
+written instead of manual example-based tests.&lt;/p&gt;
+
+&lt;p&gt;(The use of &lt;code&gt;[Int]&lt;/code&gt; type annotations is because QuickCheck requires a
+monomorphic type in order to generate concrete data to
+test. &lt;code&gt;ScopedTypeVariables&lt;/code&gt; is a GHC extension that I wish were just
+part of the standard Haskell language; it was &lt;a href=&#34;https://ocharles.org.uk/blog/guest-posts/2014-12-20-scoped-type-variables.html&#34;&gt;covered in a 2014 Day of
+GHC Extensions&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;h2 id=&#34;a-few-notes-on-the-full-nonempty-api:958db8f82ca76230f48a5dece0db5e88&#34;&gt;A few notes on the full &lt;code&gt;NonEmpty&lt;/code&gt; API&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;map&lt;/code&gt; behaves as expected, because it doesn&amp;rsquo;t change the number of
+elements and therefore mapping over a &lt;code&gt;NonEmpty&lt;/code&gt; is clearly a &lt;code&gt;NonEmpty&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;map&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; b
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;However, &lt;code&gt;filter&lt;/code&gt; on a &lt;code&gt;NonEmpty&lt;/code&gt; returns a regular possibly-empty
+list, as it should, because the predicate can potentially fail on
+every element:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;filter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And &lt;code&gt;foldl1&lt;/code&gt;, unlike that of the regular list, is &lt;em&gt;safe&lt;/em&gt;. It cannot
+fail, because it always starts off the reduction with the first
+element as the seed.&lt;/p&gt;
+
+&lt;p&gt;There are a whole bunch of other useful list functions.&lt;/p&gt;
+
+&lt;p&gt;Oh, and the &lt;a href=&#34;http://hackage.haskell.org/package/semigroups-0.18.0.1/docs/src/Data-List-NonEmpty.html#NonEmpty&#34;&gt;internal implementation&lt;/a&gt; is what you might suspect: it&amp;rsquo;s
+just a tuple of the first element with the possibly-empty tail, with a
+special &amp;ldquo;cons&amp;rdquo; operator &lt;code&gt;:|&lt;/code&gt; that resembles the normal list&amp;rsquo;s &lt;code&gt;:&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; a &lt;span style=&#34;color: #B00040&#34;&gt;:|&lt;/span&gt; [a]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;a-case-study-in-refactoring:958db8f82ca76230f48a5dece0db5e88&#34;&gt;A case study in refactoring&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at refactoring some
+&lt;a href=&#34;https://www.reddit.com/r/haskell/comments/3vlb8v/reading_data_problems/&#34;&gt;code posted on Reddit&lt;/a&gt;
+that was throwing an exception unexpectedly at run time.&lt;/p&gt;
+
+&lt;p&gt;We won&amp;rsquo;t go into how the code might be written in a completely
+different way, but just focus on identifying and removing unsafe code
+that might throw exceptions.&lt;/p&gt;
+
+&lt;p&gt;The code uses the excellent package
+&lt;a href=&#34;http://hackage.haskell.org/package/split&#34;&gt;&lt;code&gt;split&lt;/code&gt;&lt;/a&gt; which I am a happy
+user of. I have taken the liberty of adding comments to the code and
+explicit imports for presentation here.&lt;/p&gt;
+
+&lt;h3 id=&#34;original-unsafe-code:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Original unsafe code&lt;/h3&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List.Split&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Split
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;totalArea&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [(&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;totalArea&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;acc x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (acc &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; partialArea x)) &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; xs
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;partialArea&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;partialArea&lt;/span&gt; (l, w, h) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (l&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;w &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; w&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;h &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; h&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;l) &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; slack
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt; areas       &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [l, w, h]
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- &amp;#39;maximum&amp;#39; is unsafe&lt;/span&gt;
+        smallSides  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; filter (&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt; maximum areas) areas
+
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- &amp;#39;foldl1&amp;#39; is unsafe&lt;/span&gt;
+        slack       &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl1 (&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;) smallSides
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;parseFile&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [(&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)]
+&lt;span style=&#34;color: #0000FF&#34;&gt;parseFile&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; map (splitDimensions) (breakLines xs)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;breakLines&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;]
+&lt;span style=&#34;color: #0000FF&#34;&gt;breakLines&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Split&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;splitOn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | &amp;#39;read&amp;#39; is unsafe. &amp;#39;(!!)&amp;#39; is unsafe.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;splitDimensions&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;splitDimensions&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; (item &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;, item &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;, item &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;)
+                   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt; item n &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; read ((&lt;span style=&#34;color: #B00040&#34;&gt;Split&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;splitOn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; xs)&lt;span style=&#34;color: #666666&#34;&gt;!!&lt;/span&gt;n)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This crashes on &lt;code&gt;foldl1&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;UnsafeListExample&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;totalArea crashes for a particular input&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; contents &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;1 x 1 x 1&amp;quot;&lt;/span&gt;
+      evaluate (totalArea (parseFile contents)) `shouldThrow` anyException
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve already identified the problems above.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll ignore the fact that &lt;code&gt;read&lt;/code&gt; and list indexing &lt;code&gt;(!!)&lt;/code&gt; are unsafe,
+because that&amp;rsquo;s not what is of interest here today.&lt;/p&gt;
+
+&lt;p&gt;But &lt;code&gt;maximum&lt;/code&gt; and &lt;code&gt;foldl1&lt;/code&gt; are both unsafe on lists because they crash
+on empty lists.&lt;/p&gt;
+
+&lt;p&gt;It turns out &lt;em&gt;from manual inspection, acting as a human static
+analyzer&lt;/em&gt; that the use of &lt;code&gt;maximum&lt;/code&gt; is OK here, because it&amp;rsquo;s operating
+on a 3-element list &lt;code&gt;[l, w, h]&lt;/code&gt; created just before being passed to
+&lt;code&gt;maximum&lt;/code&gt;. But this safety is not reflected in the types.&lt;/p&gt;
+
+&lt;p&gt;How about &lt;code&gt;foldl1&lt;/code&gt;? If you carefully think about what &lt;code&gt;filter&lt;/code&gt;
+returns, you can deduce that it might return an empty list, and if you
+can&amp;rsquo;t guarantee that it&amp;rsquo;s nonempty, then the &lt;code&gt;foldl1&lt;/code&gt; will crash
+hard. And it does.&lt;/p&gt;
+
+&lt;p&gt;That was a lot of human thinking we had to do. Luckily, tests were run
+that discovered the bug, but still, the code ended up posted to Reddit
+asking what the bug was, so it&amp;rsquo;s not trivial to find these kinds of
+lurking bugs. Is there a better way?&lt;/p&gt;
+
+&lt;h3 id=&#34;refactoring-to-nonempty-lists:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Refactoring to &lt;code&gt;NonEmpty&lt;/code&gt; lists&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s use &lt;code&gt;NonEmpty&lt;/code&gt;. First of all, we change &lt;code&gt;totalArea&lt;/code&gt; to take a
+&lt;code&gt;NonEmpty&lt;/code&gt; because that&amp;rsquo;s what we really want.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;totalArea&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;totalArea&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;acc x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (acc &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; partialArea x)) &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; xs
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note that we only had to change the type of the parameter, not any of
+the code, because &lt;code&gt;foldl&lt;/code&gt; has been implemented on &lt;code&gt;NonEmpty&lt;/code&gt; as well
+as regular lists.&lt;/p&gt;
+
+&lt;p&gt;Next, we change the body of &lt;code&gt;partialArea&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;partialArea&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;partialArea&lt;/span&gt; (l, w, h) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (l&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;w &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; w&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;h &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; h&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;l) &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; slack
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+    areas &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+    areas &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList [l, w, h]
+
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- &amp;#39;maximum&amp;#39; is safe on &amp;#39;NonEmpty&amp;#39;&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- But &amp;#39;smallSides&amp;#39; can be empty because of &amp;#39;NonEmpty.filter&amp;#39;,&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- and &amp;#39;NonEmpty.fromList&amp;#39; is unsafe!&lt;/span&gt;
+    smallSides &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;]
+    smallSides &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;filter (&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt; maximum areas) areas
+
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- unsafe!&lt;/span&gt;
+    smallSides1 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+    smallSides1 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList smallSides
+
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- &amp;#39;foldl1&amp;#39; is safe on &amp;#39;NonEmpty&amp;#39;&lt;/span&gt;
+    slack &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl1 (&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;) smallSides1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;We made a number of changes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;since we&amp;rsquo;re creating a nonempty list, we turn it immediately into a
+&lt;code&gt;NonEmpty&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;maximum&lt;/code&gt; is defined for &lt;code&gt;NonEmpty&lt;/code&gt; so we don&amp;rsquo;t have to change the
+text of the code, but we know that &lt;code&gt;maximum&lt;/code&gt; is &lt;em&gt;guaranteed&lt;/em&gt; to be
+safe for &lt;code&gt;NonEmpty&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;NonEmpty.filter&lt;/code&gt;, as we discussed, returns a regular list, &lt;em&gt;not&lt;/em&gt; a
+&lt;code&gt;NonEmpty&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;at the end, we want to safely compute &lt;code&gt;slack&lt;/code&gt;, but we can&amp;rsquo;t unless
+we use a safe &lt;code&gt;foldl1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;working backwards, we must convert a regular list to a &lt;code&gt;NonEmpty&lt;/code&gt;,
+but there&amp;rsquo;s only one way to do that, and it&amp;rsquo;s unsafe!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So by refining the types used in the program, we have identified the
+exact point at which &lt;em&gt;we could not write the necessary code&lt;/em&gt; without
+resorting to &lt;code&gt;NonEmpty.fromList&lt;/code&gt;. So, strictly speaking, we haven&amp;rsquo;t
+made a run time error turn into a compile time error, but we have
+narrowed down what is going on purely mechanically by means of
+following the types.&lt;/p&gt;
+
+&lt;p&gt;The real problem in the code here seems to be that we wanted
+&lt;code&gt;smallSides&lt;/code&gt; to be nonempty. The attempt to use only safe code
+automatically resolved one possible source of unsafety (&lt;code&gt;maximum&lt;/code&gt;) and
+pointed at a more complicated situation requiring a proof obligation
+on the result of the &lt;code&gt;filter&lt;/code&gt;. &lt;code&gt;partialArea&lt;/code&gt; could be written to avoid
+the proof obligation, by not using a list type at all for &lt;code&gt;areas&lt;/code&gt; to
+perform the desired logic.&lt;/p&gt;
+
+&lt;h3 id=&#34;maybe-the-real-problem-is-that-we-shouldn-t-use-lists-at-all-here:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Maybe the real problem is that we shouldn&amp;rsquo;t use lists at all here&lt;/h3&gt;
+
+&lt;p&gt;You may have protested at this entire &lt;code&gt;NonEmpty&lt;/code&gt; exercise all this
+time, because &lt;code&gt;NonEmpty&lt;/code&gt; is just the wrong type for all of this work!
+&lt;strong&gt;There&amp;rsquo;s no point in trying to use some kind of fancy type that
+doesn&amp;rsquo;t fit the problem.&lt;/strong&gt; There was no reason for the list
+&lt;code&gt;[l, w, h]&lt;/code&gt; to be created at all. If you&amp;rsquo;re using a type and you still
+run into proof obligations, often that means the type is not the right
+one.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code&gt;partialArea&lt;/code&gt;, if we state the logic of what we really wanted (the
+two smallest values out of three), then we can just write what we
+mean:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Don&amp;#39;t use lists at all!&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;bestPartialArea&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;bestPartialArea&lt;/span&gt; (l, w, h) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (l&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;w &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; w&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;h &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; h&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;l) &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; slack
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+    (side0, side1, &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; sort3 (l, w, h)
+    slack &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; side0 &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; side1
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;where we created a utility module &lt;code&gt;Sort3&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Sort3&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;sort3&lt;/span&gt;) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Sort exactly 3 values.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;sort3&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Ord&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a, a, a) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (a, a, a)
+&lt;span style=&#34;color: #0000FF&#34;&gt;sort3&lt;/span&gt; (a0, a1, a2) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; a0 &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; a1
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; a0 &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; a2
+       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; a2 &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt; a1
+               &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; (a2, a1, a0)
+               &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; (a1, a2, a0)
+       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; (a1, a0, a2)
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; a1 &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; a2
+       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; a0 &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; a2
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; (a2, a0, a1)
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; (a0, a2, a1)
+       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; (a0, a1, a2)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Yes, I did look on Hoogle (as recommended in my article yesterday on
+searching for utility modules), and although I did not find this exact
+function, I found the logic for it embedded in a context of optimal
+sorting of vectors, in the
+&lt;a href=&#34;https://hackage.haskell.org/package/vector-algorithms-0.7.0.1/docs/Data-Vector-Algorithms-Optimal.html&#34;&gt;&lt;code&gt;Data.Vector.Algorithms.Optimal&lt;/code&gt; module&lt;/a&gt;
+of the
+excellent
+&lt;a href=&#34;https://hackage.haskell.org/package/vector-algorithms&#34;&gt;&lt;code&gt;vector-algorithms&lt;/code&gt; package&lt;/a&gt;
+that I highly recommend when working with vectors. I copied and
+pasted the logic in order to work on a simple triple.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-value-of-tests:958db8f82ca76230f48a5dece0db5e88&#34;&gt;The value of tests&lt;/h3&gt;
+
+&lt;p&gt;QuickCheck is a great tool. Suppose we didn&amp;rsquo;t want to or couldn&amp;rsquo;t
+refine the types in our code, for some reason. We can often still make of
+testing to try to weed out easy-to-discover bugs. For example, we
+could have written a sanity check test on &lt;code&gt;totalArea&lt;/code&gt; by generating a
+whole bunch of random input and checking that the result is what we
+expect, or at least something reasonable:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;UnsafeListExample&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;totalArea&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;parseFile&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldSatisfy&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldThrow&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;anyException&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Positive&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Exception&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;evaluate&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Printf&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;printf&lt;/span&gt;)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;UnsafeListExample&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;totalArea crashes for a particular input&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; contents &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;1 x 1 x 1&amp;quot;&lt;/span&gt;
+      evaluate (totalArea (parseFile contents)) `shouldThrow` anyException
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;totalArea gives something reasonable on any triple of ints&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;Positive&lt;/span&gt; (l &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)) (&lt;span style=&#34;color: #B00040&#34;&gt;Positive&lt;/span&gt; (w &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)) (&lt;span style=&#34;color: #B00040&#34;&gt;Positive&lt;/span&gt; (h &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; contents &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%d x %d x %d&amp;quot;&lt;/span&gt; l w h
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;in&lt;/span&gt; totalArea (parseFile contents) `shouldSatisfy` (&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Very quickly we get a counterexample reported by QuickCheck:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;  1) UnsafeListExample totalArea does not crash on any triple of ints&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       uncaught exception: ErrorCall (Prelude.foldl1: empty list) (after 4 tests)&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       Positive {getPositive = 2}&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       Positive {getPositive = 2}&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;       Positive {getPositive = 2}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Also, you may have wondered about that complicated optimal sort of 3
+values. Did I copy and paste the logic correctly? For peace of mind, I
+wrote a QuickCheck test for it:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Sort3&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sort3 sorts correctly&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(triple &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; (a0&amp;#39;, a1&amp;#39;, a2&amp;#39;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Sort3&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;sort3 triple
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;in&lt;/span&gt; a0&amp;#39; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;=&lt;/span&gt; a1&amp;#39; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; a1&amp;#39; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;=&lt;/span&gt; a2&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I love QuickCheck. What would life be without it?&lt;/p&gt;
+
+&lt;h3 id=&#34;some-bonus-refactorings:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Some bonus refactorings&lt;/h3&gt;
+
+&lt;p&gt;Some other type-oriented refactorings into &lt;code&gt;NonEmpty&lt;/code&gt; as much as
+possible that I won&amp;rsquo;t discuss in detail because they were mostly
+irrelevant here:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;parseFile&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;parseFile&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;map (splitDimensions) (breakLines xs)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | We ended up not needing the fact that the input is nonempty, and&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- converted it to a regular list.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;breakLines&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;breakLines&lt;/span&gt; string1 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; ourSplitOn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toList string1)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | &amp;#39;read&amp;#39; is unsafe. &amp;#39;(!!)&amp;#39; is unsafe.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;splitDimensions&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;splitDimensions&lt;/span&gt; xs &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; (item &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;, item &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;, item &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;)
+                   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt; item n &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; read ((&lt;span style=&#34;color: #B00040&#34;&gt;Split&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;splitOn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; xs)&lt;span style=&#34;color: #666666&#34;&gt;!!&lt;/span&gt;n)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Using unsafe &amp;#39;NonEmpty.fromList&amp;#39; is safe because we know&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- the result &amp;#39;from Split.splitOn&amp;#39; is nonempty. Note that the elements&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- themselves can be empty.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;ourSplitOn&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; [a]
+&lt;span style=&#34;color: #0000FF&#34;&gt;ourSplitOn&lt;/span&gt; subList list &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList (&lt;span style=&#34;color: #B00040&#34;&gt;Split&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;splitOn subList list)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The most interesting thing was a tangential observation that
+&lt;code&gt;Split.splitOn&lt;/code&gt; always returns a nonempty list of lists. So in
+principle we could wrap the result into a &lt;code&gt;NonEmpty&lt;/code&gt;. I even wrote a
+little passing QuickCheck test:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;split&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;splitOn always results in nonempty list&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;subList (list &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #B00040&#34;&gt;Split&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;splitOn subList list `shouldSatisfy` not &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; null
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note: &lt;code&gt;split&lt;/code&gt; already has a &lt;a href=&#34;http://hub.darcs.net/byorgey/split/browse/test/&#34;&gt;huge set of property tests for its own
+purposes&lt;/a&gt;. I love the
+&lt;code&gt;split&lt;/code&gt; library. I think it&amp;rsquo;s been very well-tested. Check it out.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-brief-note-on-semigroups-semigroup-http-hackage-haskell-org-package-semigroups-0-18-0-1-docs-data-semigroup-html:958db8f82ca76230f48a5dece0db5e88&#34;&gt;A brief note on semigroups &lt;a href=&#34;http://hackage.haskell.org/package/semigroups-0.18.0.1/docs/Data-Semigroup.html&#34;&gt;&lt;code&gt;Semigroup&lt;/code&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;A &lt;code&gt;Semigroup&lt;/code&gt; is a type class representing an algebraic structure
+requiring a single associative operation to be defined on it,
+&amp;ldquo;append&amp;rdquo;, which in this library is provided as an operator &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Semigroup&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt;))
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;A QuickCheck test verifying what we already know, which is that
+&lt;code&gt;String&lt;/code&gt; has a &lt;code&gt;Semigroup&lt;/code&gt; instance, string append, and is associative as required:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Data.Semigroup.Semigroup&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&amp;lt;&amp;gt; is associative for String&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;) y z &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (x &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; y) &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; z `shouldBe` x &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; (y &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; z)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;You may already use this operator &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; in
+&lt;a href=&#34;https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Monoid.html&#34;&gt;&lt;code&gt;Monoid&lt;/code&gt;, which is already in the standard library&lt;/a&gt;,
+but the &lt;code&gt;Monoid&lt;/code&gt; type class should really be a subclass of &lt;code&gt;Monoid&lt;/code&gt;
+and that&amp;rsquo;s what&amp;rsquo;s going to happen in a future version of Haskell
+(conceptually, it should have been there all along, but Haskell was
+invented 25 years ago in 1990 and &lt;code&gt;Semigroup&lt;/code&gt; was apparently not
+considered important enough to put into the type class hierarchy then). The difference is that a &lt;code&gt;Monoid&lt;/code&gt; also requires
+an identity element &lt;code&gt;mempty&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s no space here to say anything about why semigroups and monoids
+are useful in computing. Monoids in particular have become an everyday
+word in Big Data circles because of MapReduce, which based on monoids for performance.&lt;/p&gt;
+
+&lt;p&gt;A few Haskell oriented resources on monoids to check out:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikibooks.org/wiki/Haskell/Monoids&#34;&gt;On Wikibooks&lt;/a&gt;
+(The &lt;a href=&#34;https://en.wikibooks.org/wiki/Haskell&#34;&gt;Haskell Wikibook&lt;/a&gt; is a great resource for Haskell in general)&lt;/li&gt;
+&lt;li&gt;A really nice article with code &lt;a href=&#34;https://izbicki.me/blog/gausian-distributions-are-monoids&#34;&gt;&amp;ldquo;Gaussian distributions are monoids&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;conclusion:958db8f82ca76230f48a5dece0db5e88&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;The main takeaways today: consider using &lt;code&gt;NonEmpty&lt;/code&gt; when you have a
+list that you know is not empty, so that you can confidently perform
+operations on it without throwing an exception.  It&amp;rsquo;s just one
+additional Cabal dependency away! Also make sure that you actually
+wanted a list, and not a tuple or fixed-size vector or something like
+that. And use QuickCheck.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:958db8f82ca76230f48a5dece0db5e88&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 6: finding utilities with Hoogle and Hayoo: MissingH, extra</title>
@@ -79,8 +660,8 @@ function creatively named &lt;code&gt;replace&lt;/code&gt;:&lt;/p&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Sure, it would not be hard to write code to do this, but why not use
-see if it&amp;rsquo;s out there already for me to use?&lt;/p&gt;
+&lt;p&gt;Sure, it would not be hard to write code to do this, but why not see
+if it&amp;rsquo;s out there already for me to use?&lt;/p&gt;
 
 &lt;p&gt;What type should we search for? Maybe&lt;/p&gt;
 
@@ -1973,6 +2554,8 @@ turn it into a Stack script.&lt;/p&gt;
 Haskell sort of dynamically typed with deferred type errors&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 6: &lt;a href=&#34;../blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/&#34;&gt;finding utilities with Hoogle
 and Hayoo: MissingH, extra&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 7: &lt;a href=&#34;../blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/&#34;&gt;semigroups; NonEmpty list and
+a case study of types and tests&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
@@ -3440,111 +4023,6 @@ whatever, input -&amp;gt; whatever
 &lt;h2 id=&#34;conclusion:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;It was pretty exciting to see the announcement of the transducers library for Clojure, because it represents a level of abstraction that I think has not been expressed much in the world of dynamically typed languages, although the techniques are two decades old in the Haskell community in a statically typed setting. And I hope that I was able to convey the sheer elegance of Haskell as a way to express interesting types with practical ramifications for abstraction and pluggability.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Pittsburgh Code and Supply: Programming in journalism</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/</link>
-      <pubDate>Thu, 17 Jul 2014 21:21:19 -0400</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/</guid>
-      <description>
-
-
-&lt;figure &gt;
-    
-        &lt;img src=&#34;http://static.squarespace.com/static/538f3cc8e4b00f52172b5560/t/53a4ec76e4b0488fb14c5a29/1403317372203/sign.png?format=500w&#34; /&gt;
-    
-    
-&lt;/figure&gt;
-
-
-&lt;p&gt;I finally attended my first ever &lt;a href=&#34;http://www.codeandsupply.co/&#34;&gt;Pittsburgh Code and Supply&lt;/a&gt; meeting! The group, which posts its &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/&#34;&gt;events on Meetup&lt;/a&gt;, was created by local Pittsburgh software developer &lt;a href=&#34;https://twitter.com/justinxreese&#34;&gt;Justin Reese&lt;/a&gt; just a few months ago, in March 2014. His vision is to create a local community that, unlike conventional specific language/technology-based meetups, is much more universal and broad. If you haven&amp;rsquo;t do so already, read more about the &lt;a href=&#34;http://www.codeandsupply.co/about&#34;&gt;goals of Pittsburgh Code and Supply&lt;/a&gt;. I&amp;rsquo;m very excited about this new group!&lt;/p&gt;
-
-&lt;p&gt;The Code and Supply meetup I just attended was about &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/events/186766512/&#34;&gt;&amp;ldquo;Programming in journalism&amp;rdquo;&lt;/a&gt;. This is a topic of huge importance, and I was excited to attend to hear more about what some local journalist/programmers are doing.&lt;/p&gt;
-
-&lt;h2 id=&#34;a-bit-about-sponsors:5ceb897fd4e46960a338a7fd3d6cf4e6&#34;&gt;A bit about sponsors&lt;/h2&gt;
-
-&lt;p&gt;Justin opened by briefly saying a few words about the goals of Pittsburgh Code and Supply. He then noted that this month, the group did not have sponsors, unfortunately.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Pittsburgh Code and Supply needs sponsors!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;If you like what Code and Supply is doing, please consider seeing if your employer would be willing to step up as a sponsor for the group.&lt;/p&gt;
-
-&lt;h2 id=&#34;contribute:5ceb897fd4e46960a338a7fd3d6cf4e6&#34;&gt;Contribute!&lt;/h2&gt;
-
-&lt;p&gt;Also, in any case, spread the word about the group.&lt;/p&gt;
-
-&lt;p&gt;This is my first meeting, and next Monday, I am actually going to give my first presentation for the group, on &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/events/183483622/&#34;&gt;&amp;ldquo;Type-Directed TDD in Rust&amp;rdquo;&lt;/a&gt;. The group is always looking for people to speak about something or facilitate other formats of meetings, so &lt;a href=&#34;http://www.codeandsupply.co/speak/&#34;&gt;sign up&lt;/a&gt; if you have an idea! I personally have some ideas I&amp;rsquo;d like to propose for future meetings, such as discussions about technology-related topics such as philosophy, history, and education.&lt;/p&gt;
-
-&lt;h2 id=&#34;amyjo-brown:5ceb897fd4e46960a338a7fd3d6cf4e6&#34;&gt;AmyJo Brown&lt;/h2&gt;
-
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;//www.youtube.com/embed/DaOxhNkHvvw&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://amyjobrown.com/&#34;&gt;AmyJo Brown&lt;/a&gt;, an independent journalist, gave a great talk about the kind of work that she does, and why it is important. She gave an overview of how journalism has changed because of the availability of data and because of the complexity of the world, both of which lead to the necessity of telling stories differently, as evidenced by what &lt;a href=&#34;http://www.propublica.org/&#34;&gt;ProPublica&lt;/a&gt;, the &lt;a href=&#34;http://www.nytimes.com/&#34;&gt;New York Times&lt;/a&gt;, and the &lt;a href=&#34;http://www.latimes.com/&#34;&gt;Los Angeles Times&lt;/a&gt; have been doing.&lt;/p&gt;
-
-&lt;p&gt;Her own work involves tracking political donations (&amp;ldquo;follow the money&amp;rdquo;).&lt;/p&gt;
-
-&lt;p&gt;She gave examples of software tools she uses to get data, clean it, analyze it, and archive the whole process. On the programming end, she programs in Python, for example (Django for Web development), and uses &lt;a href=&#34;http://www.documentcloud.org/&#34;&gt;DocumentCloud&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;She talked about many things to keep in mind while doing this kind of data journalism. First of all, you have to know the limitations of the data you&amp;rsquo;re getting. She has to deal with handwritten documents, and data in different formats. Data that is clearly incomplete or entered wrong (whether accidentally or maliciously). It is necessary to know the domain, know the context in which data was collected or required or submitted, to not fall into the trap of just blindly treating data as a record of the full truth and just get into programmatically processing it. There&amp;rsquo;s a lot that involves human judgment calls. And this is why it is so important to save all the original information and document each step of data &amp;ldquo;cleaning&amp;rdquo; and interpretation.&lt;/p&gt;
-
-&lt;p&gt;Near the end of her talk, AmyJo had her colleague Katrina speak a bit also. Katrina was not originally trained as a programmer, but was always interested in politics. She ended up getting into programming later.&lt;/p&gt;
-
-&lt;p&gt;(I&amp;rsquo;m always very excited and impressed to hear of people with domain knowledge and passion who take up computer programming as a useful skill to apply to their domain. Sometimes I hear people saying &amp;ldquo;please don&amp;rsquo;t code&amp;rdquo;; I totally disagree with this sentiment and believe that &lt;a href=&#34;http://franklinchen.com/blog/2011/12/09/why-everyone-should-learn-computer-science/&#34;&gt;everyone can benefit from learning the fundamentals of computer science and programming&lt;/a&gt;.)&lt;/p&gt;
-
-&lt;h2 id=&#34;andrew-mcgill:5ceb897fd4e46960a338a7fd3d6cf4e6&#34;&gt;Andrew McGill&lt;/h2&gt;
-
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;//www.youtube.com/embed/0iT9rhwRXVs&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.andrewrmcgill.com/&#34;&gt;Andrew McGill&lt;/a&gt; bills himself as &amp;ldquo;your friendly neighborhood journalist&amp;rdquo;, and works for the &lt;a href=&#34;http://www.post-gazette.com/&#34;&gt;Pittsburgh Post-Gazette&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;He started by talking about his interesting career path, which involved being into computers before college, but then going to college and then finding other interests and abandoning programming, and then only later taking it back up, in the service of journalism, to enable him to find data and tell stories through visualization.&lt;/p&gt;
-
-&lt;p&gt;He showed us specific Web sites and articles he has created to provide better visualizations of data than what is available in raw form. For example, on the funny side, there is &lt;a href=&#34;http://newsinteractive.post-gazette.com/wheresbill/&#34;&gt;&amp;ldquo;Where&amp;rsquo;s Bill?&amp;rdquo;&lt;/a&gt;, which he created because he was not happy with the &amp;ldquo;official&amp;rdquo; boring text news feed of Mayor Bill Peduto&amp;rsquo;s calendar. He scraped the official site with PHP. He also created a Bill Peduto Twitter bot using Python.&lt;/p&gt;
-
-&lt;p&gt;He also showed a D3-based visualization of &lt;a href=&#34;http://newsinteractive.post-gazette.com/plugged-wells/&#34;&gt;&amp;ldquo;The Mystery of the Plugged Wells&amp;rdquo;&lt;/a&gt;. Again, the point was to take already available data but to tell a story better with it than just giving raw tables or a purely text-based narrative.&lt;/p&gt;
-
-&lt;p&gt;He showed some other projects, such as a visualization of school comparisons based on &lt;a href=&#34;http://en.wikipedia.org/wiki/Pennsylvania_System_of_School_Assessment&#34;&gt;PSSA&lt;/a&gt; data.&lt;/p&gt;
-
-&lt;h2 id=&#34;questions-and-answers:5ceb897fd4e46960a338a7fd3d6cf4e6&#34;&gt;Questions and answers&lt;/h2&gt;
-
-&lt;p&gt;There were quite a lot of questions posed to the presenters throughout the evening, on the technologies used, on work with graphic designers, on the process of obtaining data, and political implications of the work. Great discussions.&lt;/p&gt;
-
-&lt;h2 id=&#34;technologies-used:5ceb897fd4e46960a338a7fd3d6cf4e6&#34;&gt;Technologies used&lt;/h2&gt;
-
-&lt;p&gt;Here&amp;rsquo;s something resembling a summary of technologies mentioned that the presenters use:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Python&lt;/li&gt;
-&lt;li&gt;Django&lt;/li&gt;
-&lt;li&gt;DocumentCloud&lt;/li&gt;
-&lt;li&gt;Bootstrap&lt;/li&gt;
-&lt;li&gt;Git&lt;/li&gt;
-&lt;li&gt;R&lt;/li&gt;
-&lt;li&gt;SQL&lt;/li&gt;
-&lt;li&gt;OpenRefine&lt;/li&gt;
-&lt;li&gt;D3&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;interesting-articles:5ceb897fd4e46960a338a7fd3d6cf4e6&#34;&gt;Interesting articles&lt;/h2&gt;
-
-&lt;p&gt;Before the meetup, I posted to the &lt;a href=&#34;http://www.meetup.com/Pittsburgh-Code-Supply/events/186766512/&#34;&gt;event page&lt;/a&gt; a link to a provocative (perhaps too harsh and ranty) article warning about dangers in data journalism, &lt;a href=&#34;http://www.niemanlab.org/2014/07/alberto-cairo-data-journalism-needs-to-up-its-own-standards/&#34;&gt;by visualization expert Alberto Cairo&lt;/a&gt;. It got no response.&lt;/p&gt;
-
-&lt;p&gt;Later, I also posted a link to a thoughtful examination of the question of &lt;a href=&#34;http://source.opennews.org/en-US/learning/true-facts-maybe/&#34;&gt;epistemology in data journalism&lt;/a&gt;. I totally recommend reading that article.&lt;/p&gt;
-
-&lt;p&gt;AmyJo after the meetup posted some more links on the event page:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://medium.com/@jeremybowers/why-im-a-newsroom-coder-860d9d49f684&#34;&gt;&amp;ldquo;Why I&amp;rsquo;m a newsroom coder&amp;rdquo;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://source.opennews.org/en-US/articles/planting-next-crop-newsroom-coders/&#34;&gt;&amp;ldquo;Planting the next crop of newsroom coders&amp;rdquo;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.nytimes.com/2014/07/17/opinion/the-fec-lags-on-campaign-finance-disclosures.html&#34;&gt;&amp;ldquo;Data delayed is democracy denied&amp;rdquo;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;conclusion:5ceb897fd4e46960a338a7fd3d6cf4e6&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I was very excited to attend my first Pittsburgh Code and Supply meetup, on the fascinating topic of programming in journalism. I felt I learned a lot about what is at stake and how programming is being used in journalism to better inform people of what is going on in the world.&lt;/p&gt;
 </description>
     </item>
     

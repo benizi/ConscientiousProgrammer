@@ -79,6 +79,28 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">How to think about Rust ownership versus C&#43;&#43; unique_ptr</a>
+      </h1>
+      <span class="post-date">Dec 21, 2014 &middot; 8 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/rust">Rust</a><a class="label" href="http://ConscientiousProgrammer.com/categories/c">C</a><a class="label" href="http://ConscientiousProgrammer.com/categories/c">C&#43;&#43;</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pointers">pointers</a><a class="label" href="http://ConscientiousProgrammer.com/categories/memory-safety">memory safety</a><a class="label" href="http://ConscientiousProgrammer.com/categories/types">types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ownership">ownership</a><a class="label" href="http://ConscientiousProgrammer.com/categories/x-window-system">X Window System</a><a class="label" href="http://ConscientiousProgrammer.com/categories/segmentation-fault">segmentation fault</a>
+      </span>
+      
+      <p>The <a href="http://www.rust-lang.org/">Rust</a> programming language, which is nearing its important version 1.0 release, but already seen a lot of use, has many interesting features, the most prominent of which is its <a href="http://doc.rust-lang.org/guide.html#ownership,-borrowing,-and-lifetimes">ownership</a> static type system that prevents certain kinds of bugs common in many programs in C or C++.</p>
+
+<p>For example, it is common in most applications to create graphs of objects pointing to each other, in which it is not clear how many pointers point to a particular object, who is to free the object&rsquo;s memory when it is no longer needed, and what happens to all outstanding pointers to that block. Languages supporting precise <a href="http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29">garbage collection</a> use various algorithms to determine when memory can be freed, and have become particularly popular in the past twenty years, but there are still situations in which garbage collection is not ideal, hence the continued relevance of languages such as C++.</p>
+
+<p>When I was working as a software engineer in the 1990s developing desktop applications with user interfaces for the <a href="http://en.wikipedia.org/wiki/X_Window_System">X Window System</a>, we used frameworks that included C++ <a href="http://en.wikipedia.org/wiki/Smart_pointer">smart pointers</a> that used <a href="http://en.wikipedia.org/wiki/Reference_counting">reference counting</a> to handle graphs of interconnected data. The C++ standard itself lagged behind in standardizing smart pointers; it started with the <a href="http://www.informit.com/articles/article.aspx?p=30642&amp;seqNum=9">terribly flawed and unusable</a> <a href="http://en.wikipedia.org/wiki/Auto_ptr"><code>auto_ptr</code></a> that finally got deprecated in C++11, then moved on finally to <a href="http://en.wikipedia.org/wiki/Smart_pointer#unique_ptr"><code>unique_ptr</code></a> and <a href="http://en.wikipedia.org/wiki/Smart_pointer#shared_ptr_and_weak_ptr"><code>shared_ptr</code> and <code>weak_ptr</code></a>.</p>
+
+<p>When talking with C++ programmers about Rust, I have found that often they have been puzzled about how Rust&rsquo;s ownership system does anything better than what C++ <code>unique_ptr</code> already does. Here is an explanation (I will not be discussing analogues of <code>shared_ptr</code> and <code>weak_ptr</code> here).</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/">Remembering over 20 years of reading Dr. Dobb&#39;s Journal even till today</a>
       </h1>
       <span class="post-date">Dec 16, 2014 &middot; 6 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/#disqus_thread">Comments</a>
@@ -247,21 +269,6 @@ from 1993-2010 and considering myself fairly proficient at Perl.</p>
       <p>The <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/">Pittsburgh Scala Meetup</a> met with Justin presenting on <a href="http://www.meetup.com/Pittsburgh-Scala-Meetup/events/146581402/">&ldquo;Implicits&rdquo;</a>.</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2014/02/13/pittsburgh-scala-meetup-implicits/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/">OpenHack Pittsburgh: a great place to share and learn</a>
-      </h1>
-      <span class="post-date">Jan 27, 2014 &middot; 1 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/openhack">OpenHack</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pittsburgh">Pittsburgh</a><a class="label" href="http://ConscientiousProgrammer.com/categories/testing">testing</a><a class="label" href="http://ConscientiousProgrammer.com/categories/unit-testing">unit testing</a><a class="label" href="http://ConscientiousProgrammer.com/categories/access-control">access control</a>
-      </span>
-      
-      Another month, another meeting of OpenHack Pittsburgh! The project I worked on was writing a blog post on the controversial subject of unit testing private methods. I ended up not finishing the post, not only because there&rsquo;s a lot to say, but also because I got sidetracked (in a good way) because of discussions with people while at OpenHack! There were many good points that were made and so I had to reconsider some of my arguments.
-      <a href="http://conscientiousprogrammer.com/blog/2014/01/27/openhack-pittsburgh-a-great-place-to-share-and-learn/">Read On &rarr;</a>
       
     </div>
     

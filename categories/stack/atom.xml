@@ -261,6 +261,8 @@ world of doing &amp;ldquo;real&amp;rdquo; dynamic typing in Haskell.&lt;/p&gt;
 Haskell sort of dynamically typed with deferred type errors&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 6: &lt;a href=&#34;../../blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/&#34;&gt;finding utilities with Hoogle
 and Hayoo: MissingH, extra&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 7: &lt;a href=&#34;../../blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/&#34;&gt;semigroups; NonEmpty list and
+a case study of types and tests&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;

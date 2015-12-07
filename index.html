@@ -79,6 +79,21 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/">24 days of Hackage, 2015: day 7: semigroups; NonEmpty list and a case study of types and tests</a>
+      </h1>
+      <span class="post-date">Dec 7, 2015 &middot; 16 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/semigroups">semigroups</a><a class="label" href="http://ConscientiousProgrammer.com/categories/nonempty-lists">nonempty lists</a><a class="label" href="http://ConscientiousProgrammer.com/categories/"></a><a class="label" href="http://ConscientiousProgrammer.com/categories/types">types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parsec">parsec</a><a class="label" href="http://ConscientiousProgrammer.com/categories/monoids">monoids</a><a class="label" href="http://ConscientiousProgrammer.com/categories/algebra">algebra</a><a class="label" href="http://ConscientiousProgrammer.com/categories/split">split</a><a class="label" href="http://ConscientiousProgrammer.com/categories/safe">safe</a>
+      </span>
+      
+      Table of contents for the whole series A table of contents is at the top of the article for day 1. Day 7 How often has the following runtime error happened to you, whether in Haskell or in some other language? *** Exception: Prelude.head: empty list Basically, code blew up that assumed a list was nonempty but it wasn&rsquo;t. In fact, posted on Reddit recently was a question about code that failed with ** Exception: Prelude.foldl1: empty list which is the same problem.
+      <a href="http://conscientiousprogrammer.com/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/">24 days of Hackage, 2015: day 6: finding utilities with Hoogle and Hayoo: MissingH, extra</a>
       </h1>
       <span class="post-date">Dec 6, 2015 &middot; 8 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/#disqus_thread">Comments</a>
@@ -343,6 +358,8 @@ Stack.</p>
 Haskell sort of dynamically typed with deferred type errors</a></li>
 <li>Day 6: <a href="./blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/">finding utilities with Hoogle
 and Hayoo: MissingH, extra</a></li>
+<li>Day 7: <a href="./blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/">semigroups; NonEmpty list and
+a case study of types and tests</a></li>
 </ul>
 
 <h2 id="day-1:c37cfe20acfff0cff8579f026185f721">Day 1</h2>
@@ -490,28 +507,6 @@ time to migrate my blogs, to Octopress 3 or
 <a href="http://jekyllrb.com/">Jekyll</a>, or something else entirely.</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2015/05/31/why-i-switched-from-octopress-2-to-hugo/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">How to think about Rust ownership versus C&#43;&#43; unique_ptr</a>
-      </h1>
-      <span class="post-date">Dec 21, 2014 &middot; 8 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/rust">Rust</a><a class="label" href="http://ConscientiousProgrammer.com/categories/c">C</a><a class="label" href="http://ConscientiousProgrammer.com/categories/c">C&#43;&#43;</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pointers">pointers</a><a class="label" href="http://ConscientiousProgrammer.com/categories/memory-safety">memory safety</a><a class="label" href="http://ConscientiousProgrammer.com/categories/types">types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ownership">ownership</a><a class="label" href="http://ConscientiousProgrammer.com/categories/x-window-system">X Window System</a><a class="label" href="http://ConscientiousProgrammer.com/categories/segmentation-fault">segmentation fault</a>
-      </span>
-      
-      <p>The <a href="http://www.rust-lang.org/">Rust</a> programming language, which is nearing its important version 1.0 release, but already seen a lot of use, has many interesting features, the most prominent of which is its <a href="http://doc.rust-lang.org/guide.html#ownership,-borrowing,-and-lifetimes">ownership</a> static type system that prevents certain kinds of bugs common in many programs in C or C++.</p>
-
-<p>For example, it is common in most applications to create graphs of objects pointing to each other, in which it is not clear how many pointers point to a particular object, who is to free the object&rsquo;s memory when it is no longer needed, and what happens to all outstanding pointers to that block. Languages supporting precise <a href="http://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29">garbage collection</a> use various algorithms to determine when memory can be freed, and have become particularly popular in the past twenty years, but there are still situations in which garbage collection is not ideal, hence the continued relevance of languages such as C++.</p>
-
-<p>When I was working as a software engineer in the 1990s developing desktop applications with user interfaces for the <a href="http://en.wikipedia.org/wiki/X_Window_System">X Window System</a>, we used frameworks that included C++ <a href="http://en.wikipedia.org/wiki/Smart_pointer">smart pointers</a> that used <a href="http://en.wikipedia.org/wiki/Reference_counting">reference counting</a> to handle graphs of interconnected data. The C++ standard itself lagged behind in standardizing smart pointers; it started with the <a href="http://www.informit.com/articles/article.aspx?p=30642&amp;seqNum=9">terribly flawed and unusable</a> <a href="http://en.wikipedia.org/wiki/Auto_ptr"><code>auto_ptr</code></a> that finally got deprecated in C++11, then moved on finally to <a href="http://en.wikipedia.org/wiki/Smart_pointer#unique_ptr"><code>unique_ptr</code></a> and <a href="http://en.wikipedia.org/wiki/Smart_pointer#shared_ptr_and_weak_ptr"><code>shared_ptr</code> and <code>weak_ptr</code></a>.</p>
-
-<p>When talking with C++ programmers about Rust, I have found that often they have been puzzled about how Rust&rsquo;s ownership system does anything better than what C++ <code>unique_ptr</code> already does. Here is an explanation (I will not be discussing analogues of <code>shared_ptr</code> and <code>weak_ptr</code> here).</p>
-
-      <a href="http://conscientiousprogrammer.com/blog/2014/12/21/how-to-think-about-rust-ownership-versus-c-plus-plus-unique-ptr/">Read On &rarr;</a>
       
     </div>
     

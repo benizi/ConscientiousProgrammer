@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>24 days of Hackage, 2015: day 7: semigroups; NonEmpty list and a case study of types and tests &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+        
+        <h1>The Conscientious Programmer</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
+    </ul>
+
+    
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>24 days of Hackage, 2015: day 7: semigroups; NonEmpty list and a case study of types and tests</h1>
+    
+
+<h2 id="table-of-contents-for-the-whole-series:958db8f82ca76230f48a5dece0db5e88">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-7:958db8f82ca76230f48a5dece0db5e88">Day 7</h2>
+
+<p>How often has the following runtime error happened to you, whether in
+Haskell or in some other language?</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">*** Exception: Prelude.head: empty list</span>
+</pre></div>
+
+
+<p>Basically, code blew up that assumed a list was nonempty but it
+wasn&rsquo;t.</p>
+
+<p>In fact,
+<a href="https://www.reddit.com/r/haskell/comments/3vlb8v/reading_data_problems/">posted on Reddit recently</a>
+was a question about code that failed with</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">** Exception: Prelude.foldl1: empty list</span>
+</pre></div>
+
+
+<p>which is the same problem.</p>
+
+<p>Today, I present a case study: refactoring that code to take advantage
+of an important data type that is going to be part of the Haskell
+standard library, the <code>NonEmpty</code> list type. This is part of Edward
+Kmett&rsquo;s <a href="http://hackage.haskell.org/package/semigroups"><code>semigroups</code></a>
+package that is
+<a href="https://prime.haskell.org/wiki/Libraries/Proposals/SemigroupMonoid">going into the standard library</a>.</p>
+
+<p>&lt;&ndash;!more&ndash;&gt;</p>
+
+<h2 id="in-general-should-we-adopt-defensive-or-confident-programming:958db8f82ca76230f48a5dece0db5e88">In general, should we adopt defensive or confident programming?</h2>
+
+<p>It&rsquo;s easy to say, &ldquo;well, we should program <em>defensively</em> and not call
+unsafe functions like <code>head</code> and <code>foldl1</code> but should always check for an empty
+list&rdquo;. But what if we <em>know</em> that the list is supposed to have at
+least one element, perhaps because we validated that fact earlier on
+in our data model. For example, say you are buying tickets for a
+concert. You have to buy at least one, but could buy more than one. So
+the business logic for the ticket pickup should always assume that
+there is at least one ticket for you. It should not perpetually check
+for emptiness because that should have been caught up front when you
+ordered.</p>
+
+<p>The situation is exactly analogous to the problem of <code>NULL</code> in many
+languages: languages that use <code>NULL</code> don&rsquo;t distinguish at the <em>type</em>
+level between something that is <em>possibly-nonexistent</em> (0 or 1
+element) and something that is always there (1 element). It is
+unfortunate when we know something about our data but aren&rsquo;t saying it
+in our type. In the case of lists, the situation is that a
+<em>possibly-empty</em> list can have 0 or more elements, while a nonempty
+list can have 1 or more elements. Both situations are extremely common
+(think of regex matching that distinguishes between <code>x*</code> and <code>x+</code>) and
+should be modeled by different types!</p>
+
+<p>I believe that the real solution to this kind of problem is not to go
+<em>defensive</em> and litter all our code with random <code>NULL</code> or <code>isEmpty</code>
+kinds of runtime checks. The solution is also not to just go &ldquo;cowboy
+hacker&rdquo; and invite possible and actual runtime exceptions by skipping
+all checking.</p>
+
+<p>Instead, the solution, when practical, is to <em>use the right types</em> so
+that in the appropriate delimited scope of our code, runtime
+exceptions <em>cannot possibly occur</em> and therefore within that scope we
+can program <em>confidently</em> rather than <em>defensively</em>. If we don&rsquo;t use
+our language&rsquo;s type system to our advantage, we are just doing
+ordinary dynamically typed programming in a typed language and missing
+out on the full benefits of types. Since we made some sacrifices in
+adopting a statically typed language instead of a dynamically typed
+one, we should take advantage of what we got ourselves into. There&rsquo;s
+an interesting asymmetry in the programming world: it is <em>impossible</em>
+to write statically typed code in a dynamically typed language, but it
+is <em>easy</em> to write dynamically typed code in a statically typed
+language!</p>
+
+<h2 id="a-nonempty-list-type:958db8f82ca76230f48a5dece0db5e88">A nonempty list type</h2>
+
+<p>Let&rsquo;s look at the <code>NonEmpty</code> list. You can already use it today before
+it becomes part of the standard library, by just adding <code>semigroups</code>
+to your dependencies.</p>
+
+<h3 id="what-are-the-requirements-for-a-nonempty-list:958db8f82ca76230f48a5dece0db5e88">What are the requirements for a nonempty list?</h3>
+
+<p>Roughly, a <code>NonEmpty</code> list should</p>
+
+<ul>
+<li>support operations to interconvert with a regular possibly-empty list</li>
+<li>support analogues of standard list operations (like <code>map</code> and
+<code>filter</code>) that carefully take into account whether the output is possibly-empty.</li>
+</ul>
+
+<h3 id="quickcheck-for-specifying-laws-properties:958db8f82ca76230f48a5dece0db5e88">QuickCheck for specifying laws (properties)</h3>
+
+<p>On
+<a href="../../../../../blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/">day 3</a>,
+I mentioned that QuickCheck is very useful for specifying requirements
+when designing a new module. Ideally, when designing an API around a
+new type, we treat it as an abstract data type and check the behavior
+of operations on that type. The <code>NonEmpty</code> list is simple enough that you
+might think it&rsquo;s overkill to do that, but I just wanted to present a
+taste of what one might do up front if one were starting out with
+property test-driven development. Let&rsquo;s imagine we are creating a
+module <code>Data.List.NonEmpty</code>:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE ScopedTypeVariables #-}</span>
+
+<span style="color: #408080; font-style: italic">-- Part of a hypothetical test module for the semigroups package.</span>
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">HypotheticalSemigroupsSpec</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.List.NonEmpty</span> <span style="color: #008000; font-weight: bold">as</span> NonEmpty
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> (<span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>, <span style="color: #0000FF">shouldBe</span>, <span style="color: #0000FF">shouldSatisfy</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec.QuickCheck</span> (<span style="color: #0000FF">prop</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Test.QuickCheck</span> <span style="color: #008000; font-weight: bold">as</span> QuickCheck
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.Maybe</span> <span style="color: #008000; font-weight: bold">as</span> Maybe
+
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;semigroups&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    describe <span style="color: #BA2121">&quot;Data.List.NonEmpty&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      describe <span style="color: #BA2121">&quot;constructor NonEmpty.nonEmpty&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+        it <span style="color: #BA2121">&quot;fails on trying to construct from an empty regular list&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+          <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>nonEmpty (<span style="color: #B00040">[]</span> <span style="color: #AA22FF; font-weight: bold">::</span> [<span style="color: #B00040">Int</span>]) `shouldBe` <span style="color: #B00040">Nothing</span>
+        prop <span style="color: #BA2121">&quot;succeeds on any nonempty list&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+          <span style="color: #0000FF">\</span>(<span style="color: #B00040">QuickCheck</span><span style="color: #666666">.</span><span style="color: #B00040">NonEmpty</span> (xs <span style="color: #AA22FF; font-weight: bold">::</span> [<span style="color: #B00040">Int</span>])) <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+            <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>nonEmpty xs `shouldSatisfy` <span style="color: #B00040">Maybe</span><span style="color: #666666">.</span>isJust
+      describe <span style="color: #BA2121">&quot;conversion to regular list&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+        prop <span style="color: #BA2121">&quot;converts back to the original regular list&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+          <span style="color: #0000FF">\</span>(<span style="color: #B00040">QuickCheck</span><span style="color: #666666">.</span><span style="color: #B00040">NonEmpty</span> (xs <span style="color: #AA22FF; font-weight: bold">::</span> [<span style="color: #B00040">Int</span>])) <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+            <span style="color: #008000; font-weight: bold">let</span> <span style="color: #B00040">Just</span> nonEmptyXs <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>nonEmpty xs
+            <span style="color: #008000; font-weight: bold">in</span> <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>toList nonEmptyXs `shouldBe` xs
+</pre></div>
+
+
+<p>Basically, <code>nonEmpty</code> is a safe constructor:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">nonEmpty</span> <span style="color: #AA22FF; font-weight: bold">::</span> [a] <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Maybe</span> (<span style="color: #B00040">NonEmpty</span> a)
+</pre></div>
+
+
+<p>There is also an unsafe constructor called <code>fromList</code>. I wouldn&rsquo;t use
+that except in case I really know that a list was not empty, because
+it was returned from an API that guaranteed it but not in a typed
+way. For example, I&rsquo;ve faced this annoying problem when writing
+parsers using libraries such as
+<a href="https://hackage.haskell.org/package/parsec"><code>parsec</code></a>, because
+combinators such as <code>many1</code> have a type</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">many1</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Stream</span> s m t <span style="color: #AA22FF; font-weight: bold">=&gt;</span> <span style="color: #B00040">ParsecT</span> s u m a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">ParsecT</span> s u m [a]
+</pre></div>
+
+
+<p>even though the library <em>guarantees</em> that if the parse succeeds, the
+resulting list has at least one element! So in a situation like this,
+I would feel justified in using the unsafe <code>NonEmpty.fromList</code> to
+<em>immediately</em> unsafely wrap to get my known-to-be-nonempty-list into a
+more refined type.</p>
+
+<p>A note on QuickCheck internals: <code>QuickCheck.NonEmpty</code> (ignore the
+coincidence of the token <code>NonEmpty</code> in common with our module and type
+in question!) is just a
+<a href="https://hackage.haskell.org/package/QuickCheck-2.8.1/docs/Test-QuickCheck.html#t:NonEmptyList">newtype in QuickCheck</a>
+to generate regular lists <code>[a]</code> that happen to be nonempty at runtime
+(as in they are of the form <code>(x:xs)</code>). Imagine if QuickCheck had been
+written when the <code>NonEmpty</code> type we want had existed. Then it could
+just generate a real <code>NonEmpty</code> rather than a fake newtype!</p>
+
+<p>If you don&rsquo;t use QuickCheck or similar generative testing libraries,
+check them out! These methods of testing are far more useful than the
+example-based tests that I&rsquo;ve provided so far in these articles just
+for illustrative purposes. When possible, generative tests should be
+written instead of manual example-based tests.</p>
+
+<p>(The use of <code>[Int]</code> type annotations is because QuickCheck requires a
+monomorphic type in order to generate concrete data to
+test. <code>ScopedTypeVariables</code> is a GHC extension that I wish were just
+part of the standard Haskell language; it was <a href="https://ocharles.org.uk/blog/guest-posts/2014-12-20-scoped-type-variables.html">covered in a 2014 Day of
+GHC Extensions</a>.)</p>
+
+<h2 id="a-few-notes-on-the-full-nonempty-api:958db8f82ca76230f48a5dece0db5e88">A few notes on the full <code>NonEmpty</code> API</h2>
+
+<p><code>map</code> behaves as expected, because it doesn&rsquo;t change the number of
+elements and therefore mapping over a <code>NonEmpty</code> is clearly a <code>NonEmpty</code>:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">map</span> <span style="color: #AA22FF; font-weight: bold">::</span> (a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> b) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">NonEmpty</span> a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">NonEmpty</span> b
+</pre></div>
+
+
+<p>However, <code>filter</code> on a <code>NonEmpty</code> returns a regular possibly-empty
+list, as it should, because the predicate can potentially fail on
+every element:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">filter</span> <span style="color: #AA22FF; font-weight: bold">::</span> (a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Bool</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">NonEmpty</span> a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> [a]
+</pre></div>
+
+
+<p>And <code>foldl1</code>, unlike that of the regular list, is <em>safe</em>. It cannot
+fail, because it always starts off the reduction with the first
+element as the seed.</p>
+
+<p>There are a whole bunch of other useful list functions.</p>
+
+<p>Oh, and the <a href="http://hackage.haskell.org/package/semigroups-0.18.0.1/docs/src/Data-List-NonEmpty.html#NonEmpty">internal implementation</a> is what you might suspect: it&rsquo;s
+just a tuple of the first element with the possibly-empty tail, with a
+special &ldquo;cons&rdquo; operator <code>:|</code> that resembles the normal list&rsquo;s <code>:</code>.</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">data</span> <span style="color: #B00040">NonEmpty</span> a <span style="color: #AA22FF; font-weight: bold">=</span> a <span style="color: #B00040">:|</span> [a]
+</pre></div>
+
+
+<h2 id="a-case-study-in-refactoring:958db8f82ca76230f48a5dece0db5e88">A case study in refactoring</h2>
+
+<p>Let&rsquo;s look at refactoring some
+<a href="https://www.reddit.com/r/haskell/comments/3vlb8v/reading_data_problems/">code posted on Reddit</a>
+that was throwing an exception unexpectedly at run time.</p>
+
+<p>We won&rsquo;t go into how the code might be written in a completely
+different way, but just focus on identifying and removing unsafe code
+that might throw exceptions.</p>
+
+<p>The code uses the excellent package
+<a href="http://hackage.haskell.org/package/split"><code>split</code></a> which I am a happy
+user of. I have taken the liberty of adding comments to the code and
+explicit imports for presentation here.</p>
+
+<h3 id="original-unsafe-code:958db8f82ca76230f48a5dece0db5e88">Original unsafe code</h3>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.List.Split</span> <span style="color: #008000; font-weight: bold">as</span> Split
+
+<span style="color: #0000FF">totalArea</span> <span style="color: #AA22FF; font-weight: bold">::</span> [(<span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>)] <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Int</span>
+<span style="color: #0000FF">totalArea</span> xs <span style="color: #AA22FF; font-weight: bold">=</span> foldl (<span style="color: #0000FF">\</span>acc x <span style="color: #AA22FF; font-weight: bold">-&gt;</span> (acc <span style="color: #666666">+</span> partialArea x)) <span style="color: #666666">0</span> xs
+
+<span style="color: #0000FF">partialArea</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Int</span>
+<span style="color: #0000FF">partialArea</span> (l, w, h) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #666666">2</span> <span style="color: #666666">*</span> (l<span style="color: #666666">*</span>w <span style="color: #666666">+</span> w<span style="color: #666666">*</span>h <span style="color: #666666">+</span> h<span style="color: #666666">*</span>l) <span style="color: #666666">+</span> slack
+  <span style="color: #008000; font-weight: bold">where</span> areas       <span style="color: #AA22FF; font-weight: bold">=</span> [l, w, h]
+
+        <span style="color: #408080; font-style: italic">-- &#39;maximum&#39; is unsafe</span>
+        smallSides  <span style="color: #AA22FF; font-weight: bold">=</span> filter (<span style="color: #666666">&lt;</span> maximum areas) areas
+
+        <span style="color: #408080; font-style: italic">-- &#39;foldl1&#39; is unsafe</span>
+        slack       <span style="color: #AA22FF; font-weight: bold">=</span> foldl1 (<span style="color: #666666">*</span>) smallSides
+
+<span style="color: #0000FF">parseFile</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> [(<span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>)]
+<span style="color: #0000FF">parseFile</span> xs <span style="color: #AA22FF; font-weight: bold">=</span> map (splitDimensions) (breakLines xs)
+
+<span style="color: #0000FF">breakLines</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> [<span style="color: #B00040">String</span>]
+<span style="color: #0000FF">breakLines</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Split</span><span style="color: #666666">.</span>splitOn <span style="color: #BA2121">&quot;</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>
+
+<span style="color: #408080; font-style: italic">-- | &#39;read&#39; is unsafe. &#39;(!!)&#39; is unsafe.</span>
+<span style="color: #0000FF">splitDimensions</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> (<span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>)
+<span style="color: #0000FF">splitDimensions</span> xs <span style="color: #AA22FF; font-weight: bold">=</span> (item <span style="color: #666666">0</span>, item <span style="color: #666666">1</span>, item <span style="color: #666666">2</span>)
+                   <span style="color: #008000; font-weight: bold">where</span> item n <span style="color: #AA22FF; font-weight: bold">=</span> read ((<span style="color: #B00040">Split</span><span style="color: #666666">.</span>splitOn <span style="color: #BA2121">&quot;x&quot;</span> xs)<span style="color: #666666">!!</span>n)
+</pre></div>
+
+
+<p>This crashes on <code>foldl1</code>:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;UnsafeListExample&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    it <span style="color: #BA2121">&quot;totalArea crashes for a particular input&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #008000; font-weight: bold">let</span> contents <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&quot;1 x 1 x 1&quot;</span>
+      evaluate (totalArea (parseFile contents)) `shouldThrow` anyException
+</pre></div>
+</p>
+
+<p>I&rsquo;ve already identified the problems above.</p>
+
+<p>We&rsquo;ll ignore the fact that <code>read</code> and list indexing <code>(!!)</code> are unsafe,
+because that&rsquo;s not what is of interest here today.</p>
+
+<p>But <code>maximum</code> and <code>foldl1</code> are both unsafe on lists because they crash
+on empty lists.</p>
+
+<p>It turns out <em>from manual inspection, acting as a human static
+analyzer</em> that the use of <code>maximum</code> is OK here, because it&rsquo;s operating
+on a 3-element list <code>[l, w, h]</code> created just before being passed to
+<code>maximum</code>. But this safety is not reflected in the types.</p>
+
+<p>How about <code>foldl1</code>? If you carefully think about what <code>filter</code>
+returns, you can deduce that it might return an empty list, and if you
+can&rsquo;t guarantee that it&rsquo;s nonempty, then the <code>foldl1</code> will crash
+hard. And it does.</p>
+
+<p>That was a lot of human thinking we had to do. Luckily, tests were run
+that discovered the bug, but still, the code ended up posted to Reddit
+asking what the bug was, so it&rsquo;s not trivial to find these kinds of
+lurking bugs. Is there a better way?</p>
+
+<h3 id="refactoring-to-nonempty-lists:958db8f82ca76230f48a5dece0db5e88">Refactoring to <code>NonEmpty</code> lists</h3>
+
+<p>Let&rsquo;s use <code>NonEmpty</code>. First of all, we change <code>totalArea</code> to take a
+<code>NonEmpty</code> because that&rsquo;s what we really want.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">totalArea</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">NonEmpty</span> (<span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Int</span>
+<span style="color: #0000FF">totalArea</span> xs <span style="color: #AA22FF; font-weight: bold">=</span> foldl (<span style="color: #0000FF">\</span>acc x <span style="color: #AA22FF; font-weight: bold">-&gt;</span> (acc <span style="color: #666666">+</span> partialArea x)) <span style="color: #666666">0</span> xs
+</pre></div>
+</p>
+
+<p>Note that we only had to change the type of the parameter, not any of
+the code, because <code>foldl</code> has been implemented on <code>NonEmpty</code> as well
+as regular lists.</p>
+
+<p>Next, we change the body of <code>partialArea</code>:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">partialArea</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Int</span>
+<span style="color: #0000FF">partialArea</span> (l, w, h) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #666666">2</span> <span style="color: #666666">*</span> (l<span style="color: #666666">*</span>w <span style="color: #666666">+</span> w<span style="color: #666666">*</span>h <span style="color: #666666">+</span> h<span style="color: #666666">*</span>l) <span style="color: #666666">+</span> slack
+  <span style="color: #008000; font-weight: bold">where</span>
+    areas <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">NonEmpty</span> <span style="color: #B00040">Int</span>
+    areas <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>fromList [l, w, h]
+
+    <span style="color: #408080; font-style: italic">-- &#39;maximum&#39; is safe on &#39;NonEmpty&#39;</span>
+    <span style="color: #408080; font-style: italic">-- But &#39;smallSides&#39; can be empty because of &#39;NonEmpty.filter&#39;,</span>
+    <span style="color: #408080; font-style: italic">-- and &#39;NonEmpty.fromList&#39; is unsafe!</span>
+    smallSides <span style="color: #AA22FF; font-weight: bold">::</span> [<span style="color: #B00040">Int</span>]
+    smallSides <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>filter (<span style="color: #666666">&lt;</span> maximum areas) areas
+
+    <span style="color: #408080; font-style: italic">-- unsafe!</span>
+    smallSides1 <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">NonEmpty</span> <span style="color: #B00040">Int</span>
+    smallSides1 <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>fromList smallSides
+
+    <span style="color: #408080; font-style: italic">-- &#39;foldl1&#39; is safe on &#39;NonEmpty&#39;</span>
+    slack <span style="color: #AA22FF; font-weight: bold">=</span> foldl1 (<span style="color: #666666">*</span>) smallSides1
+</pre></div>
+</p>
+
+<p>We made a number of changes:</p>
+
+<ul>
+<li>since we&rsquo;re creating a nonempty list, we turn it immediately into a
+<code>NonEmpty</code></li>
+<li><code>maximum</code> is defined for <code>NonEmpty</code> so we don&rsquo;t have to change the
+text of the code, but we know that <code>maximum</code> is <em>guaranteed</em> to be
+safe for <code>NonEmpty</code></li>
+<li><code>NonEmpty.filter</code>, as we discussed, returns a regular list, <em>not</em> a
+<code>NonEmpty</code>.</li>
+<li>at the end, we want to safely compute <code>slack</code>, but we can&rsquo;t unless
+we use a safe <code>foldl1</code></li>
+<li>working backwards, we must convert a regular list to a <code>NonEmpty</code>,
+but there&rsquo;s only one way to do that, and it&rsquo;s unsafe!</li>
+</ul>
+
+<p>So by refining the types used in the program, we have identified the
+exact point at which <em>we could not write the necessary code</em> without
+resorting to <code>NonEmpty.fromList</code>. So, strictly speaking, we haven&rsquo;t
+made a run time error turn into a compile time error, but we have
+narrowed down what is going on purely mechanically by means of
+following the types.</p>
+
+<p>The real problem in the code here seems to be that we wanted
+<code>smallSides</code> to be nonempty. The attempt to use only safe code
+automatically resolved one possible source of unsafety (<code>maximum</code>) and
+pointed at a more complicated situation requiring a proof obligation
+on the result of the <code>filter</code>. <code>partialArea</code> could be written to avoid
+the proof obligation, by not using a list type at all for <code>areas</code> to
+perform the desired logic.</p>
+
+<h3 id="maybe-the-real-problem-is-that-we-shouldn-t-use-lists-at-all-here:958db8f82ca76230f48a5dece0db5e88">Maybe the real problem is that we shouldn&rsquo;t use lists at all here</h3>
+
+<p>You may have protested at this entire <code>NonEmpty</code> exercise all this
+time, because <code>NonEmpty</code> is just the wrong type for all of this work!
+<strong>There&rsquo;s no point in trying to use some kind of fancy type that
+doesn&rsquo;t fit the problem.</strong> There was no reason for the list
+<code>[l, w, h]</code> to be created at all. If you&rsquo;re using a type and you still
+run into proof obligations, often that means the type is not the right
+one.</p>
+
+<p>In <code>partialArea</code>, if we state the logic of what we really wanted (the
+two smallest values out of three), then we can just write what we
+mean:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | Don&#39;t use lists at all!</span>
+<span style="color: #0000FF">bestPartialArea</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Int</span>
+<span style="color: #0000FF">bestPartialArea</span> (l, w, h) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #666666">2</span> <span style="color: #666666">*</span> (l<span style="color: #666666">*</span>w <span style="color: #666666">+</span> w<span style="color: #666666">*</span>h <span style="color: #666666">+</span> h<span style="color: #666666">*</span>l) <span style="color: #666666">+</span> slack
+  <span style="color: #008000; font-weight: bold">where</span>
+    (side0, side1, <span style="color: #008000; font-weight: bold">_</span>) <span style="color: #AA22FF; font-weight: bold">=</span> sort3 (l, w, h)
+    slack <span style="color: #AA22FF; font-weight: bold">=</span> side0 <span style="color: #666666">*</span> side1
+</pre></div>
+</p>
+
+<p>where we created a utility module <code>Sort3</code>:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">Sort3</span> (<span style="color: #0000FF">sort3</span>) <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #408080; font-style: italic">-- | Sort exactly 3 values.</span>
+<span style="color: #0000FF">sort3</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Ord</span> a <span style="color: #AA22FF; font-weight: bold">=&gt;</span> (a, a, a) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> (a, a, a)
+<span style="color: #0000FF">sort3</span> (a0, a1, a2) <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #008000; font-weight: bold">if</span> a0 <span style="color: #666666">&gt;</span> a1
+  <span style="color: #008000; font-weight: bold">then</span> <span style="color: #008000; font-weight: bold">if</span> a0 <span style="color: #666666">&gt;</span> a2
+       <span style="color: #008000; font-weight: bold">then</span> <span style="color: #008000; font-weight: bold">if</span> a2 <span style="color: #666666">&lt;</span> a1
+               <span style="color: #008000; font-weight: bold">then</span> (a2, a1, a0)
+               <span style="color: #008000; font-weight: bold">else</span> (a1, a2, a0)
+       <span style="color: #008000; font-weight: bold">else</span> (a1, a0, a2)
+  <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> a1 <span style="color: #666666">&gt;</span> a2
+       <span style="color: #008000; font-weight: bold">then</span> <span style="color: #008000; font-weight: bold">if</span> a0 <span style="color: #666666">&gt;</span> a2
+            <span style="color: #008000; font-weight: bold">then</span> (a2, a0, a1)
+            <span style="color: #008000; font-weight: bold">else</span> (a0, a2, a1)
+       <span style="color: #008000; font-weight: bold">else</span> (a0, a1, a2)
+</pre></div>
+</p>
+
+<p>Yes, I did look on Hoogle (as recommended in my article yesterday on
+searching for utility modules), and although I did not find this exact
+function, I found the logic for it embedded in a context of optimal
+sorting of vectors, in the
+<a href="https://hackage.haskell.org/package/vector-algorithms-0.7.0.1/docs/Data-Vector-Algorithms-Optimal.html"><code>Data.Vector.Algorithms.Optimal</code> module</a>
+of the
+excellent
+<a href="https://hackage.haskell.org/package/vector-algorithms"><code>vector-algorithms</code> package</a>
+that I highly recommend when working with vectors. I copied and
+pasted the logic in order to work on a simple triple.</p>
+
+<h3 id="the-value-of-tests:958db8f82ca76230f48a5dece0db5e88">The value of tests</h3>
+
+<p>QuickCheck is a great tool. Suppose we didn&rsquo;t want to or couldn&rsquo;t
+refine the types in our code, for some reason. We can often still make of
+testing to try to weed out easy-to-discover bugs. For example, we
+could have written a sanity check test on <code>totalArea</code> by generating a
+whole bunch of random input and checking that the result is what we
+expect, or at least something reasonable:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">UnsafeListExample</span> (<span style="color: #0000FF">totalArea</span>, <span style="color: #0000FF">parseFile</span>)
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> (<span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>, <span style="color: #0000FF">shouldSatisfy</span>, <span style="color: #0000FF">shouldThrow</span>, <span style="color: #0000FF">anyException</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec.QuickCheck</span> (<span style="color: #0000FF">prop</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.QuickCheck</span> (<span style="color: #B00040">Positive</span>(<span style="color: #666666">..</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Exception</span> (<span style="color: #0000FF">evaluate</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Text.Printf</span> (<span style="color: #0000FF">printf</span>)
+
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;UnsafeListExample&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    it <span style="color: #BA2121">&quot;totalArea crashes for a particular input&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #008000; font-weight: bold">let</span> contents <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&quot;1 x 1 x 1&quot;</span>
+      evaluate (totalArea (parseFile contents)) `shouldThrow` anyException
+    prop <span style="color: #BA2121">&quot;totalArea gives something reasonable on any triple of ints&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #0000FF">\</span>(<span style="color: #B00040">Positive</span> (l <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>)) (<span style="color: #B00040">Positive</span> (w <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>)) (<span style="color: #B00040">Positive</span> (h <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>)) <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+        <span style="color: #008000; font-weight: bold">let</span> contents <span style="color: #AA22FF; font-weight: bold">=</span> printf <span style="color: #BA2121">&quot;%d x %d x %d&quot;</span> l w h
+        <span style="color: #008000; font-weight: bold">in</span> totalArea (parseFile contents) `shouldSatisfy` (<span style="color: #666666">&gt;</span> <span style="color: #666666">0</span>)
+</pre></div>
+</p>
+
+<p>Very quickly we get a counterexample reported by QuickCheck:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">  1) UnsafeListExample totalArea does not crash on any triple of ints</span>
+<span style="color: #888888">       uncaught exception: ErrorCall (Prelude.foldl1: empty list) (after 4 tests)</span>
+<span style="color: #888888">       Positive {getPositive = 2}</span>
+<span style="color: #888888">       Positive {getPositive = 2}</span>
+<span style="color: #888888">       Positive {getPositive = 2}</span>
+</pre></div>
+</p>
+
+<p>Also, you may have wondered about that complicated optimal sort of 3
+values. Did I copy and paste the logic correctly? For peace of mind, I
+wrote a QuickCheck test for it:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;Sort3&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    prop <span style="color: #BA2121">&quot;sort3 sorts correctly&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #0000FF">\</span>(triple <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>)) <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+        <span style="color: #008000; font-weight: bold">let</span> (a0&#39;, a1&#39;, a2&#39;) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Sort3</span><span style="color: #666666">.</span>sort3 triple
+        <span style="color: #008000; font-weight: bold">in</span> a0&#39; <span style="color: #666666">&lt;=</span> a1&#39; <span style="color: #666666">&amp;&amp;</span> a1&#39; <span style="color: #666666">&lt;=</span> a2&#39;
+</pre></div>
+</p>
+
+<p>I love QuickCheck. What would life be without it?</p>
+
+<h3 id="some-bonus-refactorings:958db8f82ca76230f48a5dece0db5e88">Some bonus refactorings</h3>
+
+<p>Some other type-oriented refactorings into <code>NonEmpty</code> as much as
+possible that I won&rsquo;t discuss in detail because they were mostly
+irrelevant here:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">parseFile</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">NonEmpty</span> <span style="color: #B00040">Char</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">NonEmpty</span> (<span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>)
+<span style="color: #0000FF">parseFile</span> xs <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>map (splitDimensions) (breakLines xs)
+
+<span style="color: #408080; font-style: italic">-- | We ended up not needing the fact that the input is nonempty, and</span>
+<span style="color: #408080; font-style: italic">-- converted it to a regular list.</span>
+<span style="color: #0000FF">breakLines</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">NonEmpty</span> <span style="color: #B00040">Char</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">NonEmpty</span> <span style="color: #B00040">String</span>
+<span style="color: #0000FF">breakLines</span> string1 <span style="color: #AA22FF; font-weight: bold">=</span> ourSplitOn <span style="color: #BA2121">&quot;</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span> (<span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>toList string1)
+
+<span style="color: #408080; font-style: italic">-- | &#39;read&#39; is unsafe. &#39;(!!)&#39; is unsafe.</span>
+<span style="color: #0000FF">splitDimensions</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> (<span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>, <span style="color: #B00040">Int</span>)
+<span style="color: #0000FF">splitDimensions</span> xs <span style="color: #AA22FF; font-weight: bold">=</span> (item <span style="color: #666666">0</span>, item <span style="color: #666666">1</span>, item <span style="color: #666666">2</span>)
+                   <span style="color: #008000; font-weight: bold">where</span> item n <span style="color: #AA22FF; font-weight: bold">=</span> read ((<span style="color: #B00040">Split</span><span style="color: #666666">.</span>splitOn <span style="color: #BA2121">&quot;x&quot;</span> xs)<span style="color: #666666">!!</span>n)
+
+<span style="color: #408080; font-style: italic">-- | Using unsafe &#39;NonEmpty.fromList&#39; is safe because we know</span>
+<span style="color: #408080; font-style: italic">-- the result &#39;from Split.splitOn&#39; is nonempty. Note that the elements</span>
+<span style="color: #408080; font-style: italic">-- themselves can be empty.</span>
+<span style="color: #0000FF">ourSplitOn</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Eq</span> a <span style="color: #AA22FF; font-weight: bold">=&gt;</span> [a] <span style="color: #AA22FF; font-weight: bold">-&gt;</span> [a] <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">NonEmpty</span> [a]
+<span style="color: #0000FF">ourSplitOn</span> subList list <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>fromList (<span style="color: #B00040">Split</span><span style="color: #666666">.</span>splitOn subList list)
+</pre></div>
+</p>
+
+<p>The most interesting thing was a tangential observation that
+<code>Split.splitOn</code> always returns a nonempty list of lists. So in
+principle we could wrap the result into a <code>NonEmpty</code>. I even wrote a
+little passing QuickCheck test:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;split&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    prop <span style="color: #BA2121">&quot;splitOn always results in nonempty list&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #0000FF">\</span>subList (list <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+        <span style="color: #B00040">Split</span><span style="color: #666666">.</span>splitOn subList list `shouldSatisfy` not <span style="color: #666666">.</span> null
+</pre></div>
+</p>
+
+<p>Note: <code>split</code> already has a <a href="http://hub.darcs.net/byorgey/split/browse/test/">huge set of property tests for its own
+purposes</a>. I love the
+<code>split</code> library. I think it&rsquo;s been very well-tested. Check it out.</p>
+
+<h2 id="a-brief-note-on-semigroups-semigroup-http-hackage-haskell-org-package-semigroups-0-18-0-1-docs-data-semigroup-html:958db8f82ca76230f48a5dece0db5e88">A brief note on semigroups <a href="http://hackage.haskell.org/package/semigroups-0.18.0.1/docs/Data-Semigroup.html"><code>Semigroup</code></a></h2>
+
+<p>A <code>Semigroup</code> is a type class representing an algebraic structure
+requiring a single associative operation to be defined on it,
+&ldquo;append&rdquo;, which in this library is provided as an operator <code>&lt;&gt;</code>.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Semigroup</span> ((<span style="color: #666666">&lt;&gt;</span>))
+</pre></div>
+</p>
+
+<p>A QuickCheck test verifying what we already know, which is that
+<code>String</code> has a <code>Semigroup</code> instance, string append, and is associative as required:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    describe <span style="color: #BA2121">&quot;Data.Semigroup.Semigroup&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      prop <span style="color: #BA2121">&quot;&lt;&gt; is associative for String&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+        <span style="color: #0000FF">\</span>(x <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span>) y z <span style="color: #AA22FF; font-weight: bold">-&gt;</span> (x <span style="color: #666666">&lt;&gt;</span> y) <span style="color: #666666">&lt;&gt;</span> z `shouldBe` x <span style="color: #666666">&lt;&gt;</span> (y <span style="color: #666666">&lt;&gt;</span> z)
+</pre></div>
+</p>
+
+<p>You may already use this operator <code>&lt;&gt;</code> in
+<a href="https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Monoid.html"><code>Monoid</code>, which is already in the standard library</a>,
+but the <code>Monoid</code> type class should really be a subclass of <code>Monoid</code>
+and that&rsquo;s what&rsquo;s going to happen in a future version of Haskell
+(conceptually, it should have been there all along, but Haskell was
+invented 25 years ago in 1990 and <code>Semigroup</code> was apparently not
+considered important enough to put into the type class hierarchy then). The difference is that a <code>Monoid</code> also requires
+an identity element <code>mempty</code>.</p>
+
+<p>There&rsquo;s no space here to say anything about why semigroups and monoids
+are useful in computing. Monoids in particular have become an everyday
+word in Big Data circles because of MapReduce, which based on monoids for performance.</p>
+
+<p>A few Haskell oriented resources on monoids to check out:</p>
+
+<ul>
+<li><a href="https://en.wikibooks.org/wiki/Haskell/Monoids">On Wikibooks</a>
+(The <a href="https://en.wikibooks.org/wiki/Haskell">Haskell Wikibook</a> is a great resource for Haskell in general)</li>
+<li>A really nice article with code <a href="https://izbicki.me/blog/gausian-distributions-are-monoids">&ldquo;Gaussian distributions are monoids</a></li>
+</ul>
+
+<h2 id="conclusion:958db8f82ca76230f48a5dece0db5e88">Conclusion</h2>
+
+<p>The main takeaways today: consider using <code>NonEmpty</code> when you have a
+list that you know is not empty, so that you can confidently perform
+operations on it without throwing an exception.  It&rsquo;s just one
+additional Cabal dependency away! Also make sure that you actually
+wanted a list, and not a tuple or fixed-size vector or something like
+that. And use QuickCheck.</p>
+
+<h2 id="all-the-code:958db8f82ca76230f48a5dece0db5e88">All the code</h2>
+
+<p>All my code for my article series are at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/07\/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests\/';
+    var disqus_title = '24 days of Hackage, 2015: day 7: semigroups; NonEmpty list and a case study of types and tests';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/07\/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+
