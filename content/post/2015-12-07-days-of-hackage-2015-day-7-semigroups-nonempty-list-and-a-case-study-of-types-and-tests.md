@@ -551,7 +551,7 @@ A QuickCheck test verifying what we already know, which is that
 
 You may already use this operator `<>` in
 [`Monoid`, which is already in the standard library](https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Monoid.html),
-but the `Monoid` type class should really be a subclass of `Monoid`
+but the `Monoid` type class should really be a subclass of `Semigroup`
 and that's what's going to happen in a future version of Haskell
 (conceptually, it should have been there all along, but Haskell was
 invented 25 years ago in 1990 and `Semigroup` was apparently not
