@@ -50,7 +50,7 @@ Kmett's [`semigroups`](http://hackage.haskell.org/package/semigroups)
 package that is
 [going into the standard library](https://prime.haskell.org/wiki/Libraries/Proposals/SemigroupMonoid).
 
-<--!more-->
+<!--more-->
 
 ## In general, should we adopt defensive or confident programming?
 
