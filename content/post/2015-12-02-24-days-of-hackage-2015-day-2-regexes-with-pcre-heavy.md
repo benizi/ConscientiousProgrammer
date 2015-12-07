@@ -303,7 +303,7 @@ add the following two lines and make the file executable:
 
 {{< highlight haskell >}}
 #!/usr/bin/env stack
--- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy
+-- stack --resolver lts-3.17 --install-ghc runghc --package pcre-heavy
 {{< /highlight >}}
 
 Stack will read the embedded command in order to install GHC, if
@@ -337,7 +337,7 @@ one to the other seamlessly.
 
 {{< highlight haskell >}}
 #!/usr/bin/env stack
--- stack --resolver lts-3.16 --install-ghc runghc --package pcre-heavy
+-- stack --resolver lts-3.17 --install-ghc runghc --package pcre-heavy
 
 {-# LANGUAGE QuasiQuotes #-}
 
