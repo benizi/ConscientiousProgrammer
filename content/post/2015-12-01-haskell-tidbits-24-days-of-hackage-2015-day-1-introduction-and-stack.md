@@ -21,6 +21,7 @@ Haskell sort of dynamically typed with deferred type errors](/blog/2015/12/05/24
 and Hayoo: MissingH, extra](/blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/)
 - Day 7: [semigroups; NonEmpty list and
 a case study of types and tests](/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/)
+- Day 8: [multiset; I wish this were in the standard containers package](/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/)
 
 ## Day 1
 
