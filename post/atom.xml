@@ -6,8 +6,283 @@
     <description>Recent content in Posts on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 07 Dec 2015 08:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Tue, 08 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/post/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 8: multiset; I wish this were in the standard containers package</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/</link>
+      <pubDate>Tue, 08 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-8:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Day 8&lt;/h2&gt;
+
+&lt;p&gt;I don&amp;rsquo;t remember when it was, but one day I got sick and tired of
+reimplementing in Haskell the same boilerplate logic when keeping
+track of many objects classified under the same key. This is a data
+structure known as a
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Multiset&#34;&gt;multiset&lt;/a&gt;, also known as a
+&lt;em&gt;bag&lt;/em&gt;, in contrast with a regular &lt;em&gt;set&lt;/em&gt;, which only keeps track of one
+unique object per key.&lt;/p&gt;
+
+&lt;p&gt;I was surprised that by the lack of a multiset module in the standard
+&lt;a href=&#34;https://hackage.haskell.org/package/containers&#34;&gt;&lt;code&gt;containers&lt;/code&gt;&lt;/a&gt;
+package, although not completely surprised because you can implement a
+multiset on top of a set, so in some sense a multiset is
+&amp;ldquo;superfluous&amp;rdquo;. Still, I was used to having a multiset available
+without any work (however trivial), because of long using a &lt;a href=&#34;http://www.cplusplus.com/reference/set/multiset/&#34;&gt;multiset
+in C++&lt;/a&gt;, which I&amp;rsquo;d
+used back in the 1990s from the original implementation of the
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Standard_Template_Library&#34;&gt;Standard Template Library&lt;/a&gt;,
+and also Python&amp;rsquo;s collections library has a
+&lt;a href=&#34;https://docs.python.org/2/library/collections.html#collections.Counter&#34;&gt;&lt;code&gt;Counter&lt;/code&gt;&lt;/a&gt;
+class which serves a similar purpose.&lt;/p&gt;
+
+&lt;p&gt;Today I&amp;rsquo;ll briefly show some code using &lt;code&gt;multiset&lt;/code&gt; and talk about why
+something like this maybe should be in the standard library.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-classic-example-of-multiset-use:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;The classic example of multiset use&lt;/h2&gt;
+
+&lt;p&gt;Multisets are often used for counting things. Word count is a
+time-honored use case for multisets, so let&amp;rsquo;s implement a very simple
+word count program that break up text into &amp;ldquo;words&amp;rdquo; separated by
+spaces, while treating non-letters as spaces, count the words, and
+finally output a report which consists of a line for each word and its
+count, in descending order of count but ascending order of word.&lt;/p&gt;
+
+&lt;p&gt;For a bit more realism and efficiency even for a toy program, let&amp;rsquo;s
+have the input not be &lt;code&gt;String&lt;/code&gt;, but the &lt;code&gt;Text&lt;/code&gt; type from
+&lt;code&gt;Data.Text.Lazy&lt;/code&gt; module of the
+&lt;a href=&#34;https://hackage.haskell.org/package/text&#34;&gt;&lt;code&gt;text&lt;/code&gt;&lt;/a&gt; package. Let&amp;rsquo;s also
+build up the final &lt;code&gt;Text&lt;/code&gt; report efficiently.&lt;/p&gt;
+
+&lt;h3 id=&#34;a-sample-hspec-test:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;A sample HSpec test&lt;/h3&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a sample test (for fun you may wish to write a reasonable
+QuickCheck generators and tests for this problem). I apologize for the
+illegible Haskell multiline string literal; I wish Haskell had
+multiline string literals, interpolation, and all that good stuff
+other languages have!&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE OverloadedStrings #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;MultisetExampleSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;MultisetExample&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;wordCount&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Required for auto-discovery.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;multiset&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;wordCount&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; input &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;I have so   many words; words I so like to have words for!?&amp;quot;&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; expected &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;words 3&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;I 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;have 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;so 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;for 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;like 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;many 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;to 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+      wordCount input `shouldBe` expected
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;the-solution:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;The solution&lt;/h3&gt;
+
+&lt;p&gt;The code almost writes itself from a natural language description of
+the problem.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE OverloadedStrings #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;MultisetExample&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.MultiSet&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; MultiSet
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Text.Lazy&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; LazyText
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Text.Lazy.Builder&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; LazyBuilder
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Text.Lazy.Builder.Int&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;decimal&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Ord&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Down&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Char&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Char
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; List
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Arrow&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Monoid&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt;))
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;wordCount&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;wordCount&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;map replaceNonLetterWithSpace
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;words
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toOccurList
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;List&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;sortOn (snd &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Down&lt;/span&gt;)
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; map summarizeWordCount
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; mconcat
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyBuilder&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toLazyText
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;replaceNonLetterWithSpace&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;replaceNonLetterWithSpace&lt;/span&gt; c
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;isLetter c &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; c
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; otherwise &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;summarizeWordCount&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Occur&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyBuilder&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Builder&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;summarizeWordCount&lt;/span&gt; (word, count) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;LazyBuilder&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromLazyText word &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot; &amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; decimal count &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Let&amp;rsquo;s go through this step by step. Note that we&amp;rsquo;re using my favorite
+left-to-right composition operator &lt;code&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/code&gt; as opposed to the
+right-to-left composition operator &lt;code&gt;.&lt;/code&gt; because it looks much more
+natural to me for pipelines.&lt;/p&gt;
+
+&lt;h3 id=&#34;get-the-words-from-text:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Get the words from text&lt;/h3&gt;
+
+&lt;p&gt;First, replace all non-letters with spaces for the purpose of this
+problem, then use the &lt;code&gt;words&lt;/code&gt; from &lt;code&gt;Data.Text.Lazy&lt;/code&gt; (which we imported
+as &lt;code&gt;LazyText&lt;/code&gt;) to break up into words (real tokenization would have
+more sophisticated rules). By the way, this is done very efficiently
+because GHC performs
+&lt;a href=&#34;https://hackage.haskell.org/package/text-1.2.1.3/docs/Data-Text-Lazy.html#g:1&#34;&gt;fusion&lt;/a&gt;
+in order to do the replacement and the breaking up into words in a
+single pass, rather than two as written in the code. Fusion is a
+really, really cool optimization that we rely on for our Haskell code
+to be super-efficient:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;wordCount&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;map replaceNonLetterWithSpace
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;words
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;put-the-words-into-a-multiset:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Put the words into a multiset&lt;/h3&gt;
+
+&lt;p&gt;Next, we get the list words into a multiset. &lt;code&gt;MultiSet&lt;/code&gt; conveniently
+has a constructor for that, &lt;a href=&#34;https://hackage.haskell.org/package/multiset-0.3.0/docs/Data-MultiSet.html#v:fromList&#34;&gt;&lt;code&gt;fromList :: Ord a =&amp;gt; [a] -&amp;gt; MultiSet a&lt;/code&gt;&lt;/a&gt;,
+and it does this in &lt;code&gt;O(n log n)&lt;/code&gt; time because of the use of comparison
+through &lt;code&gt;Ord&lt;/code&gt; to construct a tree (exercise for you if you wish: use
+one of the hash table libraries in Hackage to create a
+&lt;code&gt;MultiHashSet&lt;/code&gt; instead).&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;count-the-words:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Count the words&lt;/h4&gt;
+
+&lt;p&gt;We grab a list of word/count pairs (in ascending order of words) using
+&lt;a href=&#34;https://hackage.haskell.org/package/multiset-0.3.0/docs/Data-MultiSet.html#v:toOccurList&#34;&gt;&lt;code&gt;toOccurList :: MultiSet a -&amp;gt; [(a, Occur)]&lt;/code&gt;&lt;/a&gt;
+where
+&lt;a href=&#34;https://hackage.haskell.org/package/multiset-0.3.0/docs/Data-MultiSet.html#t:Occur&#34;&gt;&lt;code&gt;type Occur = Int&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toOccurList
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;sort-the-word-count-list:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Sort the word/count list&lt;/h4&gt;
+
+&lt;p&gt;We sort using the
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Schwartzian_transform&#34;&gt;&amp;ldquo;Schwartzian transform&amp;rdquo;&lt;/a&gt;
+for efficiency using
+&lt;a href=&#34;https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-List.html#v:sortOn&#34;&gt;&lt;code&gt;Data.List.sortOn&lt;/code&gt;&lt;/a&gt;
+of type &lt;code&gt;sortOn :: Ord b =&amp;gt; (a -&amp;gt; b) -&amp;gt; [a] -&amp;gt; [a]&lt;/code&gt;;
+recall we want the count (the second element of the tuple we get back
+from the multiset) to be descending.&lt;/p&gt;
+
+&lt;p&gt;Documentation of
+&lt;a href=&#34;https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Ord.html#t:Down&#34;&gt;&lt;code&gt;Data.Ord.Down&lt;/code&gt;&lt;/a&gt;
+explains how this &amp;ldquo;newtype hack&amp;rdquo; is used to change the default
+ordering comparison during a sort.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;List&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;sortOn (snd &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Down&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;make-a-report-for-each-word-count:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Make a report for each word/count&lt;/h4&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; map summarizeWordCount
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; mconcat
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;where our summarizing function, for efficiency in avoiding unnecessary
+allocations, does not construct a &lt;code&gt;Text&lt;/code&gt; but rather a
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Builder_pattern&#34;&gt;builder&lt;/a&gt;, since we
+don&amp;rsquo;t need this information for each as &lt;code&gt;Text&lt;/code&gt; but plan to combine the
+reports for all the lines into one &lt;code&gt;Text&lt;/code&gt; at the end.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;summarizeWordCount&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Occur&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyBuilder&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Builder&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;summarizeWordCount&lt;/span&gt; (word, count) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;LazyBuilder&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromLazyText word &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot; &amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; decimal count &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;(If you&amp;rsquo;re curious how the builder works, check out the
+&lt;a href=&#34;https://hackage.haskell.org/package/text-1.2.1.3/docs/src/Data-Text-Internal-Builder.html&#34;&gt;source code&lt;/a&gt;. It
+uses higher-rank types, unsafe operations, and strictness
+annotations.)&lt;/p&gt;
+
+&lt;h4 id=&#34;make-the-final-report:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Make the final report&lt;/h4&gt;
+
+&lt;p&gt;Just materialize the &lt;code&gt;Text&lt;/code&gt; from the builder:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyBuilder&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toLazyText
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;what-should-go-into-a-standard-library:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;What should go into a standard library?&lt;/h2&gt;
+
+&lt;p&gt;I mentioned that I think this should go into the standard library, for
+convenience. The argument for &lt;em&gt;not&lt;/em&gt; putting something into the
+standard library is always, everyone think their useful thing should
+be in there, but there&amp;rsquo;s no way that can happen, and so choices have
+to be made. Given that, I cannot really argue based on my own
+experience or perception of my experience that an entire community
+would benefit from my favorite things being made &amp;ldquo;standard&amp;rdquo;. I&amp;rsquo;d like
+to think that we have the technology now to collect real data to
+determine people&amp;rsquo;s real needs and change the way we make libraries
+discoverable and usable. Even something like mining Stack Overflow
+questions could bring up many interesting statistics about what people
+need. Such data gathering would not substitute for expert curation, of
+course, but surely would be useful.&lt;/p&gt;
+
+&lt;p&gt;There is another argument for not having something like multiset be
+incorporated: it&amp;rsquo;s easy to implement once you have the regular set. If
+you look at the
+&lt;a href=&#34;https://hackage.haskell.org/package/multiset-0.3.0/docs/src/Data-MultiSet.html#MultiSet&#34;&gt;source code&lt;/a&gt;,
+the following basically says it all. A multiset is just a map from a
+key to a count.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;newtype&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;MS&lt;/span&gt; { unMS &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Map&lt;/span&gt; a &lt;span style=&#34;color: #B00040&#34;&gt;Occur&lt;/span&gt; }
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Occur&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Everything else is a straightforward wrapper.&lt;/p&gt;
+
+&lt;p&gt;But that&amp;rsquo;s like saying a language should not have any syntactic
+sugar. I think &amp;ldquo;library sugar&amp;rdquo; is as valuable as syntactic
+sugar.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Multisets are useful. You could implement one yourself. Or you could
+use the &lt;code&gt;multiset&lt;/code&gt; package someone already wrote for us.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 7: semigroups; NonEmpty list and a case study of types and tests</title>
@@ -2554,6 +2829,7 @@ Haskell sort of dynamically typed with deferred type errors&lt;/a&gt;&lt;/li&gt;
 and Hayoo: MissingH, extra&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 7: &lt;a href=&#34;../blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/&#34;&gt;semigroups; NonEmpty list and
 a case study of types and tests&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 8: &lt;a href=&#34;../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/&#34;&gt;multiset; I wish this were in the standard containers package&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
@@ -3726,301 +4002,6 @@ has a sizable community revolving around it.&lt;/p&gt;
 &lt;h2 id=&#34;conclusion:eae2c8db91585e112346d13d734d08c3&#34;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;I enjoyed the presentations on music and sound, and got some ideas for stuff I might want to do myself. Another excellent session for Pittsburgh Code and Supply!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Understanding Clojure transducers through types</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/</link>
-      <pubDate>Thu, 07 Aug 2014 22:58:16 -0400</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/</guid>
-      <description>
-
-&lt;p&gt;Yesterday, Rich Hickey published a blog post, &lt;a href=&#34;http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming&#34;&gt;&amp;ldquo;Transducers are Coming&amp;rdquo;&lt;/a&gt;, which attracted a lot of attention.&lt;/p&gt;
-
-&lt;p&gt;I have a confession to make, which I have made before: I find it very difficult to understand ideas or code not presented with &lt;em&gt;types&lt;/em&gt;. So I decided that the only way I could possibly understand what &amp;ldquo;transducers&amp;rdquo; are would be to actually implement them in a typed language. I ended up doing so and am sharing my findings here.&lt;/p&gt;
-
-&lt;h2 id=&#34;vague-types-in-the-original-blog-post:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Vague types in the original blog post&lt;/h2&gt;
-
-&lt;p&gt;Rich informally gave some type signatures in his blog post:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;;;reducing function signature
-whatever, input -&amp;gt; whatever
-
-;;transducer signature
-(whatever, input -&amp;gt; whatever) -&amp;gt; (whatever, input -&amp;gt; whatever)
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;This was, unfortunately, not very helpful. It is hard to make sense of this pseudo-notation for types. What is quantified over what? And what is bound to what? I&amp;rsquo;ll explain later what I mean by these questions.&lt;/p&gt;
-
-&lt;h2 id=&#34;first-discussion-thread-i-saw:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;First discussion thread I saw&lt;/h2&gt;
-
-&lt;p&gt;There was much tweeting online about transducers after Rich Hickey&amp;rsquo;s initial announcement; the tweets did not help me, except for links posted to discussion elsewhere.&lt;/p&gt;
-
-&lt;p&gt;One of them was &lt;a href=&#34;https://news.ycombinator.com/item?id=8143905&#34;&gt;on Hacker News&lt;/a&gt;. I browsed through it but found it mostly not useful. The problem was that although a lot of interesting Haskell code was thrown around, it tended to be &lt;em&gt;related&lt;/em&gt; to transducers but not an &lt;em&gt;exact&lt;/em&gt; translation of the concept. I already had my own intuitions about transducers being related to well-known types such as &lt;a href=&#34;http://www.haskell.org/haskellwiki/Foldable_and_Traversable&#34;&gt;foldables&lt;/a&gt;, &lt;a href=&#34;http://en.wikipedia.org/wiki/Iteratee&#34;&gt;iteratees&lt;/a&gt;, &lt;a href=&#34;https://lens.github.io/&#34;&gt;lenses&lt;/a&gt;, etc. That &amp;ldquo;ordinary function composition&amp;rdquo; was involved immediately suggested the connections, because function composition is huge in these existing Haskell libraries.&lt;/p&gt;
-
-&lt;p&gt;But what I wanted was to understand transducers &lt;em&gt;as they are&lt;/em&gt;, before even thinking about generalizations and comparisons.&lt;/p&gt;
-
-&lt;h3 id=&#34;what-are-the-types:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;What are the types?&lt;/h3&gt;
-
-&lt;p&gt;Rich Hickey &lt;a href=&#34;https://news.ycombinator.com/item?id=8144385&#34;&gt;informally offered some types&lt;/a&gt; (which he said were &amp;ldquo;a la Haskell&amp;rdquo;) to try to help out:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    ;;reducing fn
-    x-&amp;gt;a-&amp;gt;x
-
-    ;;transducer fn
-    (x-&amp;gt;a-&amp;gt;x)-&amp;gt;(x-&amp;gt;b-&amp;gt;x)
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;OK, by using type variables &lt;code&gt;a&lt;/code&gt;, &lt;code&gt;b&lt;/code&gt;, and &lt;code&gt;x&lt;/code&gt;, that indicates what is bound to what. The blog post should have used this notation rather than&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;;;transducer signature
-(whatever, input -&amp;gt; whatever) -&amp;gt; (whatever, input -&amp;gt; whatever)
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;h3 id=&#34;sample-clojure-code:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Sample Clojure code&lt;/h3&gt;
-
-&lt;p&gt;He also posted some sample Clojure code:&lt;/p&gt;
-
-&lt;script src=&#34;https://gist.github.com/b5aefa622180681e1c81.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;h2 id=&#34;second-discussion-thread-i-saw:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Second discussion thread I saw&lt;/h2&gt;
-
-&lt;p&gt;Then today, I saw a discussion thread on Reddit, titled &lt;a href=&#34;http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/&#34;&gt;&amp;ldquo;Clojure&amp;rsquo;s Transducers are Perverse Lenses&amp;rdquo;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;actual-runnable-haskell-code:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Actual runnable Haskell code&lt;/h3&gt;
-
-&lt;p&gt;Rich finally posted some actual &lt;a href=&#34;http://www.reddit.com/r/haskell/comments/2cv6l4/clojures_transducers_are_perverse_lenses/&#34;&gt;type-checked, runnable Haskell code&lt;/a&gt;!&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Transducers in Haskell&lt;/span&gt;
-
-&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Original was (b -&amp;gt; a) -&amp;gt; (r -&amp;gt; a -&amp;gt; r) -&amp;gt; (r -&amp;gt; b -&amp;gt; r)&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- but Michael O&amp;#39;Keefe in comment pointed out this is misleading&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xf r (f a)
-
-&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
-&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; p xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; p a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; xf r a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; r
-
-&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
-&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl xf r (f a)
-
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- for exposition only, yes, conj is gross for lazy lists&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- in Clojure conj and left folds dominate&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;conj&lt;/span&gt; xs x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xs &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; [x]
-&lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; xf &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl (xf conj) &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt;
-
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- build any old list function with its transducer, all the same way&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]
-&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; mapping f
-
-&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a]
-&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; p &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; filtering p
-
-&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [b]
-&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; flatmapping f
-
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- again, not interesting for lists, but the same transform&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- can be put to use wherever there&amp;#39;s a step fn&lt;/span&gt;
-
-&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; (r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r)
-&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; mapping (&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; filtering even &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; flatmapping (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt; x])
-
-
-&lt;span style=&#34;color: #0000FF&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; xlist xform [&lt;span style=&#34;color: #666666&#34;&gt;1..5&lt;/span&gt;]
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;After this post, I knew it would not take me long to figure out transducers.&lt;/p&gt;
-
-&lt;h2 id=&#34;refactoring-his-haskell-code:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Refactoring his Haskell code&lt;/h2&gt;
-
-&lt;p&gt;Two things to notice about the original code:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;It has long, low-level function types rather than types that actually &lt;em&gt;name&lt;/em&gt; the concepts being discussed (&lt;em&gt;reducers&lt;/em&gt; and &lt;em&gt;transducers&lt;/em&gt;).&lt;/li&gt;
-&lt;li&gt;It uses hardcoded list types &lt;code&gt;[a]&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;type-synonyms-and-higher-rank-types:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Type synonyms and higher-rank types&lt;/h3&gt;
-
-&lt;p&gt;Defining lots and lots of types (whether synonyms or &lt;a href=&#34;http://www.haskell.org/haskellwiki/Newtype&#34;&gt;newtypes&lt;/a&gt; is standard practice when programming in a modern typed language. OK, so I defined a type synonym&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left reduce&lt;/span&gt;
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; r
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;But what about transducer? This is trickier.&lt;/p&gt;
-
-&lt;p&gt;An &lt;em&gt;invalid&lt;/em&gt; attempt at a type would be&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Illegal!&lt;/span&gt;
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; b r
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;because the type variable &lt;code&gt;r&lt;/code&gt; is not bound in the type definition. And it would be incorrect to just randomly add &lt;code&gt;r&lt;/code&gt; on the left hand side as an extra parameter to the &lt;code&gt;Transducer&lt;/code&gt; type, because in fact it is &lt;em&gt;critical&lt;/em&gt; that a transducer &lt;em&gt;does not care&lt;/em&gt; about the underlying reducer&amp;rsquo;s return type &lt;code&gt;r&lt;/code&gt;. How do we write the desired type?&lt;/p&gt;
-
-&lt;p&gt;It turns out you need &lt;a href=&#34;http://www.haskell.org/haskellwiki/Rank-N_types&#34;&gt;higher-rank types&lt;/a&gt;. Rank-1 types are not sufficient; we need a rank-2 type to quantify &lt;code&gt;r&lt;/code&gt;, to say that a transducer from &lt;code&gt;a&lt;/code&gt; to &lt;code&gt;b&lt;/code&gt; is a transformation that takes a reducer to a specific &lt;code&gt;r&lt;/code&gt; and returns another reducer to the &lt;em&gt;same&lt;/em&gt; &lt;code&gt;r&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Here&amp;#39;s where the rank-2 type is needed&lt;/span&gt;
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; forall r &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a r &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; b r
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;Now we can see more clearly some &lt;em&gt;completely generic&lt;/em&gt; ways to create a transducer:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
-&lt;span style=&#34;color: #0000FF&#34;&gt;mapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xf r (f a)
-
-&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a a
-&lt;span style=&#34;color: #0000FF&#34;&gt;filtering&lt;/span&gt; p xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; p a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; xf r a &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; r
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;h4 id=&#34;a-bit-of-history:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;A bit of history&lt;/h4&gt;
-
-&lt;p&gt;Higher-rank types are a powerful technique for expressing &amp;ldquo;hiding&amp;rdquo; of unnecessary details about types going on somewhere. My first recollection of the real world use of rank-2 types is from 1994 (the year I started using Haskell, although I did not actually use it in my work as a software engineer until 1995), when I was excited to read a paper by John Launchbury and Simon Peyton Jones that solved, using a rank-2 type, a specific, important, practical problem, &lt;a href=&#34;http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.50.3299&#34;&gt;&amp;ldquo;Lazy Functional State Threads&amp;rdquo;&lt;/a&gt;; twenty years later, their &lt;a href=&#34;http://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad-ST.html&#34;&gt;ST monad&lt;/a&gt; is still part of the standard library!&lt;/p&gt;
-
-&lt;h3 id=&#34;introducing-type-classes:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Introducing type classes&lt;/h3&gt;
-
-&lt;p&gt;Clojure uses &lt;a href=&#34;http://clojure.org/protocols&#34;&gt;protocols&lt;/a&gt; as an abstraction mechanism, and the &amp;ldquo;magic&amp;rdquo; of transducers uses protocols. In Haskell, type classes are the major abstraction mechanism (this is true of Scala also).&lt;/p&gt;
-
-&lt;p&gt;So I abstracted away from the hardcoded list-oriented functions and values in Rich Hickey&amp;rsquo;s Haskell code:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;foldl&lt;/code&gt; abstracted to a &lt;code&gt;class Foldable&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;conj&lt;/code&gt; and empty list &lt;code&gt;[]&lt;/code&gt; abstracted to a &lt;code&gt;class Conjable&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Left fold&lt;/span&gt;
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
-  fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; a (f a)
-
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
-  empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; f a
-  conj &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Reducer&lt;/span&gt; a (f a)
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;Note our reliance on transducing and reducing from one type &lt;code&gt;a&lt;/code&gt; to another, &lt;code&gt;f a&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id=&#34;foldable-constraint:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;&lt;code&gt;Foldable&lt;/code&gt; constraint&lt;/h4&gt;
-
-&lt;p&gt;Unlike &lt;code&gt;mapping&lt;/code&gt; and &lt;code&gt;filtering&lt;/code&gt;, &lt;code&gt;flatmapping&lt;/code&gt; is &lt;em&gt;not completely generic&lt;/em&gt;, because it depends on something being &lt;code&gt;Foldable&lt;/code&gt; (implementing a &lt;code&gt;fold&lt;/code&gt;):&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a
-&lt;span style=&#34;color: #0000FF&#34;&gt;flatmapping&lt;/span&gt; f xf r a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fold xf r (f a)
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;h4 id=&#34;conjable-constraint:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;&lt;code&gt;Conjable&lt;/code&gt; constraint&lt;/h4&gt;
-
-&lt;p&gt;Finally, here&amp;rsquo;s the originally list-specific code that now depends only on &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- I changed Rich Hickey&amp;#39;s code to be more general than just list&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- but accept anything Conjable&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; b a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
-&lt;span style=&#34;color: #0000FF&#34;&gt;xlist&lt;/span&gt; xf &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fold (xf conj) empty
-
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- build any old Foldable function with its transducer, all the same way&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
-&lt;span style=&#34;color: #0000FF&#34;&gt;xmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; mapping f
-
-&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a
-&lt;span style=&#34;color: #0000FF&#34;&gt;xfilter&lt;/span&gt; p &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; filtering p
-
-&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f b
-&lt;span style=&#34;color: #0000FF&#34;&gt;xflatmap&lt;/span&gt; f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; flatmapping f
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;h3 id=&#34;list-specific-stuff:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;List-specific stuff&lt;/h3&gt;
-
-&lt;p&gt;Here is the list-specific code:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Stuff specialized to lists.&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- To use another type, just make it a Foldable and Conjable.&lt;/span&gt;
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
-  fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; foldl
-
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- for exposition only, yes, conj is gross for lazy lists&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- in Clojure conj and left folds dominate&lt;/span&gt;
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
-  empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt;
-  conj xs x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xs &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; [x]
-
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Note: the type does not say anything about Foldable or Conjable,&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- even though the implementation just happens to use a list!&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Transducer&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;xform&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; mapping (&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; filtering even &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; flatmapping (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt; x])
-
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Again, this can munge anything Foldable and Conjable, not just a list.&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;munge&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; f, &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; f) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; f &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; f &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;munge&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; xlist xform
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;Notice some very important properties of this code:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;xform&lt;/code&gt; has a type that does not mention lists at all, even though it is implemented using a list and cannot compile without the list &lt;code&gt;instance&lt;/code&gt; implementations.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;munge&lt;/code&gt; also does not mention lists, and can transform anything that is &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Example:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- munge a list&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- [0,1,2,0,1,2,3,4,0,1,2,3,4,5,6]&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;example1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;]
-&lt;span style=&#34;color: #0000FF&#34;&gt;example1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; munge [&lt;span style=&#34;color: #666666&#34;&gt;1..5&lt;/span&gt;]
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;h3 id=&#34;implementing-another-type-to-illustrate-the-genericity-of-transducers:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Implementing another type to illustrate the genericity of transducers&lt;/h3&gt;
-
-&lt;p&gt;To illustrate Rich Hickey&amp;rsquo;s main point, I implemented instances of &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt; for a standard Haskell &lt;code&gt;Vector&lt;/code&gt; library as an alternate &amp;ldquo;collection-like&amp;rdquo; type.&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- For example using Vector instead of list&lt;/span&gt;
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; V
-
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Implement Foldable, Conjable type classes for Vector&lt;/span&gt;
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
-  fold &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;foldl
-
-&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Conjable&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
-  empty &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;empty
-  conj &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;snoc
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;And we can run &lt;code&gt;munge&lt;/code&gt; directly on a vector instead of a list, &lt;em&gt;without making any changes&lt;/em&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- return a vector rather than a list; note the fact that munge actually&lt;/span&gt;
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- internally uses a list&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;example2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;example2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; munge &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;enumFromN &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
-
-&lt;p&gt;This is &lt;em&gt;code reuse&lt;/em&gt; at its best.&lt;/p&gt;
-
-&lt;p&gt;Note that there is nothing that ties transducers to any concrete &amp;ldquo;collection&amp;rdquo; type. We could write instances of &lt;code&gt;Foldable&lt;/code&gt; and &lt;code&gt;Conjable&lt;/code&gt; for some kind of &amp;ldquo;channel&amp;rdquo; abstraction, for example, and instantaneously be able to munge data coming from it and to another. In fact, this is already what is done in the real world, where Haskell and Scala are used in production at places like Facebook and Twitter to efficiently handle large amounts of data.&lt;/p&gt;
-
-&lt;h2 id=&#34;my-code-repository:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;My code repository&lt;/h2&gt;
-
-&lt;p&gt;My complete code is available &lt;a href=&#34;https://github.com/FranklinChen/clojure-transducers-in-haskell&#34;&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:5a7fb7f4f2a1a2d30fdd2c73dcd9c156&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;It was pretty exciting to see the announcement of the transducers library for Clojure, because it represents a level of abstraction that I think has not been expressed much in the world of dynamically typed languages, although the techniques are two decades old in the Haskell community in a statically typed setting. And I hope that I was able to convey the sheer elegance of Haskell as a way to express interesting types with practical ramifications for abstraction and pluggability.&lt;/p&gt;
 </description>
     </item>
     

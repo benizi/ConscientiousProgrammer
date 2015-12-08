@@ -79,6 +79,50 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/">24 days of Hackage, 2015: day 8: multiset; I wish this were in the standard containers package</a>
+      </h1>
+      <span class="post-date">Dec 8, 2015 &middot; 6 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/multiset">multiset</a><a class="label" href="http://ConscientiousProgrammer.com/categories/containers">containers</a><a class="label" href="http://ConscientiousProgrammer.com/categories/text">text</a><a class="label" href="http://ConscientiousProgrammer.com/categories/sorting">sorting</a><a class="label" href="http://ConscientiousProgrammer.com/categories/builder-pattern">builder pattern</a>
+      </span>
+      
+      <h2 id="table-of-contents-for-the-whole-series:2fc978f0a24d72120da8b6255ca644c0">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-8:2fc978f0a24d72120da8b6255ca644c0">Day 8</h2>
+
+<p>I don&rsquo;t remember when it was, but one day I got sick and tired of
+reimplementing in Haskell the same boilerplate logic when keeping
+track of many objects classified under the same key. This is a data
+structure known as a
+<a href="https://en.wikipedia.org/wiki/Multiset">multiset</a>, also known as a
+<em>bag</em>, in contrast with a regular <em>set</em>, which only keeps track of one
+unique object per key.</p>
+
+<p>I was surprised that by the lack of a multiset module in the standard
+<a href="https://hackage.haskell.org/package/containers"><code>containers</code></a>
+package, although not completely surprised because you can implement a
+multiset on top of a set, so in some sense a multiset is
+&ldquo;superfluous&rdquo;. Still, I was used to having a multiset available
+without any work (however trivial), because of long using a <a href="http://www.cplusplus.com/reference/set/multiset/">multiset
+in C++</a>, which I&rsquo;d
+used back in the 1990s from the original implementation of the
+<a href="https://en.wikipedia.org/wiki/Standard_Template_Library">Standard Template Library</a>,
+and also Python&rsquo;s collections library has a
+<a href="https://docs.python.org/2/library/collections.html#collections.Counter"><code>Counter</code></a>
+class which serves a similar purpose.</p>
+
+<p>Today I&rsquo;ll briefly show some code using <code>multiset</code> and talk about why
+something like this maybe should be in the standard library.</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/">24 days of Hackage, 2015: day 7: semigroups; NonEmpty list and a case study of types and tests</a>
       </h1>
       <span class="post-date">Dec 7, 2015 &middot; 16 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/#disqus_thread">Comments</a>
@@ -392,6 +436,7 @@ Haskell sort of dynamically typed with deferred type errors</a></li>
 and Hayoo: MissingH, extra</a></li>
 <li>Day 7: <a href="./blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/">semigroups; NonEmpty list and
 a case study of types and tests</a></li>
+<li>Day 8: <a href="./blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/">multiset; I wish this were in the standard containers package</a></li>
 </ul>
 
 <h2 id="day-1:c37cfe20acfff0cff8579f026185f721">Day 1</h2>
@@ -512,33 +557,6 @@ source software. However, his Web site <code>http://www.canb.auug.org.au/~miller
 
 
       <a href="http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2015/05/31/why-i-switched-from-octopress-2-to-hugo/">Why I switched from Octopress 2 to Hugo</a>
-      </h1>
-      <span class="post-date">May 31, 2015 &middot; 6 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/05/31/why-i-switched-from-octopress-2-to-hugo/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/static-site-generator">static site generator</a><a class="label" href="http://ConscientiousProgrammer.com/categories/octopress">Octopress</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hugo">Hugo</a><a class="label" href="http://ConscientiousProgrammer.com/categories/jekyll">Jekyll</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hakyll">Hakyll</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ruby">Ruby</a><a class="label" href="http://ConscientiousProgrammer.com/categories/go">Go</a><a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/performance">performance</a><a class="label" href="http://ConscientiousProgrammer.com/categories/cache">cache</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pandoc">Pandoc</a><a class="label" href="http://ConscientiousProgrammer.com/categories/markdown">Markdown</a><a class="label" href="http://ConscientiousProgrammer.com/categories/perl">Perl</a>
-      </span>
-      
-      <p>Until now, I haven&rsquo;t been publishing anything on any of my three blogs
-for half a year now. There are many reasons, but one of them was that
-I wanted to migrate away from
-<a href="http://octopress.org/">Octopress</a> 2. Octopress 2 is ancient and slow
-and unmaintained, and I&rsquo;d been waiting for
-<a href="https://github.com/octopress/octopress">Octopress 3</a> for over three
-years
-<a href="http://octopress.org/2015/01/15/octopress-3.0-is-coming/">to arrive</a>,
-so when I heard that Octopress 3 was finally going to be officially
-announced at <a href="http://jekyllconf.com/">JekyllConf</a>, I decided it was
-time to migrate my blogs, to Octopress 3 or
-<a href="http://jekyllrb.com/">Jekyll</a>, or something else entirely.</p>
-
-      <a href="http://conscientiousprogrammer.com/blog/2015/05/31/why-i-switched-from-octopress-2-to-hugo/">Read On &rarr;</a>
       
     </div>
     

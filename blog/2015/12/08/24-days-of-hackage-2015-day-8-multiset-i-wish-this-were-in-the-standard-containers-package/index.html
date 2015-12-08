@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>24 days of Hackage, 2015: day 8: multiset; I wish this were in the standard containers package &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+        
+        <h1>The Conscientious Programmer</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
+    </ul>
+
+    
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>24 days of Hackage, 2015: day 8: multiset; I wish this were in the standard containers package</h1>
+    
+
+<h2 id="table-of-contents-for-the-whole-series:2fc978f0a24d72120da8b6255ca644c0">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-8:2fc978f0a24d72120da8b6255ca644c0">Day 8</h2>
+
+<p>I don&rsquo;t remember when it was, but one day I got sick and tired of
+reimplementing in Haskell the same boilerplate logic when keeping
+track of many objects classified under the same key. This is a data
+structure known as a
+<a href="https://en.wikipedia.org/wiki/Multiset">multiset</a>, also known as a
+<em>bag</em>, in contrast with a regular <em>set</em>, which only keeps track of one
+unique object per key.</p>
+
+<p>I was surprised that by the lack of a multiset module in the standard
+<a href="https://hackage.haskell.org/package/containers"><code>containers</code></a>
+package, although not completely surprised because you can implement a
+multiset on top of a set, so in some sense a multiset is
+&ldquo;superfluous&rdquo;. Still, I was used to having a multiset available
+without any work (however trivial), because of long using a <a href="http://www.cplusplus.com/reference/set/multiset/">multiset
+in C++</a>, which I&rsquo;d
+used back in the 1990s from the original implementation of the
+<a href="https://en.wikipedia.org/wiki/Standard_Template_Library">Standard Template Library</a>,
+and also Python&rsquo;s collections library has a
+<a href="https://docs.python.org/2/library/collections.html#collections.Counter"><code>Counter</code></a>
+class which serves a similar purpose.</p>
+
+<p>Today I&rsquo;ll briefly show some code using <code>multiset</code> and talk about why
+something like this maybe should be in the standard library.</p>
+
+<h2 id="the-classic-example-of-multiset-use:2fc978f0a24d72120da8b6255ca644c0">The classic example of multiset use</h2>
+
+<p>Multisets are often used for counting things. Word count is a
+time-honored use case for multisets, so let&rsquo;s implement a very simple
+word count program that break up text into &ldquo;words&rdquo; separated by
+spaces, while treating non-letters as spaces, count the words, and
+finally output a report which consists of a line for each word and its
+count, in descending order of count but ascending order of word.</p>
+
+<p>For a bit more realism and efficiency even for a toy program, let&rsquo;s
+have the input not be <code>String</code>, but the <code>Text</code> type from
+<code>Data.Text.Lazy</code> module of the
+<a href="https://hackage.haskell.org/package/text"><code>text</code></a> package. Let&rsquo;s also
+build up the final <code>Text</code> report efficiently.</p>
+
+<h3 id="a-sample-hspec-test:2fc978f0a24d72120da8b6255ca644c0">A sample HSpec test</h3>
+
+<p>Here&rsquo;s a sample test (for fun you may wish to write a reasonable
+QuickCheck generators and tests for this problem). I apologize for the
+illegible Haskell multiline string literal; I wish Haskell had
+multiline string literals, interpolation, and all that good stuff
+other languages have!</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE OverloadedStrings #-}</span>
+
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">MultisetExampleSpec</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">MultisetExample</span> (<span style="color: #0000FF">wordCount</span>)
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> (<span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>, <span style="color: #0000FF">shouldBe</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec.QuickCheck</span> (<span style="color: #0000FF">prop</span>)
+
+<span style="color: #408080; font-style: italic">-- | Required for auto-discovery.</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;multiset&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    it <span style="color: #BA2121">&quot;wordCount&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #008000; font-weight: bold">let</span> input <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&quot;I have so   many words; words I so like to have words for!?&quot;</span>
+      <span style="color: #008000; font-weight: bold">let</span> expected <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&quot;words 3</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">I 2</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">have 2</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">so 2</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">for 1</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">like 1</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">many 1</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">to 1</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>
+      wordCount input `shouldBe` expected
+</pre></div>
+
+
+<h3 id="the-solution:2fc978f0a24d72120da8b6255ca644c0">The solution</h3>
+
+<p>The code almost writes itself from a natural language description of
+the problem.</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE OverloadedStrings #-}</span>
+
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">MultisetExample</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.MultiSet</span> <span style="color: #008000; font-weight: bold">as</span> MultiSet
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.Text.Lazy</span> <span style="color: #008000; font-weight: bold">as</span> LazyText
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.Text.Lazy.Builder</span> <span style="color: #008000; font-weight: bold">as</span> LazyBuilder
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Text.Lazy.Builder.Int</span> (<span style="color: #0000FF">decimal</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Ord</span> (<span style="color: #B00040">Down</span>(<span style="color: #666666">..</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.Char</span> <span style="color: #008000; font-weight: bold">as</span> Char
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.List</span> <span style="color: #008000; font-weight: bold">as</span> List
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Arrow</span> ((<span style="color: #666666">&gt;&gt;&gt;</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Monoid</span> ((<span style="color: #666666">&lt;&gt;</span>))
+
+<span style="color: #0000FF">wordCount</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">LazyText</span><span style="color: #666666">.</span><span style="color: #B00040">Text</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">LazyText</span><span style="color: #666666">.</span><span style="color: #B00040">Text</span>
+<span style="color: #0000FF">wordCount</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #B00040">LazyText</span><span style="color: #666666">.</span>map replaceNonLetterWithSpace
+  <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">LazyText</span><span style="color: #666666">.</span>words
+  <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">MultiSet</span><span style="color: #666666">.</span>fromList
+  <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">MultiSet</span><span style="color: #666666">.</span>toOccurList
+  <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">List</span><span style="color: #666666">.</span>sortOn (snd <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">Down</span>)
+  <span style="color: #666666">&gt;&gt;&gt;</span> map summarizeWordCount
+  <span style="color: #666666">&gt;&gt;&gt;</span> mconcat
+  <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">LazyBuilder</span><span style="color: #666666">.</span>toLazyText
+
+<span style="color: #0000FF">replaceNonLetterWithSpace</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Char</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Char</span>
+<span style="color: #0000FF">replaceNonLetterWithSpace</span> c
+  <span style="color: #666666">|</span> <span style="color: #B00040">Char</span><span style="color: #666666">.</span>isLetter c <span style="color: #AA22FF; font-weight: bold">=</span> c
+  <span style="color: #666666">|</span> otherwise <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&#39; &#39;</span>
+
+<span style="color: #0000FF">summarizeWordCount</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">LazyText</span><span style="color: #666666">.</span><span style="color: #B00040">Text</span>, <span style="color: #B00040">MultiSet</span><span style="color: #666666">.</span><span style="color: #B00040">Occur</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">LazyBuilder</span><span style="color: #666666">.</span><span style="color: #B00040">Builder</span>
+<span style="color: #0000FF">summarizeWordCount</span> (word, count) <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #B00040">LazyBuilder</span><span style="color: #666666">.</span>fromLazyText word <span style="color: #666666">&lt;&gt;</span> <span style="color: #BA2121">&quot; &quot;</span> <span style="color: #666666">&lt;&gt;</span> decimal count <span style="color: #666666">&lt;&gt;</span> <span style="color: #BA2121">&quot;</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>
+</pre></div>
+
+
+<p>Let&rsquo;s go through this step by step. Note that we&rsquo;re using my favorite
+left-to-right composition operator <code>&gt;&gt;&gt;</code> as opposed to the
+right-to-left composition operator <code>.</code> because it looks much more
+natural to me for pipelines.</p>
+
+<h3 id="get-the-words-from-text:2fc978f0a24d72120da8b6255ca644c0">Get the words from text</h3>
+
+<p>First, replace all non-letters with spaces for the purpose of this
+problem, then use the <code>words</code> from <code>Data.Text.Lazy</code> (which we imported
+as <code>LazyText</code>) to break up into words (real tokenization would have
+more sophisticated rules). By the way, this is done very efficiently
+because GHC performs
+<a href="https://hackage.haskell.org/package/text-1.2.1.3/docs/Data-Text-Lazy.html#g:1">fusion</a>
+in order to do the replacement and the breaking up into words in a
+single pass, rather than two as written in the code. Fusion is a
+really, really cool optimization that we rely on for our Haskell code
+to be super-efficient:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">wordCount</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #B00040">LazyText</span><span style="color: #666666">.</span>map replaceNonLetterWithSpace
+  <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">LazyText</span><span style="color: #666666">.</span>words
+</pre></div>
+</p>
+
+<h3 id="put-the-words-into-a-multiset:2fc978f0a24d72120da8b6255ca644c0">Put the words into a multiset</h3>
+
+<p>Next, we get the list words into a multiset. <code>MultiSet</code> conveniently
+has a constructor for that, <a href="https://hackage.haskell.org/package/multiset-0.3.0/docs/Data-MultiSet.html#v:fromList"><code>fromList :: Ord a =&gt; [a] -&gt; MultiSet a</code></a>,
+and it does this in <code>O(n log n)</code> time because of the use of comparison
+through <code>Ord</code> to construct a tree (exercise for you if you wish: use
+one of the hash table libraries in Hackage to create a
+<code>MultiHashSet</code> instead).</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">MultiSet</span><span style="color: #666666">.</span>fromList
+</pre></div>
+</p>
+
+<h4 id="count-the-words:2fc978f0a24d72120da8b6255ca644c0">Count the words</h4>
+
+<p>We grab a list of word/count pairs (in ascending order of words) using
+<a href="https://hackage.haskell.org/package/multiset-0.3.0/docs/Data-MultiSet.html#v:toOccurList"><code>toOccurList :: MultiSet a -&gt; [(a, Occur)]</code></a>
+where
+<a href="https://hackage.haskell.org/package/multiset-0.3.0/docs/Data-MultiSet.html#t:Occur"><code>type Occur = Int</code></a>:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">MultiSet</span><span style="color: #666666">.</span>toOccurList
+</pre></div>
+</p>
+
+<h4 id="sort-the-word-count-list:2fc978f0a24d72120da8b6255ca644c0">Sort the word/count list</h4>
+
+<p>We sort using the
+<a href="https://en.wikipedia.org/wiki/Schwartzian_transform">&ldquo;Schwartzian transform&rdquo;</a>
+for efficiency using
+<a href="https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-List.html#v:sortOn"><code>Data.List.sortOn</code></a>
+of type <code>sortOn :: Ord b =&gt; (a -&gt; b) -&gt; [a] -&gt; [a]</code>;
+recall we want the count (the second element of the tuple we get back
+from the multiset) to be descending.</p>
+
+<p>Documentation of
+<a href="https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Ord.html#t:Down"><code>Data.Ord.Down</code></a>
+explains how this &ldquo;newtype hack&rdquo; is used to change the default
+ordering comparison during a sort.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">List</span><span style="color: #666666">.</span>sortOn (snd <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">Down</span>)
+</pre></div>
+</p>
+
+<h4 id="make-a-report-for-each-word-count:2fc978f0a24d72120da8b6255ca644c0">Make a report for each word/count</h4>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #666666">&gt;&gt;&gt;</span> map summarizeWordCount
+  <span style="color: #666666">&gt;&gt;&gt;</span> mconcat
+</pre></div>
+</p>
+
+<p>where our summarizing function, for efficiency in avoiding unnecessary
+allocations, does not construct a <code>Text</code> but rather a
+<a href="https://en.wikipedia.org/wiki/Builder_pattern">builder</a>, since we
+don&rsquo;t need this information for each as <code>Text</code> but plan to combine the
+reports for all the lines into one <code>Text</code> at the end.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">summarizeWordCount</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">LazyText</span><span style="color: #666666">.</span><span style="color: #B00040">Text</span>, <span style="color: #B00040">MultiSet</span><span style="color: #666666">.</span><span style="color: #B00040">Occur</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">LazyBuilder</span><span style="color: #666666">.</span><span style="color: #B00040">Builder</span>
+<span style="color: #0000FF">summarizeWordCount</span> (word, count) <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #B00040">LazyBuilder</span><span style="color: #666666">.</span>fromLazyText word <span style="color: #666666">&lt;&gt;</span> <span style="color: #BA2121">&quot; &quot;</span> <span style="color: #666666">&lt;&gt;</span> decimal count <span style="color: #666666">&lt;&gt;</span> <span style="color: #BA2121">&quot;</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>
+</pre></div>
+</p>
+
+<p>(If you&rsquo;re curious how the builder works, check out the
+<a href="https://hackage.haskell.org/package/text-1.2.1.3/docs/src/Data-Text-Internal-Builder.html">source code</a>. It
+uses higher-rank types, unsafe operations, and strictness
+annotations.)</p>
+
+<h4 id="make-the-final-report:2fc978f0a24d72120da8b6255ca644c0">Make the final report</h4>
+
+<p>Just materialize the <code>Text</code> from the builder:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">  <span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #B00040">LazyBuilder</span><span style="color: #666666">.</span>toLazyText
+</pre></div>
+</p>
+
+<h2 id="what-should-go-into-a-standard-library:2fc978f0a24d72120da8b6255ca644c0">What should go into a standard library?</h2>
+
+<p>I mentioned that I think this should go into the standard library, for
+convenience. The argument for <em>not</em> putting something into the
+standard library is always, everyone think their useful thing should
+be in there, but there&rsquo;s no way that can happen, and so choices have
+to be made. Given that, I cannot really argue based on my own
+experience or perception of my experience that an entire community
+would benefit from my favorite things being made &ldquo;standard&rdquo;. I&rsquo;d like
+to think that we have the technology now to collect real data to
+determine people&rsquo;s real needs and change the way we make libraries
+discoverable and usable. Even something like mining Stack Overflow
+questions could bring up many interesting statistics about what people
+need. Such data gathering would not substitute for expert curation, of
+course, but surely would be useful.</p>
+
+<p>There is another argument for not having something like multiset be
+incorporated: it&rsquo;s easy to implement once you have the regular set. If
+you look at the
+<a href="https://hackage.haskell.org/package/multiset-0.3.0/docs/src/Data-MultiSet.html#MultiSet">source code</a>,
+the following basically says it all. A multiset is just a map from a
+key to a count.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">newtype</span> <span style="color: #B00040">MultiSet</span> a <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">MS</span> { unMS <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Map</span> a <span style="color: #B00040">Occur</span> }
+
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Occur</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Int</span>
+</pre></div>
+</p>
+
+<p>Everything else is a straightforward wrapper.</p>
+
+<p>But that&rsquo;s like saying a language should not have any syntactic
+sugar. I think &ldquo;library sugar&rdquo; is as valuable as syntactic
+sugar.</p>
+
+<h2 id="conclusion:2fc978f0a24d72120da8b6255ca644c0">Conclusion</h2>
+
+<p>Multisets are useful. You could implement one yourself. Or you could
+use the <code>multiset</code> package someone already wrote for us.</p>
+
+<h2 id="all-the-code:2fc978f0a24d72120da8b6255ca644c0">All the code</h2>
+
+<p>All my code for my article series are at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/08\/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package\/';
+    var disqus_title = '24 days of Hackage, 2015: day 8: multiset; I wish this were in the standard containers package';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/08\/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+
