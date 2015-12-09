@@ -111,8 +111,12 @@ feel sad if I picked a library that is problematic for Windows users.
 Recently, out came
 [`pcre-heavy`](https://hackage.haskell.org/package/pcre-heavy), a
 wrapper around `pcre-light` that uses
-[Template Haskell](https://wiki.haskell.org/Template_Haskell), and I
-liked it, so I use it.
+[Template Haskell](https://wiki.haskell.org/Template_Haskell), the GHC
+extension that is "macros for Haskell", enabling compile-time
+metaprogramming (see the
+[2014 Day of Hackage article about Template Haskell](https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html).
+
+I liked it, so I use it.
 
 ## Example program using `pcre-heavy`
 
