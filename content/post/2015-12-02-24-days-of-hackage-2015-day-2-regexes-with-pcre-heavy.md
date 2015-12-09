@@ -437,6 +437,11 @@ libraries that now includes `pcre-heavy`.
 Also, I showed how to add two lines to the top of a Haskell program to
 turn it into a Stack script.
 
+### (Update from day 9)
+
+[Day 9](/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/)
+covers more libraries based on Template Haskell.
+
 ## All the code
 
 All my code for my article series are at

@@ -68,6 +68,32 @@ illegible Haskell multiline string literal; I wish Haskell had
 multiline string literals, interpolation, and all that good stuff
 other languages have!
 
+#### (A tangent from day 9)
+
+A number of people commented that I made a misleading remark above
+about string support in Haskell. It is true that the core Haskell
+syntax for strings is limited, but it is easy to work around that with
+Template Haskell, so see
+[Day 9](/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/)
+for how to do this. I totally recommend using one of the libraries
+mentioned.
+
+In brief, the ugly string literal I wrote can be written
+
+{{< highlight haskell >}}
+      let expected = [hereLit|words 3
+I 2
+have 2
+so 2
+for 1
+like 1
+many 1
+to 1
+|]
+{{< /highlight >}}
+
+#### The code
+
 {{< highlight haskell >}}
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -139,7 +165,28 @@ summarizeWordCount (word, count) =
 Let's go through this step by step. Note that we're using my favorite
 left-to-right composition operator `>>>` as opposed to the
 right-to-left composition operator `.` because it looks much more
-natural to me for pipelines.
+natural to me for pipelines, and because my description below top to
+bottom matches this syntax.
+
+#### (Update on syntax)
+
+Here is the pipeline part of the code in more traditional
+right-to-left syntax. I think it's important to be able to read and
+write in both styles:
+
+{{< highlight haskell >}}
+-- | Same thing, using traditional right-to-left composition.
+wordCountTraditional :: LazyText.Text -> LazyText.Text
+wordCountTraditional =
+  LazyBuilder.toLazyText
+  . mconcat
+  . map summarizeWordCount
+  . List.sortOn (Down . snd)
+  . MultiSet.toOccurList
+  . MultiSet.fromList
+  . LazyText.words
+  . LazyText.map replaceNonLetterWithSpace
+{{< /highlight >}}
 
 ### Get the words from text
 
