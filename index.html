@@ -79,9 +79,52 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/">24 days of Hackage, 2015: day 9: Template Haskell goodies: here, interpolate, file-embed</a>
+      </h1>
+      <span class="post-date">Dec 9, 2015 &middot; 3 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/template-haskell">Template Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/here">here</a><a class="label" href="http://ConscientiousProgrammer.com/categories/interpolate">interpolate</a><a class="label" href="http://ConscientiousProgrammer.com/categories/file-embed">file-embed</a><a class="label" href="http://ConscientiousProgrammer.com/categories/strings">strings</a>
+      </span>
+      
+      <h2 id="table-of-contents-for-the-whole-series:8eaddb149d77042401ce1f324517c8ca">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-9:8eaddb149d77042401ce1f324517c8ca">Day 9</h2>
+
+<p>A stray negative remark I made on
+<a href="./blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/">day 9</a>
+regarding Haskell and its unergonomic support for multi-line string
+literals and interpolation led to good comments that I was being
+misleading because there actually exist good solutions. I already use
+one of them, but had not brought them into the picture because I
+didn&rsquo;t want to be distracting in that post by bringing in other
+libraries, especially since they are implemented in
+<a href="https://wiki.haskell.org/Template_Haskell">Template Haskell</a>, the GHC
+extension that is &ldquo;macros for Haskell&rdquo;, enabling compile-time
+metaprogramming (see the
+<a href="https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html">2014 Day of Hackage article about Template Haskell</a>. On
+<a href="./blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/">day 2</a>
+I already introduced a package that uses Template Haskell, so it looks
+like I&rsquo;ll be continuing to do that today.</p>
+
+<p>These packages require only that you turn on <code>QuasiQuotes</code> in modules
+where you use them, so our example source code will have the header</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE QuasiQuotes #-}</span>
+</pre></div>
+
+
+      <a href="http://conscientiousprogrammer.com/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/">24 days of Hackage, 2015: day 8: multiset; I wish this were in the standard containers package</a>
       </h1>
-      <span class="post-date">Dec 8, 2015 &middot; 6 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/#disqus_thread">Comments</a>
+      <span class="post-date">Dec 8, 2015 &middot; 7 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/#disqus_thread">Comments</a>
       
       <br/>
       <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/multiset">multiset</a><a class="label" href="http://ConscientiousProgrammer.com/categories/containers">containers</a><a class="label" href="http://ConscientiousProgrammer.com/categories/text">text</a><a class="label" href="http://ConscientiousProgrammer.com/categories/sorting">sorting</a><a class="label" href="http://ConscientiousProgrammer.com/categories/builder-pattern">builder pattern</a>
@@ -437,6 +480,7 @@ and Hayoo: MissingH, extra</a></li>
 <li>Day 7: <a href="./blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/">semigroups; NonEmpty list and
 a case study of types and tests</a></li>
 <li>Day 8: <a href="./blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/">multiset; I wish this were in the standard containers package</a></li>
+<li>Day 9: <a href="./blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/">Template Haskell goodies: here, interpolate, file-embed</a></li>
 </ul>
 
 <h2 id="day-1:c37cfe20acfff0cff8579f026185f721">Day 1</h2>
@@ -502,61 +546,6 @@ people want to see. So I will summarize the feedback I got (fifteen
 participants filled out feedback forms).</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2015/10/07/report-on-my-talk-a-gentle-conceptual-introduction-to-functional-programming/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/">Aegis and Cook: what happens when an open source developer dies?</a>
-      </h1>
-      <span class="post-date">Jun 16, 2015 &middot; 3 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/aegis">Aegis</a><a class="label" href="http://ConscientiousProgrammer.com/categories/cook">Cook</a><a class="label" href="http://ConscientiousProgrammer.com/categories/peter-miller">Peter Miller</a><a class="label" href="http://ConscientiousProgrammer.com/categories/version-control">version control</a><a class="label" href="http://ConscientiousProgrammer.com/categories/make">Make</a><a class="label" href="http://ConscientiousProgrammer.com/categories/bors">bors</a><a class="label" href="http://ConscientiousProgrammer.com/categories/rust">Rust</a><a class="label" href="http://ConscientiousProgrammer.com/categories/continuous-integration">continuous integration</a>
-      </span>
-      
-      <p>By sheer accident, while I was looking for something else online, I
-came across a Web site for <a href="http://aegis.sourceforge.net/">Aegis</a>, a
-distributed version control system I used at work back in 1995-1997. I
-was surprised this software was still alive after twenty years. A lot
-of software has a very short life span, and since I had not heard
-anything about Aegis all this time, I would have guessed that it had
-died.</p>
-
-<p>I remembered that we had used this software along with another tool
-the author developed, called
-<a href="https://ftp.gnu.org/non-gnu/cook.README">Cook</a>, which was a
-replacement for
-<a href="https://en.wikipedia.org/wiki/Make_%28software%29">Make</a>. I was
-unsuccessful in locating any official Web site for Cook, so I assume
-it is more or less dead.</p>
-
-<p>Meanwhile, I found by coincidence that actually, the author,
-<a href="https://en.wikipedia.org/wiki/Peter_Miller_%28software_engineer%29">Peter Miller</a>,
-died less than a year ago (July 2014). There was enough memory of him
-that someone wrote that Wikipedia page on his contributions to open
-source software. However, his Web site <code>http://www.canb.auug.org.au/~millerp/
-</code>, sadly, has died with him, and with that, the site he had on Cook.</p>
-
-<p>But we know that the Web is &ldquo;forever&rdquo;, right? Let&rsquo;s see.</p>
-
-<p>I found this old photo, for example.</p>
-
-
-<figure >
-    
-        <img src="http://web.archive.org/web/20090111230031/http://miller.emu.id.au/pmiller/pmiller-1993-128.png" />
-    
-    
-    <figcaption>
-        <h4>Peter Miller, 1993</h4>
-        
-    </figcaption>
-    
-</figure>
-
-
-      <a href="http://conscientiousprogrammer.com/blog/2015/06/16/aegis-and-cook-what-happens-when-an-open-source-developer-dies/">Read On &rarr;</a>
       
     </div>
     

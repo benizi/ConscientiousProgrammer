@@ -131,6 +131,32 @@ illegible Haskell multiline string literal; I wish Haskell had
 multiline string literals, interpolation, and all that good stuff
 other languages have!</p>
 
+<h4 id="a-tangent-from-day-9:2fc978f0a24d72120da8b6255ca644c0">(A tangent from day 9)</h4>
+
+<p>A number of people commented that I made a misleading remark above
+about string support in Haskell. It is true that the core Haskell
+syntax for strings is limited, but it is easy to work around that with
+Template Haskell, so see
+<a href="../../../../../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/">Day 9</a>
+for how to do this. I totally recommend using one of the libraries
+mentioned.</p>
+
+<p>In brief, the ugly string literal I wrote can be written</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">      <span style="color: #008000; font-weight: bold">let</span> expected <span style="color: #AA22FF; font-weight: bold">=</span> [hereLit<span style="color: #666666">|</span>words <span style="color: #666666">3</span>
+<span style="color: #B00040">I</span> <span style="color: #666666">2</span>
+<span style="color: #0000FF">have</span> <span style="color: #666666">2</span>
+<span style="color: #0000FF">so</span> <span style="color: #666666">2</span>
+<span style="color: #0000FF">for</span> <span style="color: #666666">1</span>
+<span style="color: #0000FF">like</span> <span style="color: #666666">1</span>
+<span style="color: #0000FF">many</span> <span style="color: #666666">1</span>
+<span style="color: #0000FF">to</span> <span style="color: #666666">1</span>
+<span style="color: #666666">|</span>]
+</pre></div>
+
+
+<h4 id="the-code:2fc978f0a24d72120da8b6255ca644c0">The code</h4>
+
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE OverloadedStrings #-}</span>
 
 <span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">MultisetExampleSpec</span> <span style="color: #008000; font-weight: bold">where</span>
@@ -202,7 +228,28 @@ the problem.</p>
 <p>Let&rsquo;s go through this step by step. Note that we&rsquo;re using my favorite
 left-to-right composition operator <code>&gt;&gt;&gt;</code> as opposed to the
 right-to-left composition operator <code>.</code> because it looks much more
-natural to me for pipelines.</p>
+natural to me for pipelines, and because my description below top to
+bottom matches this syntax.</p>
+
+<h4 id="update-on-syntax:2fc978f0a24d72120da8b6255ca644c0">(Update on syntax)</h4>
+
+<p>Here is the pipeline part of the code in more traditional
+right-to-left syntax. I think it&rsquo;s important to be able to read and
+write in both styles:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | Same thing, using traditional right-to-left composition.</span>
+<span style="color: #0000FF">wordCountTraditional</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">LazyText</span><span style="color: #666666">.</span><span style="color: #B00040">Text</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">LazyText</span><span style="color: #666666">.</span><span style="color: #B00040">Text</span>
+<span style="color: #0000FF">wordCountTraditional</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #B00040">LazyBuilder</span><span style="color: #666666">.</span>toLazyText
+  <span style="color: #666666">.</span> mconcat
+  <span style="color: #666666">.</span> map summarizeWordCount
+  <span style="color: #666666">.</span> <span style="color: #B00040">List</span><span style="color: #666666">.</span>sortOn (<span style="color: #B00040">Down</span> <span style="color: #666666">.</span> snd)
+  <span style="color: #666666">.</span> <span style="color: #B00040">MultiSet</span><span style="color: #666666">.</span>toOccurList
+  <span style="color: #666666">.</span> <span style="color: #B00040">MultiSet</span><span style="color: #666666">.</span>fromList
+  <span style="color: #666666">.</span> <span style="color: #B00040">LazyText</span><span style="color: #666666">.</span>words
+  <span style="color: #666666">.</span> <span style="color: #B00040">LazyText</span><span style="color: #666666">.</span>map replaceNonLetterWithSpace
+</pre></div>
+</p>
 
 <h3 id="get-the-words-from-text:2fc978f0a24d72120da8b6255ca644c0">Get the words from text</h3>
 

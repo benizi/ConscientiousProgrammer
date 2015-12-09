@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>24 days of Hackage, 2015: day 9: Template Haskell goodies: here, interpolate, file-embed &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+        
+        <h1>The Conscientious Programmer</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
+    </ul>
+
+    
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>24 days of Hackage, 2015: day 9: Template Haskell goodies: here, interpolate, file-embed</h1>
+    
+
+<h2 id="table-of-contents-for-the-whole-series:8eaddb149d77042401ce1f324517c8ca">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-9:8eaddb149d77042401ce1f324517c8ca">Day 9</h2>
+
+<p>A stray negative remark I made on
+<a href="../../../../../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/">day 9</a>
+regarding Haskell and its unergonomic support for multi-line string
+literals and interpolation led to good comments that I was being
+misleading because there actually exist good solutions. I already use
+one of them, but had not brought them into the picture because I
+didn&rsquo;t want to be distracting in that post by bringing in other
+libraries, especially since they are implemented in
+<a href="https://wiki.haskell.org/Template_Haskell">Template Haskell</a>, the GHC
+extension that is &ldquo;macros for Haskell&rdquo;, enabling compile-time
+metaprogramming (see the
+<a href="https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html">2014 Day of Hackage article about Template Haskell</a>. On
+<a href="../../../../../blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/">day 2</a>
+I already introduced a package that uses Template Haskell, so it looks
+like I&rsquo;ll be continuing to do that today.</p>
+
+<p>These packages require only that you turn on <code>QuasiQuotes</code> in modules
+where you use them, so our example source code will have the header</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE QuasiQuotes #-}</span>
+</pre></div>
+
+
+<h2 id="better-string-literals-with-here:8eaddb149d77042401ce1f324517c8ca">Better string literals with <code>here</code></h2>
+
+<p>I&rsquo;ve been using <a href="http://hackage.haskell.org/package/here"><code>here</code></a> for
+&ldquo;here&rdquo; strings and interpolation. Check out the
+<a href="https://github.com/tmhedberg/here">documentation</a> for full details,
+but for context, here are some examples using data we already have.</p>
+
+<p>Imports:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.String.Here</span> (<span style="color: #0000FF">hereLit</span>, <span style="color: #0000FF">here</span>, <span style="color: #0000FF">hereFile</span>, <span style="color: #0000FF">i</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> (<span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>, <span style="color: #0000FF">shouldBe</span>)
+</pre></div>
+
+
+<p>A trimmed multi-line literal, where leading and trailing white space
+are removed, making it particularly easy to just copy and paste blocks
+of text in between the <code>here</code> quasiquoter brackets.</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    it <span style="color: #BA2121">&quot;makes trimmed multi-line strings prettier&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #408080; font-style: italic">-- In this case we want trimming.</span>
+      <span style="color: #008000; font-weight: bold">let</span> original <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&quot;words 3</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">I 2</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">have 2</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">so 2</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">for 1</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">like 1</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">many 1</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">to 1&quot;</span>
+      <span style="color: #008000; font-weight: bold">let</span> trimmedHereDoc <span style="color: #AA22FF; font-weight: bold">=</span> [here<span style="color: #666666">|</span>
+<span style="color: #0000FF">words</span> <span style="color: #666666">3</span>
+<span style="color: #B00040">I</span> <span style="color: #666666">2</span>
+<span style="color: #0000FF">have</span> <span style="color: #666666">2</span>
+<span style="color: #0000FF">so</span> <span style="color: #666666">2</span>
+<span style="color: #0000FF">for</span> <span style="color: #666666">1</span>
+<span style="color: #0000FF">like</span> <span style="color: #666666">1</span>
+<span style="color: #0000FF">many</span> <span style="color: #666666">1</span>
+<span style="color: #0000FF">to</span> <span style="color: #666666">1</span>
+<span style="color: #666666">|</span>]
+      trimmedHereDoc `shouldBe` original
+</pre></div>
+
+
+<p>For more control (typically what I do for small examples), use <code>hereLit</code>:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    it <span style="color: #BA2121">&quot;makes literal multi-line strings prettier&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #408080; font-style: italic">-- In this case assume we want the trailing newline.</span>
+      <span style="color: #008000; font-weight: bold">let</span> original <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&quot;words 3</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">I 2</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">have 2</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">so 2</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">for 1</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">like 1</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">many 1</span><span style="color: #BB6622; font-weight: bold">\n\</span>
+<span style="color: #BB6622; font-weight: bold">                     \</span><span style="color: #BA2121">to 1</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>
+      <span style="color: #008000; font-weight: bold">let</span> literalHereDoc <span style="color: #AA22FF; font-weight: bold">=</span> [hereLit<span style="color: #666666">|</span>words <span style="color: #666666">3</span>
+<span style="color: #B00040">I</span> <span style="color: #666666">2</span>
+<span style="color: #0000FF">have</span> <span style="color: #666666">2</span>
+<span style="color: #0000FF">so</span> <span style="color: #666666">2</span>
+<span style="color: #0000FF">for</span> <span style="color: #666666">1</span>
+<span style="color: #0000FF">like</span> <span style="color: #666666">1</span>
+<span style="color: #0000FF">many</span> <span style="color: #666666">1</span>
+<span style="color: #0000FF">to</span> <span style="color: #666666">1</span>
+<span style="color: #666666">|</span>]
+      literalHereDoc `shouldBe` original
+</pre></div>
+</p>
+
+<p>But why stop at copy/paste? Much better to embed an actual file with
+<code>hereFile</code>. We use our own little HSpec discovery <code>test/Spec.hs</code> file
+as an example:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    it <span style="color: #BA2121">&quot;allows file embed&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      [hereFile<span style="color: #666666">|</span>test<span style="color: #666666">/</span><span style="color: #B00040">Spec</span><span style="color: #666666">.</span>hs<span style="color: #666666">|</span>] `shouldBe`
+        <span style="color: #BA2121">&quot;{-# OPTIONS_GHC -F -pgmF hspec-discover #-}&quot;</span>
+</pre></div>
+</p>
+
+<p>Finally, some interpolation, using <code>i</code>. Although it is very
+convenient, I have some reservations about overusing this quasiquoter,
+because it is engaging in &ldquo;stringly typed&rdquo; programming that just makes
+use of anything that implements <code>Show</code> and <code>Typeable</code>. It is easy to
+accidentally write code that compiles but does the wrong thing when
+operating at this implicit level. Still, it&rsquo;s useful:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    it <span style="color: #BA2121">&quot;makes interpolation prettier&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #008000; font-weight: bold">let</span> list <span style="color: #AA22FF; font-weight: bold">=</span> [<span style="color: #666666">1</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>, <span style="color: #666666">2</span>]
+      <span style="color: #008000; font-weight: bold">let</span> num <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #666666">42</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>
+      [i<span style="color: #666666">|</span>number<span style="color: #B00040">:</span> <span style="color: #666666">$</span>{num}, stuff<span style="color: #B00040">:</span> <span style="color: #666666">$</span>{map (<span style="color: #666666">+1</span>) list}<span style="color: #666666">|</span>] `shouldBe`
+        <span style="color: #BA2121">&quot;number: 42, stuff: [2,3]&quot;</span>
+</pre></div>
+</p>
+
+<h2 id="interpolate:8eaddb149d77042401ce1f324517c8ca"><code>interpolate</code></h2>
+
+<p><a href="http://hackage.haskell.org/package/interpolate"><code>interpolate</code></a> is
+another package that does the same sort of thing. You might like its
+<a href="http://hackage.haskell.org/package/interpolate-0.1.0/docs/Data-String-Interpolate-Util.html"><code>unindent</code></a>
+feature, which facilitates the copy/paste mode of embedding blocks of
+text into your code.</p>
+
+<h2 id="file-embed:8eaddb149d77042401ce1f324517c8ca"><code>file-embed</code></h2>
+
+<p><a href="http://hackage.haskell.org/package/file-embed"><code>file-embed</code></a> is also
+useful, because you can use it to embed contents of entire
+directories. It also has a unique feature of injection into an
+executable.</p>
+
+<h2 id="conclusion:8eaddb149d77042401ce1f324517c8ca">Conclusion</h2>
+
+<p>You don&rsquo;t have to settle for the built-in syntax for creating strings
+out of literals in Haskell. With libraries using Template Haskell, you
+can use much prettier representations of strings. Check out <code>here</code>,
+<code>interpolate</code>, and <code>file-embed</code>.</p>
+
+<h2 id="all-the-code:8eaddb149d77042401ce1f324517c8ca">All the code</h2>
+
+<p>All my code for my article series are at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/09\/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed\/';
+    var disqus_title = '24 days of Hackage, 2015: day 9: Template Haskell goodies: here, interpolate, file-embed';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/09\/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

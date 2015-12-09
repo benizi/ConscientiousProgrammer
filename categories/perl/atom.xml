@@ -701,8 +701,12 @@ feel sad if I picked a library that is problematic for Windows users.&lt;/p&gt;
 &lt;p&gt;Recently, out came
 &lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy&#34;&gt;&lt;code&gt;pcre-heavy&lt;/code&gt;&lt;/a&gt;, a
 wrapper around &lt;code&gt;pcre-light&lt;/code&gt; that uses
-&lt;a href=&#34;https://wiki.haskell.org/Template_Haskell&#34;&gt;Template Haskell&lt;/a&gt;, and I
-liked it, so I use it.&lt;/p&gt;
+&lt;a href=&#34;https://wiki.haskell.org/Template_Haskell&#34;&gt;Template Haskell&lt;/a&gt;, the GHC
+extension that is &amp;ldquo;macros for Haskell&amp;rdquo;, enabling compile-time
+metaprogramming (see the
+&lt;a href=&#34;https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html&#34;&gt;2014 Day of Hackage article about Template Haskell&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I liked it, so I use it.&lt;/p&gt;
 
 &lt;h2 id=&#34;example-program-using-pcre-heavy:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Example program using &lt;code&gt;pcre-heavy&lt;/code&gt;&lt;/h2&gt;
 
@@ -1023,6 +1027,11 @@ libraries that now includes &lt;code&gt;pcre-heavy&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;Also, I showed how to add two lines to the top of a Haskell program to
 turn it into a Stack script.&lt;/p&gt;
+
+&lt;h3 id=&#34;update-from-day-9:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;(Update from day 9)&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;../../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/&#34;&gt;Day 9&lt;/a&gt;
+covers more libraries based on Template Haskell.&lt;/p&gt;
 
 &lt;h2 id=&#34;all-the-code:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;All the code&lt;/h2&gt;
 

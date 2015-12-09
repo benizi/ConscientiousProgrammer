@@ -6,8 +6,166 @@
     <description>Recent content in Haskell on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 08 Dec 2015 08:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Wed, 09 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/categories/haskell/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 9: Template Haskell goodies: here, interpolate, file-embed</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/</link>
+      <pubDate>Wed, 09 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:8eaddb149d77042401ce1f324517c8ca&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-9:8eaddb149d77042401ce1f324517c8ca&#34;&gt;Day 9&lt;/h2&gt;
+
+&lt;p&gt;A stray negative remark I made on
+&lt;a href=&#34;../../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/&#34;&gt;day 9&lt;/a&gt;
+regarding Haskell and its unergonomic support for multi-line string
+literals and interpolation led to good comments that I was being
+misleading because there actually exist good solutions. I already use
+one of them, but had not brought them into the picture because I
+didn&amp;rsquo;t want to be distracting in that post by bringing in other
+libraries, especially since they are implemented in
+&lt;a href=&#34;https://wiki.haskell.org/Template_Haskell&#34;&gt;Template Haskell&lt;/a&gt;, the GHC
+extension that is &amp;ldquo;macros for Haskell&amp;rdquo;, enabling compile-time
+metaprogramming (see the
+&lt;a href=&#34;https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html&#34;&gt;2014 Day of Hackage article about Template Haskell&lt;/a&gt;. On
+&lt;a href=&#34;../../blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/&#34;&gt;day 2&lt;/a&gt;
+I already introduced a package that uses Template Haskell, so it looks
+like I&amp;rsquo;ll be continuing to do that today.&lt;/p&gt;
+
+&lt;p&gt;These packages require only that you turn on &lt;code&gt;QuasiQuotes&lt;/code&gt; in modules
+where you use them, so our example source code will have the header&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE QuasiQuotes #-}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;better-string-literals-with-here:8eaddb149d77042401ce1f324517c8ca&#34;&gt;Better string literals with &lt;code&gt;here&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve been using &lt;a href=&#34;http://hackage.haskell.org/package/here&#34;&gt;&lt;code&gt;here&lt;/code&gt;&lt;/a&gt; for
+&amp;ldquo;here&amp;rdquo; strings and interpolation. Check out the
+&lt;a href=&#34;https://github.com/tmhedberg/here&#34;&gt;documentation&lt;/a&gt; for full details,
+but for context, here are some examples using data we already have.&lt;/p&gt;
+
+&lt;p&gt;Imports:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.String.Here&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;hereLit&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;here&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hereFile&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;i&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A trimmed multi-line literal, where leading and trailing white space
+are removed, making it particularly easy to just copy and paste blocks
+of text in between the &lt;code&gt;here&lt;/code&gt; quasiquoter brackets.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;makes trimmed multi-line strings prettier&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- In this case we want trimming.&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; original &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;words 3&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;I 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;have 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;so 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;for 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;like 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;many 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;to 1&amp;quot;&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; trimmedHereDoc &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [here&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;words&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;have&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;so&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;like&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;many&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;]
+      trimmedHereDoc `shouldBe` original
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;For more control (typically what I do for small examples), use &lt;code&gt;hereLit&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;makes literal multi-line strings prettier&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- In this case assume we want the trailing newline.&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; original &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;words 3&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;I 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;have 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;so 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;for 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;like 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;many 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;to 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; literalHereDoc &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [hereLit&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;words &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;have&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;so&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;like&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;many&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;]
+      literalHereDoc `shouldBe` original
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;But why stop at copy/paste? Much better to embed an actual file with
+&lt;code&gt;hereFile&lt;/code&gt;. We use our own little HSpec discovery &lt;code&gt;test/Spec.hs&lt;/code&gt; file
+as an example:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;allows file embed&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      [hereFile&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;test&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;hs&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;] `shouldBe`
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{-# OPTIONS_GHC -F -pgmF hspec-discover #-}&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Finally, some interpolation, using &lt;code&gt;i&lt;/code&gt;. Although it is very
+convenient, I have some reservations about overusing this quasiquoter,
+because it is engaging in &amp;ldquo;stringly typed&amp;rdquo; programming that just makes
+use of anything that implements &lt;code&gt;Show&lt;/code&gt; and &lt;code&gt;Typeable&lt;/code&gt;. It is easy to
+accidentally write code that compiles but does the wrong thing when
+operating at this implicit level. Still, it&amp;rsquo;s useful:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;makes interpolation prettier&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; list &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;]
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; num &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;42&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+      [i&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;number&lt;span style=&#34;color: #B00040&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{num}, stuff&lt;span style=&#34;color: #B00040&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{map (&lt;span style=&#34;color: #666666&#34;&gt;+1&lt;/span&gt;) list}&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;] `shouldBe`
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;number: 42, stuff: [2,3]&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;interpolate:8eaddb149d77042401ce1f324517c8ca&#34;&gt;&lt;code&gt;interpolate&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://hackage.haskell.org/package/interpolate&#34;&gt;&lt;code&gt;interpolate&lt;/code&gt;&lt;/a&gt; is
+another package that does the same sort of thing. You might like its
+&lt;a href=&#34;http://hackage.haskell.org/package/interpolate-0.1.0/docs/Data-String-Interpolate-Util.html&#34;&gt;&lt;code&gt;unindent&lt;/code&gt;&lt;/a&gt;
+feature, which facilitates the copy/paste mode of embedding blocks of
+text into your code.&lt;/p&gt;
+
+&lt;h2 id=&#34;file-embed:8eaddb149d77042401ce1f324517c8ca&#34;&gt;&lt;code&gt;file-embed&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://hackage.haskell.org/package/file-embed&#34;&gt;&lt;code&gt;file-embed&lt;/code&gt;&lt;/a&gt; is also
+useful, because you can use it to embed contents of entire
+directories. It also has a unique feature of injection into an
+executable.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:8eaddb149d77042401ce1f324517c8ca&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;You don&amp;rsquo;t have to settle for the built-in syntax for creating strings
+out of literals in Haskell. With libraries using Template Haskell, you
+can use much prettier representations of strings. Check out &lt;code&gt;here&lt;/code&gt;,
+&lt;code&gt;interpolate&lt;/code&gt;, and &lt;code&gt;file-embed&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:8eaddb149d77042401ce1f324517c8ca&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 8: multiset; I wish this were in the standard containers package</title>
@@ -69,6 +227,32 @@ QuickCheck generators and tests for this problem). I apologize for the
 illegible Haskell multiline string literal; I wish Haskell had
 multiline string literals, interpolation, and all that good stuff
 other languages have!&lt;/p&gt;
+
+&lt;h4 id=&#34;a-tangent-from-day-9:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;(A tangent from day 9)&lt;/h4&gt;
+
+&lt;p&gt;A number of people commented that I made a misleading remark above
+about string support in Haskell. It is true that the core Haskell
+syntax for strings is limited, but it is easy to work around that with
+Template Haskell, so see
+&lt;a href=&#34;../../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/&#34;&gt;Day 9&lt;/a&gt;
+for how to do this. I totally recommend using one of the libraries
+mentioned.&lt;/p&gt;
+
+&lt;p&gt;In brief, the ugly string literal I wrote can be written&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; expected &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [hereLit&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;words &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;have&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;so&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;like&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;many&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4 id=&#34;the-code:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;The code&lt;/h4&gt;
 
 &lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE OverloadedStrings #-}&lt;/span&gt;
 
@@ -141,7 +325,28 @@ the problem.&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s go through this step by step. Note that we&amp;rsquo;re using my favorite
 left-to-right composition operator &lt;code&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/code&gt; as opposed to the
 right-to-left composition operator &lt;code&gt;.&lt;/code&gt; because it looks much more
-natural to me for pipelines.&lt;/p&gt;
+natural to me for pipelines, and because my description below top to
+bottom matches this syntax.&lt;/p&gt;
+
+&lt;h4 id=&#34;update-on-syntax:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;(Update on syntax)&lt;/h4&gt;
+
+&lt;p&gt;Here is the pipeline part of the code in more traditional
+right-to-left syntax. I think it&amp;rsquo;s important to be able to read and
+write in both styles:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Same thing, using traditional right-to-left composition.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;wordCountTraditional&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;wordCountTraditional&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;LazyBuilder&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toLazyText
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; mconcat
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; map summarizeWordCount
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;List&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;sortOn (&lt;span style=&#34;color: #B00040&#34;&gt;Down&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; snd)
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toOccurList
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;words
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;map replaceNonLetterWithSpace
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;get-the-words-from-text:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Get the words from text&lt;/h3&gt;
 
@@ -2477,8 +2682,12 @@ feel sad if I picked a library that is problematic for Windows users.&lt;/p&gt;
 &lt;p&gt;Recently, out came
 &lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy&#34;&gt;&lt;code&gt;pcre-heavy&lt;/code&gt;&lt;/a&gt;, a
 wrapper around &lt;code&gt;pcre-light&lt;/code&gt; that uses
-&lt;a href=&#34;https://wiki.haskell.org/Template_Haskell&#34;&gt;Template Haskell&lt;/a&gt;, and I
-liked it, so I use it.&lt;/p&gt;
+&lt;a href=&#34;https://wiki.haskell.org/Template_Haskell&#34;&gt;Template Haskell&lt;/a&gt;, the GHC
+extension that is &amp;ldquo;macros for Haskell&amp;rdquo;, enabling compile-time
+metaprogramming (see the
+&lt;a href=&#34;https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html&#34;&gt;2014 Day of Hackage article about Template Haskell&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I liked it, so I use it.&lt;/p&gt;
 
 &lt;h2 id=&#34;example-program-using-pcre-heavy:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Example program using &lt;code&gt;pcre-heavy&lt;/code&gt;&lt;/h2&gt;
 
@@ -2800,6 +3009,11 @@ libraries that now includes &lt;code&gt;pcre-heavy&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Also, I showed how to add two lines to the top of a Haskell program to
 turn it into a Stack script.&lt;/p&gt;
 
+&lt;h3 id=&#34;update-from-day-9:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;(Update from day 9)&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;../../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/&#34;&gt;Day 9&lt;/a&gt;
+covers more libraries based on Template Haskell.&lt;/p&gt;
+
 &lt;h2 id=&#34;all-the-code:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;All the code&lt;/h2&gt;
 
 &lt;p&gt;All my code for my article series are at
@@ -2830,6 +3044,7 @@ and Hayoo: MissingH, extra&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 7: &lt;a href=&#34;../../blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/&#34;&gt;semigroups; NonEmpty list and
 a case study of types and tests&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 8: &lt;a href=&#34;../../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/&#34;&gt;multiset; I wish this were in the standard containers package&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 9: &lt;a href=&#34;../../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/&#34;&gt;Template Haskell goodies: here, interpolate, file-embed&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
@@ -4226,150 +4441,6 @@ You ordered NULL items.
 &lt;p&gt;In part 2 of this series, I will expand on different design choices even in the situation we just examined, especially in the face of continued evolution in which there are multiple domain classes to be turned into strings.&lt;/p&gt;
 
 &lt;p&gt;Finally, there actually are quite a few languages that don&amp;rsquo;t have this particular &lt;code&gt;toString&lt;/code&gt; problem, but some have analogues to a lesser degree. Part 3 of this series will discuss the different design choices in the languages or in the standard libraries or idioms. Examples will be drawn from C, C++, Haskell, Go, Standard ML, OCaml, Rust, and JavaScript.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>OpenHack Pittsburgh: learning Elixir test-driven and package-publishing</title>
-      <link>http://conscientiousprogrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/</link>
-      <pubDate>Mon, 26 Aug 2013 22:09:00 +0000</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2013/08/26/openhack-pittsburgh-learning-elixir-test-driven-and-package-publishing/</guid>
-      <description>
-
-&lt;p&gt;It&amp;rsquo;s been a long time since I went to an &lt;a href=&#34;http://openhack.github.io/pittsburgh/&#34;&gt;OpenHack Pittsburgh&lt;/a&gt; meeting. The last time was &lt;a href=&#34;http://franklinchen.com/blog/2013/03/25/openhack-pittsburgh-exploring-scala-odds-and-ends/&#34;&gt;five months ago&lt;/a&gt;. On June 24, there was an &lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby/events/120200292/&#34;&gt;OpenHack Pittsburgh&lt;/a&gt; held at &lt;a href=&#34;http://www.4moms.com/&#34;&gt;4moms&lt;/a&gt;, but I really needed to stay home and take it easy that evening, because of my busy schedule later in the week, including attending a &lt;a href=&#34;../../blog/2013/06/25/pittsburgh-java-user-group-building-and-evolving-a-java-api/&#34;&gt;PittJUG meeting&lt;/a&gt; and preparing a &lt;a href=&#34;../../blog/2013/06/26/pittsburgh-python-night-of-the-favorite-module/&#34;&gt;Pittsburgh Python talk&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.meetup.com/pittsburgh-ruby/events/120201842/&#34;&gt;This August meeting of OpenHack Pittsburgh&lt;/a&gt; was held at &lt;a href=&#34;http://www.modcloth.com/&#34;&gt;ModCloth&lt;/a&gt;, which I had never been to. It&amp;rsquo;s in Crafton, which is a place I&amp;rsquo;ve never been before, nearly half an hour drive from Pittsburgh. Because of worries about driving there near rush hour after work, I probably would not have signed up to attend had it not been for &lt;a href=&#34;http://justinxreese.com/&#34;&gt;Justin&lt;/a&gt;, the organizer of OpenHack Pittsburgh.&lt;/p&gt;
-
-&lt;p&gt;What happened was that he asked for feedback about who was planning to work on what, and said he planned to learn some &lt;a href=&#34;http://elixir-lang.org/&#34;&gt;Elixir&lt;/a&gt;, a fairly new programming language built on top of the &lt;a href=&#34;http://www.erlang.org/&#34;&gt;Erlang&lt;/a&gt; runtime. Since this language had been on my list of things to look into, I decided that learning loves company, so I proposed to learn some Elixir in a test-driven way!&lt;/p&gt;
-
-&lt;p&gt;What does that mean?&lt;/p&gt;
-
-&lt;h2 id=&#34;how-to-learn-a-programming-language:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;How to learn a programming language&lt;/h2&gt;
-
-&lt;p&gt;I have written code in probably around fifty (50) programming languages. I&amp;rsquo;m not kidding, and I&amp;rsquo;m not proud, but this is simply a fact of my having done programming since 1982, thirty-one (31!!) years ago. Let&amp;rsquo;s face it: languages come and go. I have personally sat at an IBM &lt;a href=&#34;http://en.wikipedia.org/wiki/Keypunch&#34;&gt;keypunch&lt;/a&gt; machine punching out cards for my COBOL and Fortran code.&lt;/p&gt;
-
-&lt;p&gt;As with human languages, the fact is that to be truly productive in a language requires much more than learning some syntax and semantics. It requires actually writing and running and fixing code, and in the context of a realistic project.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve learned through trial and error that the most common ways of learning a programming language, like the most common ways of learning human languages (other than one&amp;rsquo;s first language), are terribly inefficient and misleading, resulting in minimal competence. I mean, reading through books, typing into a REPL, submitting a single file to a compiler or interpreter, etc.&lt;/p&gt;
-
-&lt;p&gt;I feel that we should learn programming languages using a variety of approaches. Yes, the academic bottom-up semantics-based approach is critical in the long run, to avoid wasting a lot of time on pointless misunderstandings. Exploration in a REPL can be very rewarding. But I think what is often missing is the &lt;em&gt;biggest possible picture&lt;/em&gt;: immediately seeing how to write a program that is integrated with a test framework, uses libraries, is exportable and publishable publicly as a library, can be submitted to a continuous integration server, is editable in a decent editor or IDE, etc.&lt;/p&gt;
-
-&lt;p&gt;Without seeing the biggest possible picture, one usually gets a horribly inaccurate picture of what it is like to program in a particular language ecosystem. (I will be writing more about this subject of pedagogy later.)&lt;/p&gt;
-
-&lt;h2 id=&#34;my-proposal:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;My proposal&lt;/h2&gt;
-
-&lt;p&gt;The last couple of languages I have learned in recent years, I slowly came to work with in a more efficient way than in the past, because I focused on matters such as testability. In particular, as I grew to wholly adopt TDD when writing any code at all in any language, it became clear to me that the best way to learn a new language must be in a test-driven way.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s an analogy: I believe the best way to learn a human language is to dive into how to be able to converse in some coherent way right off the bat. &lt;a href=&#34;http://www.fluentin3months.com/4-hour/&#34;&gt;Tim Ferriss and others&lt;/a&gt; have exploited this idea to &lt;em&gt;drive&lt;/em&gt; the learning of what is most relevant in &lt;a href=&#34;http://www.fourhourworkweek.com/blog/2007/11/07/how-to-learn-but-not-master-any-language-in-1-hour-plus-a-favor/&#34;&gt;grammar&lt;/a&gt; and &lt;a href=&#34;http://www.fourhourworkweek.com/blog/2009/01/20/learning-language/&#34;&gt;vocabulary&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In the past, I learned human languages in a terrible way, taking lots of courses, but never actually getting fluent in everyday use. This is how we tend to learn &amp;ldquo;foreign&amp;rdquo; programming languages. My proposal is that learning a new programming language should involve getting as quickly as possible up to speed on a &lt;em&gt;minimum viable publishable library&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;That the software artifact should be a &lt;em&gt;library&lt;/em&gt;, and not just some executable program, is vital, because it means having to adhere by whatever standards apply to real-world API design in the language ecosystem, producing something that client code can import and call.&lt;/p&gt;
-
-&lt;p&gt;That it should be &lt;em&gt;publishable&lt;/em&gt; is vital because it means adhering to standards of testing, of discovery through metadata, and enabling easy use by a client.&lt;/p&gt;
-
-&lt;h2 id=&#34;my-concrete-example-with-learning-elixir-tonight:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;My concrete example with learning Elixir tonight&lt;/h2&gt;
-
-&lt;h3 id=&#34;prior-background-in-erlang-and-elixir:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Prior background in Erlang and Elixir&lt;/h3&gt;
-
-&lt;p&gt;I went to OpenHack Pittsburgh &lt;em&gt;never&lt;/em&gt; having yet read any Elixir language material, never having written Elixir code, not even &amp;ldquo;hello, world&amp;rdquo;. The only things I had done before tonight:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;I first heard of Erlang nearly two decades ago, and when I saw it, I was turned off by the Prolog-style syntax, and it didn&amp;rsquo;t seem relevant to anything I was doing at the time, so I ignored it.&lt;/li&gt;
-&lt;li&gt;I intended to learn some Erlang earlier this year, but made little progress before putting it aside: I went to the free book &lt;a href=&#34;http://learnyousomeerlang.com/&#34;&gt;&amp;ldquo;Learn You Some Erlang for Great Good!&amp;rdquo;&lt;/a&gt; and downloaded the code and &lt;a href=&#34;https://github.com/FranklinChen/learn-you-some-erlang&#34;&gt;got it to compile&lt;/a&gt;, but did not proceed any further.&lt;/li&gt;
-&lt;li&gt;I installed Elixir on my Mac &lt;a href=&#34;http://elixir-lang.org/getting_started/1.html&#34;&gt;using Homebrew&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;I installed an &lt;a href=&#34;https://github.com/elixir-lang/emacs-elixir&#34;&gt;Emacs Elixir mode&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;I made a note of a free online book &lt;a href=&#34;http://chimera.labs.oreilly.com/books/1234000001642&#34;&gt;&amp;ldquo;Etudes for Elixir&amp;rdquo;&lt;/a&gt; and checked out the GitHub repository, but did not look at the book or code.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;find-a-testing-framework:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Find a testing framework&lt;/h3&gt;
-
-&lt;p&gt;Upon arrival at ModCloth, getting pizza to eat, and plugging in my MacBook and connecting to the guest WiFi, the first thing I did was search for a testing framework for Elixir.&lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s 2013, not 1993, so it is hard to convince me to invest any time at all in learning to operate in a language ecosystem that does not have at least a de facto standard testing framework. For every language that I currently actively use for writing serious programs, I operate with TDD. Some examples of languages and the test frameworks I currently use for them:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;C/C++: &lt;a href=&#34;https://code.google.com/p/googletest/&#34;&gt;googletest&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Clojure: &lt;a href=&#34;https://github.com/marick/Midje&#34;&gt;Midje&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Haskell: &lt;a href=&#34;http://hspec.github.io/&#34;&gt;HSpec&lt;/a&gt; and &lt;a href=&#34;http://www.haskell.org/haskellwiki/Introduction_to_QuickCheck2&#34;&gt;QuickCheck&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Java or Scala: &lt;a href=&#34;http://specs2.org/&#34;&gt;Specs2&lt;/a&gt; and &lt;a href=&#34;http://www.scalacheck.org/&#34;&gt;ScalaCheck&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;JavaScript: &lt;a href=&#34;http://pivotal.github.io/jasmine/&#34;&gt;Jasmine&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Perl: &lt;a href=&#34;http://search.cpan.org/~mschwern/Test-Simple-0.98/lib/Test/More.pm&#34;&gt;Test::More&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Python: &lt;a href=&#34;http://pytest.org/&#34;&gt;pytest&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Ruby: &lt;a href=&#34;http://rspec.info/&#34;&gt;RSpec&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Racket: &lt;a href=&#34;http://docs.racket-lang.org/rackunit/&#34;&gt;RackUnit&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Well, first Web search hit for Elixir and unit testing was &lt;a href=&#34;http://elixir-lang.org/getting_started/ex_unit/1.html&#34;&gt;ExUnit&lt;/a&gt;, so that was encouraging.&lt;/p&gt;
-
-&lt;p&gt;Justin was still stuck installing Elixir, so we started exploring Elixir together off my laptop.&lt;/p&gt;
-
-&lt;h3 id=&#34;one-test-file:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;One test file&lt;/h3&gt;
-
-&lt;p&gt;The first thing I did after discovering ExUnit was to copy and paste the code for a sample test into Emacs and save it into a file &lt;code&gt;test_hello.exs&lt;/code&gt;, see that the Elixir mode was working (with syntax highlighting), and figure out how to run the test: &lt;code&gt;$ elixir test_hello.exs&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;It worked!&lt;/p&gt;
-
-&lt;p&gt;Then we explored adding more tests, changing some assertions, and learning as went, by looking up the Elixir documentation. For example, Elixir uses an interesting callback mechanism for cleanly passing &amp;ldquo;setup&amp;rdquo; state to tests inside a single test case. Also, &lt;code&gt;assert&lt;/code&gt; and &lt;code&gt;test&lt;/code&gt; are &lt;a href=&#34;http://en.wikipedia.org/wiki/Macro_%28computer_science%29#Syntactic_macros&#34;&gt;syntactic macros&lt;/a&gt;, enabling them to do magic to analyze expressions, hence the support of natural assertion syntax (which &lt;a href=&#34;../../blog/2013/07/11/pittsburgh-ruby-lightning-talk-night/&#34;&gt;I like a lot better than special syntax&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;After writing some failing tests involving arithmetic and making them pass, I wrote a division by zero test. I was intrigued that not only did it fail, as expected, but also the compiler warned ahead of time that an exception was going to be raised. Nice. In any case, I learned how to make an assertion of the raising of an exception. This is very important. We should always pay attention to &lt;a href=&#34;http://franklinchen.com/blog/2013/06/01/report-on-the-second-pittsburgh-techfest-2013/&#34;&gt;testing the sad paths&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;We saw in the documentation for ExUnit that there was a way to mark a test case as being OK to run concurrently with others. Great! These days there is no excuse not to be able to run tests concurrently. So I wrote another test case, which I put in the same source file (for the moment), and I wanted to see for myself that concurrency was happening. I wanted to call some kind of &amp;ldquo;sleep&amp;rdquo; function. To do that, I did a Web search, and found that Erlang comes with &lt;code&gt;sleep&lt;/code&gt; in the &lt;code&gt;timer&lt;/code&gt; module. I found out how to call Erlang from Elixir, and it worked!&lt;/p&gt;
-
-&lt;h3 id=&#34;more-than-one-source-file:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;More than one source file&lt;/h3&gt;
-
-&lt;p&gt;The next obvious step was to write a test for code that did not yet exist, but was to be written outside the test source file. For that, I had to figure out how to define a module and import it. OK, but then there&amp;rsquo;s the question of file organization. Hmm.&lt;/p&gt;
-
-&lt;p&gt;At this point, the only reasonable thing to do (and which in retrospect should have been done first) was to find out what the &amp;ldquo;standard&amp;rdquo; way of organizing a project&amp;rsquo;s source files is supposed to be, and what the standard way to build everything is.&lt;/p&gt;
-
-&lt;p&gt;A Web search quickly came up with &lt;a href=&#34;http://elixir-lang.org/getting_started/mix/1.html&#34;&gt;Mix&lt;/a&gt;. Awesome, the Elixir people are serious about real software development! Mix turns out to be inspired by Clojure&amp;rsquo;s &lt;a href=&#34;https://github.com/technomancy/leiningen&#34;&gt;Leiningen&lt;/a&gt;, which of course I use to start any new Clojure project. &lt;code&gt;$ mix new hello&lt;/code&gt; did the trick, creating the scaffolding for a new Elixir project.&lt;/p&gt;
-
-&lt;p&gt;I refactored our existing &lt;code&gt;test_hello.exs&lt;/code&gt; file into two files (one for each test case) in the &lt;code&gt;test&lt;/code&gt; directory, then wrote a module &lt;code&gt;hello.ex&lt;/code&gt; into &lt;code&gt;lib&lt;/code&gt;. A failed test, then making it succeed, and finally I wrote my first non-test code in Elixir!&lt;/p&gt;
-
-&lt;p&gt;Running tests is very easy once you are using Mix. Just &lt;code&gt;$ mix test&lt;/code&gt; does it.&lt;/p&gt;
-
-&lt;h3 id=&#34;packaging-for-publshing:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Packaging for publshing&lt;/h3&gt;
-
-&lt;p&gt;At this point, I decided I wanted to create an actual Elixir package to publish.&lt;/p&gt;
-
-&lt;p&gt;So I did a Web search to find out whether there was a standard repository and how to publish to it.&lt;/p&gt;
-
-&lt;p&gt;Here we go, &lt;a href=&#34;http://expm.co/&#34;&gt;Expm&lt;/a&gt;!&lt;/p&gt;
-
-&lt;p&gt;I installed the package manager, set up my user name and password, and went to work on a simple package to publish.&lt;/p&gt;
-
-&lt;p&gt;I saw that nobody had yet contributed an implementation of &lt;a href=&#34;http://franklinchen.com/blog/2012/03/14/for-real-geeks-today-is-not-pi-day-but-half-tau-day/&#34;&gt;tau&lt;/a&gt;, so I quickly created a tau library with Mix, did &lt;code&gt;$ expm new&lt;/code&gt; to create a &lt;code&gt;package.exs&lt;/code&gt; template, filled it out, wrote an ExUnit test that passed, completed the &lt;code&gt;README.md&lt;/code&gt;, and just as OpenHack Pittsburgh was officially closing for the evening, I successfully published &lt;a href=&#34;http://expm.co/tau&#34;&gt;my tau package&lt;/a&gt;!&lt;/p&gt;
-
-&lt;p&gt;Actually, I accidentally screwed up the first time, forgetting to change all the fields of the template &lt;code&gt;package.exs&lt;/code&gt; and ending up published &lt;code&gt;yourlib&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Oh, and I committed my project in Git and pushed &lt;a href=&#34;https://github.com/franklinchen/tau&#34;&gt;to GitHub&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;some-haskell-stuff:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Some Haskell stuff&lt;/h2&gt;
-
-&lt;p&gt;Steve McCarthy of &lt;a href=&#34;http://www.spacefinity.com/&#34;&gt;Spacefinity&lt;/a&gt; had announced, in the introduction at the beginning of the evening when each of us stood up to say what we planned to work on, that he wanted to do more with the &lt;a href=&#34;http://www.haskell.org/cabal/&#34;&gt;Cabal&lt;/a&gt; package manager for Haskell, so I spent a little bit of time getting him going by pointing him toward a sample Haskell code repository I initially &lt;a href=&#34;http://franklinchen.com/blog/2012/11/05/the-start-of-a-local-haskell-study-group.markdown/&#34;&gt;set up last year when some friends were interested in getting into Haskell&lt;/a&gt;; sadly, we&amp;rsquo;ve all been too busy for Haskell, so I&amp;rsquo;ve let the project rot, in the sense that my configuration file is not optimally organized and also there have been updates in the test framework world in Haskell since then.&lt;/p&gt;
-
-&lt;p&gt;Anyway, here&amp;rsquo;s my &lt;a href=&#34;https://github.com/FranklinChen/project-euler-haskell&#34;&gt;&amp;ldquo;Project Euler in Haskell&amp;rdquo; repository&lt;/a&gt;. I plan to get around to improving it.&lt;/p&gt;
-
-&lt;h2 id=&#34;thanks:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Thanks&lt;/h2&gt;
-
-&lt;p&gt;Thanks to ModCloth for providing the space, pizza, cookies, and WiFi!&lt;/p&gt;
-
-&lt;p&gt;A big thank-you to Justin for providing the inspiration for me to try this experiment in learning!&lt;/p&gt;
-
-&lt;p&gt;And thanks to Steve McCarthy for getting me to drag up an old Haskell project and making me think that I should soon update it to be a better example.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;Tonight was the first time I ever started learning a new programming language, wrote unit tests right off the bat with proper project organization and also published a library immediately.&lt;/p&gt;
-
-&lt;p&gt;Of course, there is much more to go in actually really learning and using Elixir, but as a first step in showing that Elixir has a viable ecosystem, I think the experiment was a success. My next steps in continuing to learn Elixir would include writing tests in conjunction with a deep dive into the actual semantics of the language. There is no substitute for the latter; the alternative is dangerously making assumptions based on superficial syntactic similarity with other languages (such as Ruby).&lt;/p&gt;
-
-&lt;h3 id=&#34;update-of-2013-08-27:1ce2624ff25ef568d351a0712ca69fa2&#34;&gt;(Update of 2013-08-27)&lt;/h3&gt;
-
-&lt;p&gt;One thing I didn&amp;rsquo;t get around to was setting up &lt;a href=&#34;http://travis-ci.org/&#34;&gt;Travis&lt;/a&gt; continuous integration. I believe this should also be part of the story in getting up and running in a new programming language environment.&lt;/p&gt;
-
-&lt;p&gt;So I did a Web search and figured out how to create a suitable &lt;code&gt;.travis.yml&lt;/code&gt;. I committed and pushed to GitHub, flipped the switch in my Travis account, and you can see its &lt;a href=&#34;https://travis-ci.org/FranklinChen/tau&#34;&gt;passing status&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     

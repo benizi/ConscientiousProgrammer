@@ -70,6 +70,32 @@ illegible Haskell multiline string literal; I wish Haskell had
 multiline string literals, interpolation, and all that good stuff
 other languages have!&lt;/p&gt;
 
+&lt;h4 id=&#34;a-tangent-from-day-9:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;(A tangent from day 9)&lt;/h4&gt;
+
+&lt;p&gt;A number of people commented that I made a misleading remark above
+about string support in Haskell. It is true that the core Haskell
+syntax for strings is limited, but it is easy to work around that with
+Template Haskell, so see
+&lt;a href=&#34;../../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/&#34;&gt;Day 9&lt;/a&gt;
+for how to do this. I totally recommend using one of the libraries
+mentioned.&lt;/p&gt;
+
+&lt;p&gt;In brief, the ugly string literal I wrote can be written&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; expected &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [hereLit&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;words &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;have&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;so&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;like&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;many&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4 id=&#34;the-code:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;The code&lt;/h4&gt;
+
 &lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE OverloadedStrings #-}&lt;/span&gt;
 
 &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;MultisetExampleSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
@@ -141,7 +167,28 @@ the problem.&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s go through this step by step. Note that we&amp;rsquo;re using my favorite
 left-to-right composition operator &lt;code&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/code&gt; as opposed to the
 right-to-left composition operator &lt;code&gt;.&lt;/code&gt; because it looks much more
-natural to me for pipelines.&lt;/p&gt;
+natural to me for pipelines, and because my description below top to
+bottom matches this syntax.&lt;/p&gt;
+
+&lt;h4 id=&#34;update-on-syntax:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;(Update on syntax)&lt;/h4&gt;
+
+&lt;p&gt;Here is the pipeline part of the code in more traditional
+right-to-left syntax. I think it&amp;rsquo;s important to be able to read and
+write in both styles:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Same thing, using traditional right-to-left composition.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;wordCountTraditional&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;wordCountTraditional&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;LazyBuilder&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toLazyText
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; mconcat
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; map summarizeWordCount
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;List&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;sortOn (&lt;span style=&#34;color: #B00040&#34;&gt;Down&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; snd)
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;toOccurList
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;MultiSet&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;words
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;LazyText&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;map replaceNonLetterWithSpace
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h3 id=&#34;get-the-words-from-text:2fc978f0a24d72120da8b6255ca644c0&#34;&gt;Get the words from text&lt;/h3&gt;
 

@@ -6,8 +6,166 @@
     <description>Recent content in Template Haskell on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Dec 2015 07:50:12 -0500</lastBuildDate>
+    <lastBuildDate>Wed, 09 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/categories/template-haskell/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 9: Template Haskell goodies: here, interpolate, file-embed</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/</link>
+      <pubDate>Wed, 09 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:8eaddb149d77042401ce1f324517c8ca&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-9:8eaddb149d77042401ce1f324517c8ca&#34;&gt;Day 9&lt;/h2&gt;
+
+&lt;p&gt;A stray negative remark I made on
+&lt;a href=&#34;../../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/&#34;&gt;day 9&lt;/a&gt;
+regarding Haskell and its unergonomic support for multi-line string
+literals and interpolation led to good comments that I was being
+misleading because there actually exist good solutions. I already use
+one of them, but had not brought them into the picture because I
+didn&amp;rsquo;t want to be distracting in that post by bringing in other
+libraries, especially since they are implemented in
+&lt;a href=&#34;https://wiki.haskell.org/Template_Haskell&#34;&gt;Template Haskell&lt;/a&gt;, the GHC
+extension that is &amp;ldquo;macros for Haskell&amp;rdquo;, enabling compile-time
+metaprogramming (see the
+&lt;a href=&#34;https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html&#34;&gt;2014 Day of Hackage article about Template Haskell&lt;/a&gt;. On
+&lt;a href=&#34;../../blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/&#34;&gt;day 2&lt;/a&gt;
+I already introduced a package that uses Template Haskell, so it looks
+like I&amp;rsquo;ll be continuing to do that today.&lt;/p&gt;
+
+&lt;p&gt;These packages require only that you turn on &lt;code&gt;QuasiQuotes&lt;/code&gt; in modules
+where you use them, so our example source code will have the header&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE QuasiQuotes #-}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;better-string-literals-with-here:8eaddb149d77042401ce1f324517c8ca&#34;&gt;Better string literals with &lt;code&gt;here&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve been using &lt;a href=&#34;http://hackage.haskell.org/package/here&#34;&gt;&lt;code&gt;here&lt;/code&gt;&lt;/a&gt; for
+&amp;ldquo;here&amp;rdquo; strings and interpolation. Check out the
+&lt;a href=&#34;https://github.com/tmhedberg/here&#34;&gt;documentation&lt;/a&gt; for full details,
+but for context, here are some examples using data we already have.&lt;/p&gt;
+
+&lt;p&gt;Imports:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.String.Here&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;hereLit&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;here&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hereFile&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;i&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A trimmed multi-line literal, where leading and trailing white space
+are removed, making it particularly easy to just copy and paste blocks
+of text in between the &lt;code&gt;here&lt;/code&gt; quasiquoter brackets.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;makes trimmed multi-line strings prettier&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- In this case we want trimming.&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; original &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;words 3&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;I 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;have 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;so 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;for 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;like 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;many 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;to 1&amp;quot;&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; trimmedHereDoc &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [here&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;words&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;have&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;so&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;like&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;many&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;]
+      trimmedHereDoc `shouldBe` original
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;For more control (typically what I do for small examples), use &lt;code&gt;hereLit&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;makes literal multi-line strings prettier&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- In this case assume we want the trailing newline.&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; original &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;words 3&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;I 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;have 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;so 2&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;for 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;like 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;many 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n\&lt;/span&gt;
+&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;                     \&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;to 1&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; literalHereDoc &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [hereLit&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;words &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;have&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;so&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;like&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;many&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;to&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;]
+      literalHereDoc `shouldBe` original
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;But why stop at copy/paste? Much better to embed an actual file with
+&lt;code&gt;hereFile&lt;/code&gt;. We use our own little HSpec discovery &lt;code&gt;test/Spec.hs&lt;/code&gt; file
+as an example:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;allows file embed&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      [hereFile&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;test&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;hs&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;] `shouldBe`
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;{-# OPTIONS_GHC -F -pgmF hspec-discover #-}&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Finally, some interpolation, using &lt;code&gt;i&lt;/code&gt;. Although it is very
+convenient, I have some reservations about overusing this quasiquoter,
+because it is engaging in &amp;ldquo;stringly typed&amp;rdquo; programming that just makes
+use of anything that implements &lt;code&gt;Show&lt;/code&gt; and &lt;code&gt;Typeable&lt;/code&gt;. It is easy to
+accidentally write code that compiles but does the wrong thing when
+operating at this implicit level. Still, it&amp;rsquo;s useful:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;makes interpolation prettier&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; list &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;2&lt;/span&gt;]
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; num &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;42&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+      [i&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;number&lt;span style=&#34;color: #B00040&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{num}, stuff&lt;span style=&#34;color: #B00040&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{map (&lt;span style=&#34;color: #666666&#34;&gt;+1&lt;/span&gt;) list}&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;] `shouldBe`
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;number: 42, stuff: [2,3]&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;interpolate:8eaddb149d77042401ce1f324517c8ca&#34;&gt;&lt;code&gt;interpolate&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://hackage.haskell.org/package/interpolate&#34;&gt;&lt;code&gt;interpolate&lt;/code&gt;&lt;/a&gt; is
+another package that does the same sort of thing. You might like its
+&lt;a href=&#34;http://hackage.haskell.org/package/interpolate-0.1.0/docs/Data-String-Interpolate-Util.html&#34;&gt;&lt;code&gt;unindent&lt;/code&gt;&lt;/a&gt;
+feature, which facilitates the copy/paste mode of embedding blocks of
+text into your code.&lt;/p&gt;
+
+&lt;h2 id=&#34;file-embed:8eaddb149d77042401ce1f324517c8ca&#34;&gt;&lt;code&gt;file-embed&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://hackage.haskell.org/package/file-embed&#34;&gt;&lt;code&gt;file-embed&lt;/code&gt;&lt;/a&gt; is also
+useful, because you can use it to embed contents of entire
+directories. It also has a unique feature of injection into an
+executable.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:8eaddb149d77042401ce1f324517c8ca&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;You don&amp;rsquo;t have to settle for the built-in syntax for creating strings
+out of literals in Haskell. With libraries using Template Haskell, you
+can use much prettier representations of strings. Check out &lt;code&gt;here&lt;/code&gt;,
+&lt;code&gt;interpolate&lt;/code&gt;, and &lt;code&gt;file-embed&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:8eaddb149d77042401ce1f324517c8ca&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 2: Regexes with pcre-heavy; standalone Haskell scripts using Stack</title>
@@ -113,8 +271,12 @@ feel sad if I picked a library that is problematic for Windows users.&lt;/p&gt;
 &lt;p&gt;Recently, out came
 &lt;a href=&#34;https://hackage.haskell.org/package/pcre-heavy&#34;&gt;&lt;code&gt;pcre-heavy&lt;/code&gt;&lt;/a&gt;, a
 wrapper around &lt;code&gt;pcre-light&lt;/code&gt; that uses
-&lt;a href=&#34;https://wiki.haskell.org/Template_Haskell&#34;&gt;Template Haskell&lt;/a&gt;, and I
-liked it, so I use it.&lt;/p&gt;
+&lt;a href=&#34;https://wiki.haskell.org/Template_Haskell&#34;&gt;Template Haskell&lt;/a&gt;, the GHC
+extension that is &amp;ldquo;macros for Haskell&amp;rdquo;, enabling compile-time
+metaprogramming (see the
+&lt;a href=&#34;https://ocharles.org.uk/blog/guest-posts/2014-12-22-template-haskell.html&#34;&gt;2014 Day of Hackage article about Template Haskell&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I liked it, so I use it.&lt;/p&gt;
 
 &lt;h2 id=&#34;example-program-using-pcre-heavy:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Example program using &lt;code&gt;pcre-heavy&lt;/code&gt;&lt;/h2&gt;
 
@@ -435,6 +597,11 @@ libraries that now includes &lt;code&gt;pcre-heavy&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;Also, I showed how to add two lines to the top of a Haskell program to
 turn it into a Stack script.&lt;/p&gt;
+
+&lt;h3 id=&#34;update-from-day-9:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;(Update from day 9)&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;../../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/&#34;&gt;Day 9&lt;/a&gt;
+covers more libraries based on Template Haskell.&lt;/p&gt;
 
 &lt;h2 id=&#34;all-the-code:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;All the code&lt;/h2&gt;
 
