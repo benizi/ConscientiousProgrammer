@@ -79,6 +79,55 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/">24 days of Hackage, 2015: day 10: s-cargot: using S-expression syntax</a>
+      </h1>
+      <span class="post-date">Dec 10, 2015 &middot; 14 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/lisp">Lisp</a><a class="label" href="http://ConscientiousProgrammer.com/categories/scheme">Scheme</a><a class="label" href="http://ConscientiousProgrammer.com/categories/s-cargot">s-cargot</a><a class="label" href="http://ConscientiousProgrammer.com/categories/s-expressions">S-expressions</a><a class="label" href="http://ConscientiousProgrammer.com/categories/domain-specific-language">domain-specific language</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parsers">parsers</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parsec">parsec</a>
+      </span>
+      
+      <h2 id="table-of-contents-for-the-whole-series:6004f4e5d78ba4d157aa1a919a6f7cf7">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-10:6004f4e5d78ba4d157aa1a919a6f7cf7">Day 10</h2>
+
+<p>There are times when I&rsquo;m jealous of the Lisp world.</p>
+
+<p>One of those times is when defining some domain-specific language,
+because in the Lisp world, the natural thing to do is to represent it
+using S-expressions as the concrete syntax, and not fuss with defining
+yet another special syntax, along with writing a parser for that
+syntax into the abstract syntax as well as a pretty-printer from the
+abstract syntax back to the concrete syntax. Maybe in the long run
+users might want a special syntax that is not just S-expressions, but
+for quick initial prototyping, at least, it seems worthwhile to not
+commit to any special syntax and just use S-expressions. Although
+there is nothing magical about S-expressions (or XML or JSON or any
+other generic representation of a tree data structure), they are
+particularly concise and flexible.</p>
+
+<p>S-expressions are so useful that in my first job as a software
+engineer in the 1990s, we actually had a C++ S-expression library for
+input and output of a format that amounted to a domain-specific
+language (this was before XML was invented) that was processed by many
+tools (including a validator that I wrote in Standard ML).</p>
+
+<p>A library on Hackage for working with S-expressions in Haskell is
+<a href="http://hackage.haskell.org/package/s-cargot"><code>s-cargot</code></a>. There have
+been many others, but most of them have gone sadly unmaintained,
+whereas this one is new and comes with bells and whistles.</p>
+
+<p>Today I&rsquo;ll give an example of how to use this library, in the context
+of a problem domain in which having a concrete syntax is important.</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/">24 days of Hackage, 2015: day 9: Template Haskell goodies: here, interpolate, file-embed</a>
       </h1>
       <span class="post-date">Dec 9, 2015 &middot; 3 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/#disqus_thread">Comments</a>
@@ -481,6 +530,7 @@ and Hayoo: MissingH, extra</a></li>
 a case study of types and tests</a></li>
 <li>Day 8: <a href="./blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/">multiset; I wish this were in the standard containers package</a></li>
 <li>Day 9: <a href="./blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/">Template Haskell goodies: here, interpolate, file-embed</a></li>
+<li>Day 10: <a href="./blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/">s-cargot: using S-expression syntax</a></li>
 </ul>
 
 <h2 id="day-1:c37cfe20acfff0cff8579f026185f721">Day 1</h2>
@@ -513,42 +563,6 @@ discovery for me.</p>
       
     </div>
     
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2015/10/07/report-on-my-talk-a-gentle-conceptual-introduction-to-functional-programming/">Report on my talk &#34;A gentle conceptual introduction to functional programming&#34;</a>
-      </h1>
-      <span class="post-date">Oct 7, 2015 &middot; 4 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/10/07/report-on-my-talk-a-gentle-conceptual-introduction-to-functional-programming/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/functional-programming">functional programming</a>
-      </span>
-      
-      <p>On behalf of the relatively new
-<a href="http://www.meetup.com/Pittsburgh-Functional-Programming-Meetup/">Pittsburgh Functional Programming</a>,
-I gave an introductory talk held at Google Pittsburgh that I called
-<a href="http://www.meetup.com/Pittsburgh-Functional-Programming-Meetup/events/224593883/">&ldquo;A gentle conceptual introduction to functional programming&rdquo;</a>.</p>
-
-<p>This presentation is part of an experiment, a big shift in how I&rsquo;m
-trying to talk about not only &ldquo;functional programming&rdquo;, but any kind
-of programming and more generally any topic at all (whether it&rsquo;s
-cooking or music) for a wide audience. As I&rsquo;ve been doing more
-teaching and collaboration in many areas of my life, I&rsquo;ve been trying
-to figure out ways to better reach people. In particular, when
-presenting something new, it&rsquo;s useful to motivate it and somehow
-connect it to something they already know, even if it&rsquo;s different.</p>
-
-<p>I&rsquo;ll write more later about what I did differently in this talk than
-I&rsquo;ve done in the past, and why. For now, I&rsquo;ll just say that one big
-addition I made was that I prepared feedback forms to be filled out,
-both to help me understand what I can do better and also to help
-Pittsburgh Functional Programming plan further events and topics that
-people want to see. So I will summarize the feedback I got (fifteen
-participants filled out feedback forms).</p>
-
-      <a href="http://conscientiousprogrammer.com/blog/2015/10/07/report-on-my-talk-a-gentle-conceptual-introduction-to-functional-programming/">Read On &rarr;</a>
-      
-    </div>
-    
     
     
     <ul class="pagination">
@@ -578,12 +592,15 @@ participants filled out feedback forms).</p>
         ><a href="./page/5/">5</a></li>
         
         <li
+        ><a href="./page/6/">6</a></li>
+        
+        <li
         >
         <a href="./page/2/" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
         </li>
         
         <li>
-            <a href="./page/5/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+            <a href="./page/6/" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
         </li>
         
     </ul>

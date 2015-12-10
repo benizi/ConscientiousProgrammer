@@ -6,8 +6,522 @@
     <description>Recent content in Posts on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 09 Dec 2015 08:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 10 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/post/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 10: s-cargot: using S-expression syntax</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/</link>
+      <pubDate>Thu, 10 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-10:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Day 10&lt;/h2&gt;
+
+&lt;p&gt;There are times when I&amp;rsquo;m jealous of the Lisp world.&lt;/p&gt;
+
+&lt;p&gt;One of those times is when defining some domain-specific language,
+because in the Lisp world, the natural thing to do is to represent it
+using S-expressions as the concrete syntax, and not fuss with defining
+yet another special syntax, along with writing a parser for that
+syntax into the abstract syntax as well as a pretty-printer from the
+abstract syntax back to the concrete syntax. Maybe in the long run
+users might want a special syntax that is not just S-expressions, but
+for quick initial prototyping, at least, it seems worthwhile to not
+commit to any special syntax and just use S-expressions. Although
+there is nothing magical about S-expressions (or XML or JSON or any
+other generic representation of a tree data structure), they are
+particularly concise and flexible.&lt;/p&gt;
+
+&lt;p&gt;S-expressions are so useful that in my first job as a software
+engineer in the 1990s, we actually had a C++ S-expression library for
+input and output of a format that amounted to a domain-specific
+language (this was before XML was invented) that was processed by many
+tools (including a validator that I wrote in Standard ML).&lt;/p&gt;
+
+&lt;p&gt;A library on Hackage for working with S-expressions in Haskell is
+&lt;a href=&#34;http://hackage.haskell.org/package/s-cargot&#34;&gt;&lt;code&gt;s-cargot&lt;/code&gt;&lt;/a&gt;. There have
+been many others, but most of them have gone sadly unmaintained,
+whereas this one is new and comes with bells and whistles.&lt;/p&gt;
+
+&lt;p&gt;Today I&amp;rsquo;ll give an example of how to use this library, in the context
+of a problem domain in which having a concrete syntax is important.&lt;/p&gt;
+
+&lt;h2 id=&#34;installation:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;We need to add &lt;code&gt;s-cargot&lt;/code&gt; to &lt;code&gt;stack.yaml&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;- s-cargot-0.1.0.0
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;the-task-symbolic-differentiation:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;The task: symbolic differentiation&lt;/h2&gt;
+
+&lt;p&gt;The task we solve here is, appropriately enough, a translation from the Lisp
+(Scheme, to be precise) code for a &lt;a href=&#34;https://mitpress.mit.edu/sicp/full-text/book/book-Z-H-16.html#%_sec_2.3.2&#34;&gt;symbolic differentiator of
+mathematical expressions&lt;/a&gt; in the classic computer science textbook
+&lt;a href=&#34;https://mitpress.mit.edu/sicp/&#34;&gt;&amp;ldquo;Structure and Interpretation of Computer Programs&amp;rdquo;&lt;/a&gt;. I
+won&amp;rsquo;t be walking through the solution here, but just focusing on some
+syntax issues.&lt;/p&gt;
+
+&lt;p&gt;Example: given a mathematical expression such as the linear function
+&lt;code&gt;5x + 7&lt;/code&gt;, we want to find the symbolic derivative with respect to &lt;code&gt;x&lt;/code&gt;,
+to get &lt;code&gt;5&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;simplest-syntax-for-the-expression-type:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Simplest syntax for the expression type&lt;/h2&gt;
+
+&lt;p&gt;How do we model an expression and a function to compute a derivative
+of an expression? Let&amp;rsquo;s start with the most vanilla possible way,
+which is to define a data type for expression, &lt;code&gt;Exp&lt;/code&gt;, along with
+ordinary alphanumeric constructors &lt;code&gt;N&lt;/code&gt; (for number), &lt;code&gt;V&lt;/code&gt; (for
+variable), &lt;code&gt;Plus&lt;/code&gt; (for sum of subexpressions), &lt;code&gt;Times&lt;/code&gt; (for product of
+subexpressions). A sample subset of an appropriate HSpec/QuickCheck
+spec to define what we need:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.AlphaSyntaxSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.AlphaSyntax&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt;), &lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.QuickCheck&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;==&amp;gt;&lt;/span&gt;))
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;symbolic differentiation&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (x + n) == 1&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x n &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n)) x `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (x + y) == x, if x /= y&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x y &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      x &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; y &lt;span style=&#34;color: #666666&#34;&gt;==&amp;gt;&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x) (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; y)) x `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; y
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (a * x + b) == x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;a x b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a) (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x)) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; b)) x `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (x * y * (x + 3)) == (x * y) + y * (x + 3)&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt;))
+                   (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;))) &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; `shouldBe`
+        (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt;))
+              (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;))))
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The syntax looks OK for simple expressions, but ugly when you have
+lots of nested subexpressions, with parentheses for grouping, as in
+the final artificial example.&lt;/p&gt;
+
+&lt;p&gt;Here is the code for a still-naive symbolic differentiator, having
+only a few heuristics built in for some simplification through
+rewriting (for example, adding &lt;code&gt;0&lt;/code&gt; to an expression results in that
+expression rather than construction of a superfluous &lt;code&gt;N 0&lt;/code&gt;
+subexpression):&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.AlphaSyntax&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Variable in an expression.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Var&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Expression.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;          &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ number&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Var&lt;/span&gt;          &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ variable&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ sum&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ product&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;deriving&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Derivative of expression with respect to a variable.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Var&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;)         &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; v&amp;#39;)        v &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; v&amp;#39; &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; v &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; e1 e2)  v &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; plus (deriv e1 v) (deriv e2 v)
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; e1 e2) v &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; plus (times e1 (deriv e2 v))
+                             (times (deriv e1 v) e2)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Smart constructor that simplifies while combining subexpressions.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;plus&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;)  e      &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #0000FF&#34;&gt;plus&lt;/span&gt; e      (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;)  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #0000FF&#34;&gt;plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n1) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n2) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; (n1 &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; n2)
+&lt;span style=&#34;color: #0000FF&#34;&gt;plus&lt;/span&gt; e1     e2     &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; e1 e2
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Smart constructor that simplifies while combining subexpressions.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;times&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;)  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;      &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;times&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;      (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;)  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;)  e      &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #0000FF&#34;&gt;times&lt;/span&gt; e      (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;)  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #0000FF&#34;&gt;times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n1) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n2) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; (n1 &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; n2)
+&lt;span style=&#34;color: #0000FF&#34;&gt;times&lt;/span&gt; e1     e2     &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; e1 e2
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The syntax of the code, using pattern matching, looks reasonably good
+to me. It&amp;rsquo;s the &lt;code&gt;Exp&lt;/code&gt; data construction that looks a bit ugly,
+although not terrible. So we have a situation in which the implementor
+of this little expression language is fairly happy, but the user is
+not. In fact, we haven&amp;rsquo;t even provided a way for a user outside the
+system to create expressions: right now, we have an API but no parser
+from a string into an expression.&lt;/p&gt;
+
+&lt;h2 id=&#34;parsing-from-what-format:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Parsing from what format?&lt;/h2&gt;
+
+&lt;p&gt;One way to go is to write a custom parser from a custom syntax, for
+example maybe write a function &lt;code&gt;fromString :: String -&amp;gt; Exp&lt;/code&gt; such that&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;fromString&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;5x + 7y + 20&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;))
+             (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;7&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt;)))
+       (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;20&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;We would also want to write a pretty-printer &lt;code&gt;toString :: Exp -&amp;gt;
+String&lt;/code&gt; such that maybe it&amp;rsquo;s smart enough to go&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;toString&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;))
+                     (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;7&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt;)))
+               (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;20&lt;/span&gt;)) &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;5x + 7y + 20&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;It is straightforward to write such a parser using
+&lt;a href=&#34;http://hackage.haskell.org/package/parsec&#34;&gt;&lt;code&gt;parsec&lt;/code&gt;&lt;/a&gt; or the
+like, but you can imagine that sometimes it might be annoying to
+design the syntax for a much more complex language (including special
+infix operators, precedences, scoping keywords, different kinds of
+braces, etc.) and also make users learn it.&lt;/p&gt;
+
+&lt;p&gt;So let&amp;rsquo;s assume for the purpose of this article that we have a reason
+to prefer prefix-only S-expressions, just as the Lisp community does
+in order to avoid all the hassles of a custom syntax.&lt;/p&gt;
+
+&lt;p&gt;Here are some sample QuickCheck tests to show what it is we want to be
+able to do. (Note that for convenience, we are using string
+interpolation through the
+&lt;a href=&#34;http://hackage.haskell.org/package/here&#34;&gt;&lt;code&gt;here&lt;/code&gt;&lt;/a&gt; package as
+introduced yesterday,
+&lt;a href=&#34;../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/&#34;&gt;day 9&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE QuasiQuotes #-}&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE OverloadedStrings #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.SExpSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.AlphaSyntax&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.SExp&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; SExp
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.String.Here&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;i&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Required for auto-discovery.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;S-expression syntax for expression&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;(+ x a)&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;SExp&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parse [i&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; x &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{a})&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;] `shouldBe`
+        &lt;span style=&#34;color: #B00040&#34;&gt;Right&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a))
+
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;(* (+ x a) (+ y b))&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;SExp&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parse [i&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;
+                     (&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; x &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{a})
+                        (&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; y &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{b}))
+                   &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;] `shouldBe`
+        &lt;span style=&#34;color: #B00040&#34;&gt;Right&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a))
+                     (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; b)))
+
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;(!? x y)&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;SExp&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parse &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;(!? x y)&amp;quot;&lt;/span&gt; `shouldBe`
+        &lt;span style=&#34;color: #B00040&#34;&gt;Left&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;!?&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt; is not a valid operator&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve included a little test to indicate that we want some kind of
+error handling also. Nothing is more annoying to a user than terrible
+parse error messages. We won&amp;rsquo;t provide great messages here, but at
+least will give an idea of how one could.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-s-expression-parser:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;The S-expression parser&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;s-cargot&lt;/code&gt; provides very flexible ways of constructing S-expression
+parsers, based on what kind of syntax you want to allow (full Scheme
+or not, for example), and allows hooks on many levels to support
+readers as well as specifying the desired atom parser.&lt;/p&gt;
+
+&lt;p&gt;Some imports first:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE QuasiQuotes #-}&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE OverloadedStrings #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.SExp&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.AlphaSyntax&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt;))
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.SCargot&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; S
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.SCargot.Language.Basic&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;basicParser&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.SCargot.Repr.WellFormed&lt;/span&gt;
+       (&lt;span style=&#34;color: #B00040&#34;&gt;WellFormedSExpr&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;WFSList&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;WFSAtom&lt;/span&gt;), &lt;span style=&#34;color: #0000FF&#34;&gt;fromWellFormed&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Text&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Text
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Text&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Text.Read&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;signed&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;decimal&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.String.Here&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;i&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Error when parsing.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Error&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The main driver is a pipeline of calling an &lt;code&gt;s-cargot&lt;/code&gt; parser and then
+calling our own parser of an S-expression into our &lt;code&gt;Exp&lt;/code&gt; type:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | For simplicity, we use &amp;#39;basicParser&amp;#39; which just treats every atom&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- as &amp;#39;Text&amp;#39;, which we parse later rather than up front.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;parse&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Either&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Error&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;parse&lt;/span&gt; text &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; parseOneSexp text &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;=&lt;/span&gt; toExp
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;parseOneSexp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Either&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Error&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;WellFormedSExpr&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;parseOneSexp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;S&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;decodeOne (&lt;span style=&#34;color: #B00040&#34;&gt;S&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;asWellFormed basicParser)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Once we have a well-formed S-expression, we can pick it apart, while
+catching errors if we encounter one.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;toExp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;WellFormedSExpr&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Either&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Error&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;toExp&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;WFSAtom&lt;/span&gt; text) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; fromAtom text
+&lt;span style=&#34;color: #0000FF&#34;&gt;toExp&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;WFSList&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;WFSAtom&lt;/span&gt; operatorText, sexp1, sexp2]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  operator &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; fromOperator operatorText
+  e1 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; toExp sexp1
+  e2 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; toExp sexp2
+  return (operator e1 e2)
+&lt;span style=&#34;color: #0000FF&#34;&gt;toExp&lt;/span&gt; list&lt;span style=&#34;color: #666666&#34;&gt;@&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;WFSList&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Left&lt;/span&gt; [i&lt;span style=&#34;color: #666666&#34;&gt;|$&lt;/span&gt;{list} should have exactly &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt; elements&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;]
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;fromOperator&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Either&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Error&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;fromOperator&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;+&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; return &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;fromOperator&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;*&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; return &lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;fromOperator&lt;/span&gt; text &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Left&lt;/span&gt; [i&lt;span style=&#34;color: #666666&#34;&gt;|$&lt;/span&gt;{text} is not a valid operator&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;]
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Either an integer or a variable.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;fromAtom&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Either&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Error&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;fromAtom&lt;/span&gt; text &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt; signed decimal text &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;of&lt;/span&gt;
+    &lt;span style=&#34;color: #B00040&#34;&gt;Right&lt;/span&gt; (n, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      return (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n)
+    &lt;span style=&#34;color: #B00040&#34;&gt;Right&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;Left&lt;/span&gt; [i&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;extra garbage after numeric &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{text}&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;]
+    &lt;span style=&#34;color: #B00040&#34;&gt;Left&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      return (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;unpack text))
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;pretty-printing:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Pretty-printing&lt;/h2&gt;
+
+&lt;p&gt;And we get pretty-printing for free from &lt;code&gt;s-cargot&lt;/code&gt; if we turn our
+&lt;code&gt;Exp&lt;/code&gt; into an S-expression first. I won&amp;rsquo;t show the details, but you
+can use the basic S-expression printer or customize it with a lot
+options including indentation strategy. Let&amp;rsquo;s just use the basic.&lt;/p&gt;
+
+&lt;p&gt;A sample test for our &lt;code&gt;SExp.prettyPrint&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;pretty-printing&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;a b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;SExp&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;prettyPrint (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a))
+                              (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; b))) `shouldBe`
+       [i&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; x &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{a}) (&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; y &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{b}))&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The code:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;fromExp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;WellFormedSExpr&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;fromExp&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;WFSAtom&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;pack (show n))
+&lt;span style=&#34;color: #0000FF&#34;&gt;fromExp&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;WFSAtom&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;pack x)
+&lt;span style=&#34;color: #0000FF&#34;&gt;fromExp&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; e1 e2) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;WFSList&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;WFSAtom&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;+&amp;quot;&lt;/span&gt;, fromExp e1, fromExp e2]
+&lt;span style=&#34;color: #0000FF&#34;&gt;fromExp&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; e1 e2) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;WFSList&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;WFSAtom&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;*&amp;quot;&lt;/span&gt;, fromExp e1, fromExp e2]
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;prettyPrint&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;prettyPrint&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;S&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;encodeOne (&lt;span style=&#34;color: #B00040&#34;&gt;S&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;setFromCarrier fromWellFormed (&lt;span style=&#34;color: #B00040&#34;&gt;S&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;basicPrint id))
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; fromExp
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;summary-of-s-expression-parsing-and-pretty-printing:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Summary of S-expression parsing and pretty-printing&lt;/h2&gt;
+
+&lt;p&gt;So there you have it: with a little bit of boilerplate you can get an
+experience similar to that of working in Lisp. Note that with even
+clever Template Haskell work with quasiquotation you could go further
+than the pure text templates we&amp;rsquo;ve used for convenience, and create
+pattern templates as well.&lt;/p&gt;
+
+&lt;p&gt;We didn&amp;rsquo;t have to write a traditional parser, and we were able to
+separate well-formedness from further processing. This is really
+useful in many contexts: in my experience, the multi-level error
+checking makes good error messages easier to create. Also, not
+discussed here is how S-expressions can also help with prediction and
+completion.&lt;/p&gt;
+
+&lt;h2 id=&#34;optional-further-notes-on-syntax-for-domain-specific-languages:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Optional further notes on syntax for domain-specific languages&lt;/h2&gt;
+
+&lt;p&gt;I wanted to point out that for some problem domains, such as this one
+that happens to be mathematical, it is sometimes popular to make
+things look mathematical. I&amp;rsquo;ve deliberately presented it without that
+attempt first, but now I&amp;rsquo;ll show some syntactic variants.&lt;/p&gt;
+
+&lt;h3 id=&#34;alphanumeric-identifiers-as-operators:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Alphanumeric identifiers as operators&lt;/h3&gt;
+
+&lt;p&gt;First, one can use operator syntax with backticks and precedence
+levels:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.AlphaOperatorSyntax&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Variable in an expression.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Var&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Precedences for our expression constructors.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;infixl&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;6&lt;/span&gt; `&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt;`
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;infixl&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;7&lt;/span&gt; `&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt;`
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Expression.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;          &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ number&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Var&lt;/span&gt;          &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ variable&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;   &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ sum&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ product&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;deriving&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Derivative of expression with respect to a variable.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Var&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;)         &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; v&amp;#39;)        v &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; v&amp;#39; &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; v &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; e1 e2)  v &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; deriv e1 v `plus` deriv e2 v
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; e1 e2) v &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e1 `times` deriv e2 v
+                        `plus`
+                        deriv e1 v `times` e2
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Precedences for our expression &amp;quot;smart&amp;quot; constructors.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;infixl&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;6&lt;/span&gt; `plus`
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;infixl&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;7&lt;/span&gt; `times`
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Smart constructor that simplifies while combining subexpressions.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;plus&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;  `plus` e    &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #0000FF&#34;&gt;e&lt;/span&gt;    `plus` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n1 `plus` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n2 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; (n1 &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; n2)
+&lt;span style=&#34;color: #0000FF&#34;&gt;e1&lt;/span&gt;   `plus` e2   &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e1 `&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt;` e2
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Smart constructor that simplifies while combining subexpressions.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;times&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;  `times` &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;    &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;    `times` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;  `times` e    &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #0000FF&#34;&gt;e&lt;/span&gt;    `times` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n1 `times` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n2 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; (n1 &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; n2)
+&lt;span style=&#34;color: #0000FF&#34;&gt;e1&lt;/span&gt;   `times` e2   &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e1 `&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt;` e2
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note that nothing has really changed, except the use of infix
+function definitions and calls, and use of precedence to remove
+parentheses, such as in the big expression for the derivative of a
+product of expressions. But clarity is starting to be lost, for those
+not already familiar with the problem domain and conventions.&lt;/p&gt;
+
+&lt;h3 id=&#34;symbolic-identifiers-as-operators:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Symbolic identifiers as operators&lt;/h3&gt;
+
+&lt;p&gt;One can go further and use symbolic identifiers in place of the
+backticked alphanumeric operators. This is where many of us start
+wondering what is going on:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.OperatorSyntax&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Variable in an expression.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Var&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Precedences for our expression constructors.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;infixl&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;infixl&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;7&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Expression.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ number&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Var&lt;/span&gt;        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ variable&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ sum&lt;/span&gt;
+  &lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ product&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;deriving&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Derivative of expression with respect to a variable.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Var&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;)       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x )      y &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; x &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; y &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (e1 &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; e2) v &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; deriv e1 v &lt;span style=&#34;color: #666666&#34;&gt;.+.&lt;/span&gt; deriv e2 v
+&lt;span style=&#34;color: #0000FF&#34;&gt;deriv&lt;/span&gt; (e1 &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; e2) v &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e1 &lt;span style=&#34;color: #666666&#34;&gt;.*.&lt;/span&gt; deriv e2 v
+                      &lt;span style=&#34;color: #666666&#34;&gt;.+.&lt;/span&gt;
+                      deriv e1 v &lt;span style=&#34;color: #666666&#34;&gt;.*.&lt;/span&gt; e2
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Precedences for our expression &amp;quot;smart&amp;quot; constructors.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;infixl&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.+.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;infixl&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;7&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.*.&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Smart constructor that simplifies while combining subexpressions.&lt;/span&gt;
+(&lt;span style=&#34;color: #666666&#34;&gt;.+.&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;  &lt;span style=&#34;color: #666666&#34;&gt;.+.&lt;/span&gt; e    &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #0000FF&#34;&gt;e&lt;/span&gt;    &lt;span style=&#34;color: #666666&#34;&gt;.+.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n1 &lt;span style=&#34;color: #666666&#34;&gt;.+.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n2 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; (n1 &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; n2)
+&lt;span style=&#34;color: #0000FF&#34;&gt;e1&lt;/span&gt;   &lt;span style=&#34;color: #666666&#34;&gt;.+.&lt;/span&gt; e2   &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e1 &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; e2
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Smart constructor that simplifies while combining subexpressions.&lt;/span&gt;
+(&lt;span style=&#34;color: #666666&#34;&gt;.*.&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;  &lt;span style=&#34;color: #666666&#34;&gt;.*.&lt;/span&gt;  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;   &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;    &lt;span style=&#34;color: #666666&#34;&gt;.*.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;  &lt;span style=&#34;color: #666666&#34;&gt;.*.&lt;/span&gt; e    &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #0000FF&#34;&gt;e&lt;/span&gt;    &lt;span style=&#34;color: #666666&#34;&gt;.*.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;  &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e
+&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n1 &lt;span style=&#34;color: #666666&#34;&gt;.*.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n2 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; (n1 &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; n2)
+&lt;span style=&#34;color: #0000FF&#34;&gt;e1&lt;/span&gt;   &lt;span style=&#34;color: #666666&#34;&gt;.*.&lt;/span&gt; e2   &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; e1 &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; e2
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Depending on your taste, you might find that this funny syntax makes
+the tests look nicer:&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;All this looks kind of cute if you&amp;rsquo;re used to it, but I think it can
+look really weird otherwise; and I know that many non-Haskellers
+seeing this before seeing the vanilla way get the wrong idea that you
+have to write this way in Haskell and turn away in disgust and
+confusion. This is why I showed the vanilla way first, and show this
+only to illustrate that there are libraries out there that do try to
+be very suggestive in symbolic operator usage, and also that there is
+nothing special going on here: it&amp;rsquo;s just a different way of saying
+exactly the same thing as the first version, with the second version
+(backticked alphanumerics as operators) being a transitional step
+toward this third version. It&amp;rsquo;s good to know about all three variants,
+regardless of which one you prefer to read and write.&lt;/p&gt;
+
+&lt;p&gt;But what about the S-expression route, which is to decouple the user
+(represented by the tests) side of things from the abstract syntax and
+the Haskell syntax? My intuition is that there are real benefits in at
+least providing an alternate S-expression syntax for whatever other
+concrete syntax is made available.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;S-expressions are a time-honored way of representing data. The
+&lt;code&gt;s-cargot&lt;/code&gt; library comes with ways to build custom S-expression
+parsers and pretty-printers and also comes with useful defaults.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 9: Template Haskell goodies: here, interpolate, file-embed</title>
@@ -3045,6 +3559,7 @@ and Hayoo: MissingH, extra&lt;/a&gt;&lt;/li&gt;
 a case study of types and tests&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 8: &lt;a href=&#34;../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/&#34;&gt;multiset; I wish this were in the standard containers package&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 9: &lt;a href=&#34;../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/&#34;&gt;Template Haskell goodies: here, interpolate, file-embed&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 10: &lt;a href=&#34;../blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/&#34;&gt;s-cargot: using S-expression syntax&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
@@ -4131,50 +4646,6 @@ has a sizable community revolving around it.&lt;/p&gt;
 &lt;p&gt;Some nostalgia and detective work have opened up memories and questions of &amp;ldquo;what could have been&amp;rdquo; that I&amp;rsquo;ll explore in later articles.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;What is your relationship to Dr. Dobb&amp;rsquo;s Journal? Have you ever been a loyal reader of it? What did you get from it?&lt;/strong&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>When a computer algebra program gives wrong answers</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/</link>
-      <pubDate>Thu, 06 Nov 2014 20:20:32 -0500</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/</guid>
-      <description>
-
-&lt;p&gt;I read an interesting and disturbing report, &lt;a href=&#34;http://www.ams.org/notices/201410/rnoti-p1249.pdf&#34;&gt;&amp;ldquo;The Misfortunes of a Trio of Mathematicians Using Computer Algebra Systems. Can We Trust in Them?&amp;rdquo;&lt;/a&gt; published in the Notices of the American Mathematical Society. I feel that all software developers should read this and reflect on the nature of our work, when people who are not programmers depend on it.&lt;/p&gt;
-
-&lt;p&gt;This report was about mathematicians accidentally discovering a bug in a major computer algebra system, Mathematica.&lt;/p&gt;
-
-&lt;h2 id=&#34;a-note-about-scientists-and-mathematicians:260dc6c39a3c815ab72d5109f7c53dfd&#34;&gt;A note about scientists and mathematicians&lt;/h2&gt;
-
-&lt;p&gt;Scientists and mathematicians increasingly depend on computer software for their work, to explore data, analyze it, verify hypotheses, etc. It&amp;rsquo;s gotten to the point where we can no longer pretend, for example, that scientists are not writing substantial computer programs, whether or not they are trained programmers (in fact, &lt;a href=&#34;http://software-carpentry.org/&#34;&gt;Software Carpentry&lt;/a&gt; was created by a physicist to fulfill the need of training scientists in programming).&lt;/p&gt;
-
-&lt;h2 id=&#34;the-discovery-of-the-bug:260dc6c39a3c815ab72d5109f7c53dfd&#34;&gt;The discovery of the bug&lt;/h2&gt;
-
-&lt;p&gt;A bunch of mathematicians used Mathematica to generate and test ideas they had about a mathematical hypothesis. They wanted to find counterexamples to their conjectures and found some with integer arithmetic calculations using Mathematica.&lt;/p&gt;
-
-&lt;p&gt;One of them happened to also be using Maple, and the results differed, so Mathematica or Maple had to be wrong. They isolated the error by &lt;em&gt;generating random test cases&lt;/em&gt; and finding that Mathematica was in error.&lt;/p&gt;
-
-&lt;p&gt;In fact, given the &lt;em&gt;same matrix&lt;/em&gt; and calling Mathematica&amp;rsquo;s matrix determinant function, Mathematica would return different results!! This was a rather serious bug indeed. They found that Mathematica 7 did not have this bug, but 9 and 10 did.&lt;/p&gt;
-
-&lt;h2 id=&#34;wolfram-research-s-lack-of-responsiveness-to-the-problem:260dc6c39a3c815ab72d5109f7c53dfd&#34;&gt;Wolfram Research&amp;rsquo;s lack of responsiveness to the problem&lt;/h2&gt;
-
-&lt;p&gt;They reported the Mathematica bug to Wolfram Research but got no useful reply, and at the next release of Mathematica, the bug was still not fixed.&lt;/p&gt;
-
-&lt;p&gt;There were other bugs they found as well.&lt;/p&gt;
-
-&lt;p&gt;Wolfram Research never gave any feedback, and does not publish a list of known bugs.&lt;/p&gt;
-
-&lt;h2 id=&#34;lessons-to-learn:260dc6c39a3c815ab72d5109f7c53dfd&#34;&gt;Lessons to learn&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;When there is a bug in proprietary, closed-source software, you are completely helpless. The bug may not even be acknowledged, much less fixed, and you could not fix it yourself even if you wanted to.&lt;/li&gt;
-&lt;li&gt;There is value in having an alternative tool: without independent work using Maple, the bugs in Mathematica may never have been discovered. Diversity is good.&lt;/li&gt;
-&lt;li&gt;All scientists should be aware that the tools they use can be buggy, and therefore computational results can only be &lt;em&gt;trusted&lt;/em&gt; as much as the specific versions of software they use can be trusted.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Does any of this surprise you? For what you rely on, how do you work around the inevitable fact that software has bugs?&lt;/strong&gt;&lt;/p&gt;
 </description>
     </item>
     

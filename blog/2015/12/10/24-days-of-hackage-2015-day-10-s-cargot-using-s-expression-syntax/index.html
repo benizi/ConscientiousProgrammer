@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>24 days of Hackage, 2015: day 10: s-cargot: using S-expression syntax &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+        
+        <h1>The Conscientious Programmer</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
+    </ul>
+
+    
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>24 days of Hackage, 2015: day 10: s-cargot: using S-expression syntax</h1>
+    
+
+<h2 id="table-of-contents-for-the-whole-series:6004f4e5d78ba4d157aa1a919a6f7cf7">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-10:6004f4e5d78ba4d157aa1a919a6f7cf7">Day 10</h2>
+
+<p>There are times when I&rsquo;m jealous of the Lisp world.</p>
+
+<p>One of those times is when defining some domain-specific language,
+because in the Lisp world, the natural thing to do is to represent it
+using S-expressions as the concrete syntax, and not fuss with defining
+yet another special syntax, along with writing a parser for that
+syntax into the abstract syntax as well as a pretty-printer from the
+abstract syntax back to the concrete syntax. Maybe in the long run
+users might want a special syntax that is not just S-expressions, but
+for quick initial prototyping, at least, it seems worthwhile to not
+commit to any special syntax and just use S-expressions. Although
+there is nothing magical about S-expressions (or XML or JSON or any
+other generic representation of a tree data structure), they are
+particularly concise and flexible.</p>
+
+<p>S-expressions are so useful that in my first job as a software
+engineer in the 1990s, we actually had a C++ S-expression library for
+input and output of a format that amounted to a domain-specific
+language (this was before XML was invented) that was processed by many
+tools (including a validator that I wrote in Standard ML).</p>
+
+<p>A library on Hackage for working with S-expressions in Haskell is
+<a href="http://hackage.haskell.org/package/s-cargot"><code>s-cargot</code></a>. There have
+been many others, but most of them have gone sadly unmaintained,
+whereas this one is new and comes with bells and whistles.</p>
+
+<p>Today I&rsquo;ll give an example of how to use this library, in the context
+of a problem domain in which having a concrete syntax is important.</p>
+
+<h2 id="installation:6004f4e5d78ba4d157aa1a919a6f7cf7">Installation</h2>
+
+<p>We need to add <code>s-cargot</code> to <code>stack.yaml</code>:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">- s-cargot-0.1.0.0
+</pre></div>
+
+
+<h2 id="the-task-symbolic-differentiation:6004f4e5d78ba4d157aa1a919a6f7cf7">The task: symbolic differentiation</h2>
+
+<p>The task we solve here is, appropriately enough, a translation from the Lisp
+(Scheme, to be precise) code for a <a href="https://mitpress.mit.edu/sicp/full-text/book/book-Z-H-16.html#%_sec_2.3.2">symbolic differentiator of
+mathematical expressions</a> in the classic computer science textbook
+<a href="https://mitpress.mit.edu/sicp/">&ldquo;Structure and Interpretation of Computer Programs&rdquo;</a>. I
+won&rsquo;t be walking through the solution here, but just focusing on some
+syntax issues.</p>
+
+<p>Example: given a mathematical expression such as the linear function
+<code>5x + 7</code>, we want to find the symbolic derivative with respect to <code>x</code>,
+to get <code>5</code>.</p>
+
+<h2 id="simplest-syntax-for-the-expression-type:6004f4e5d78ba4d157aa1a919a6f7cf7">Simplest syntax for the expression type</h2>
+
+<p>How do we model an expression and a function to compute a derivative
+of an expression? Let&rsquo;s start with the most vanilla possible way,
+which is to define a data type for expression, <code>Exp</code>, along with
+ordinary alphanumeric constructors <code>N</code> (for number), <code>V</code> (for
+variable), <code>Plus</code> (for sum of subexpressions), <code>Times</code> (for product of
+subexpressions). A sample subset of an appropriate HSpec/QuickCheck
+spec to define what we need:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.AlphaSyntaxSpec</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.AlphaSyntax</span> (<span style="color: #B00040">Exp</span>(<span style="color: #B00040">N</span>, <span style="color: #B00040">V</span>, <span style="color: #B00040">Plus</span>, <span style="color: #B00040">Times</span>), <span style="color: #0000FF">deriv</span>)
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> (<span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>, <span style="color: #0000FF">shouldBe</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec.QuickCheck</span> (<span style="color: #0000FF">prop</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.QuickCheck</span> ((<span style="color: #666666">==&gt;</span>))
+
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;symbolic differentiation&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    prop <span style="color: #BA2121">&quot;d/dx (x + n) == 1&quot;</span> <span style="color: #666666">$</span> <span style="color: #0000FF">\</span>x n <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      deriv (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">V</span> x) (<span style="color: #B00040">N</span> n)) x `shouldBe` <span style="color: #B00040">N</span> <span style="color: #666666">1</span>
+    prop <span style="color: #BA2121">&quot;d/dx (x + y) == x, if x /= y&quot;</span> <span style="color: #666666">$</span> <span style="color: #0000FF">\</span>x y <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      x <span style="color: #666666">/=</span> y <span style="color: #666666">==&gt;</span>
+      deriv (<span style="color: #B00040">Times</span> (<span style="color: #B00040">V</span> x) (<span style="color: #B00040">V</span> y)) x `shouldBe` <span style="color: #B00040">V</span> y
+    prop <span style="color: #BA2121">&quot;d/dx (a * x + b) == x&quot;</span> <span style="color: #666666">$</span> <span style="color: #0000FF">\</span>a x b <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      deriv (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">Times</span> (<span style="color: #B00040">N</span> a) (<span style="color: #B00040">V</span> x)) (<span style="color: #B00040">N</span> b)) x `shouldBe` <span style="color: #B00040">N</span> a
+    it <span style="color: #BA2121">&quot;d/dx (x * y * (x + 3)) == (x * y) + y * (x + 3)&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      deriv (<span style="color: #B00040">Times</span> (<span style="color: #B00040">Times</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>) (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span>))
+                   (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>) (<span style="color: #B00040">N</span> <span style="color: #666666">3</span>))) <span style="color: #BA2121">&quot;x&quot;</span> `shouldBe`
+        (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">Times</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>) (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span>))
+              (<span style="color: #B00040">Times</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span>) (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>) (<span style="color: #B00040">N</span> <span style="color: #666666">3</span>))))
+</pre></div>
+
+
+<p>The syntax looks OK for simple expressions, but ugly when you have
+lots of nested subexpressions, with parentheses for grouping, as in
+the final artificial example.</p>
+
+<p>Here is the code for a still-naive symbolic differentiator, having
+only a few heuristics built in for some simplification through
+rewriting (for example, adding <code>0</code> to an expression results in that
+expression rather than construction of a superfluous <code>N 0</code>
+subexpression):</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.AlphaSyntax</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #408080; font-style: italic">-- | Variable in an expression.</span>
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Var</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">String</span>
+
+<span style="color: #408080; font-style: italic">-- | Expression.</span>
+<span style="color: #008000; font-weight: bold">data</span> <span style="color: #B00040">Exp</span>
+  <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #B00040">Int</span>          <span style="color: #408080; font-style: italic">-- ^ number</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">V</span> <span style="color: #B00040">Var</span>          <span style="color: #408080; font-style: italic">-- ^ variable</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">Plus</span> <span style="color: #B00040">Exp</span> <span style="color: #B00040">Exp</span>   <span style="color: #408080; font-style: italic">-- ^ sum</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">Times</span> <span style="color: #B00040">Exp</span> <span style="color: #B00040">Exp</span>  <span style="color: #408080; font-style: italic">-- ^ product</span>
+  <span style="color: #008000; font-weight: bold">deriving</span> (<span style="color: #B00040">Show</span>, <span style="color: #B00040">Eq</span>)
+
+<span style="color: #408080; font-style: italic">-- | Derivative of expression with respect to a variable.</span>
+<span style="color: #0000FF">deriv</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Var</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span>
+<span style="color: #0000FF">deriv</span> (<span style="color: #B00040">N</span> <span style="color: #008000; font-weight: bold">_</span>)         <span style="color: #008000; font-weight: bold">_</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>
+<span style="color: #0000FF">deriv</span> (<span style="color: #B00040">V</span> v&#39;)        v <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> (<span style="color: #008000; font-weight: bold">if</span> v&#39; <span style="color: #666666">==</span> v <span style="color: #008000; font-weight: bold">then</span> <span style="color: #666666">1</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">0</span>)
+<span style="color: #0000FF">deriv</span> (<span style="color: #B00040">Plus</span> e1 e2)  v <span style="color: #AA22FF; font-weight: bold">=</span> plus (deriv e1 v) (deriv e2 v)
+<span style="color: #0000FF">deriv</span> (<span style="color: #B00040">Times</span> e1 e2) v <span style="color: #AA22FF; font-weight: bold">=</span> plus (times e1 (deriv e2 v))
+                             (times (deriv e1 v) e2)
+
+<span style="color: #408080; font-style: italic">-- | Smart constructor that simplifies while combining subexpressions.</span>
+<span style="color: #0000FF">plus</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span>
+<span style="color: #0000FF">plus</span> (<span style="color: #B00040">N</span> <span style="color: #666666">0</span>)  e      <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #0000FF">plus</span> e      (<span style="color: #B00040">N</span> <span style="color: #666666">0</span>)  <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #0000FF">plus</span> (<span style="color: #B00040">N</span> n1) (<span style="color: #B00040">N</span> n2) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> (n1 <span style="color: #666666">+</span> n2)
+<span style="color: #0000FF">plus</span> e1     e2     <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Plus</span> e1 e2
+
+<span style="color: #408080; font-style: italic">-- | Smart constructor that simplifies while combining subexpressions.</span>
+<span style="color: #0000FF">times</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span>
+<span style="color: #0000FF">times</span> (<span style="color: #B00040">N</span> <span style="color: #666666">0</span>)  <span style="color: #008000; font-weight: bold">_</span>      <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>
+<span style="color: #0000FF">times</span> <span style="color: #008000; font-weight: bold">_</span>      (<span style="color: #B00040">N</span> <span style="color: #666666">0</span>)  <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>
+<span style="color: #0000FF">times</span> (<span style="color: #B00040">N</span> <span style="color: #666666">1</span>)  e      <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #0000FF">times</span> e      (<span style="color: #B00040">N</span> <span style="color: #666666">1</span>)  <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #0000FF">times</span> (<span style="color: #B00040">N</span> n1) (<span style="color: #B00040">N</span> n2) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> (n1 <span style="color: #666666">*</span> n2)
+<span style="color: #0000FF">times</span> e1     e2     <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Times</span> e1 e2
+</pre></div>
+
+
+<p>The syntax of the code, using pattern matching, looks reasonably good
+to me. It&rsquo;s the <code>Exp</code> data construction that looks a bit ugly,
+although not terrible. So we have a situation in which the implementor
+of this little expression language is fairly happy, but the user is
+not. In fact, we haven&rsquo;t even provided a way for a user outside the
+system to create expressions: right now, we have an API but no parser
+from a string into an expression.</p>
+
+<h2 id="parsing-from-what-format:6004f4e5d78ba4d157aa1a919a6f7cf7">Parsing from what format?</h2>
+
+<p>One way to go is to write a custom parser from a custom syntax, for
+example maybe write a function <code>fromString :: String -&gt; Exp</code> such that</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">fromString</span> <span style="color: #BA2121">&quot;5x + 7y + 20&quot;</span> <span style="color: #666666">==</span>
+  <span style="color: #B00040">Plus</span> (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">Times</span> (<span style="color: #B00040">N</span> <span style="color: #666666">5</span>) (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>))
+             (<span style="color: #B00040">Times</span> (<span style="color: #B00040">N</span> <span style="color: #666666">7</span>) (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span>)))
+       (<span style="color: #B00040">N</span> <span style="color: #666666">20</span>)
+</pre></div>
+</p>
+
+<p>We would also want to write a pretty-printer <code>toString :: Exp -&gt;
+String</code> such that maybe it&rsquo;s smart enough to go</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">toString</span> (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">Times</span> (<span style="color: #B00040">N</span> <span style="color: #666666">5</span>) (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>))
+                     (<span style="color: #B00040">Times</span> (<span style="color: #B00040">N</span> <span style="color: #666666">7</span>) (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span>)))
+               (<span style="color: #B00040">N</span> <span style="color: #666666">20</span>)) <span style="color: #666666">==</span> <span style="color: #BA2121">&quot;5x + 7y + 20&quot;</span>
+</pre></div>
+</p>
+
+<p>It is straightforward to write such a parser using
+<a href="http://hackage.haskell.org/package/parsec"><code>parsec</code></a> or the
+like, but you can imagine that sometimes it might be annoying to
+design the syntax for a much more complex language (including special
+infix operators, precedences, scoping keywords, different kinds of
+braces, etc.) and also make users learn it.</p>
+
+<p>So let&rsquo;s assume for the purpose of this article that we have a reason
+to prefer prefix-only S-expressions, just as the Lisp community does
+in order to avoid all the hassles of a custom syntax.</p>
+
+<p>Here are some sample QuickCheck tests to show what it is we want to be
+able to do. (Note that for convenience, we are using string
+interpolation through the
+<a href="http://hackage.haskell.org/package/here"><code>here</code></a> package as
+introduced yesterday,
+<a href="../../../../../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/">day 9</a>.)</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE QuasiQuotes #-}</span>
+<span style="color: #408080; font-style: italic">{-# LANGUAGE OverloadedStrings #-}</span>
+
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.SExpSpec</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.AlphaSyntax</span> (<span style="color: #B00040">Exp</span>(<span style="color: #B00040">N</span>, <span style="color: #B00040">V</span>, <span style="color: #B00040">Plus</span>, <span style="color: #B00040">Times</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.SExp</span> <span style="color: #008000; font-weight: bold">as</span> SExp
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> (<span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">shouldBe</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec.QuickCheck</span> (<span style="color: #0000FF">prop</span>)
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.String.Here</span> (<span style="color: #0000FF">i</span>)
+
+<span style="color: #408080; font-style: italic">-- | Required for auto-discovery.</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;S-expression syntax for expression&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    prop <span style="color: #BA2121">&quot;(+ x a)&quot;</span> <span style="color: #666666">$</span> <span style="color: #0000FF">\</span>a <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      <span style="color: #B00040">SExp</span><span style="color: #666666">.</span>parse [i<span style="color: #666666">|</span>(<span style="color: #666666">+</span> x <span style="color: #666666">$</span>{a})<span style="color: #666666">|</span>] `shouldBe`
+        <span style="color: #B00040">Right</span> (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>) (<span style="color: #B00040">N</span> a))
+
+    prop <span style="color: #BA2121">&quot;(* (+ x a) (+ y b))&quot;</span> <span style="color: #666666">$</span> <span style="color: #0000FF">\</span>a b <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      <span style="color: #B00040">SExp</span><span style="color: #666666">.</span>parse [i<span style="color: #666666">|</span>
+                     (<span style="color: #666666">*</span> (<span style="color: #666666">+</span> x <span style="color: #666666">$</span>{a})
+                        (<span style="color: #666666">+</span> y <span style="color: #666666">$</span>{b}))
+                   <span style="color: #666666">|</span>] `shouldBe`
+        <span style="color: #B00040">Right</span> (<span style="color: #B00040">Times</span> (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>) (<span style="color: #B00040">N</span> a))
+                     (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span>) (<span style="color: #B00040">N</span> b)))
+
+    it <span style="color: #BA2121">&quot;(!? x y)&quot;</span> <span style="color: #666666">$</span>
+      <span style="color: #B00040">SExp</span><span style="color: #666666">.</span>parse <span style="color: #BA2121">&quot;(!? x y)&quot;</span> `shouldBe`
+        <span style="color: #B00040">Left</span> <span style="color: #BA2121">&quot;</span><span style="color: #BB6622; font-weight: bold">\&quot;</span><span style="color: #BA2121">!?</span><span style="color: #BB6622; font-weight: bold">\&quot;</span><span style="color: #BA2121"> is not a valid operator&quot;</span>
+</pre></div>
+</p>
+
+<p>I&rsquo;ve included a little test to indicate that we want some kind of
+error handling also. Nothing is more annoying to a user than terrible
+parse error messages. We won&rsquo;t provide great messages here, but at
+least will give an idea of how one could.</p>
+
+<h2 id="the-s-expression-parser:6004f4e5d78ba4d157aa1a919a6f7cf7">The S-expression parser</h2>
+
+<p><code>s-cargot</code> provides very flexible ways of constructing S-expression
+parsers, based on what kind of syntax you want to allow (full Scheme
+or not, for example), and allows hooks on many levels to support
+readers as well as specifying the desired atom parser.</p>
+
+<p>Some imports first:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE QuasiQuotes #-}</span>
+<span style="color: #408080; font-style: italic">{-# LANGUAGE OverloadedStrings #-}</span>
+
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.SExp</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.AlphaSyntax</span> (<span style="color: #B00040">Exp</span>(<span style="color: #B00040">N</span>, <span style="color: #B00040">V</span>, <span style="color: #B00040">Plus</span>, <span style="color: #B00040">Times</span>))
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.SCargot</span> <span style="color: #008000; font-weight: bold">as</span> S
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.SCargot.Language.Basic</span> (<span style="color: #0000FF">basicParser</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.SCargot.Repr.WellFormed</span>
+       (<span style="color: #B00040">WellFormedSExpr</span>(<span style="color: #B00040">WFSList</span>, <span style="color: #B00040">WFSAtom</span>), <span style="color: #0000FF">fromWellFormed</span>)
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.Text</span> <span style="color: #008000; font-weight: bold">as</span> Text
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Text</span> (<span style="color: #B00040">Text</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.Text.Read</span> (<span style="color: #0000FF">signed</span>, <span style="color: #0000FF">decimal</span>)
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.String.Here</span> (<span style="color: #0000FF">i</span>)
+
+<span style="color: #408080; font-style: italic">-- | Error when parsing.</span>
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Error</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">String</span>
+</pre></div>
+</p>
+
+<p>The main driver is a pipeline of calling an <code>s-cargot</code> parser and then
+calling our own parser of an S-expression into our <code>Exp</code> type:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | For simplicity, we use &#39;basicParser&#39; which just treats every atom</span>
+<span style="color: #408080; font-style: italic">-- as &#39;Text&#39;, which we parse later rather than up front.</span>
+<span style="color: #0000FF">parse</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Text</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Either</span> <span style="color: #B00040">Error</span> <span style="color: #B00040">Exp</span>
+<span style="color: #0000FF">parse</span> text <span style="color: #AA22FF; font-weight: bold">=</span> parseOneSexp text <span style="color: #666666">&gt;&gt;=</span> toExp
+
+<span style="color: #0000FF">parseOneSexp</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Text</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Either</span> <span style="color: #B00040">Error</span> (<span style="color: #B00040">WellFormedSExpr</span> <span style="color: #B00040">Text</span>)
+<span style="color: #0000FF">parseOneSexp</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">S</span><span style="color: #666666">.</span>decodeOne (<span style="color: #B00040">S</span><span style="color: #666666">.</span>asWellFormed basicParser)
+</pre></div>
+</p>
+
+<p>Once we have a well-formed S-expression, we can pick it apart, while
+catching errors if we encounter one.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">toExp</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">WellFormedSExpr</span> <span style="color: #B00040">Text</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Either</span> <span style="color: #B00040">Error</span> <span style="color: #B00040">Exp</span>
+<span style="color: #0000FF">toExp</span> (<span style="color: #B00040">WFSAtom</span> text) <span style="color: #AA22FF; font-weight: bold">=</span> fromAtom text
+<span style="color: #0000FF">toExp</span> (<span style="color: #B00040">WFSList</span> [<span style="color: #B00040">WFSAtom</span> operatorText, sexp1, sexp2]) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  operator <span style="color: #AA22FF; font-weight: bold">&lt;-</span> fromOperator operatorText
+  e1 <span style="color: #AA22FF; font-weight: bold">&lt;-</span> toExp sexp1
+  e2 <span style="color: #AA22FF; font-weight: bold">&lt;-</span> toExp sexp2
+  return (operator e1 e2)
+<span style="color: #0000FF">toExp</span> list<span style="color: #666666">@</span>(<span style="color: #B00040">WFSList</span> <span style="color: #008000; font-weight: bold">_</span>) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Left</span> [i<span style="color: #666666">|$</span>{list} should have exactly <span style="color: #666666">3</span> elements<span style="color: #666666">|</span>]
+
+<span style="color: #0000FF">fromOperator</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Text</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Either</span> <span style="color: #B00040">Error</span> (<span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span>)
+<span style="color: #0000FF">fromOperator</span> <span style="color: #BA2121">&quot;+&quot;</span> <span style="color: #AA22FF; font-weight: bold">=</span> return <span style="color: #B00040">Plus</span>
+<span style="color: #0000FF">fromOperator</span> <span style="color: #BA2121">&quot;*&quot;</span> <span style="color: #AA22FF; font-weight: bold">=</span> return <span style="color: #B00040">Times</span>
+<span style="color: #0000FF">fromOperator</span> text <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Left</span> [i<span style="color: #666666">|$</span>{text} is not a valid operator<span style="color: #666666">|</span>]
+
+<span style="color: #408080; font-style: italic">-- | Either an integer or a variable.</span>
+<span style="color: #0000FF">fromAtom</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Text</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Either</span> <span style="color: #B00040">Error</span> <span style="color: #B00040">Exp</span>
+<span style="color: #0000FF">fromAtom</span> text <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #008000; font-weight: bold">case</span> signed decimal text <span style="color: #008000; font-weight: bold">of</span>
+    <span style="color: #B00040">Right</span> (n, <span style="color: #BA2121">&quot;&quot;</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      return (<span style="color: #B00040">N</span> n)
+    <span style="color: #B00040">Right</span> (<span style="color: #008000; font-weight: bold">_</span>, <span style="color: #008000; font-weight: bold">_</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      <span style="color: #B00040">Left</span> [i<span style="color: #666666">|</span>extra garbage after numeric <span style="color: #008000; font-weight: bold">in</span> <span style="color: #666666">$</span>{text}<span style="color: #666666">|</span>]
+    <span style="color: #B00040">Left</span> <span style="color: #008000; font-weight: bold">_</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      return (<span style="color: #B00040">V</span> (<span style="color: #B00040">Text</span><span style="color: #666666">.</span>unpack text))
+</pre></div>
+</p>
+
+<h2 id="pretty-printing:6004f4e5d78ba4d157aa1a919a6f7cf7">Pretty-printing</h2>
+
+<p>And we get pretty-printing for free from <code>s-cargot</code> if we turn our
+<code>Exp</code> into an S-expression first. I won&rsquo;t show the details, but you
+can use the basic S-expression printer or customize it with a lot
+options including indentation strategy. Let&rsquo;s just use the basic.</p>
+
+<p>A sample test for our <code>SExp.prettyPrint</code>:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    prop <span style="color: #BA2121">&quot;pretty-printing&quot;</span> <span style="color: #666666">$</span> <span style="color: #0000FF">\</span>a b <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      <span style="color: #B00040">SExp</span><span style="color: #666666">.</span>prettyPrint (<span style="color: #B00040">Times</span> (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>) (<span style="color: #B00040">N</span> a))
+                              (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span>) (<span style="color: #B00040">N</span> b))) `shouldBe`
+       [i<span style="color: #666666">|</span>(<span style="color: #666666">*</span> (<span style="color: #666666">+</span> x <span style="color: #666666">$</span>{a}) (<span style="color: #666666">+</span> y <span style="color: #666666">$</span>{b}))<span style="color: #666666">|</span>]
+</pre></div>
+</p>
+
+<p>The code:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">fromExp</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">WellFormedSExpr</span> <span style="color: #B00040">Text</span>
+<span style="color: #0000FF">fromExp</span> (<span style="color: #B00040">N</span> n) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">WFSAtom</span> (<span style="color: #B00040">Text</span><span style="color: #666666">.</span>pack (show n))
+<span style="color: #0000FF">fromExp</span> (<span style="color: #B00040">V</span> x) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">WFSAtom</span> (<span style="color: #B00040">Text</span><span style="color: #666666">.</span>pack x)
+<span style="color: #0000FF">fromExp</span> (<span style="color: #B00040">Plus</span> e1 e2) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">WFSList</span> [<span style="color: #B00040">WFSAtom</span> <span style="color: #BA2121">&quot;+&quot;</span>, fromExp e1, fromExp e2]
+<span style="color: #0000FF">fromExp</span> (<span style="color: #B00040">Times</span> e1 e2) <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">WFSList</span> [<span style="color: #B00040">WFSAtom</span> <span style="color: #BA2121">&quot;*&quot;</span>, fromExp e1, fromExp e2]
+
+<span style="color: #0000FF">prettyPrint</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Text</span>
+<span style="color: #0000FF">prettyPrint</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #B00040">S</span><span style="color: #666666">.</span>encodeOne (<span style="color: #B00040">S</span><span style="color: #666666">.</span>setFromCarrier fromWellFormed (<span style="color: #B00040">S</span><span style="color: #666666">.</span>basicPrint id))
+  <span style="color: #666666">.</span> fromExp
+</pre></div>
+</p>
+
+<h2 id="summary-of-s-expression-parsing-and-pretty-printing:6004f4e5d78ba4d157aa1a919a6f7cf7">Summary of S-expression parsing and pretty-printing</h2>
+
+<p>So there you have it: with a little bit of boilerplate you can get an
+experience similar to that of working in Lisp. Note that with even
+clever Template Haskell work with quasiquotation you could go further
+than the pure text templates we&rsquo;ve used for convenience, and create
+pattern templates as well.</p>
+
+<p>We didn&rsquo;t have to write a traditional parser, and we were able to
+separate well-formedness from further processing. This is really
+useful in many contexts: in my experience, the multi-level error
+checking makes good error messages easier to create. Also, not
+discussed here is how S-expressions can also help with prediction and
+completion.</p>
+
+<h2 id="optional-further-notes-on-syntax-for-domain-specific-languages:6004f4e5d78ba4d157aa1a919a6f7cf7">Optional further notes on syntax for domain-specific languages</h2>
+
+<p>I wanted to point out that for some problem domains, such as this one
+that happens to be mathematical, it is sometimes popular to make
+things look mathematical. I&rsquo;ve deliberately presented it without that
+attempt first, but now I&rsquo;ll show some syntactic variants.</p>
+
+<h3 id="alphanumeric-identifiers-as-operators:6004f4e5d78ba4d157aa1a919a6f7cf7">Alphanumeric identifiers as operators</h3>
+
+<p>First, one can use operator syntax with backticks and precedence
+levels:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.AlphaOperatorSyntax</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #408080; font-style: italic">-- | Variable in an expression.</span>
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Var</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">String</span>
+
+<span style="color: #408080; font-style: italic">-- | Precedences for our expression constructors.</span>
+<span style="color: #008000; font-weight: bold">infixl</span> <span style="color: #666666">6</span> `<span style="color: #B00040">Plus</span>`
+<span style="color: #008000; font-weight: bold">infixl</span> <span style="color: #666666">7</span> `<span style="color: #B00040">Times</span>`
+
+<span style="color: #408080; font-style: italic">-- | Expression.</span>
+<span style="color: #008000; font-weight: bold">data</span> <span style="color: #B00040">Exp</span>
+  <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #B00040">Int</span>          <span style="color: #408080; font-style: italic">-- ^ number</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">V</span> <span style="color: #B00040">Var</span>          <span style="color: #408080; font-style: italic">-- ^ variable</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">Plus</span> <span style="color: #B00040">Exp</span> <span style="color: #B00040">Exp</span>   <span style="color: #408080; font-style: italic">-- ^ sum</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">Times</span> <span style="color: #B00040">Exp</span> <span style="color: #B00040">Exp</span>  <span style="color: #408080; font-style: italic">-- ^ product</span>
+  <span style="color: #008000; font-weight: bold">deriving</span> (<span style="color: #B00040">Show</span>, <span style="color: #B00040">Eq</span>)
+
+<span style="color: #408080; font-style: italic">-- | Derivative of expression with respect to a variable.</span>
+<span style="color: #0000FF">deriv</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Var</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span>
+<span style="color: #0000FF">deriv</span> (<span style="color: #B00040">N</span> <span style="color: #008000; font-weight: bold">_</span>)         <span style="color: #008000; font-weight: bold">_</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>
+<span style="color: #0000FF">deriv</span> (<span style="color: #B00040">V</span> v&#39;)        v <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> (<span style="color: #008000; font-weight: bold">if</span> v&#39; <span style="color: #666666">==</span> v <span style="color: #008000; font-weight: bold">then</span> <span style="color: #666666">1</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">0</span>)
+<span style="color: #0000FF">deriv</span> (<span style="color: #B00040">Plus</span> e1 e2)  v <span style="color: #AA22FF; font-weight: bold">=</span> deriv e1 v `plus` deriv e2 v
+<span style="color: #0000FF">deriv</span> (<span style="color: #B00040">Times</span> e1 e2) v <span style="color: #AA22FF; font-weight: bold">=</span> e1 `times` deriv e2 v
+                        `plus`
+                        deriv e1 v `times` e2
+
+<span style="color: #408080; font-style: italic">-- | Precedences for our expression &quot;smart&quot; constructors.</span>
+<span style="color: #008000; font-weight: bold">infixl</span> <span style="color: #666666">6</span> `plus`
+<span style="color: #008000; font-weight: bold">infixl</span> <span style="color: #666666">7</span> `times`
+
+<span style="color: #408080; font-style: italic">-- | Smart constructor that simplifies while combining subexpressions.</span>
+<span style="color: #0000FF">plus</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span>
+<span style="color: #B00040">N</span> <span style="color: #666666">0</span>  `plus` e    <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #0000FF">e</span>    `plus` <span style="color: #B00040">N</span> <span style="color: #666666">0</span>  <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #B00040">N</span> n1 `plus` <span style="color: #B00040">N</span> n2 <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> (n1 <span style="color: #666666">+</span> n2)
+<span style="color: #0000FF">e1</span>   `plus` e2   <span style="color: #AA22FF; font-weight: bold">=</span> e1 `<span style="color: #B00040">Plus</span>` e2
+
+<span style="color: #408080; font-style: italic">-- | Smart constructor that simplifies while combining subexpressions.</span>
+<span style="color: #0000FF">times</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span>
+<span style="color: #B00040">N</span> <span style="color: #666666">0</span>  `times` <span style="color: #008000; font-weight: bold">_</span>    <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>
+<span style="color: #008000; font-weight: bold">_</span>    `times` <span style="color: #B00040">N</span> <span style="color: #666666">0</span>  <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>
+<span style="color: #B00040">N</span> <span style="color: #666666">1</span>  `times` e    <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #0000FF">e</span>    `times` <span style="color: #B00040">N</span> <span style="color: #666666">1</span>  <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #B00040">N</span> n1 `times` <span style="color: #B00040">N</span> n2 <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> (n1 <span style="color: #666666">*</span> n2)
+<span style="color: #0000FF">e1</span>   `times` e2   <span style="color: #AA22FF; font-weight: bold">=</span> e1 `<span style="color: #B00040">Times</span>` e2
+</pre></div>
+</p>
+
+<p>Note that nothing has really changed, except the use of infix
+function definitions and calls, and use of precedence to remove
+parentheses, such as in the big expression for the derivative of a
+product of expressions. But clarity is starting to be lost, for those
+not already familiar with the problem domain and conventions.</p>
+
+<h3 id="symbolic-identifiers-as-operators:6004f4e5d78ba4d157aa1a919a6f7cf7">Symbolic identifiers as operators</h3>
+
+<p>One can go further and use symbolic identifiers in place of the
+backticked alphanumeric operators. This is where many of us start
+wondering what is going on:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.OperatorSyntax</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #408080; font-style: italic">-- | Variable in an expression.</span>
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Var</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">String</span>
+
+<span style="color: #408080; font-style: italic">-- | Precedences for our expression constructors.</span>
+<span style="color: #008000; font-weight: bold">infixl</span> <span style="color: #666666">6</span> <span style="color: #B00040">:+:</span>
+<span style="color: #008000; font-weight: bold">infixl</span> <span style="color: #666666">7</span> <span style="color: #B00040">:*:</span>
+
+<span style="color: #408080; font-style: italic">-- | Expression.</span>
+<span style="color: #008000; font-weight: bold">data</span> <span style="color: #B00040">Exp</span>
+  <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #B00040">Int</span>        <span style="color: #408080; font-style: italic">-- ^ number</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">V</span> <span style="color: #B00040">Var</span>        <span style="color: #408080; font-style: italic">-- ^ variable</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">Exp</span> <span style="color: #B00040">:+:</span> <span style="color: #B00040">Exp</span>  <span style="color: #408080; font-style: italic">-- ^ sum</span>
+  <span style="color: #666666">|</span> <span style="color: #B00040">Exp</span> <span style="color: #B00040">:*:</span> <span style="color: #B00040">Exp</span>  <span style="color: #408080; font-style: italic">-- ^ product</span>
+  <span style="color: #008000; font-weight: bold">deriving</span> (<span style="color: #B00040">Show</span>, <span style="color: #B00040">Eq</span>)
+
+<span style="color: #408080; font-style: italic">-- | Derivative of expression with respect to a variable.</span>
+<span style="color: #0000FF">deriv</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Var</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span>
+<span style="color: #0000FF">deriv</span> (<span style="color: #B00040">N</span> <span style="color: #008000; font-weight: bold">_</span>)       <span style="color: #008000; font-weight: bold">_</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>
+<span style="color: #0000FF">deriv</span> (<span style="color: #B00040">V</span> x )      y <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> (<span style="color: #008000; font-weight: bold">if</span> x <span style="color: #666666">==</span> y <span style="color: #008000; font-weight: bold">then</span> <span style="color: #666666">1</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">0</span>)
+<span style="color: #0000FF">deriv</span> (e1 <span style="color: #B00040">:+:</span> e2) v <span style="color: #AA22FF; font-weight: bold">=</span> deriv e1 v <span style="color: #666666">.+.</span> deriv e2 v
+<span style="color: #0000FF">deriv</span> (e1 <span style="color: #B00040">:*:</span> e2) v <span style="color: #AA22FF; font-weight: bold">=</span> e1 <span style="color: #666666">.*.</span> deriv e2 v
+                      <span style="color: #666666">.+.</span>
+                      deriv e1 v <span style="color: #666666">.*.</span> e2
+
+<span style="color: #408080; font-style: italic">-- | Precedences for our expression &quot;smart&quot; constructors.</span>
+<span style="color: #008000; font-weight: bold">infixl</span> <span style="color: #666666">6</span> <span style="color: #666666">.+.</span>
+<span style="color: #008000; font-weight: bold">infixl</span> <span style="color: #666666">7</span> <span style="color: #666666">.*.</span>
+
+<span style="color: #408080; font-style: italic">-- | Smart constructor that simplifies while combining subexpressions.</span>
+(<span style="color: #666666">.+.</span>) <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span>
+<span style="color: #B00040">N</span> <span style="color: #666666">0</span>  <span style="color: #666666">.+.</span> e    <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #0000FF">e</span>    <span style="color: #666666">.+.</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>  <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #B00040">N</span> n1 <span style="color: #666666">.+.</span> <span style="color: #B00040">N</span> n2 <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> (n1 <span style="color: #666666">+</span> n2)
+<span style="color: #0000FF">e1</span>   <span style="color: #666666">.+.</span> e2   <span style="color: #AA22FF; font-weight: bold">=</span> e1 <span style="color: #B00040">:+:</span> e2
+
+<span style="color: #408080; font-style: italic">-- | Smart constructor that simplifies while combining subexpressions.</span>
+(<span style="color: #666666">.*.</span>) <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Exp</span>
+<span style="color: #B00040">N</span> <span style="color: #666666">0</span>  <span style="color: #666666">.*.</span>  <span style="color: #008000; font-weight: bold">_</span>   <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>
+<span style="color: #008000; font-weight: bold">_</span>    <span style="color: #666666">.*.</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>  <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> <span style="color: #666666">0</span>
+<span style="color: #B00040">N</span> <span style="color: #666666">1</span>  <span style="color: #666666">.*.</span> e    <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #0000FF">e</span>    <span style="color: #666666">.*.</span> <span style="color: #B00040">N</span> <span style="color: #666666">1</span>  <span style="color: #AA22FF; font-weight: bold">=</span> e
+<span style="color: #B00040">N</span> n1 <span style="color: #666666">.*.</span> <span style="color: #B00040">N</span> n2 <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">N</span> (n1 <span style="color: #666666">*</span> n2)
+<span style="color: #0000FF">e1</span>   <span style="color: #666666">.*.</span> e2   <span style="color: #AA22FF; font-weight: bold">=</span> e1 <span style="color: #B00040">:*:</span> e2
+</pre></div>
+</p>
+
+<p>Depending on your taste, you might find that this funny syntax makes
+the tests look nicer:</p>
+
+<p></p>
+
+<p>All this looks kind of cute if you&rsquo;re used to it, but I think it can
+look really weird otherwise; and I know that many non-Haskellers
+seeing this before seeing the vanilla way get the wrong idea that you
+have to write this way in Haskell and turn away in disgust and
+confusion. This is why I showed the vanilla way first, and show this
+only to illustrate that there are libraries out there that do try to
+be very suggestive in symbolic operator usage, and also that there is
+nothing special going on here: it&rsquo;s just a different way of saying
+exactly the same thing as the first version, with the second version
+(backticked alphanumerics as operators) being a transitional step
+toward this third version. It&rsquo;s good to know about all three variants,
+regardless of which one you prefer to read and write.</p>
+
+<p>But what about the S-expression route, which is to decouple the user
+(represented by the tests) side of things from the abstract syntax and
+the Haskell syntax? My intuition is that there are real benefits in at
+least providing an alternate S-expression syntax for whatever other
+concrete syntax is made available.</p>
+
+<h2 id="conclusion:6004f4e5d78ba4d157aa1a919a6f7cf7">Conclusion</h2>
+
+<p>S-expressions are a time-honored way of representing data. The
+<code>s-cargot</code> library comes with ways to build custom S-expression
+parsers and pretty-printers and also comes with useful defaults.</p>
+
+<h2 id="all-the-code:6004f4e5d78ba4d157aa1a919a6f7cf7">All the code</h2>
+
+<p>All my code for my article series are at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/10\/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax\/';
+    var disqus_title = '24 days of Hackage, 2015: day 10: s-cargot: using S-expression syntax';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/10\/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+
