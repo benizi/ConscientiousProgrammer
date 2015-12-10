@@ -20,7 +20,7 @@ A table of contents is at the top of the article for [day 1](/blog/2015/11/30/ha
 ## Day 9
 
 A stray negative remark I made on
-[day 9](/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/)
+[day 8](/blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/)
 regarding Haskell and its unergonomic support for multi-line string
 literals and interpolation led to good comments that I was being
 misleading because there actually exist good solutions. I already use
