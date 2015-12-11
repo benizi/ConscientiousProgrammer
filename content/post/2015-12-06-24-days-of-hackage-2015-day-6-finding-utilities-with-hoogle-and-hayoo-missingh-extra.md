@@ -126,7 +126,8 @@ immediately brings up much more promising results than with `String`,
 from packages such as `utility-ht`, `MissingH`, and `extra`. `pandoc`
 also popped up, but that's a
 [huge text-processing tool](http://pandoc.org/), not a library I would
-pull in for just one tiny utility function!
+pull in for just one tiny utility function! (Note that `pandoc` was
+covered in a [2013 day of Hackage](https://ocharles.org.uk/blog/guest-posts/2013-12-12-24-days-of-hackage-pandoc.html).
 
 The
 [Hoogle search at `hoogle.haskell.org`](http://hoogle.haskell.org/?hoogle=Eq+a+%3D%3E+[a]+-%3E+[a]+-%3E+[a]+-%3E+[a]&scope=set%3Astackage)

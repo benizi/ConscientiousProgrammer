@@ -488,7 +488,7 @@ e1   .*. e2   = e1 :*: e2
 Depending on your taste, you might find that this funny syntax makes
 the tests look nicer:
 
-{{< highlight >}}
+{{< highlight haskell >}}
 spec :: Spec
 spec =
   describe "symbolic differentiation" $ do
