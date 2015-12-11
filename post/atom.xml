@@ -78,7 +78,8 @@ recursion for the loop:&lt;/p&gt;
       guess &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getLine
       &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; guess &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;secret&amp;quot;&lt;/span&gt;
         &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
-          putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Wrong password! Try again:&amp;quot;&lt;/span&gt;
+          putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Wrong password!&amp;quot;&lt;/span&gt;
+          putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Try again:&amp;quot;&lt;/span&gt;
           go
         &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt;
           return &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
@@ -95,8 +96,9 @@ recursion for the loop:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;log_in&lt;/span&gt;():
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;% E&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;nter password:&amp;quot;&lt;/span&gt;
   &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;raw_input&lt;/span&gt;() &lt;span style=&#34;color: #666666&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;secret&amp;#39;&lt;/span&gt;:
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Wrong password! Try again:&amp;quot;&lt;/span&gt;
-    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Congratulations!&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Wrong password!&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Try again:&amp;quot;&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Congratulations!&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 

@@ -139,7 +139,8 @@ recursion for the loop:</p>
       guess <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getLine
       <span style="color: #008000; font-weight: bold">if</span> guess <span style="color: #666666">/=</span> <span style="color: #BA2121">&quot;secret&quot;</span>
         <span style="color: #008000; font-weight: bold">then</span> <span style="color: #008000; font-weight: bold">do</span>
-          putStrLn <span style="color: #BA2121">&quot;% Wrong password! Try again:&quot;</span>
+          putStrLn <span style="color: #BA2121">&quot;% Wrong password!&quot;</span>
+          putStrLn <span style="color: #BA2121">&quot;% Try again:&quot;</span>
           go
         <span style="color: #008000; font-weight: bold">else</span>
           return <span style="color: #008000">()</span>
@@ -156,8 +157,9 @@ recursion for the loop:</p>
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">log_in</span>():
   <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;</span><span style="color: #BB6688; font-weight: bold">% E</span><span style="color: #BA2121">nter password:&quot;</span>
   <span style="color: #008000; font-weight: bold">while</span> <span style="color: #008000">raw_input</span>() <span style="color: #666666">!=</span> <span style="color: #BA2121">&#39;secret&#39;</span>:
-    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;% Wrong password! Try again:&quot;</span>
-    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;% Congratulations!&quot;</span>
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;% Wrong password!&quot;</span>
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;% Try again:&quot;</span>
+  <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;% Congratulations!&quot;</span>
 </pre></div>
 
 
