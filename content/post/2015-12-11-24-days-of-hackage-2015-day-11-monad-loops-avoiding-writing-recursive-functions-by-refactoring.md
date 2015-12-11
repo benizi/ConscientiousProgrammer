@@ -69,7 +69,8 @@ logIn = do
       guess <- getLine
       if guess /= "secret"
         then do
-          putStrLn "% Wrong password! Try again:"
+          putStrLn "% Wrong password!"
+          putStrLn "% Try again:"
           go
         else
           return ()
@@ -86,8 +87,9 @@ Compare with typical Python code:
 def log_in():
   print "% Enter password:"
   while raw_input() != 'secret':
-    print "% Wrong password! Try again:"
-    print "% Congratulations!"
+    print "% Wrong password!"
+    print "% Try again:"
+  print "% Congratulations!"
 {{< /highlight >}}
 
 There's a reason
