@@ -550,7 +550,21 @@ wondering what is going on:</p>
 <p>Depending on your taste, you might find that this funny syntax makes
 the tests look nicer:</p>
 
-<p></p>
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;symbolic differentiation&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    prop <span style="color: #BA2121">&quot;d/dx (x + n) == 1&quot;</span> <span style="color: #666666">$</span> <span style="color: #0000FF">\</span>x n <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      deriv (<span style="color: #B00040">V</span> x <span style="color: #B00040">:+:</span> <span style="color: #B00040">N</span> n) x `shouldBe` <span style="color: #B00040">N</span> <span style="color: #666666">1</span>
+    prop <span style="color: #BA2121">&quot;d/dx (x + y) == x, if x /= y&quot;</span> <span style="color: #666666">$</span> <span style="color: #0000FF">\</span>x y <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      x <span style="color: #666666">/=</span> y <span style="color: #666666">==&gt;</span>
+      deriv (<span style="color: #B00040">V</span> x <span style="color: #B00040">:*:</span> <span style="color: #B00040">V</span> y) x `shouldBe` <span style="color: #B00040">V</span> y
+    prop <span style="color: #BA2121">&quot;d/dx (a * x + b) == x&quot;</span> <span style="color: #666666">$</span> <span style="color: #0000FF">\</span>a x b <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      deriv (<span style="color: #B00040">N</span> a <span style="color: #B00040">:*:</span> <span style="color: #B00040">V</span> x <span style="color: #B00040">:+:</span> <span style="color: #B00040">N</span> b) x `shouldBe` <span style="color: #B00040">N</span> a
+    it <span style="color: #BA2121">&quot;d/dx (x * y * (x + 3)) == (x * y) + y * (x + 3)&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      deriv (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span> <span style="color: #B00040">:*:</span> <span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span> <span style="color: #B00040">:*:</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span> <span style="color: #B00040">:+:</span> <span style="color: #B00040">N</span> <span style="color: #666666">3</span>)) <span style="color: #BA2121">&quot;x&quot;</span> `shouldBe`
+        (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span> <span style="color: #B00040">:*:</span> <span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span>) <span style="color: #B00040">:+:</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span> <span style="color: #B00040">:*:</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span> <span style="color: #B00040">:+:</span> <span style="color: #B00040">N</span> <span style="color: #666666">3</span>))
+</pre></div>
+</p>
 
 <p>All this looks kind of cute if you&rsquo;re used to it, but I think it can
 look really weird otherwise; and I know that many non-Haskellers

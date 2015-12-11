@@ -244,10 +244,6 @@ compile-time error rather than a runtime error.</p>
 
 <p>Example of a compile-time error:</p>
 
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- This Haskell code fails to compile!</span>
-<span style="color: #0000FF">mediaRegex</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Regex</span>
-<span style="color: #0000FF">mediaRegex</span> <span style="color: #AA22FF; font-weight: bold">=</span> [re<span style="color: #666666">|^@</span><span style="color: #B00040">Media:\</span>t([<span style="color: #666666">^</span> ,]<span style="color: #666666">+</span>)<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>,<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>(audio<span style="color: #666666">|</span>video)(<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>,<span style="color: #0000FF">\</span> <span style="color: #666666">*</span>(<span style="color: #666666">?:</span>missing<span style="color: #666666">|</span>unlinked)<span style="color: #666666">?|</span>]
-</pre></div>
 
 
 <p>Loading this in GHCi or compiling with GHC results in</p>
@@ -334,14 +330,14 @@ command-line program.</p>
 
 <p>We have all the information needed to print out a report for each line.</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | Output a report.</span>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | Output a report.</span>
 <span style="color: #0000FF">reportOnInfo</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Maybe</span> <span style="color: #B00040">Info</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
 <span style="color: #0000FF">reportOnInfo</span> <span style="color: #B00040">Nothing</span> <span style="color: #AA22FF; font-weight: bold">=</span> putStrLn <span style="color: #BA2121">&quot;no match&quot;</span>
 <span style="color: #0000FF">reportOnInfo</span> (<span style="color: #B00040">Just</span> <span style="color: #B00040">Skip</span>) <span style="color: #AA22FF; font-weight: bold">=</span> putStrLn <span style="color: #BA2121">&quot;match, but missing or unlinked&quot;</span>
 <span style="color: #0000FF">reportOnInfo</span> (<span style="color: #B00040">Just</span> (<span style="color: #B00040">Audio</span> path)) <span style="color: #AA22FF; font-weight: bold">=</span> printf <span style="color: #BA2121">&quot;audio at %s</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span> path
 <span style="color: #0000FF">reportOnInfo</span> (<span style="color: #B00040">Just</span> (<span style="color: #B00040">Video</span> path)) <span style="color: #AA22FF; font-weight: bold">=</span> printf <span style="color: #BA2121">&quot;video at %s</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span> path
 </pre></div>
-</p>
+
 
 <p>And the final driver, piping everything through from standard input:</p>
 

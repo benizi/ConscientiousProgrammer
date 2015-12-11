@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>24 days of Hackage, 2015: day 11: monad-loops: avoiding writing recursive functions by refactoring &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+        
+        <h1>The Conscientious Programmer</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
+    </ul>
+
+    
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>24 days of Hackage, 2015: day 11: monad-loops: avoiding writing recursive functions by refactoring</h1>
+    
+
+<h2 id="table-of-contents-for-the-whole-series:dca87c7fcd1d9eced1add38ac79eca8c">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-11:dca87c7fcd1d9eced1add38ac79eca8c">Day 11</h2>
+
+<p>I often dislike writing recursive functions. Recursion is a form of
+<code>goto</code> and therefore recursion is, conceptually, the assembly
+language low-level infrastructure of functional programming, a
+fundamental building block but not necessarily something I want to see
+every day.</p>
+
+<p>An analogy: imperative programming in the 1960s was altered
+significantly when brand new control structures such as <code>for</code> and
+<code>while</code> loops changed the face of imperative programming by removing
+the boilerplate of using the low-level <code>goto</code> everywhere; <code>for</code> and
+<code>while</code> are the higher-order control structures of imperative programming.</p>
+
+<p>In functional programming, recursion boilerplate is avoided through
+writing and using higher-order functions such as <code>map</code>,<code>filter</code>,
+<code>foldr</code>, and <code>traverse</code>. The cool thing is that in functional
+programming, these are ordinary user-space functions, whereas in
+imperative programming, the control structures are built into the
+language and it&rsquo;s typically not so easy to invent your own.</p>
+
+<p>Why would you want to define control structures yourself? I&rsquo;ll show
+examples and a useful little library
+<a href="https://hackage.haskell.org/package/monad-loops"><code>monad-loops</code></a> that
+you can use in order to avoid reinventing the wheel.</p>
+
+<h2 id="a-sample-task:dca87c7fcd1d9eced1add38ac79eca8c">A sample task</h2>
+
+<p>Let&rsquo;s write a function to simulate a user login process, in which</p>
+
+<ul>
+<li>the user is prompted to enter a password</li>
+<li>a loop is entered in which
+
+<ul>
+<li>a guess is read in</li>
+<li>if it is not correct, we prompt again and loop</li>
+<li>if it is correct, we exit the loop</li>
+<li>we print congratulations</li>
+</ul></li>
+</ul>
+
+<p>Here is a literal translation of the pseudocode into Haskell using
+recursion for the loop:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">logIn</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
+<span style="color: #0000FF">logIn</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  putStrLn <span style="color: #BA2121">&quot;% Enter password:&quot;</span>
+  go
+  putStrLn <span style="color: #BA2121">&quot;$ Congratulations!&quot;</span>
+
+  <span style="color: #008000; font-weight: bold">where</span>
+    <span style="color: #408080; font-style: italic">-- Use recursion for loop</span>
+    go <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+      guess <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getLine
+      <span style="color: #008000; font-weight: bold">if</span> guess <span style="color: #666666">/=</span> <span style="color: #BA2121">&quot;secret&quot;</span>
+        <span style="color: #008000; font-weight: bold">then</span> <span style="color: #008000; font-weight: bold">do</span>
+          putStrLn <span style="color: #BA2121">&quot;% Wrong password! Try again:&quot;</span>
+          go
+        <span style="color: #008000; font-weight: bold">else</span>
+          return <span style="color: #008000">()</span>
+</pre></div>
+
+
+<p>Do you like this code? Me, I&rsquo;m annoyed by having to write that
+&ldquo;helper&rdquo; recursive function just to write a loop.</p>
+
+<h3 id="comparision-with-typical-imperative-style:dca87c7fcd1d9eced1add38ac79eca8c">Comparision with typical imperative style</h3>
+
+<p>Compare with typical Python code:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">log_in</span>():
+  <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;</span><span style="color: #BB6688; font-weight: bold">% E</span><span style="color: #BA2121">nter password:&quot;</span>
+  <span style="color: #008000; font-weight: bold">while</span> <span style="color: #008000">raw_input</span>() <span style="color: #666666">!=</span> <span style="color: #BA2121">&#39;secret&#39;</span>:
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;% Wrong password! Try again:&quot;</span>
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">&quot;% Congratulations!&quot;</span>
+</pre></div>
+
+
+<p>There&rsquo;s a reason
+<a href="https://en.wikipedia.org/wiki/While_loop"><code>while</code> loops</a> were
+invented in the 1960s for imperative programming. It was to improve
+the expression of <em>control flow patterns</em> of this form. It would be
+backwards to return to programming entirely in <code>goto</code> style. (However,
+this does <em>not</em> mean <code>goto</code> and recursion are bad. Knuth famously
+wrote an
+<a href="http://c2.com/cgi/wiki?StructuredProgrammingWithGoToStatements">article in 1974</a>
+defending the careful use of <code>goto</code> against what he correctly noted
+was dogma that went to far against <code>goto</code>. The same could be said
+against any anti-recursion dogma.)</p>
+
+<p>When I teach Haskell, I get embarrassed when people wonder what&rsquo;s so
+&ldquo;wrong&rdquo; about Haskell that you can&rsquo;t write straightforward code like
+the Python code above, but have to pull out the recursion thing just
+to do something simple. The dilemma I face when teaching is that the
+thought in my mind is, &ldquo;But, but, we can have loops too, they&rsquo;re just
+not built into the language and you can even write your own using
+higher-order functions!&rdquo; while I know that many are thinking &ldquo;What a
+crappy ivory-tower impractical academic language, it doesn&rsquo;t even have
+while loops&rdquo;, and meanwhile I also know that you can&rsquo;t just jump into
+higher-order functions in the first hour.</p>
+
+<h3 id="making-your-own-loop:dca87c7fcd1d9eced1add38ac79eca8c">Making your own loop</h3>
+
+<p>The central mindset of functional programming is that if you see
+boilerplate, a pattern, then it might be worthwhile to refactor into
+two components:</p>
+
+<ul>
+<li>the abstract structure of the pattern</li>
+<li>the concrete instance of the problem</li>
+</ul>
+
+<p>So <code>monad-loops</code> provides a bunch of useful combinators capturing
+common control flow patterns. For example, we can use the function
+<code>whileM_</code> for our problem:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Monad.Loops</span> (<span style="color: #0000FF">whileM_</span>)
+</pre></div>
+
+
+<p>The type of <code>whileM</code> is</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">whileM_</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Monad</span> m <span style="color: #AA22FF; font-weight: bold">=&gt;</span> m <span style="color: #B00040">Bool</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> m a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> m <span style="color: #008000">()</span>
+</pre></div>
+
+
+<p>It takes a &ldquo;condition&rdquo; that evaluates a <code>Bool</code> (in a monadic context
+<code>m</code>), along with an arbitrary monadic &ldquo;body&rdquo; action to perform, to
+return a &ldquo;loop&rdquo; (the monadic action that returns unit) which keeps
+testing the condition and performing the body.</p>
+
+<p>Our code rewritten:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | No explicit recursion</span>
+<span style="color: #0000FF">logIn2</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
+<span style="color: #0000FF">logIn2</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  putStrLn <span style="color: #BA2121">&quot;% Enter password:&quot;</span>
+  whileM_ (<span style="color: #008000; font-weight: bold">do</span>
+             guess <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getLine
+             return (guess <span style="color: #666666">/=</span> <span style="color: #BA2121">&quot;secret&quot;</span>)
+          ) (<span style="color: #008000; font-weight: bold">do</span>
+               putStrLn <span style="color: #BA2121">&quot;% Wrong password!&quot;</span>
+               putStrLn <span style="color: #BA2121">&quot;% Try again:&quot;</span>
+            )
+  putStrLn <span style="color: #BA2121">&quot;$ Congratulations!&quot;</span>
+</pre></div>
+
+
+<p>This looks better than the explicit recursion, except for the clumsy
+syntax because our loop &ldquo;condition&rdquo; and &ldquo;body&rdquo; are just ordinary
+expressions and therefore need to be parenthesized to be passed into
+the <code>whileM_</code> function.</p>
+
+<p>Note that the
+<a href="https://hackage.haskell.org/package/monad-loops-0.4.3/docs/src/Control-Monad-Loops.html#whileM_">implementation of <code>whileM</code></a>
+is just ordinary Haskell code that abstracts exactly from the
+structure of our original code, by pulling out the condition and
+body. Functional programming is all about <a href="http://refactoring.com/catalog/extractMethod.html">&ldquo;extract method&rdquo;</a>!</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">whileM_</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">Monad</span> m) <span style="color: #AA22FF; font-weight: bold">=&gt;</span> m <span style="color: #B00040">Bool</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> m a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> m <span style="color: #008000">()</span>
+<span style="color: #0000FF">whileM_</span> p f <span style="color: #AA22FF; font-weight: bold">=</span> go
+    <span style="color: #008000; font-weight: bold">where</span> go <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+            x <span style="color: #AA22FF; font-weight: bold">&lt;-</span> p
+            <span style="color: #008000; font-weight: bold">if</span> x
+                <span style="color: #008000; font-weight: bold">then</span> f <span style="color: #666666">&gt;&gt;</span> go
+                <span style="color: #008000; font-weight: bold">else</span> return <span style="color: #008000">()</span>
+</pre></div>
+</p>
+
+<h4 id="improving-the-syntax:dca87c7fcd1d9eced1add38ac79eca8c">Improving the syntax</h4>
+
+<p>I&rsquo;ve warned in earlier posts against getting too clever with syntax,
+so I deliberately presented &ldquo;normal&rdquo; syntax above for calling the
+<code>whileM_</code> function, to show that it really is normal code, nothing
+magical. But for those of you who are not already deeply embedded in
+Haskell shortcut idioms, below are some rewrites into &ldquo;fancier&rdquo;
+syntax, but <em>do exactly the same thing</em>.</p>
+
+<p>The first step to avoid a lot of parenthesizing of expressions is to
+use the <code>$</code> function application operator, a trick to enable removing
+the parentheses of the final expression (the one serving as loop
+&ldquo;body&rdquo;):</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | With $ syntax.</span>
+<span style="color: #0000FF">logIn3</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
+<span style="color: #0000FF">logIn3</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  putStrLn <span style="color: #BA2121">&quot;% Enter password:&quot;</span>
+  whileM_ (<span style="color: #008000; font-weight: bold">do</span>
+             guess <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getLine
+             return (guess <span style="color: #666666">/=</span> <span style="color: #BA2121">&quot;secret&quot;</span>)
+          ) <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    putStrLn <span style="color: #BA2121">&quot;% Wrong password!&quot;</span>
+    putStrLn <span style="color: #BA2121">&quot;% Try again:&quot;</span>
+  putStrLn <span style="color: #BA2121">&quot;$ Congratulations!&quot;</span>
+</pre></div>
+</p>
+
+<p>Another step is to use some lifting of operations into the monad using
+<code>liftM</code>:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Monad</span> (<span style="color: #0000FF">liftM</span>)
+
+<span style="color: #408080; font-style: italic">-- | With lifting.</span>
+<span style="color: #0000FF">logIn4</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
+<span style="color: #0000FF">logIn4</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  putStrLn <span style="color: #BA2121">&quot;% Enter password:&quot;</span>
+  whileM_ (liftM (<span style="color: #0000FF">\</span>guess <span style="color: #AA22FF; font-weight: bold">-&gt;</span> guess <span style="color: #666666">/=</span> <span style="color: #BA2121">&quot;secret&quot;</span>) getLine) <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    putStrLn <span style="color: #BA2121">&quot;% Wrong password!&quot;</span>
+    putStrLn <span style="color: #BA2121">&quot;% Try again:&quot;</span>
+  putStrLn <span style="color: #BA2121">&quot;$ Congratulations!&quot;</span>
+</pre></div>
+</p>
+
+<p>The cost is that you have to understand lifting and the
+<code>$</code> operator.</p>
+
+<p>If you&rsquo;re willing to pay another cost, that of using operator
+sectioning and the symbolic <code>fmap</code> operator <code>&lt;$&gt;</code>, here&rsquo;s a final
+version:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | With operator sectioning and &lt;$&gt;.</span>
+<span style="color: #0000FF">logIn5</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> <span style="color: #008000">()</span>
+<span style="color: #0000FF">logIn5</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  putStrLn <span style="color: #BA2121">&quot;% Enter password:&quot;</span>
+  whileM_ ((<span style="color: #666666">/=</span> <span style="color: #BA2121">&quot;secret&quot;</span>) <span style="color: #666666">&lt;$&gt;</span> getLine) <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    putStrLn <span style="color: #BA2121">&quot;% Wrong password!&quot;</span>
+    putStrLn <span style="color: #BA2121">&quot;% Try again:&quot;</span>
+  putStrLn <span style="color: #BA2121">&quot;$ Congratulations!&quot;</span>
+</pre></div>
+</p>
+
+<p>This looks a lot like the Python code, except it is full of syntax
+that is completely mysterious to a newcomer to Haskell.</p>
+
+<h2 id="another-task-reading-and-collecting-lines:dca87c7fcd1d9eced1add38ac79eca8c">Another task: reading and collecting lines</h2>
+
+<p>One last example of refactoring away recursion:</p>
+
+<p>Suppose you want to write an <code>IO</code> action for a console application
+that reads lines from user input until encountering &ldquo;quit&rdquo;, and you
+want to collect all these lines (but not &ldquo;quit&rdquo;) into a list:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">readLinesUntilQuit</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> [<span style="color: #B00040">String</span>]
+</pre></div>
+</p>
+
+<p>Here&rsquo;s a sample interactive session:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #000080; font-weight: bold">&gt;</span> readLinesUntilQuit
+<span style="color: #888888">hello</span>
+<span style="color: #888888">lovely</span>
+<span style="color: #888888">world!</span>
+<span style="color: #888888">quit</span>
+</pre></div>
+</p>
+
+<p>Result:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">[&quot;hello&quot;,&quot;lovely&quot;,&quot;world!&quot;]</span>
+</pre></div>
+</p>
+
+<p>Here&rsquo;s a straightforward implementation, using recursion.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">readLinesUntilQuit</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> [<span style="color: #B00040">String</span>]
+<span style="color: #0000FF">readLinesUntilQuit</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  line <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getLine
+  <span style="color: #008000; font-weight: bold">if</span> line <span style="color: #666666">/=</span> <span style="color: #BA2121">&quot;quit&quot;</span>
+    <span style="color: #008000; font-weight: bold">then</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #408080; font-style: italic">-- recursive call, to loop</span>
+      restOfLines <span style="color: #AA22FF; font-weight: bold">&lt;-</span> readLinesUntilQuit
+      return (line <span style="color: #B00040">:</span> restOfLines)
+    <span style="color: #008000; font-weight: bold">else</span> return <span style="color: #B00040">[]</span>
+</pre></div>
+</p>
+
+<p>This is not unreadable, but there is definitely a lot of boilerplate
+going on:</p>
+
+<ul>
+<li>a condition</li>
+<li>recursion</li>
+<li>collection stuff into a list</li>
+</ul>
+
+<h3 id="refactoring-recursion-away:dca87c7fcd1d9eced1add38ac79eca8c">Refactoring recursion away</h3>
+
+<p>We&rsquo;ll use <code>unfoldM</code>:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">unfoldM</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Monad</span> m <span style="color: #AA22FF; font-weight: bold">=&gt;</span> m (<span style="color: #B00040">Maybe</span> a) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> m [a]
+</pre></div>
+</p>
+
+<p>All the work is in the argument, which we extract into its own
+definition:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | No explicit recursion.</span>
+<span style="color: #0000FF">readLinesUntilQuit2</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> [<span style="color: #B00040">String</span>]
+<span style="color: #0000FF">readLinesUntilQuit2</span> <span style="color: #AA22FF; font-weight: bold">=</span> unfoldM maybeReadLine
+
+<span style="color: #408080; font-style: italic">-- | Read a single line and check whether it&#39;s &quot;quit&quot;.</span>
+<span style="color: #0000FF">maybeReadLine</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> (<span style="color: #B00040">Maybe</span> <span style="color: #B00040">String</span>)
+<span style="color: #0000FF">maybeReadLine</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  line <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getLine
+  return (<span style="color: #008000; font-weight: bold">if</span> line <span style="color: #666666">/=</span> <span style="color: #BA2121">&quot;quit&quot;</span>
+          <span style="color: #008000; font-weight: bold">then</span> <span style="color: #B00040">Just</span> line
+          <span style="color: #008000; font-weight: bold">else</span> <span style="color: #B00040">Nothing</span>)
+</pre></div>
+</p>
+
+<p>We can go further in this refactoring, because <code>maybeReadLine</code>
+intermingles both <code>IO</code> and a pure conditional check of the input
+line. <strong>Parenthesized expressions are often a code smell suggesting a
+refactoring opportunity.</strong></p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">readLinesUntilQuit3</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">IO</span> [<span style="color: #B00040">String</span>]
+<span style="color: #0000FF">readLinesUntilQuit3</span> <span style="color: #AA22FF; font-weight: bold">=</span> unfoldM (notQuit <span style="color: #666666">&lt;$&gt;</span> getLine)
+
+<span style="color: #0000FF">notQuit</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Maybe</span> <span style="color: #B00040">String</span>
+<span style="color: #0000FF">notQuit</span> line <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #008000; font-weight: bold">if</span> line <span style="color: #666666">/=</span> <span style="color: #BA2121">&quot;quit&quot;</span>
+    <span style="color: #008000; font-weight: bold">then</span> <span style="color: #B00040">Just</span> line
+    <span style="color: #008000; font-weight: bold">else</span> <span style="color: #B00040">Nothing</span>
+</pre></div>
+</p>
+
+<p>I like this last version because it decouples the loop, the condition,
+and the fundamental IO action bringing in more information to use.</p>
+
+<h2 id="a-note-on-testing:dca87c7fcd1d9eced1add38ac79eca8c">A note on testing</h2>
+
+<p>If you&rsquo;ve been following this entire Days of Hackage article series,
+you may be wondering why I didn&rsquo;t provide HSpec tests and walk through
+in test-driven development style. The reason is that I didn&rsquo;t want to
+get into how one would &ldquo;mock out&rdquo; IO in order to write tests that
+simulate user activity.</p>
+
+<h2 id="conclusion:dca87c7fcd1d9eced1add38ac79eca8c">Conclusion</h2>
+
+<p>I gave two example refactorings of code to avoid explicit recursion in
+favor of using combinators from <code>monad-loops</code>. I hope the exploration
+of refactoring as well as of syntax is useful to those not already
+familiar with these techniques and idioms. Check out the whole library
+for more combinators you can use.</p>
+
+<h2 id="all-the-code:dca87c7fcd1d9eced1add38ac79eca8c">All the code</h2>
+
+<p>All my code for my article series are at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/11\/24-days-of-hackage-2015-day-11-monad-loops-avoiding-writing-recursive-functions-by-refactoring\/';
+    var disqus_title = '24 days of Hackage, 2015: day 11: monad-loops: avoiding writing recursive functions by refactoring';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/11\/24-days-of-hackage-2015-day-11-monad-loops-avoiding-writing-recursive-functions-by-refactoring\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

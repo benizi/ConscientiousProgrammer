@@ -489,7 +489,21 @@ wondering what is going on:&lt;/p&gt;
 &lt;p&gt;Depending on your taste, you might find that this funny syntax makes
 the tests look nicer:&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;symbolic differentiation&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (x + n) == 1&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x n &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n) x `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (x + y) == x, if x /= y&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x y &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      x &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; y &lt;span style=&#34;color: #666666&#34;&gt;==&amp;gt;&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; y) x `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; y
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (a * x + b) == x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;a x b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; b) x `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (x * y * (x + 3)) == (x * y) + y * (x + 3)&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;)) &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; `shouldBe`
+        (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt;) &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;))
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;All this looks kind of cute if you&amp;rsquo;re used to it, but I think it can
 look really weird otherwise; and I know that many non-Haskellers
@@ -697,10 +711,6 @@ compile-time error rather than a runtime error.&lt;/p&gt;
 
 &lt;p&gt;Example of a compile-time error:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- This Haskell code fails to compile!&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Regex&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [re&lt;span style=&#34;color: #666666&#34;&gt;|^@&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Media:\&lt;/span&gt;t([&lt;span style=&#34;color: #666666&#34;&gt;^&lt;/span&gt; ,]&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt;)&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(audio&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;video)(&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;?:&lt;/span&gt;missing&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;unlinked)&lt;span style=&#34;color: #666666&#34;&gt;?|&lt;/span&gt;]
-&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Loading this in GHCi or compiling with GHC results in&lt;/p&gt;
@@ -787,14 +797,14 @@ command-line program.&lt;/p&gt;
 
 &lt;p&gt;We have all the information needed to print out a report for each line.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Output a report.&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Output a report.&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Info&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Nothing&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;no match&amp;quot;&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Skip&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;match, but missing or unlinked&amp;quot;&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Audio&lt;/span&gt; path)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;audio at %s&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; path
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Video&lt;/span&gt; path)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;video at %s&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; path
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;And the final driver, piping everything through from standard input:&lt;/p&gt;
 

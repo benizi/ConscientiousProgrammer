@@ -79,6 +79,79 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">Haskell tidbits: 24 days of Hackage, 2015: day 1: Introduction and Stack</a>
+      </h1>
+      <span class="post-date">Nov 30, 2015 &middot; 9 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/stack">Stack</a>
+      </span>
+      
+      <h2 id="table-of-contents-for-the-whole-series:c37cfe20acfff0cff8579f026185f721">Table of contents for the whole series</h2>
+
+<ul>
+<li>Day 1: <a href="../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">Introduction and Stack</a></li>
+<li>Day 2: <a href="../../blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/">Regexes with pcre-heavy; standalone Haskell scripts using Stack</a></li>
+<li>Day 3: <a href="../../blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/">HSpec; the importance of testing</a></li>
+<li>Day 4:
+<a href="../../blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/">wreq: Web client programming; with notes on lens and operator syntax</a></li>
+<li>Day 5: <a href="../../blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/">should-not-typecheck: making
+Haskell sort of dynamically typed with deferred type errors</a></li>
+<li>Day 6: <a href="../../blog/2015/12/06/24-days-of-hackage-2015-day-6-finding-utilities-with-hoogle-and-hayoo-missingh-extra/">finding utilities with Hoogle
+and Hayoo: MissingH, extra</a></li>
+<li>Day 7: <a href="../../blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/">semigroups; NonEmpty list and
+a case study of types and tests</a></li>
+<li>Day 8: <a href="../../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/">multiset; I wish this were in the standard containers package</a></li>
+<li>Day 9: <a href="../../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/">Template Haskell goodies: here, interpolate, file-embed</a></li>
+<li>Day 10: <a href="../../blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/">s-cargot: using S-expression syntax</a></li>
+<li>Day 11: <a href="../../blog/2015/12/11/24-days-of-hackage-2015-day-11-monad-loops-avoiding-writing-recursive-functions-by-refactoring/">monad-loops: avoiding writing recursive functions by refactoring</a></li>
+<li>Day 12:</li>
+<li>Day 13:</li>
+<li>Day 14:</li>
+<li>Day 15:</li>
+<li>Day 16:</li>
+<li>Day 17:</li>
+<li>Day 18:</li>
+<li>Day 19:</li>
+<li>Day 20:</li>
+<li>Day 21:</li>
+<li>Day 22:</li>
+<li>Day 23:</li>
+<li>Day 24:</li>
+</ul>
+
+<h2 id="day-1:c37cfe20acfff0cff8579f026185f721">Day 1</h2>
+
+<p>A couple of days ago, I happened to see a
+<a href="https://twitter.com/acid2/status/669882628695281669">tweet from Ollie Charles</a>
+that he didn&rsquo;t have time to do his usual annual December &ldquo;24 days of&hellip;&rdquo;
+Haskell blog posts this year (2015) and felt sad because I&rsquo;ve
+learned a huge amount from
+<a href="https://ocharles.org.uk/blog/">reading them</a>. In both 2012 and 2013, he
+wrote &ldquo;24 days of Hackage&rdquo;, daily short and sweet blog posts that
+showed how to use selected Haskell packages you can get from the
+community archive <a href="http://hackage.haskell.org/">Hackage</a>, and in 2014
+he covered GHC language extensions.</p>
+
+<p>With some trepidation, I decided that I would do a &ldquo;24 days of
+Hackage&rdquo; series myself to cap off this year, to share a selection of
+the huge number of Haskell packages I find useful. I thought it would
+be particularly appropriate to do this given that 2015 was the year
+that I migrated to <em>using Haskell as my main language</em> for most new work and
+personal projects, and therefore this has been a year of considerable
+discovery for me.</p>
+
+<h2 id="all-the-code:c37cfe20acfff0cff8579f026185f721">All the code</h2>
+
+<p>All my code for my article series will be at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/10/07/report-on-my-talk-a-gentle-conceptual-introduction-to-functional-programming/">Report on my talk &#34;A gentle conceptual introduction to functional programming&#34;</a>
       </h1>
       <span class="post-date">Oct 7, 2015 &middot; 4 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/10/07/report-on-my-talk-a-gentle-conceptual-introduction-to-functional-programming/#disqus_thread">Comments</a>
@@ -311,35 +384,6 @@ time to migrate my blogs, to Octopress 3 or
 <p>The Code and Supply meetup I just attended was about <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/186766512/">&ldquo;Programming in journalism&rdquo;</a>. This is a topic of huge importance, and I was excited to attend to hear more about what some local journalist/programmers are doing.</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2014/07/17/pittsburgh-code-and-supply-programming-in-journalism/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2014/07/17/why-programming-puzzlers-make-me-sad/">Why programming puzzlers make me sad</a>
-      </h1>
-      <span class="post-date">Jul 17, 2014 &middot; 3 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2014/07/17/why-programming-puzzlers-make-me-sad/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/puzzlers">puzzlers</a><a class="label" href="http://ConscientiousProgrammer.com/categories/perl">Perl</a><a class="label" href="http://ConscientiousProgrammer.com/categories/c">C</a>
-      </span>
-      
-      <p>I recently saw a
-<a href="http://blog.plover.com/2014/07/17/">&ldquo;guess what this does&rdquo; article</a>
-on a blog I follow, and this post presents mysterious Perl code for
-which the reader is asked to guess what it does:</p>
-
-<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #888888">perl -le &#39;print(two + two == five ? &quot;true&quot; : &quot;false&quot;)&#39;</span>
-</pre></div>
-
-
-<p>I looked at it briefly, got a headache, and didn&rsquo;t even want to solve
-it. This despite using Perl as one of my main programming languages
-from 1993-2010 and considering myself fairly proficient at Perl.</p>
-
-<p>Programming puzzlers just in general make me sad.</p>
-
-      <a href="http://conscientiousprogrammer.com/blog/2014/07/17/why-programming-puzzlers-make-me-sad/">Read On &rarr;</a>
       
     </div>
     

@@ -6,8 +6,373 @@
     <description>Recent content in Posts on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Dec 2015 08:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Fri, 11 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/post/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 11: monad-loops: avoiding writing recursive functions by refactoring</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/11/24-days-of-hackage-2015-day-11-monad-loops-avoiding-writing-recursive-functions-by-refactoring/</link>
+      <pubDate>Fri, 11 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/11/24-days-of-hackage-2015-day-11-monad-loops-avoiding-writing-recursive-functions-by-refactoring/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-11:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;Day 11&lt;/h2&gt;
+
+&lt;p&gt;I often dislike writing recursive functions. Recursion is a form of
+&lt;code&gt;goto&lt;/code&gt; and therefore recursion is, conceptually, the assembly
+language low-level infrastructure of functional programming, a
+fundamental building block but not necessarily something I want to see
+every day.&lt;/p&gt;
+
+&lt;p&gt;An analogy: imperative programming in the 1960s was altered
+significantly when brand new control structures such as &lt;code&gt;for&lt;/code&gt; and
+&lt;code&gt;while&lt;/code&gt; loops changed the face of imperative programming by removing
+the boilerplate of using the low-level &lt;code&gt;goto&lt;/code&gt; everywhere; &lt;code&gt;for&lt;/code&gt; and
+&lt;code&gt;while&lt;/code&gt; are the higher-order control structures of imperative programming.&lt;/p&gt;
+
+&lt;p&gt;In functional programming, recursion boilerplate is avoided through
+writing and using higher-order functions such as &lt;code&gt;map&lt;/code&gt;,&lt;code&gt;filter&lt;/code&gt;,
+&lt;code&gt;foldr&lt;/code&gt;, and &lt;code&gt;traverse&lt;/code&gt;. The cool thing is that in functional
+programming, these are ordinary user-space functions, whereas in
+imperative programming, the control structures are built into the
+language and it&amp;rsquo;s typically not so easy to invent your own.&lt;/p&gt;
+
+&lt;p&gt;Why would you want to define control structures yourself? I&amp;rsquo;ll show
+examples and a useful little library
+&lt;a href=&#34;https://hackage.haskell.org/package/monad-loops&#34;&gt;&lt;code&gt;monad-loops&lt;/code&gt;&lt;/a&gt; that
+you can use in order to avoid reinventing the wheel.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-sample-task:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;A sample task&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s write a function to simulate a user login process, in which&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;the user is prompted to enter a password&lt;/li&gt;
+&lt;li&gt;a loop is entered in which
+
+&lt;ul&gt;
+&lt;li&gt;a guess is read in&lt;/li&gt;
+&lt;li&gt;if it is not correct, we prompt again and loop&lt;/li&gt;
+&lt;li&gt;if it is correct, we exit the loop&lt;/li&gt;
+&lt;li&gt;we print congratulations&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is a literal translation of the pseudocode into Haskell using
+recursion for the loop:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;logIn&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;logIn&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Enter password:&amp;quot;&lt;/span&gt;
+  go
+  putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;$ Congratulations!&amp;quot;&lt;/span&gt;
+
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Use recursion for loop&lt;/span&gt;
+    go &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      guess &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getLine
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; guess &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;secret&amp;quot;&lt;/span&gt;
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+          putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Wrong password! Try again:&amp;quot;&lt;/span&gt;
+          go
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt;
+          return &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Do you like this code? Me, I&amp;rsquo;m annoyed by having to write that
+&amp;ldquo;helper&amp;rdquo; recursive function just to write a loop.&lt;/p&gt;
+
+&lt;h3 id=&#34;comparision-with-typical-imperative-style:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;Comparision with typical imperative style&lt;/h3&gt;
+
+&lt;p&gt;Compare with typical Python code:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;log_in&lt;/span&gt;():
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #BB6688; font-weight: bold&#34;&gt;% E&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;nter password:&amp;quot;&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;raw_input&lt;/span&gt;() &lt;span style=&#34;color: #666666&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;secret&amp;#39;&lt;/span&gt;:
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Wrong password! Try again:&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Congratulations!&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There&amp;rsquo;s a reason
+&lt;a href=&#34;https://en.wikipedia.org/wiki/While_loop&#34;&gt;&lt;code&gt;while&lt;/code&gt; loops&lt;/a&gt; were
+invented in the 1960s for imperative programming. It was to improve
+the expression of &lt;em&gt;control flow patterns&lt;/em&gt; of this form. It would be
+backwards to return to programming entirely in &lt;code&gt;goto&lt;/code&gt; style. (However,
+this does &lt;em&gt;not&lt;/em&gt; mean &lt;code&gt;goto&lt;/code&gt; and recursion are bad. Knuth famously
+wrote an
+&lt;a href=&#34;http://c2.com/cgi/wiki?StructuredProgrammingWithGoToStatements&#34;&gt;article in 1974&lt;/a&gt;
+defending the careful use of &lt;code&gt;goto&lt;/code&gt; against what he correctly noted
+was dogma that went to far against &lt;code&gt;goto&lt;/code&gt;. The same could be said
+against any anti-recursion dogma.)&lt;/p&gt;
+
+&lt;p&gt;When I teach Haskell, I get embarrassed when people wonder what&amp;rsquo;s so
+&amp;ldquo;wrong&amp;rdquo; about Haskell that you can&amp;rsquo;t write straightforward code like
+the Python code above, but have to pull out the recursion thing just
+to do something simple. The dilemma I face when teaching is that the
+thought in my mind is, &amp;ldquo;But, but, we can have loops too, they&amp;rsquo;re just
+not built into the language and you can even write your own using
+higher-order functions!&amp;rdquo; while I know that many are thinking &amp;ldquo;What a
+crappy ivory-tower impractical academic language, it doesn&amp;rsquo;t even have
+while loops&amp;rdquo;, and meanwhile I also know that you can&amp;rsquo;t just jump into
+higher-order functions in the first hour.&lt;/p&gt;
+
+&lt;h3 id=&#34;making-your-own-loop:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;Making your own loop&lt;/h3&gt;
+
+&lt;p&gt;The central mindset of functional programming is that if you see
+boilerplate, a pattern, then it might be worthwhile to refactor into
+two components:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;the abstract structure of the pattern&lt;/li&gt;
+&lt;li&gt;the concrete instance of the problem&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So &lt;code&gt;monad-loops&lt;/code&gt; provides a bunch of useful combinators capturing
+common control flow patterns. For example, we can use the function
+&lt;code&gt;whileM_&lt;/code&gt; for our problem:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Monad.Loops&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;whileM_&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The type of &lt;code&gt;whileM&lt;/code&gt; is&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;whileM_&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Monad&lt;/span&gt; m &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; m &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; m a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; m &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It takes a &amp;ldquo;condition&amp;rdquo; that evaluates a &lt;code&gt;Bool&lt;/code&gt; (in a monadic context
+&lt;code&gt;m&lt;/code&gt;), along with an arbitrary monadic &amp;ldquo;body&amp;rdquo; action to perform, to
+return a &amp;ldquo;loop&amp;rdquo; (the monadic action that returns unit) which keeps
+testing the condition and performing the body.&lt;/p&gt;
+
+&lt;p&gt;Our code rewritten:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | No explicit recursion&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;logIn2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;logIn2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Enter password:&amp;quot;&lt;/span&gt;
+  whileM_ (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+             guess &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getLine
+             return (guess &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;secret&amp;quot;&lt;/span&gt;)
+          ) (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+               putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Wrong password!&amp;quot;&lt;/span&gt;
+               putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Try again:&amp;quot;&lt;/span&gt;
+            )
+  putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;$ Congratulations!&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This looks better than the explicit recursion, except for the clumsy
+syntax because our loop &amp;ldquo;condition&amp;rdquo; and &amp;ldquo;body&amp;rdquo; are just ordinary
+expressions and therefore need to be parenthesized to be passed into
+the &lt;code&gt;whileM_&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;p&gt;Note that the
+&lt;a href=&#34;https://hackage.haskell.org/package/monad-loops-0.4.3/docs/src/Control-Monad-Loops.html#whileM_&#34;&gt;implementation of &lt;code&gt;whileM&lt;/code&gt;&lt;/a&gt;
+is just ordinary Haskell code that abstracts exactly from the
+structure of our original code, by pulling out the condition and
+body. Functional programming is all about &lt;a href=&#34;http://refactoring.com/catalog/extractMethod.html&#34;&gt;&amp;ldquo;extract method&amp;rdquo;&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;whileM_&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Monad&lt;/span&gt; m) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; m &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; m a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; m &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;whileM_&lt;/span&gt; p f &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; go
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt; go &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+            x &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; p
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; x
+                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; f &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt; go
+                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; return &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;improving-the-syntax:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;Improving the syntax&lt;/h4&gt;
+
+&lt;p&gt;I&amp;rsquo;ve warned in earlier posts against getting too clever with syntax,
+so I deliberately presented &amp;ldquo;normal&amp;rdquo; syntax above for calling the
+&lt;code&gt;whileM_&lt;/code&gt; function, to show that it really is normal code, nothing
+magical. But for those of you who are not already deeply embedded in
+Haskell shortcut idioms, below are some rewrites into &amp;ldquo;fancier&amp;rdquo;
+syntax, but &lt;em&gt;do exactly the same thing&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;The first step to avoid a lot of parenthesizing of expressions is to
+use the &lt;code&gt;$&lt;/code&gt; function application operator, a trick to enable removing
+the parentheses of the final expression (the one serving as loop
+&amp;ldquo;body&amp;rdquo;):&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | With $ syntax.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;logIn3&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;logIn3&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Enter password:&amp;quot;&lt;/span&gt;
+  whileM_ (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+             guess &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getLine
+             return (guess &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;secret&amp;quot;&lt;/span&gt;)
+          ) &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Wrong password!&amp;quot;&lt;/span&gt;
+    putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Try again:&amp;quot;&lt;/span&gt;
+  putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;$ Congratulations!&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Another step is to use some lifting of operations into the monad using
+&lt;code&gt;liftM&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Monad&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;liftM&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | With lifting.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;logIn4&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;logIn4&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Enter password:&amp;quot;&lt;/span&gt;
+  whileM_ (liftM (&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;guess &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; guess &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;secret&amp;quot;&lt;/span&gt;) getLine) &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Wrong password!&amp;quot;&lt;/span&gt;
+    putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Try again:&amp;quot;&lt;/span&gt;
+  putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;$ Congratulations!&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The cost is that you have to understand lifting and the
+&lt;code&gt;$&lt;/code&gt; operator.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;re willing to pay another cost, that of using operator
+sectioning and the symbolic &lt;code&gt;fmap&lt;/code&gt; operator &lt;code&gt;&amp;lt;$&amp;gt;&lt;/code&gt;, here&amp;rsquo;s a final
+version:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | With operator sectioning and &amp;lt;$&amp;gt;.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;logIn5&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;logIn5&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Enter password:&amp;quot;&lt;/span&gt;
+  whileM_ ((&lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;secret&amp;quot;&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; getLine) &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Wrong password!&amp;quot;&lt;/span&gt;
+    putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;% Try again:&amp;quot;&lt;/span&gt;
+  putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;$ Congratulations!&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This looks a lot like the Python code, except it is full of syntax
+that is completely mysterious to a newcomer to Haskell.&lt;/p&gt;
+
+&lt;h2 id=&#34;another-task-reading-and-collecting-lines:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;Another task: reading and collecting lines&lt;/h2&gt;
+
+&lt;p&gt;One last example of refactoring away recursion:&lt;/p&gt;
+
+&lt;p&gt;Suppose you want to write an &lt;code&gt;IO&lt;/code&gt; action for a console application
+that reads lines from user input until encountering &amp;ldquo;quit&amp;rdquo;, and you
+want to collect all these lines (but not &amp;ldquo;quit&amp;rdquo;) into a list:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;readLinesUntilQuit&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a sample interactive session:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;&amp;gt;&lt;/span&gt; readLinesUntilQuit
+&lt;span style=&#34;color: #888888&#34;&gt;hello&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;lovely&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;world!&lt;/span&gt;
+&lt;span style=&#34;color: #888888&#34;&gt;quit&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Result:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #888888&#34;&gt;[&amp;quot;hello&amp;quot;,&amp;quot;lovely&amp;quot;,&amp;quot;world!&amp;quot;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a straightforward implementation, using recursion.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;readLinesUntilQuit&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;]
+&lt;span style=&#34;color: #0000FF&#34;&gt;readLinesUntilQuit&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  line &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getLine
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; line &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;quit&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- recursive call, to loop&lt;/span&gt;
+      restOfLines &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; readLinesUntilQuit
+      return (line &lt;span style=&#34;color: #B00040&#34;&gt;:&lt;/span&gt; restOfLines)
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; return &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This is not unreadable, but there is definitely a lot of boilerplate
+going on:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a condition&lt;/li&gt;
+&lt;li&gt;recursion&lt;/li&gt;
+&lt;li&gt;collection stuff into a list&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;refactoring-recursion-away:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;Refactoring recursion away&lt;/h3&gt;
+
+&lt;p&gt;We&amp;rsquo;ll use &lt;code&gt;unfoldM&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;unfoldM&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Monad&lt;/span&gt; m &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; m (&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; a) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; m [a]
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;All the work is in the argument, which we extract into its own
+definition:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | No explicit recursion.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;readLinesUntilQuit2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;]
+&lt;span style=&#34;color: #0000FF&#34;&gt;readLinesUntilQuit2&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; unfoldM maybeReadLine
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Read a single line and check whether it&amp;#39;s &amp;quot;quit&amp;quot;.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;maybeReadLine&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;maybeReadLine&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  line &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getLine
+  return (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; line &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;quit&amp;quot;&lt;/span&gt;
+          &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; line
+          &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Nothing&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;We can go further in this refactoring, because &lt;code&gt;maybeReadLine&lt;/code&gt;
+intermingles both &lt;code&gt;IO&lt;/code&gt; and a pure conditional check of the input
+line. &lt;strong&gt;Parenthesized expressions are often a code smell suggesting a
+refactoring opportunity.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;readLinesUntilQuit3&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;]
+&lt;span style=&#34;color: #0000FF&#34;&gt;readLinesUntilQuit3&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; unfoldM (notQuit &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; getLine)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;notQuit&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;notQuit&lt;/span&gt; line &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; line &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;quit&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; line
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Nothing&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I like this last version because it decouples the loop, the condition,
+and the fundamental IO action bringing in more information to use.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-note-on-testing:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;A note on testing&lt;/h2&gt;
+
+&lt;p&gt;If you&amp;rsquo;ve been following this entire Days of Hackage article series,
+you may be wondering why I didn&amp;rsquo;t provide HSpec tests and walk through
+in test-driven development style. The reason is that I didn&amp;rsquo;t want to
+get into how one would &amp;ldquo;mock out&amp;rdquo; IO in order to write tests that
+simulate user activity.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I gave two example refactorings of code to avoid explicit recursion in
+favor of using combinators from &lt;code&gt;monad-loops&lt;/code&gt;. I hope the exploration
+of refactoring as well as of syntax is useful to those not already
+familiar with these techniques and idioms. Check out the whole library
+for more combinators you can use.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:dca87c7fcd1d9eced1add38ac79eca8c&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 10: s-cargot: using S-expression syntax</title>
@@ -489,7 +854,21 @@ wondering what is going on:&lt;/p&gt;
 &lt;p&gt;Depending on your taste, you might find that this funny syntax makes
 the tests look nicer:&lt;/p&gt;
 
-&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;symbolic differentiation&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (x + n) == 1&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x n &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; n) x `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (x + y) == x, if x /= y&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;x y &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      x &lt;span style=&#34;color: #666666&#34;&gt;/=&lt;/span&gt; y &lt;span style=&#34;color: #666666&#34;&gt;==&amp;gt;&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; y) x `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; y
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (a * x + b) == x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;a x b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; x &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; b) x `shouldBe` &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;d/dx (x * y * (x + 3)) == (x * y) + y * (x + 3)&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      deriv (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;)) &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; `shouldBe`
+        (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt;) &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:*:&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:+:&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;))
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;All this looks kind of cute if you&amp;rsquo;re used to it, but I think it can
 look really weird otherwise; and I know that many non-Haskellers
@@ -538,7 +917,7 @@ parsers and pretty-printers and also comes with useful defaults.&lt;/p&gt;
 &lt;h2 id=&#34;day-9:8eaddb149d77042401ce1f324517c8ca&#34;&gt;Day 9&lt;/h2&gt;
 
 &lt;p&gt;A stray negative remark I made on
-&lt;a href=&#34;../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/&#34;&gt;day 9&lt;/a&gt;
+&lt;a href=&#34;../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/&#34;&gt;day 8&lt;/a&gt;
 regarding Haskell and its unergonomic support for multi-line string
 literals and interpolation led to good comments that I was being
 misleading because there actually exist good solutions. I already use
@@ -1701,7 +2080,8 @@ immediately brings up much more promising results than with &lt;code&gt;String&l
 from packages such as &lt;code&gt;utility-ht&lt;/code&gt;, &lt;code&gt;MissingH&lt;/code&gt;, and &lt;code&gt;extra&lt;/code&gt;. &lt;code&gt;pandoc&lt;/code&gt;
 also popped up, but that&amp;rsquo;s a
 &lt;a href=&#34;http://pandoc.org/&#34;&gt;huge text-processing tool&lt;/a&gt;, not a library I would
-pull in for just one tiny utility function!&lt;/p&gt;
+pull in for just one tiny utility function! (Note that &lt;code&gt;pandoc&lt;/code&gt; was
+covered in a &lt;a href=&#34;https://ocharles.org.uk/blog/guest-posts/2013-12-12-24-days-of-hackage-pandoc.html&#34;&gt;2013 day of Hackage&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;The
 &lt;a href=&#34;http://hoogle.haskell.org/?hoogle=Eq+a+%3D%3E+[a]+-%3E+[a]+-%3E+[a]+-%3E+[a]&amp;amp;scope=set%3Astackage&#34;&gt;Hoogle search at &lt;code&gt;hoogle.haskell.org&lt;/code&gt;&lt;/a&gt;
@@ -3266,10 +3646,6 @@ compile-time error rather than a runtime error.&lt;/p&gt;
 
 &lt;p&gt;Example of a compile-time error:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- This Haskell code fails to compile!&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Regex&lt;/span&gt;
-&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [re&lt;span style=&#34;color: #666666&#34;&gt;|^@&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Media:\&lt;/span&gt;t([&lt;span style=&#34;color: #666666&#34;&gt;^&lt;/span&gt; ,]&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt;)&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(audio&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;video)(&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;?:&lt;/span&gt;missing&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;unlinked)&lt;span style=&#34;color: #666666&#34;&gt;?|&lt;/span&gt;]
-&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Loading this in GHCi or compiling with GHC results in&lt;/p&gt;
@@ -3356,14 +3732,14 @@ command-line program.&lt;/p&gt;
 
 &lt;p&gt;We have all the information needed to print out a report for each line.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Output a report.&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Output a report.&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Info&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Nothing&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;no match&amp;quot;&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Skip&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;match, but missing or unlinked&amp;quot;&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Audio&lt;/span&gt; path)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;audio at %s&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; path
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Video&lt;/span&gt; path)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;video at %s&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; path
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;p&gt;And the final driver, piping everything through from standard input:&lt;/p&gt;
 
@@ -3560,6 +3936,20 @@ a case study of types and tests&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 8: &lt;a href=&#34;../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/&#34;&gt;multiset; I wish this were in the standard containers package&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 9: &lt;a href=&#34;../blog/2015/12/09/24-days-of-hackage-2015-day-9-template-haskell-goodies-here-interpolate-file-embed/&#34;&gt;Template Haskell goodies: here, interpolate, file-embed&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 10: &lt;a href=&#34;../blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/&#34;&gt;s-cargot: using S-expression syntax&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 11: &lt;a href=&#34;../blog/2015/12/11/24-days-of-hackage-2015-day-11-monad-loops-avoiding-writing-recursive-functions-by-refactoring/&#34;&gt;monad-loops: avoiding writing recursive functions by refactoring&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Day 12:&lt;/li&gt;
+&lt;li&gt;Day 13:&lt;/li&gt;
+&lt;li&gt;Day 14:&lt;/li&gt;
+&lt;li&gt;Day 15:&lt;/li&gt;
+&lt;li&gt;Day 16:&lt;/li&gt;
+&lt;li&gt;Day 17:&lt;/li&gt;
+&lt;li&gt;Day 18:&lt;/li&gt;
+&lt;li&gt;Day 19:&lt;/li&gt;
+&lt;li&gt;Day 20:&lt;/li&gt;
+&lt;li&gt;Day 21:&lt;/li&gt;
+&lt;li&gt;Day 22:&lt;/li&gt;
+&lt;li&gt;Day 23:&lt;/li&gt;
+&lt;li&gt;Day 24:&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;day-1:c37cfe20acfff0cff8579f026185f721&#34;&gt;Day 1&lt;/h2&gt;
@@ -4562,90 +4952,6 @@ has a sizable community revolving around it.&lt;/p&gt;
 &lt;p&gt;I hope this little article shows a little bit about what Rust&amp;rsquo;s ownership type system can do to make pointer-heavy code memory safe, unlike C++, and also gives you a taste of how Rust&amp;rsquo;s flexibility also allows you to use C++-style reference-counting if desired, and even raw unsafe code. Personally, I am excited about the upcoming 1.0 release of Rust, and although I have not done low-level systems programming for almost two decades, if I ever was to do it again, I would immediately reach out for Rust as a language of choice for the ultimate combination of safety, expressiveness, and performance (in use of time and space).&lt;/p&gt;
 
 &lt;p&gt;All code for this article is available in a &lt;a href=&#34;https://github.com/FranklinChen/rust-vs-cpp-unique_ptr&#34;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Remembering over 20 years of reading Dr. Dobb&#39;s Journal even till today</title>
-      <link>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/</link>
-      <pubDate>Tue, 16 Dec 2014 22:23:42 -0500</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2014/12/16/remembering-over-20-years-of-reading-dr-dobbs-journal-even-till-today/</guid>
-      <description>
-
-&lt;p&gt;It was with sadness, but not surprise, that I read today about the &lt;a href=&#34;http://www.drdobbs.com/architecture-and-design/farewell-dr-dobbs/240169421&#34;&gt;end of Dr. Dobb&amp;rsquo;s Journal&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve been reading this magazine for &lt;em&gt;twenty-two years&lt;/em&gt;! I haven&amp;rsquo;t read any other magazine on any topic for this long.&lt;/p&gt;
-
-&lt;h2 id=&#34;rss:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;RSS&lt;/h2&gt;
-
-&lt;p&gt;Of course, it&amp;rsquo;s been years since my last printed copy of &lt;a href=&#34;http://en.wikipedia.org/wiki/Dr._Dobb%27s_Journal&#34;&gt;Dr. Dobb&amp;rsquo;s Journal&lt;/a&gt; (DDJ) entered my mailbox. At some point I was simply regularly reading content from its online &lt;a href=&#34;http://drdobbs.com/rss/all&#34;&gt;RSS feed&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I was particularly sad when reading of the discontinuation of the publication because I had been following for quite some time Andrew Koenig&amp;rsquo;s multi-part article on binary search. In fact, &lt;a href=&#34;http://www.drdobbs.com/cpp/abstractions-for-binary-search-part-9-wh/240169416&#34;&gt;I had just read part 9 and was looking forward to the eventual conclusion of the series&lt;/a&gt;! I&amp;rsquo;ve been waiting to see his punch line, since every article in this series has ended with a cliff-hanger. Here, he had closed with &amp;ldquo;Next week, we shall continue building our tests.&amp;rdquo; I wonder if he be able to post the conclusion?&lt;/p&gt;
-
-&lt;h3 id=&#34;update-of-2014-12-22:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;(Update of 2014-12-22)&lt;/h3&gt;
-
-&lt;p&gt;Andrew Koenig&amp;rsquo;s article series did conclude, after all, &lt;a href=&#34;http://www.drdobbs.com/cpp/abstractions-for-binary-search-part-10-p/240169437&#34;&gt;today&lt;/a&gt;. I&amp;rsquo;ll comment on his concluded article series in a later blog post.&lt;/p&gt;
-
-&lt;h2 id=&#34;how-i-started-reading-ddj:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;How I started reading DDJ&lt;/h2&gt;
-
-&lt;p&gt;In 1992, I was unemployed, a physics grad school dropout, and needed a new career. I had studied some math and passed the first two actuarial exams but frankly, had no interest in doing math and insurance for a living. Friends told me computer programming was a good way to go, so although I had not written a single computer program since high school (where I wrote and ran only COBOL and Pascal programs), I decided to learn C and Unix and Lisp, because these were technologies my friends had learned in their first year in college.&lt;/p&gt;
-
-&lt;p&gt;Meanwhile, this was all before the Web, so the way to get any new and exciting information was from Usenet or from printed magazines. I got some recommendations to check out two magazines in particular: Dr. Dobb&amp;rsquo;s Journal and the &lt;a href=&#34;http://en.wikipedia.org/wiki/C/C%2B%2B_Users_Journal&#34;&gt;C Users Journal&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Yes, I did ask, &amp;ldquo;Who the heck is or was Dr. Dobb?!&amp;rdquo; It didn&amp;rsquo;t matter. The magazine was great. It covered all kinds of topics, and had code listings you could type in or download (remember &lt;a href=&#34;http://en.wikipedia.org/wiki/File_Transfer_Protocol#Anonymous_FTP&#34;&gt;anonymous FTP&lt;/a&gt; as the primary way to download stuff?).&lt;/p&gt;
-
-
-&lt;figure &gt;
-    
-        &lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/d/d8/Macintosh_classic.jpg&#34; /&gt;
-    
-    
-    &lt;figcaption&gt;
-        &lt;h4&gt;Macintosh Classic&lt;/h4&gt;
-        
-    &lt;/figcaption&gt;
-    
-&lt;/figure&gt;
-
-
-&lt;p&gt;I got my first job as a software engineer in 1993, after much intense self-study, learning to programm in C on my younger sister&amp;rsquo;s &lt;a href=&#34;http://en.wikipedia.org/wiki/Macintosh_Classic&#34;&gt;Macintosh Classic&lt;/a&gt; using &lt;a href=&#34;http://en.wikipedia.org/wiki/THINK_C&#34;&gt;THINK C&lt;/a&gt;. What can I say, DDJ was there for me as a useful resource.&lt;/p&gt;
-
-&lt;h2 id=&#34;continuing-to-read-ddj-learning-new-languages:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Continuing to read DDJ; learning new languages&lt;/h2&gt;
-
-&lt;p&gt;Today I was intrigued to read &lt;a href=&#34;https://twitter.com/bodil/status/545009243272003585&#34;&gt;Bodil Stokke&amp;rsquo;s tweet&lt;/a&gt;, &amp;ldquo;I read about both Haskell and Dylan in Dr Dobbs 1994-ish and was itching to learn both, but couldn&amp;rsquo;t find Amiga impls for either.&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;I did learn both Haskell and Dylan in 1994, but don&amp;rsquo;t remember whether it was because of mention in DDJ or because of other sources! I do remember that I downloaded quite a bit of &amp;ldquo;freeware&amp;rdquo; and &amp;ldquo;shareware&amp;rdquo; through FTP or bought through CD-ROMs in 1992-1994, before the birth of the &lt;a href=&#34;http://en.wikipedia.org/wiki/World_Wide_Web&#34;&gt;World Wide Web&lt;/a&gt;, which I started using excitedly in 1995.&lt;/p&gt;
-
-&lt;p&gt;1994 was a particularly important year for me, because I discovered and experimented with writing and running programs in a huge variety of programming languages that year.&lt;/p&gt;
-
-&lt;h3 id=&#34;haskell:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Haskell&lt;/h3&gt;
-
-&lt;p&gt;The most important new language I learned in 1994 was &lt;a href=&#34;http://caml.inria.fr/caml-light/&#34;&gt;Caml Light&lt;/a&gt;, which I came across and learned and used on my Mac SE/30 in 1994, at &lt;a href=&#34;http://caml.inria.fr/pub/old_caml_site/caml-list-ar/0136.html&#34;&gt;version 0.6&lt;/a&gt;. I still remember just finishing working through the &lt;a href=&#34;http://caml.inria.fr/pub/docs/fpcl/&#34;&gt;tutorial&lt;/a&gt; when version 0.7 came out and a lot of stuff changed, annoying me.  How Caml changed the course of my life is the subject of another article.&lt;/p&gt;
-
-&lt;p&gt;I also discovered Haskell in 1994. That took longer for me to get a feel for. It was the dialect &lt;a href=&#34;http://en.wikipedia.org/wiki/Gofer_%28programming_language%29&#34;&gt;Gofer&lt;/a&gt; that I first downloaded and copied to a floppy disk, in the form of &lt;a href=&#34;http://web.cecs.pdx.edu/~mpj/goferarc/macgofer/index.html&#34;&gt;MacGofer&lt;/a&gt;. Later, in 1996, I used &lt;a href=&#34;https://www.haskell.org/ghc/&#34;&gt;GHC&lt;/a&gt; briefly for a small internal utility at work in 1996. I see that DDJ &lt;a href=&#34;http://www.drdobbs.com/programming-paradigms/184409831&#34;&gt;mentioned Haskell in February 1996&lt;/a&gt;, but given that I learned it earlier, I don&amp;rsquo;t know if there was any earlier DDJ mention (not Web-searchable currently) that could have influenced me to try Gofer in the first place. (More on the history of my Haskell usage is the subject of another article; Haskell is the only programming language I am still using active twenty years after first learning it.)&lt;/p&gt;
-
-&lt;h3 id=&#34;dylan:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Dylan&lt;/h3&gt;
-
-&lt;p&gt;I see that there was a &lt;a href=&#34;http://www.drdobbs.com/tools/the-dylan-programming-language/184409404&#34;&gt;DDJ article on Dylan in January 1994&lt;/a&gt;. &amp;ldquo;Dylan, an object-oriented dynamic language developed by Apple Computer, is designed to replace existing static languages for the development of large software systems, yet remains small and efficient enough for the next generation of portable computers. Dylan was developed from the language Scheme, augmented with the Common-Lisp Object System (CLOS).&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;I was very excited about &lt;a href=&#34;http://en.wikipedia.org/wiki/Dylan_%28programming_language%29&#34;&gt;Dylan&lt;/a&gt; when I learned about it, because of its ambitions to simultaneously&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;have all the nice features of Scheme&lt;/li&gt;
-&lt;li&gt;remain dynamically typed, but offer optional typing as a standard part of the language&lt;/li&gt;
-&lt;li&gt;provide an object system with multimethods (in 1994, I felt that conventional single-receiver OO was a dead end in the history of programming languages, as evidenced by the horrible &lt;a href=&#34;http://en.wikipedia.org/wiki/Visitor_pattern&#34;&gt;visitor pattern&lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Up until I discovered Caml, my favorite language was Scheme, which I had learned in 1992 while working through (the first edition of) &lt;a href=&#34;http://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs&#34;&gt;&amp;ldquo;The Structure and Interpretation of Computer Programs&amp;rdquo;&lt;/a&gt; (SICP), so I felt totally at home in Dylan. In fact, I remember this very article as convincing me to switch from Scheme to Dylan: &lt;a href=&#34;http://www.drdobbs.com/tools/the-dylan-programming-language/184409404#0272_00e9&#34;&gt;Example 5&lt;/a&gt; in the article presented a code snippet from SICP translated into Dylan! Note that this was when Dylan was still using an S-expression syntax carried over from Scheme. Later, Dylan acquired an infix syntax, which I was a big fan of, actually, since I viscerally dislike the parentheses of Lisp languages. I played around with various implementations of Dylan before &lt;a href=&#34;http://en.wikipedia.org/wiki/Apple_Dylan&#34;&gt;Apple&amp;rsquo;s project&lt;/a&gt; was &lt;a href=&#34;http://web.archive.org/web/20060101181134/http://apple.computerhistory.org/discuss/msgReader$186?mode=day&#34;&gt;killed in 1995&lt;/a&gt;. That was a shocker. The news got to me late. I had acquired the Apple Dylan implementation and manual, and it was all for nothing. It was one of the greatest disappointments of my life (topic of another article).&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:47ed5fb51dd415468841ce6db5cecf80&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I&amp;rsquo;ve appreciated Dr. Dobb&amp;rsquo;s Journal for over two decades because of the timely information it has brought on all kinds of topics involving software development, from C and assembly code listings to surveys of new languages, libraries, algorithms, etc. It was particularly exciting rediscovering an important article on Dylan that exposed me to a sadly short-lived language, Dylan (although some are trying to revive it as &lt;a href=&#34;http://opendylan.org/&#34;&gt;Open Dylan&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;Some nostalgia and detective work have opened up memories and questions of &amp;ldquo;what could have been&amp;rdquo; that I&amp;rsquo;ll explore in later articles.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;What is your relationship to Dr. Dobb&amp;rsquo;s Journal? Have you ever been a loyal reader of it? What did you get from it?&lt;/strong&gt;&lt;/p&gt;
 </description>
     </item>
     

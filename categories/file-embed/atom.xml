@@ -24,7 +24,7 @@
 &lt;h2 id=&#34;day-9:8eaddb149d77042401ce1f324517c8ca&#34;&gt;Day 9&lt;/h2&gt;
 
 &lt;p&gt;A stray negative remark I made on
-&lt;a href=&#34;../../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/&#34;&gt;day 9&lt;/a&gt;
+&lt;a href=&#34;../../blog/2015/12/08/24-days-of-hackage-2015-day-8-multiset-i-wish-this-were-in-the-standard-containers-package/&#34;&gt;day 8&lt;/a&gt;
 regarding Haskell and its unergonomic support for multi-line string
 literals and interpolation led to good comments that I was being
 misleading because there actually exist good solutions. I already use
