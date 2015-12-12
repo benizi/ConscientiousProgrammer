@@ -343,6 +343,45 @@ But the `.~` is I think not very suggestive to newcomers to
 `lens`. Is `set lens newValue object` so much worse to write or read than
 `object & lens .~ newValue`?
 
+## (Update of 2014-12-12) Thinking compositionally
+
+One thing that is unfortunately lost if you use pipeline application
+operators such as `&` is the *compositionality* that underlies the
+power of lenses. So here is a refactoring of `eventsOptions` that
+shows how to best think of what we are doing, which is creating a
+"builder" and applying it:
+
+{{< highlight haskell >}}
+eventsOptionsRefactored :: GroupId -> Options
+eventsOptionsRefactored groupId = builder defaults
+  where builder = eventsOptionsBuilder groupId
+
+-- | Recall: type is sugar for GroupId -> (Options -> Options)
+eventsOptionsBuilder :: GroupId -> Options -> Options
+eventsOptionsBuilder groupId =
+  set (param "page") ["10"]
+  . set (param "order") ["time"]
+  . set (param "status") ["upcoming"]
+  . set (param "group_id") [groupId]
+  . set (param "format") ["json"]
+{{< /highlight >}}
+
+Note the separation of concerns here: instead of thinking of building
+an `Options` object as
+
+- starting with a default
+- successively applying an extra setting to it
+
+we think of
+
+- creating an options builder through composition
+- applying the builder to the default
+
+Partial application in functional programming is used here to
+implement the builder pattern: `eventsOptionsBuilder` takes one
+argument, and returns an `Options` transformer of type `Options ->
+Options`.
+
 ## Code golf?
 
 To illustrate both the up sides and down sides of using operators (but
