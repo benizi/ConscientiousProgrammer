@@ -6,8 +6,271 @@
     <description>Recent content in Json on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Dec 2015 17:05:23 -0500</lastBuildDate>
+    <lastBuildDate>Sat, 12 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/categories/json/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 12: json-autotype: inferring types from data</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/12/24-days-of-hackage-2015-day-12-json-autotype-inferring-types-from-data/</link>
+      <pubDate>Sat, 12 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/12/24-days-of-hackage-2015-day-12-json-autotype-inferring-types-from-data/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:33f1fa328e93fa7d82a0bc799e461364&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-12:33f1fa328e93fa7d82a0bc799e461364&#34;&gt;Day 12&lt;/h2&gt;
+
+&lt;p&gt;Today we revisit a problem from
+&lt;a href=&#34;../../blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/&#34;&gt;day 4&lt;/a&gt;,
+in which we grabbed JSON off the Web in order to extract information
+about it. I mentioned then that we were using an untyped
+representation for JSON. Ideally, if it&amp;rsquo;s not too onerous, we want to
+use a typed representation for our data, to avoid common errors such
+as trying to access a nonexistent field. The Aeson library allows us
+to write our own data types and convert them from and to JSON. If we
+were in charge of the data and data format, then this would be the way
+to go.&lt;/p&gt;
+
+&lt;p&gt;But what if, for whatever reason, we do not already have a typed data
+model, but are consuming, for example, JSON from a source that has not
+given us a spec of the data types, maybe with JSON Schema? Then we
+have to reverse-engineer the data types, possibly from an informal text
+spec of the format (which is a real pain).&lt;/p&gt;
+
+&lt;p&gt;Or we could take a lazy way out, and &lt;em&gt;infer&lt;/em&gt; plausible types from a
+corpus of representative data. This is what the useful
+&lt;a href=&#34;http://hackage.haskell.org/package/json-autotype&#34;&gt;&lt;code&gt;json-autotype&lt;/code&gt;&lt;/a&gt;
+package does (&lt;a href=&#34;https://github.com/mgajda/json-autotype&#34;&gt;documentation on the GitHub repo page&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h2 id=&#34;generating-a-module-of-types-from-json-data:33f1fa328e93fa7d82a0bc799e461364&#34;&gt;Generating a module of types from JSON data&lt;/h2&gt;
+
+&lt;p&gt;I saved off a sample JSON document,
+&lt;code&gt;pittsburgh-code-and-supply-events.json&lt;/code&gt; from a query of the Meetup
+events API.&lt;/p&gt;
+
+&lt;p&gt;The easiest way to use &lt;code&gt;json-autotype&lt;/code&gt; is to use its command line
+tool, installing it globally first.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; stack install json-autotype
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;For our quick example, I just manually generated Haskell source code
+(ideally we should integrate this process into a fully automated
+build):&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; json-autotype pittsburgh-code-and-supply-events.json -o
+&lt;span style=&#34;color: #888888&#34;&gt;MeetupEventsJSON.hs&lt;/span&gt;
+&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; mkdir generated-src
+&lt;span style=&#34;color: #000080; font-weight: bold&#34;&gt;$&lt;/span&gt; mv MeetupEventsJSon.hs generated-src/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Note that although for this example, we only ran the inference on a
+single document, running it on more documents may give more precise
+types.&lt;/p&gt;
+
+&lt;h3 id=&#34;a-quick-look-at-the-generated-code:33f1fa328e93fa7d82a0bc799e461364&#34;&gt;A quick look at the generated code&lt;/h3&gt;
+
+&lt;p&gt;Here is a sample of what was generated (reformatted and edited for clarity):&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE TypeOperators #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Aeson.AutoType.Alternative&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;:|:&lt;/span&gt;))
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;TopLevel&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;TopLevel&lt;/span&gt; {
+    topLevelResults &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;ResultsElt&lt;/span&gt;],
+    topLevelMeta &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Meta&lt;/span&gt;
+  } &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;deriving&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt;,&lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt;,&lt;span style=&#34;color: #B00040&#34;&gt;Generic&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ResultsElt&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ResultsElt&lt;/span&gt; {
+    resultsEltStatus &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;,
+    resultsEltGroup &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Group&lt;/span&gt;,
+    resultsEltTime &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    resultsEltWaitlistCount &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    resultsEltVenue &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Venue:|:&lt;/span&gt;[(&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt;)])),
+    resultsEltCreated &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    resultsEltUtcOffset &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    resultsEltEventUrl &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;,
+    resultsEltYesRsvpCount &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    resultsEltHeadcount &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    resultsEltFee &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Fee:|:&lt;/span&gt;[(&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt;)])),
+    resultsEltVisibility &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;,
+    resultsEltMaybeRsvpCount &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    resultsEltName &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;,
+    resultsEltId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;,
+    resultsEltRsvpLimit &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int:|:&lt;/span&gt;[(&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt;)])),
+    resultsEltUpdated &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    resultsEltDuration &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Int:|:&lt;/span&gt;[(&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt;)])),
+    resultsEltDescription &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Text:|:&lt;/span&gt;[(&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt;)]))
+  } &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;deriving&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt;,&lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt;,&lt;span style=&#34;color: #B00040&#34;&gt;Generic&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;instance&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;FromJSON&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ResultsElt&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+  parseJSON (&lt;span style=&#34;color: #B00040&#34;&gt;Object&lt;/span&gt; v) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ResultsElt&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;group&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;waitlist_count&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:??&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;venue&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;created&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;utc_offset&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;event_url&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;yes_rsvp_count&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;headcount&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:??&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;fee&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;visibility&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;maybe_rsvp_count&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:??&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;rsvp_limit&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:&lt;/span&gt;   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;updated&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:??&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;duration&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;.:??&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;description&amp;quot;&lt;/span&gt;
+  parseJSON &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;          &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; mzero
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Venue&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Venue&lt;/span&gt; {
+    venueRepinned &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Bool&lt;/span&gt;,
+    venueState &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;,
+    venueCountry &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;,
+    venueZip &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Text:|:&lt;/span&gt;[(&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt;)])),
+    venueLat &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    venueName &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;,
+    venueCity &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;,
+    venueId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    venueLon &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;,
+    venueAddress1 &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+  } &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;deriving&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Show&lt;/span&gt;,&lt;span style=&#34;color: #B00040&#34;&gt;Eq&lt;/span&gt;,&lt;span style=&#34;color: #B00040&#34;&gt;Generic&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Isn&amp;rsquo;t this much better than inferring and writing the boilerplate
+manually? Now we can parse raw JSON directly into our set of types.&lt;/p&gt;
+
+&lt;p&gt;The funny &lt;code&gt;:|:&lt;/code&gt; operator is an &lt;code&gt;Either&lt;/code&gt;-like type constructor used to
+deal with the fact that when a field is missing from some data
+examples, we cannot infer whether it could potentially be a complex
+object that we just don&amp;rsquo;t know about from our corpus of examples.&lt;/p&gt;
+
+&lt;h2 id=&#34;using-the-generated-types:33f1fa328e93fa7d82a0bc799e461364&#34;&gt;Using the generated types&lt;/h2&gt;
+
+&lt;p&gt;Imports:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE OverloadedStrings #-}&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE TypeOperators #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;JSONAutoTypeExample&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Reuse what we did earlier.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;WreqExample&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt;), &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventsJSONBytes&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- Module automatically generated using json-autotype.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;MeetupEventsJSON&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Meetup
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Aeson&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Aeson
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Arrow&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Aeson.AutoType.Alternative&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;:|:&lt;/span&gt;)(&lt;span style=&#34;color: #B00040&#34;&gt;AltLeft&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;AltRight&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Text&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Text
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Our replacement for the old &lt;code&gt;getMeetupEventInfos&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Either&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;])
+&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  getMeetupEventsJSONBytes groupId
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;=&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Aeson&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;eitherDecode
+       &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; fmap extractEventInfos
+       &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; return
+      )
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note already the differences from before. We are now using
+&lt;code&gt;Aeson.eitherDecode&lt;/code&gt; to turn JSON bytes into a full-fledged
+&lt;code&gt;Meetup.TopLevel&lt;/code&gt; typed data object, and therefore can detect up front
+whether the JSON we got was valid (in the sense of, conforms to our
+prior inferred types).&lt;/p&gt;
+
+&lt;p&gt;Extracting events:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;extractEventInfos&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Meetup&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;TopLevel&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;]
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractEventInfos&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;Meetup&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;topLevelResults
+  &lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; map extractEventInfo
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This is also different from before, in that we are not just using
+hardcoded string keys to hopefully find what we want in the JSON
+result. We have a &lt;code&gt;Meetup.TopLevel&lt;/code&gt; object and just use ordinary typed
+record access to dive into the data.&lt;/p&gt;
+
+&lt;p&gt;Extracting information from a single event:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;extractEventInfo&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Meetup&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;ResultsElt&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractEventInfo&lt;/span&gt; event &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt; { eventName &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Meetup&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;resultsEltName event
+            , venueName &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; extractVenueName (&lt;span style=&#34;color: #B00040&#34;&gt;Meetup&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;resultsEltVenue event)
+            }
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Again, we just use the typed record fields from &lt;code&gt;Meetup.ResultsElt&lt;/code&gt;,
+instead of string keys into an object.&lt;/p&gt;
+
+&lt;p&gt;Finally, bottoming out as we try to get a venue name from the venue
+object of an event:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Trickier because json-autotype apparently found events without a venue.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractVenueName&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Meetup&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Venue&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;:|:&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Aeson&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Value&lt;/span&gt;]) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractVenueName&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Nothing&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractVenueName&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;AltLeft&lt;/span&gt; venue)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Meetup&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;venueName venue
+&lt;span style=&#34;color: #0000FF&#34;&gt;extractVenueName&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;AltRight&lt;/span&gt; jsonValues)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;Text&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;pack (&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;(unexpected JSON venue: &amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; show jsonValues &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;)&amp;quot;&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Here we recognize that maybe there is no venue, or the &lt;code&gt;venue&lt;/code&gt; JSON
+field is not actually a &lt;code&gt;Venue&lt;/code&gt;. In practice, recognizing this fact
+might result in changing our &lt;code&gt;EventInfo&lt;/code&gt; type so that it doesn&amp;rsquo;t
+assume a &lt;code&gt;Text&lt;/code&gt; as its &lt;code&gt;venueName&lt;/code&gt;, but for here, for now, we just
+stay in the stringly-typed world and try to make to with return a
+useful string in all cases.&lt;/p&gt;
+
+&lt;p&gt;But you see how having typed JSON can drive rethinking of our original
+assumptions leading to our definition of &lt;code&gt;EventInfo&lt;/code&gt; and maybe improve
+our design. The cool thing about &lt;code&gt;json-autotype&lt;/code&gt; is that you can make
+use it without having to write the JSON types by hand.&lt;/p&gt;
+
+&lt;h2 id=&#34;type-providers:33f1fa328e93fa7d82a0bc799e461364&#34;&gt;Type providers&lt;/h2&gt;
+
+&lt;p&gt;The F# language includes support for
+&lt;a href=&#34;https://msdn.microsoft.com/en-us/library/hh156509.aspx&#34;&gt;type providers&lt;/a&gt;,
+which are ways to get types from somewhere without having to write
+them yourself. This is a really cool feature I&amp;rsquo;d like to see put into
+more typed language ecosystems. For example, there is a library for
+&lt;a href=&#34;https://github.com/david-christiansen/idris-type-providers&#34;&gt;type providers for Idris&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m not aware of how much work there has been on a type provider
+ecosystem for Haskell, but I imagine that you could use Template
+Haskell, for example, to automate some of what we did here with
+&lt;code&gt;json-autotype&lt;/code&gt;, as a crude form of type provider.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:33f1fa328e93fa7d82a0bc799e461364&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;json-autotype&lt;/code&gt; is a nice library that helps in making sense of
+JSON that comes your way but without an associated set of types
+already written for you. It infers types and writes out a Haskell
+module for you.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:33f1fa328e93fa7d82a0bc799e461364&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 4: wreq: Web client programming; with notes on lens and operator syntax</title>
@@ -198,11 +461,11 @@ another using a builder pattern starting with the &lt;code&gt;wreq&lt;/code&gt; 
 &lt;p&gt;We begin by going out to the Web to get back a response, which is a
 &lt;a href=&#34;https://hackage.haskell.org/package/bytestring-0.10.6.0/docs/Data-ByteString-Lazy.html&#34;&gt;lazy &lt;code&gt;ByteString&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;]
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;]
 &lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
   response &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getWith (eventsOptions groupId) meetupEventsUrl
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;the-json-part:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;The JSON part&lt;/h3&gt;
 
@@ -337,6 +600,49 @@ so I feel OK about using it.&lt;/p&gt;
 &lt;p&gt;But the &lt;code&gt;.~&lt;/code&gt; is I think not very suggestive to newcomers to
 &lt;code&gt;lens&lt;/code&gt;. Is &lt;code&gt;set lens newValue object&lt;/code&gt; so much worse to write or read than
 &lt;code&gt;object &amp;amp; lens .~ newValue&lt;/code&gt;?&lt;/p&gt;
+
+&lt;h2 id=&#34;update-of-2014-12-12-thinking-compositionally:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;(Update of 2014-12-12) Thinking compositionally&lt;/h2&gt;
+
+&lt;p&gt;One thing that is unfortunately lost if you use pipeline application
+operators such as &lt;code&gt;&amp;amp;&lt;/code&gt; is the &lt;em&gt;compositionality&lt;/em&gt; that underlies the
+power of lenses. So here is a refactoring of &lt;code&gt;eventsOptions&lt;/code&gt; that
+shows how to best think of what we are doing, which is creating a
+&amp;ldquo;builder&amp;rdquo; and applying it:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptionsRefactored&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptionsRefactored&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; builder defaults
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt; builder &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; eventsOptionsBuilder groupId
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Recall: type is sugar for GroupId -&amp;gt; (Options -&amp;gt; Options)&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptionsBuilder&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptionsBuilder&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;page&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;10&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;order&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;upcoming&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;group_id&amp;quot;&lt;/span&gt;) [groupId]
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;format&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;json&amp;quot;&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note the separation of concerns here: instead of thinking of building
+an &lt;code&gt;Options&lt;/code&gt; object as&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;starting with a default&lt;/li&gt;
+&lt;li&gt;successively applying an extra setting to it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;we think of&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;creating an options builder through composition&lt;/li&gt;
+&lt;li&gt;applying the builder to the default&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Partial application in functional programming is used here to
+implement the builder pattern: &lt;code&gt;eventsOptionsBuilder&lt;/code&gt; takes one
+argument, and returns an &lt;code&gt;Options&lt;/code&gt; transformer of type &lt;code&gt;Options -&amp;gt;
+Options&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;code-golf:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Code golf?&lt;/h2&gt;
 

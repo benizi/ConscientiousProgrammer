@@ -259,11 +259,11 @@ another using a builder pattern starting with the <code>wreq</code> <code>defaul
 <p>We begin by going out to the Web to get back a response, which is a
 <a href="https://hackage.haskell.org/package/bytestring-0.10.6.0/docs/Data-ByteString-Lazy.html">lazy <code>ByteString</code></a>:</p>
 
-<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">getMeetupEventInfos</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">IO</span> [<span style="color: #B00040">EventInfo</span>]
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">getMeetupEventInfos</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">IO</span> [<span style="color: #B00040">EventInfo</span>]
 <span style="color: #0000FF">getMeetupEventInfos</span> groupId <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
   response <span style="color: #AA22FF; font-weight: bold">&lt;-</span> getWith (eventsOptions groupId) meetupEventsUrl
 </pre></div>
-</p>
+
 
 <h3 id="the-json-part:de6d56fd6945d7d59fdd3a84148a0b85">The JSON part</h3>
 
@@ -398,6 +398,49 @@ so I feel OK about using it.</p>
 <p>But the <code>.~</code> is I think not very suggestive to newcomers to
 <code>lens</code>. Is <code>set lens newValue object</code> so much worse to write or read than
 <code>object &amp; lens .~ newValue</code>?</p>
+
+<h2 id="update-of-2014-12-12-thinking-compositionally:de6d56fd6945d7d59fdd3a84148a0b85">(Update of 2014-12-12) Thinking compositionally</h2>
+
+<p>One thing that is unfortunately lost if you use pipeline application
+operators such as <code>&amp;</code> is the <em>compositionality</em> that underlies the
+power of lenses. So here is a refactoring of <code>eventsOptions</code> that
+shows how to best think of what we are doing, which is creating a
+&ldquo;builder&rdquo; and applying it:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">eventsOptionsRefactored</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Options</span>
+<span style="color: #0000FF">eventsOptionsRefactored</span> groupId <span style="color: #AA22FF; font-weight: bold">=</span> builder defaults
+  <span style="color: #008000; font-weight: bold">where</span> builder <span style="color: #AA22FF; font-weight: bold">=</span> eventsOptionsBuilder groupId
+
+<span style="color: #408080; font-style: italic">-- | Recall: type is sugar for GroupId -&gt; (Options -&gt; Options)</span>
+<span style="color: #0000FF">eventsOptionsBuilder</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">GroupId</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Options</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Options</span>
+<span style="color: #0000FF">eventsOptionsBuilder</span> groupId <span style="color: #AA22FF; font-weight: bold">=</span>
+  set (param <span style="color: #BA2121">&quot;page&quot;</span>) [<span style="color: #BA2121">&quot;10&quot;</span>]
+  <span style="color: #666666">.</span> set (param <span style="color: #BA2121">&quot;order&quot;</span>) [<span style="color: #BA2121">&quot;time&quot;</span>]
+  <span style="color: #666666">.</span> set (param <span style="color: #BA2121">&quot;status&quot;</span>) [<span style="color: #BA2121">&quot;upcoming&quot;</span>]
+  <span style="color: #666666">.</span> set (param <span style="color: #BA2121">&quot;group_id&quot;</span>) [groupId]
+  <span style="color: #666666">.</span> set (param <span style="color: #BA2121">&quot;format&quot;</span>) [<span style="color: #BA2121">&quot;json&quot;</span>]
+</pre></div>
+</p>
+
+<p>Note the separation of concerns here: instead of thinking of building
+an <code>Options</code> object as</p>
+
+<ul>
+<li>starting with a default</li>
+<li>successively applying an extra setting to it</li>
+</ul>
+
+<p>we think of</p>
+
+<ul>
+<li>creating an options builder through composition</li>
+<li>applying the builder to the default</li>
+</ul>
+
+<p>Partial application in functional programming is used here to
+implement the builder pattern: <code>eventsOptionsBuilder</code> takes one
+argument, and returns an <code>Options</code> transformer of type <code>Options -&gt;
+Options</code>.</p>
 
 <h2 id="code-golf:de6d56fd6945d7d59fdd3a84148a0b85">Code golf?</h2>
 

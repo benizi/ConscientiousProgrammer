@@ -198,11 +198,11 @@ another using a builder pattern starting with the &lt;code&gt;wreq&lt;/code&gt; 
 &lt;p&gt;We begin by going out to the Web to get back a response, which is a
 &lt;a href=&#34;https://hackage.haskell.org/package/bytestring-0.10.6.0/docs/Data-ByteString-Lazy.html&#34;&gt;lazy &lt;code&gt;ByteString&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;]
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; [&lt;span style=&#34;color: #B00040&#34;&gt;EventInfo&lt;/span&gt;]
 &lt;span style=&#34;color: #0000FF&#34;&gt;getMeetupEventInfos&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
   response &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; getWith (eventsOptions groupId) meetupEventsUrl
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+
 
 &lt;h3 id=&#34;the-json-part:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;The JSON part&lt;/h3&gt;
 
@@ -337,6 +337,49 @@ so I feel OK about using it.&lt;/p&gt;
 &lt;p&gt;But the &lt;code&gt;.~&lt;/code&gt; is I think not very suggestive to newcomers to
 &lt;code&gt;lens&lt;/code&gt;. Is &lt;code&gt;set lens newValue object&lt;/code&gt; so much worse to write or read than
 &lt;code&gt;object &amp;amp; lens .~ newValue&lt;/code&gt;?&lt;/p&gt;
+
+&lt;h2 id=&#34;update-of-2014-12-12-thinking-compositionally:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;(Update of 2014-12-12) Thinking compositionally&lt;/h2&gt;
+
+&lt;p&gt;One thing that is unfortunately lost if you use pipeline application
+operators such as &lt;code&gt;&amp;amp;&lt;/code&gt; is the &lt;em&gt;compositionality&lt;/em&gt; that underlies the
+power of lenses. So here is a refactoring of &lt;code&gt;eventsOptions&lt;/code&gt; that
+shows how to best think of what we are doing, which is creating a
+&amp;ldquo;builder&amp;rdquo; and applying it:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptionsRefactored&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptionsRefactored&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; builder defaults
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt; builder &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; eventsOptionsBuilder groupId
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Recall: type is sugar for GroupId -&amp;gt; (Options -&amp;gt; Options)&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptionsBuilder&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;GroupId&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Options&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;eventsOptionsBuilder&lt;/span&gt; groupId &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;page&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;10&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;order&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;status&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;upcoming&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;group_id&amp;quot;&lt;/span&gt;) [groupId]
+  &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; set (param &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;format&amp;quot;&lt;/span&gt;) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;json&amp;quot;&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note the separation of concerns here: instead of thinking of building
+an &lt;code&gt;Options&lt;/code&gt; object as&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;starting with a default&lt;/li&gt;
+&lt;li&gt;successively applying an extra setting to it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;we think of&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;creating an options builder through composition&lt;/li&gt;
+&lt;li&gt;applying the builder to the default&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Partial application in functional programming is used here to
+implement the builder pattern: &lt;code&gt;eventsOptionsBuilder&lt;/code&gt; takes one
+argument, and returns an &lt;code&gt;Options&lt;/code&gt; transformer of type &lt;code&gt;Options -&amp;gt;
+Options&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;code-golf:de6d56fd6945d7d59fdd3a84148a0b85&#34;&gt;Code golf?&lt;/h2&gt;
 
