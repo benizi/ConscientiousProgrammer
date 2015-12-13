@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>24 days of Hackage, 2015: day 13: hint: runtime eval for Haskell &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+        
+        <h1>The Conscientious Programmer</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
+    </ul>
+
+    
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>24 days of Hackage, 2015: day 13: hint: runtime eval for Haskell</h1>
+    
+
+<h2 id="table-of-contents-for-the-whole-series:4ffc4d1fd7325e3ed1c68dabc85f2632">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-13:4ffc4d1fd7325e3ed1c68dabc85f2632">Day 13</h2>
+
+<p>One hallmark of a &ldquo;dynamic language&rdquo; such as Lisp and JavaScript is
+the ability to evaluate code at runtime inside a running
+process. Since runtime loading of classes is a fundamental feature of
+Java, is Java a &ldquo;dynamic language&rdquo; then? I think the terms &ldquo;static
+language&rdquo; and &ldquo;dynamic language&rdquo; are not very useful terms, and a
+comparison of language and compiler and development environments
+should focus on specific features of the user experience and where the
+boundaries lie in the semantics. One tricky thing is that a lot of
+what is interesting is actually implementation-dependent.</p>
+
+<p>For example, the Haskell standard says nothing about runtime <code>eval</code>,
+so there is some sense in which Haskell considered as a strictly
+defined &ldquo;language&rdquo; has no support for it. But if we consider the GHC
+implementation and its ecosystem, which is dominant today despite the
+existence of other Haskell implementations, there&rsquo;s a lot of tooling
+that is &ldquo;dynamic&rdquo;, in the sense of being able to access GHC APIs in
+one of many different ways.</p>
+
+<p>Edward Yang recently wrote an interesting blog post
+<a href="http://blog.ezyang.com/2015/12/the-convergence-of-compilers-build-systems-and-package-managers/">&ldquo;The convergence of compilers, build systems and package managers&rdquo;</a>
+on a subset of the general issue of what can access what for the sake
+of tooling. It didn&rsquo;t touch on runtime evaluation, which is an entire
+topic in itself.</p>
+
+<p>For today, I decided to mention that you can already do runtime eval
+of GHC Haskell code using the package
+<a href="http://hackage.haskell.org/package/hint"><code>hint</code></a> and offer the
+thought that maybe we might want something less ad hoc than
+third-party packages like this.</p>
+
+<h2 id="why-dynamic-loading-and-evaluation-of-haskell-code:4ffc4d1fd7325e3ed1c68dabc85f2632">Why dynamic loading and evaluation of Haskell code?</h2>
+
+<p>For me, it always comes down to being jealous of the Lisp world.</p>
+
+<p>There are times when I have wanted to be able to do dynamic loading
+and evaluation of Haskell code, and wished I were in Lisp. The main
+example is when supporting user-written &ldquo;plugins&rdquo; that can be loaded
+from a source file or even typed at a custom REPL. The cleanest way of
+doing such a thing is to create and implement a limited
+domain-specific language and write a parser, type checker (if the DSL
+is typed), compiler/interpreter for it. But why do all that if we can
+just allow using the full power of Haskell instead?</p>
+
+<p>Luckily, I found libraries such as <code>hint</code> that enabled me to do what I
+wanted. I&rsquo;ll show a toy example of the kind of thing that I have done.</p>
+
+<h2 id="the-task:4ffc4d1fd7325e3ed1c68dabc85f2632">The task</h2>
+
+<p>Imagine a program that does sorting, and allows the user at runtime to
+submit a custom sorting function to have it be used in place of the
+default options. For example, the user could have specified the path
+of a Haskell source file <code>OurSorter.hs</code> as a command-line argument, or
+the program could have a preferences dialog box allowing the user to
+enter the text of a sorting function.</p>
+
+<p>To make things even more interesting, let&rsquo;s say that the sorting
+function to be specified has to be polymorphic, constrained only to
+require comparison:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">userDefinedSort</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Ord</span> a <span style="color: #AA22FF; font-weight: bold">=&gt;</span> [a] <span style="color: #AA22FF; font-weight: bold">-&gt;</span> [a]
+</pre></div>
+
+
+<p>How do we load this type of function at runtime?</p>
+
+<h2 id="a-necessary-wrapper:4ffc4d1fd7325e3ed1c68dabc85f2632">A necessary wrapper</h2>
+
+<p>The first thing to get out of the way is that we cannot load a
+function of type <code>Ord a =&gt; [a] -&gt; [a]</code> directly. We have to wrap it in
+a <code>newtype</code> to hide the higher-rank type and go monomorphic:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE RankNTypes #-}</span>
+
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">SortWrapper</span> (<span style="color: #B00040">Sort</span>(<span style="color: #666666">..</span>)) <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">newtype</span> <span style="color: #B00040">Sort</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  <span style="color: #B00040">Sort</span> { getSort <span style="color: #AA22FF; font-weight: bold">::</span> forall a<span style="color: #666666">.</span> <span style="color: #B00040">Ord</span> a <span style="color: #AA22FF; font-weight: bold">=&gt;</span> [a] <span style="color: #AA22FF; font-weight: bold">-&gt;</span> [a] }
+</pre></div>
+
+
+<p>Now we can try to load values of type <code>Sort</code> instead of type <code>Ord a =&gt;
+[a] -&gt; [a]</code>.</p>
+
+<h2 id="how-to-load:4ffc4d1fd7325e3ed1c68dabc85f2632">How to load?</h2>
+
+<p>Let&rsquo;s create an API called <code>loadSort</code> that enables loading a
+particular <code>Sort</code> by looking for it by module and name. Here&rsquo;s an
+HSpec test that illustrates that we want to be able to load a <code>Sort</code>
+and use it on different types of lists. We&rsquo;re using
+<code>Language.Haskell.Interpreter</code> to do the work:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">HintExampleSpec</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">SortWrapper</span> (<span style="color: #B00040">Sort</span>(<span style="color: #B00040">Sort</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">HintExample</span> (<span style="color: #0000FF">loadSort</span>)
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Language.Haskell.Interpreter</span> <span style="color: #008000; font-weight: bold">as</span> I
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> (<span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>, <span style="color: #0000FF">shouldBe</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec.QuickCheck</span> (<span style="color: #0000FF">prop</span>)
+
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;hint&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    it <span style="color: #BA2121">&quot;dynamically loads a correct polymorphic sort function&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #B00040">Right</span> (<span style="color: #B00040">Sort</span> ourSort) <span style="color: #AA22FF; font-weight: bold">&lt;-</span>
+        <span style="color: #B00040">I</span><span style="color: #666666">.</span>runInterpreter (loadSort <span style="color: #BA2121">&quot;OurSorter&quot;</span> <span style="color: #BA2121">&quot;ourSort&quot;</span>)
+      ourSort <span style="color: #BA2121">&quot;ebcad&quot;</span> `shouldBe` <span style="color: #BA2121">&quot;abcde&quot;</span>
+      ourSort [<span style="color: #666666">1</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>, <span style="color: #666666">5</span>, <span style="color: #666666">4</span>, <span style="color: #666666">3</span>, <span style="color: #666666">7</span>] `shouldBe` [<span style="color: #666666">1</span>, <span style="color: #666666">3</span>, <span style="color: #666666">4</span>, <span style="color: #666666">5</span>, <span style="color: #666666">7</span>]
+    it <span style="color: #BA2121">&quot;dynamically loads a wrong (only head) sort function&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      <span style="color: #B00040">Right</span> (<span style="color: #B00040">Sort</span> onlyHead) <span style="color: #AA22FF; font-weight: bold">&lt;-</span>
+        <span style="color: #B00040">I</span><span style="color: #666666">.</span>runInterpreter (loadSort <span style="color: #BA2121">&quot;OurSorter&quot;</span> <span style="color: #BA2121">&quot;onlyHead&quot;</span>)
+      onlyHead <span style="color: #BA2121">&quot;ebcad&quot;</span> `shouldBe` <span style="color: #BA2121">&quot;e&quot;</span>
+      onlyHead [<span style="color: #B00040">True</span>, <span style="color: #B00040">False</span>] `shouldBe` [<span style="color: #B00040">True</span>]
+</pre></div>
+
+
+<h2 id="a-sample-plugin:4ffc4d1fd7325e3ed1c68dabc85f2632">A sample &ldquo;plugin&rdquo;</h2>
+
+<p>We created a sample &ldquo;plugin&rdquo; in a directory whose source code is <em>not</em> compiled
+into our main program. Imagine that the user has a separate plugins directory.</p>
+
+<h2 id="the-loader:4ffc4d1fd7325e3ed1c68dabc85f2632">The loader</h2>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">HintExample</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">SortWrapper</span> (<span style="color: #B00040">Sort</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Language.Haskell.Interpreter</span> <span style="color: #008000; font-weight: bold">as</span> I
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Language.Haskell.Interpreter</span> (<span style="color: #B00040">OptionVal</span>((<span style="color: #666666">:=</span>)))
+
+<span style="color: #408080; font-style: italic">-- | Dynamically load a &#39;Sort&#39; implementation from a file.</span>
+<span style="color: #408080; font-style: italic">-- src is needed to pick up our SortWrapper.</span>
+<span style="color: #408080; font-style: italic">-- sort-plugins is a sample user plugins directory</span>
+<span style="color: #0000FF">loadSort</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">I</span><span style="color: #666666">.</span><span style="color: #B00040">MonadInterpreter</span> m <span style="color: #AA22FF; font-weight: bold">=&gt;</span>
+            <span style="color: #B00040">String</span>  <span style="color: #408080; font-style: italic">-- ^ module name</span>
+         <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">String</span>  <span style="color: #408080; font-style: italic">-- ^ function name</span>
+         <span style="color: #AA22FF; font-weight: bold">-&gt;</span> m <span style="color: #B00040">Sort</span>
+<span style="color: #0000FF">loadSort</span> moduleName functionName <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #008000; font-weight: bold">do</span>
+  <span style="color: #B00040">I</span><span style="color: #666666">.</span>set [<span style="color: #B00040">I</span><span style="color: #666666">.</span>searchPath <span style="color: #B00040">:=</span> [<span style="color: #BA2121">&quot;src&quot;</span>, <span style="color: #BA2121">&quot;sort-plugins&quot;</span>]]
+  <span style="color: #B00040">I</span><span style="color: #666666">.</span>loadModules [moduleName]
+  <span style="color: #B00040">I</span><span style="color: #666666">.</span>setImports [moduleName, <span style="color: #BA2121">&quot;SortWrapper&quot;</span>]
+  <span style="color: #B00040">I</span><span style="color: #666666">.</span>interpret (moduleName <span style="color: #666666">++</span> <span style="color: #BA2121">&quot;.&quot;</span> <span style="color: #666666">++</span> functionName) (<span style="color: #B00040">I</span><span style="color: #666666">.</span>as <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Sort</span>)
+</pre></div>
+</p>
+
+<p>The most interesting part is the use of the <code>interpret</code> function that
+has type</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">interpret</span> <span style="color: #AA22FF; font-weight: bold">::</span> (<span style="color: #B00040">MonadInterpreter</span> m, <span style="color: #B00040">Typeable</span> a) <span style="color: #AA22FF; font-weight: bold">=&gt;</span> <span style="color: #B00040">String</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> m a
+</pre></div>
+</p>
+
+<p>taking a string and a witness for a monomorphic type in order to tell
+<code>interpret</code> what runtime dictionary for <code>Typeable</code> to use.</p>
+
+<p>So there we have it: runtime eval in GHC Haskell. What <code>hint</code> provides
+is fairly primitive, but I found it useful.</p>
+
+<h2 id="conclusion:4ffc4d1fd7325e3ed1c68dabc85f2632">Conclusion</h2>
+
+<p>I&rsquo;d like to see more official support for dynamism in environments for
+languages such as Haskell. This does require access to compiler
+internals or official APIs, but I think this is the way to
+go. Principled phase separations are important but so is
+integration. I like that <code>hint</code> exists to allow me to dynamically load
+GHC Haskell code.</p>
+
+<h2 id="all-the-code:4ffc4d1fd7325e3ed1c68dabc85f2632">All the code</h2>
+
+<p>All my code for my article series are at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/13\/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell\/';
+    var disqus_title = '24 days of Hackage, 2015: day 13: hint: runtime eval for Haskell';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/13\/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

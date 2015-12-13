@@ -79,6 +79,56 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/">24 days of Hackage, 2015: day 13: hint: runtime eval for Haskell</a>
+      </h1>
+      <span class="post-date">Dec 13, 2015 &middot; 5 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hint">hint</a><a class="label" href="http://ConscientiousProgrammer.com/categories/eval">eval</a><a class="label" href="http://ConscientiousProgrammer.com/categories/dynamic">dynamic</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ghc">GHC</a><a class="label" href="http://ConscientiousProgrammer.com/categories/lisp">Lisp</a><a class="label" href="http://ConscientiousProgrammer.com/categories/javascript">JavaScript</a><a class="label" href="http://ConscientiousProgrammer.com/categories/java">Java</a>
+      </span>
+      
+      <h2 id="table-of-contents-for-the-whole-series:4ffc4d1fd7325e3ed1c68dabc85f2632">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-13:4ffc4d1fd7325e3ed1c68dabc85f2632">Day 13</h2>
+
+<p>One hallmark of a &ldquo;dynamic language&rdquo; such as Lisp and JavaScript is
+the ability to evaluate code at runtime inside a running
+process. Since runtime loading of classes is a fundamental feature of
+Java, is Java a &ldquo;dynamic language&rdquo; then? I think the terms &ldquo;static
+language&rdquo; and &ldquo;dynamic language&rdquo; are not very useful terms, and a
+comparison of language and compiler and development environments
+should focus on specific features of the user experience and where the
+boundaries lie in the semantics. One tricky thing is that a lot of
+what is interesting is actually implementation-dependent.</p>
+
+<p>For example, the Haskell standard says nothing about runtime <code>eval</code>,
+so there is some sense in which Haskell considered as a strictly
+defined &ldquo;language&rdquo; has no support for it. But if we consider the GHC
+implementation and its ecosystem, which is dominant today despite the
+existence of other Haskell implementations, there&rsquo;s a lot of tooling
+that is &ldquo;dynamic&rdquo;, in the sense of being able to access GHC APIs in
+one of many different ways.</p>
+
+<p>Edward Yang recently wrote an interesting blog post
+<a href="http://blog.ezyang.com/2015/12/the-convergence-of-compilers-build-systems-and-package-managers/">&ldquo;The convergence of compilers, build systems and package managers&rdquo;</a>
+on a subset of the general issue of what can access what for the sake
+of tooling. It didn&rsquo;t touch on runtime evaluation, which is an entire
+topic in itself.</p>
+
+<p>For today, I decided to mention that you can already do runtime eval
+of GHC Haskell code using the package
+<a href="http://hackage.haskell.org/package/hint"><code>hint</code></a> and offer the
+thought that maybe we might want something less ad hoc than
+third-party packages like this.</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/12/12/24-days-of-hackage-2015-day-12-json-autotype-inferring-types-from-data/">24 days of Hackage, 2015: day 12: json-autotype: inferring types from data</a>
       </h1>
       <span class="post-date">Dec 12, 2015 &middot; 6 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/12/24-days-of-hackage-2015-day-12-json-autotype-inferring-types-from-data/#disqus_thread">Comments</a>
@@ -495,52 +545,6 @@ example of use that should be simple enough to be understood from
 context, then discuss the issue of using operator syntax in Haskell.</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/">24 days of Hackage, 2015: day 3: HSpec; the importance of testing</a>
-      </h1>
-      <span class="post-date">Dec 3, 2015 &middot; 15 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hspec">HSpec</a><a class="label" href="http://ConscientiousProgrammer.com/categories/rspec">RSpec</a><a class="label" href="http://ConscientiousProgrammer.com/categories/testing">testing</a><a class="label" href="http://ConscientiousProgrammer.com/categories/test-driven-development">test-driven development</a><a class="label" href="http://ConscientiousProgrammer.com/categories/type-driven-development">type-driven development</a><a class="label" href="http://ConscientiousProgrammer.com/categories/perl">Perl</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ruby">Ruby</a><a class="label" href="http://ConscientiousProgrammer.com/categories/elixir">Elixir</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ocaml">OCaml</a><a class="label" href="http://ConscientiousProgrammer.com/categories/types">types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/refactoring">refactoring</a><a class="label" href="http://ConscientiousProgrammer.com/categories/domain-specific-languages">domain-specific languages</a>
-      </span>
-      
-      <h2 id="table-of-contents-for-the-whole-series:740606311d3fcf0ba2f14607a358bd73">Table of contents for the whole series</h2>
-
-<p>A table of contents is at the top of the article for <a href="./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
-
-<h2 id="day-3:740606311d3fcf0ba2f14607a358bd73">Day 3</h2>
-
-<p>I spent my formative years writing software before &ldquo;testing framework&rdquo;
-was in my vocabulary, before
-<a href="https://en.wikipedia.org/wiki/Test-driven_development">&ldquo;test-driven development&rdquo;</a>
-was a thing. I shudder to think of those years, because now I&rsquo;m a
-believer in tests and even in test-driven development (TDD), according to my
-interpretation of what that means (since everyone has a different
-definition).</p>
-
-<p>There are a bunch of testing tools that have been available in the
-Haskell ecosystem for some time. In fact, Ollie in his &ldquo;24 Days of
-Hackage&rdquo; covered</p>
-
-<ul>
-<li><a href="https://hackage.haskell.org/package/QuickCheck"><code>QuickCheck</code></a>
-<a href="https://ocharles.org.uk/blog/posts/2012-12-08-24-days-of-hackage.html">in 2012</a></li>
-<li><a href="https://hackage.haskell.org/package/doctest"><code>doctest</code></a> <a href="https://ocharles.org.uk/blog/posts/2013-12-18-doctest.html">in 2013</a></li>
-<li><a href="http://documentup.com/feuerbach/tasty"><code>tasty</code></a> <a href="https://ocharles.org.uk/blog/posts/2013-12-03-24-days-of-hackage-tasty.html">in 2013</a></li>
-</ul>
-
-<p>and I heartily recommend looking those up.</p>
-
-<p>But today I&rsquo;m going to show use of <a href="http://hspec.github.io/"><code>HSpec</code></a>
-(noting that a framework like <code>tasty</code> or
-<a href="`https://batterseapower.github.io/test-framework/"><code>test-framework</code></a>
-are a lot fancier).</p>
-
-      <a href="http://conscientiousprogrammer.com/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/">Read On &rarr;</a>
       
     </div>
     

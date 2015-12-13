@@ -893,7 +893,7 @@ can rely on the recipient simply installing Stack.&lt;/p&gt;
 add the following two lines and make the file executable:&lt;/p&gt;
 
 &lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #666666&#34;&gt;#!/&lt;/span&gt;usr&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;env stack
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- stack --resolver lts-3.17 --install-ghc runghc --package pcre-heavy&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- stack --resolver lts-3.18 --install-ghc runghc --package pcre-heavy&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -927,7 +927,7 @@ one to the other seamlessly.&lt;/p&gt;
 &lt;h3 id=&#34;here-s-our-complete-example-standalone-program:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Here&amp;rsquo;s our complete example standalone program&lt;/h3&gt;
 
 &lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #666666&#34;&gt;#!/&lt;/span&gt;usr&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;env stack
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- stack --resolver lts-3.17 --install-ghc runghc --package pcre-heavy&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- stack --resolver lts-3.18 --install-ghc runghc --package pcre-heavy&lt;/span&gt;
 
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE QuasiQuotes #-}&lt;/span&gt;
 

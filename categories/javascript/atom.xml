@@ -6,8 +6,196 @@
     <description>Recent content in Javascript on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 23 Dec 2013 23:54:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 13 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/categories/javascript/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 13: hint: runtime eval for Haskell</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/</link>
+      <pubDate>Sun, 13 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-13:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;Day 13&lt;/h2&gt;
+
+&lt;p&gt;One hallmark of a &amp;ldquo;dynamic language&amp;rdquo; such as Lisp and JavaScript is
+the ability to evaluate code at runtime inside a running
+process. Since runtime loading of classes is a fundamental feature of
+Java, is Java a &amp;ldquo;dynamic language&amp;rdquo; then? I think the terms &amp;ldquo;static
+language&amp;rdquo; and &amp;ldquo;dynamic language&amp;rdquo; are not very useful terms, and a
+comparison of language and compiler and development environments
+should focus on specific features of the user experience and where the
+boundaries lie in the semantics. One tricky thing is that a lot of
+what is interesting is actually implementation-dependent.&lt;/p&gt;
+
+&lt;p&gt;For example, the Haskell standard says nothing about runtime &lt;code&gt;eval&lt;/code&gt;,
+so there is some sense in which Haskell considered as a strictly
+defined &amp;ldquo;language&amp;rdquo; has no support for it. But if we consider the GHC
+implementation and its ecosystem, which is dominant today despite the
+existence of other Haskell implementations, there&amp;rsquo;s a lot of tooling
+that is &amp;ldquo;dynamic&amp;rdquo;, in the sense of being able to access GHC APIs in
+one of many different ways.&lt;/p&gt;
+
+&lt;p&gt;Edward Yang recently wrote an interesting blog post
+&lt;a href=&#34;http://blog.ezyang.com/2015/12/the-convergence-of-compilers-build-systems-and-package-managers/&#34;&gt;&amp;ldquo;The convergence of compilers, build systems and package managers&amp;rdquo;&lt;/a&gt;
+on a subset of the general issue of what can access what for the sake
+of tooling. It didn&amp;rsquo;t touch on runtime evaluation, which is an entire
+topic in itself.&lt;/p&gt;
+
+&lt;p&gt;For today, I decided to mention that you can already do runtime eval
+of GHC Haskell code using the package
+&lt;a href=&#34;http://hackage.haskell.org/package/hint&#34;&gt;&lt;code&gt;hint&lt;/code&gt;&lt;/a&gt; and offer the
+thought that maybe we might want something less ad hoc than
+third-party packages like this.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-dynamic-loading-and-evaluation-of-haskell-code:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;Why dynamic loading and evaluation of Haskell code?&lt;/h2&gt;
+
+&lt;p&gt;For me, it always comes down to being jealous of the Lisp world.&lt;/p&gt;
+
+&lt;p&gt;There are times when I have wanted to be able to do dynamic loading
+and evaluation of Haskell code, and wished I were in Lisp. The main
+example is when supporting user-written &amp;ldquo;plugins&amp;rdquo; that can be loaded
+from a source file or even typed at a custom REPL. The cleanest way of
+doing such a thing is to create and implement a limited
+domain-specific language and write a parser, type checker (if the DSL
+is typed), compiler/interpreter for it. But why do all that if we can
+just allow using the full power of Haskell instead?&lt;/p&gt;
+
+&lt;p&gt;Luckily, I found libraries such as &lt;code&gt;hint&lt;/code&gt; that enabled me to do what I
+wanted. I&amp;rsquo;ll show a toy example of the kind of thing that I have done.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-task:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;The task&lt;/h2&gt;
+
+&lt;p&gt;Imagine a program that does sorting, and allows the user at runtime to
+submit a custom sorting function to have it be used in place of the
+default options. For example, the user could have specified the path
+of a Haskell source file &lt;code&gt;OurSorter.hs&lt;/code&gt; as a command-line argument, or
+the program could have a preferences dialog box allowing the user to
+enter the text of a sorting function.&lt;/p&gt;
+
+&lt;p&gt;To make things even more interesting, let&amp;rsquo;s say that the sorting
+function to be specified has to be polymorphic, constrained only to
+require comparison:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;userDefinedSort&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Ord&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;How do we load this type of function at runtime?&lt;/p&gt;
+
+&lt;h2 id=&#34;a-necessary-wrapper:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;A necessary wrapper&lt;/h2&gt;
+
+&lt;p&gt;The first thing to get out of the way is that we cannot load a
+function of type &lt;code&gt;Ord a =&amp;gt; [a] -&amp;gt; [a]&lt;/code&gt; directly. We have to wrap it in
+a &lt;code&gt;newtype&lt;/code&gt; to hide the higher-rank type and go monomorphic:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE RankNTypes #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SortWrapper&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt;)) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;newtype&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt; { getSort &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; forall a&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Ord&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] }
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now we can try to load values of type &lt;code&gt;Sort&lt;/code&gt; instead of type &lt;code&gt;Ord a =&amp;gt;
+[a] -&amp;gt; [a]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-to-load:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;How to load?&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s create an API called &lt;code&gt;loadSort&lt;/code&gt; that enables loading a
+particular &lt;code&gt;Sort&lt;/code&gt; by looking for it by module and name. Here&amp;rsquo;s an
+HSpec test that illustrates that we want to be able to load a &lt;code&gt;Sort&lt;/code&gt;
+and use it on different types of lists. We&amp;rsquo;re using
+&lt;code&gt;Language.Haskell.Interpreter&lt;/code&gt; to do the work:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;HintExampleSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SortWrapper&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;HintExample&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;loadSort&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Language.Haskell.Interpreter&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; I
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;hint&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;dynamically loads a correct polymorphic sort function&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;Right&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt; ourSort) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt;
+        &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;runInterpreter (loadSort &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;OurSorter&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;ourSort&amp;quot;&lt;/span&gt;)
+      ourSort &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;ebcad&amp;quot;&lt;/span&gt; `shouldBe` &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;abcde&amp;quot;&lt;/span&gt;
+      ourSort [&lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;7&lt;/span&gt;] `shouldBe` [&lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;7&lt;/span&gt;]
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;dynamically loads a wrong (only head) sort function&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;Right&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt; onlyHead) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt;
+        &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;runInterpreter (loadSort &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;OurSorter&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;onlyHead&amp;quot;&lt;/span&gt;)
+      onlyHead &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;ebcad&amp;quot;&lt;/span&gt; `shouldBe` &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;
+      onlyHead [&lt;span style=&#34;color: #B00040&#34;&gt;True&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;False&lt;/span&gt;] `shouldBe` [&lt;span style=&#34;color: #B00040&#34;&gt;True&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;a-sample-plugin:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;A sample &amp;ldquo;plugin&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;We created a sample &amp;ldquo;plugin&amp;rdquo; in a directory whose source code is &lt;em&gt;not&lt;/em&gt; compiled
+into our main program. Imagine that the user has a separate plugins directory.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-loader:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;The loader&lt;/h2&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;HintExample&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SortWrapper&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Language.Haskell.Interpreter&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; I
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Language.Haskell.Interpreter&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;OptionVal&lt;/span&gt;((&lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt;)))
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Dynamically load a &amp;#39;Sort&amp;#39; implementation from a file.&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- src is needed to pick up our SortWrapper.&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- sort-plugins is a sample user plugins directory&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;loadSort&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;MonadInterpreter&lt;/span&gt; m &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ module name&lt;/span&gt;
+         &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ function name&lt;/span&gt;
+         &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; m &lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;loadSort&lt;/span&gt; moduleName functionName &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;set [&lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;searchPath &lt;span style=&#34;color: #B00040&#34;&gt;:=&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;src&amp;quot;&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sort-plugins&amp;quot;&lt;/span&gt;]]
+  &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;loadModules [moduleName]
+  &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;setImports [moduleName, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;SortWrapper&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;interpret (moduleName &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;.&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; functionName) (&lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;as &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The most interesting part is the use of the &lt;code&gt;interpret&lt;/code&gt; function that
+has type&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;interpret&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;MonadInterpreter&lt;/span&gt; m, &lt;span style=&#34;color: #B00040&#34;&gt;Typeable&lt;/span&gt; a) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; m a
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;taking a string and a witness for a monomorphic type in order to tell
+&lt;code&gt;interpret&lt;/code&gt; what runtime dictionary for &lt;code&gt;Typeable&lt;/code&gt; to use.&lt;/p&gt;
+
+&lt;p&gt;So there we have it: runtime eval in GHC Haskell. What &lt;code&gt;hint&lt;/code&gt; provides
+is fairly primitive, but I found it useful.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;d like to see more official support for dynamism in environments for
+languages such as Haskell. This does require access to compiler
+internals or official APIs, but I think this is the way to
+go. Principled phase separations are important but so is
+integration. I like that &lt;code&gt;hint&lt;/code&gt; exists to allow me to dynamically load
+GHC Haskell code.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>toString considered harmful, part 1</title>

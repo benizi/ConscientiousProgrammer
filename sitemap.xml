@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://conscientiousprogrammer.com/</loc>
-    <lastmod>2015-12-12T08:00:00-05:00</lastmod>
+    <lastmod>2015-12-13T08:00:00-05:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://conscientiousprogrammer.com/blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/</loc>
+    <lastmod>2015-12-13T08:00:00-05:00</lastmod>
   </url>
   
   <url>

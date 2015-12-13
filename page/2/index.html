@@ -79,6 +79,52 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/">24 days of Hackage, 2015: day 3: HSpec; the importance of testing</a>
+      </h1>
+      <span class="post-date">Dec 3, 2015 &middot; 15 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hspec">HSpec</a><a class="label" href="http://ConscientiousProgrammer.com/categories/rspec">RSpec</a><a class="label" href="http://ConscientiousProgrammer.com/categories/testing">testing</a><a class="label" href="http://ConscientiousProgrammer.com/categories/test-driven-development">test-driven development</a><a class="label" href="http://ConscientiousProgrammer.com/categories/type-driven-development">type-driven development</a><a class="label" href="http://ConscientiousProgrammer.com/categories/perl">Perl</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ruby">Ruby</a><a class="label" href="http://ConscientiousProgrammer.com/categories/elixir">Elixir</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ocaml">OCaml</a><a class="label" href="http://ConscientiousProgrammer.com/categories/types">types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/refactoring">refactoring</a><a class="label" href="http://ConscientiousProgrammer.com/categories/domain-specific-languages">domain-specific languages</a>
+      </span>
+      
+      <h2 id="table-of-contents-for-the-whole-series:740606311d3fcf0ba2f14607a358bd73">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-3:740606311d3fcf0ba2f14607a358bd73">Day 3</h2>
+
+<p>I spent my formative years writing software before &ldquo;testing framework&rdquo;
+was in my vocabulary, before
+<a href="https://en.wikipedia.org/wiki/Test-driven_development">&ldquo;test-driven development&rdquo;</a>
+was a thing. I shudder to think of those years, because now I&rsquo;m a
+believer in tests and even in test-driven development (TDD), according to my
+interpretation of what that means (since everyone has a different
+definition).</p>
+
+<p>There are a bunch of testing tools that have been available in the
+Haskell ecosystem for some time. In fact, Ollie in his &ldquo;24 Days of
+Hackage&rdquo; covered</p>
+
+<ul>
+<li><a href="https://hackage.haskell.org/package/QuickCheck"><code>QuickCheck</code></a>
+<a href="https://ocharles.org.uk/blog/posts/2012-12-08-24-days-of-hackage.html">in 2012</a></li>
+<li><a href="https://hackage.haskell.org/package/doctest"><code>doctest</code></a> <a href="https://ocharles.org.uk/blog/posts/2013-12-18-doctest.html">in 2013</a></li>
+<li><a href="http://documentup.com/feuerbach/tasty"><code>tasty</code></a> <a href="https://ocharles.org.uk/blog/posts/2013-12-03-24-days-of-hackage-tasty.html">in 2013</a></li>
+</ul>
+
+<p>and I heartily recommend looking those up.</p>
+
+<p>But today I&rsquo;m going to show use of <a href="http://hspec.github.io/"><code>HSpec</code></a>
+(noting that a framework like <code>tasty</code> or
+<a href="`https://batterseapower.github.io/test-framework/"><code>test-framework</code></a>
+are a lot fancier).</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/">24 days of Hackage, 2015: day 2: Regexes with pcre-heavy; standalone Haskell scripts using Stack</a>
       </h1>
       <span class="post-date">Dec 2, 2015 &middot; 11 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/02/24-days-of-hackage-2015-day-2-regexes-with-pcre-heavy-standalone-haskell-scripts-using-stack/#disqus_thread">Comments</a>
@@ -152,7 +198,7 @@ a case study of types and tests</a></li>
 <li>Day 10: <a href="../../blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/">s-cargot: using S-expression syntax</a></li>
 <li>Day 11: <a href="../../blog/2015/12/11/24-days-of-hackage-2015-day-11-monad-loops-avoiding-writing-recursive-functions-by-refactoring/">monad-loops: avoiding writing recursive functions by refactoring</a></li>
 <li>Day 12: <a href="../../blog/2015/12/12/24-days-of-hackage-2015-day-12-json-autotype-inferring-types-from-data/">json-autotype: inferring types from data</a></li>
-<li>Day 13:</li>
+<li>Day 13: <a href="../../blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell">hint: runtime eval for Haskell</a></li>
 <li>Day 14:</li>
 <li>Day 15:</li>
 <li>Day 16:</li>
@@ -385,24 +431,6 @@ time to migrate my blogs, to Octopress 3 or
       <p>I attended <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/202086812">a fine meeting</a> of <a href="http://www.codeandsupply.co/">Pittsburgh Code and Supply</a> dedicated to two related topics: <em>music</em> and <em>sonification</em>. I thought it was a great idea to have presentations on both topics in the same session, thereby giving a broad view of what can be done with <em>sound</em> through computation.</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/">Understanding Clojure transducers through types</a>
-      </h1>
-      <span class="post-date">Aug 7, 2014 &middot; 9 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/clojure">Clojure</a><a class="label" href="http://ConscientiousProgrammer.com/categories/transducers">transducers</a><a class="label" href="http://ConscientiousProgrammer.com/categories/types">types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/higher-rank-types">higher-rank types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/monads">monads</a><a class="label" href="http://ConscientiousProgrammer.com/categories/type-classes">type classes</a><a class="label" href="http://ConscientiousProgrammer.com/categories/scala">Scala</a><a class="label" href="http://ConscientiousProgrammer.com/categories/rich-hickey">Rich Hickey</a><a class="label" href="http://ConscientiousProgrammer.com/categories/john-launchbury">John Launchbury</a><a class="label" href="http://ConscientiousProgrammer.com/categories/simon-peyton-jones">Simon Peyton Jones</a>
-      </span>
-      
-      <p>Yesterday, Rich Hickey published a blog post, <a href="http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming">&ldquo;Transducers are Coming&rdquo;</a>, which attracted a lot of attention.</p>
-
-<p>I have a confession to make, which I have made before: I find it very difficult to understand ideas or code not presented with <em>types</em>. So I decided that the only way I could possibly understand what &ldquo;transducers&rdquo; are would be to actually implement them in a typed language. I ended up doing so and am sharing my findings here.</p>
-
-      <a href="http://conscientiousprogrammer.com/blog/2014/08/07/understanding-cloure-transducers-through-types/">Read On &rarr;</a>
       
     </div>
     

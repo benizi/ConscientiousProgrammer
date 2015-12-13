@@ -6,8 +6,196 @@
     <description>Recent content on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 12 Dec 2015 08:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Sun, 13 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 13: hint: runtime eval for Haskell</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/</link>
+      <pubDate>Sun, 13 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-13:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;Day 13&lt;/h2&gt;
+
+&lt;p&gt;One hallmark of a &amp;ldquo;dynamic language&amp;rdquo; such as Lisp and JavaScript is
+the ability to evaluate code at runtime inside a running
+process. Since runtime loading of classes is a fundamental feature of
+Java, is Java a &amp;ldquo;dynamic language&amp;rdquo; then? I think the terms &amp;ldquo;static
+language&amp;rdquo; and &amp;ldquo;dynamic language&amp;rdquo; are not very useful terms, and a
+comparison of language and compiler and development environments
+should focus on specific features of the user experience and where the
+boundaries lie in the semantics. One tricky thing is that a lot of
+what is interesting is actually implementation-dependent.&lt;/p&gt;
+
+&lt;p&gt;For example, the Haskell standard says nothing about runtime &lt;code&gt;eval&lt;/code&gt;,
+so there is some sense in which Haskell considered as a strictly
+defined &amp;ldquo;language&amp;rdquo; has no support for it. But if we consider the GHC
+implementation and its ecosystem, which is dominant today despite the
+existence of other Haskell implementations, there&amp;rsquo;s a lot of tooling
+that is &amp;ldquo;dynamic&amp;rdquo;, in the sense of being able to access GHC APIs in
+one of many different ways.&lt;/p&gt;
+
+&lt;p&gt;Edward Yang recently wrote an interesting blog post
+&lt;a href=&#34;http://blog.ezyang.com/2015/12/the-convergence-of-compilers-build-systems-and-package-managers/&#34;&gt;&amp;ldquo;The convergence of compilers, build systems and package managers&amp;rdquo;&lt;/a&gt;
+on a subset of the general issue of what can access what for the sake
+of tooling. It didn&amp;rsquo;t touch on runtime evaluation, which is an entire
+topic in itself.&lt;/p&gt;
+
+&lt;p&gt;For today, I decided to mention that you can already do runtime eval
+of GHC Haskell code using the package
+&lt;a href=&#34;http://hackage.haskell.org/package/hint&#34;&gt;&lt;code&gt;hint&lt;/code&gt;&lt;/a&gt; and offer the
+thought that maybe we might want something less ad hoc than
+third-party packages like this.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-dynamic-loading-and-evaluation-of-haskell-code:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;Why dynamic loading and evaluation of Haskell code?&lt;/h2&gt;
+
+&lt;p&gt;For me, it always comes down to being jealous of the Lisp world.&lt;/p&gt;
+
+&lt;p&gt;There are times when I have wanted to be able to do dynamic loading
+and evaluation of Haskell code, and wished I were in Lisp. The main
+example is when supporting user-written &amp;ldquo;plugins&amp;rdquo; that can be loaded
+from a source file or even typed at a custom REPL. The cleanest way of
+doing such a thing is to create and implement a limited
+domain-specific language and write a parser, type checker (if the DSL
+is typed), compiler/interpreter for it. But why do all that if we can
+just allow using the full power of Haskell instead?&lt;/p&gt;
+
+&lt;p&gt;Luckily, I found libraries such as &lt;code&gt;hint&lt;/code&gt; that enabled me to do what I
+wanted. I&amp;rsquo;ll show a toy example of the kind of thing that I have done.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-task:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;The task&lt;/h2&gt;
+
+&lt;p&gt;Imagine a program that does sorting, and allows the user at runtime to
+submit a custom sorting function to have it be used in place of the
+default options. For example, the user could have specified the path
+of a Haskell source file &lt;code&gt;OurSorter.hs&lt;/code&gt; as a command-line argument, or
+the program could have a preferences dialog box allowing the user to
+enter the text of a sorting function.&lt;/p&gt;
+
+&lt;p&gt;To make things even more interesting, let&amp;rsquo;s say that the sorting
+function to be specified has to be polymorphic, constrained only to
+require comparison:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;userDefinedSort&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Ord&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;How do we load this type of function at runtime?&lt;/p&gt;
+
+&lt;h2 id=&#34;a-necessary-wrapper:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;A necessary wrapper&lt;/h2&gt;
+
+&lt;p&gt;The first thing to get out of the way is that we cannot load a
+function of type &lt;code&gt;Ord a =&amp;gt; [a] -&amp;gt; [a]&lt;/code&gt; directly. We have to wrap it in
+a &lt;code&gt;newtype&lt;/code&gt; to hide the higher-rank type and go monomorphic:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE RankNTypes #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SortWrapper&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt;)) &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;newtype&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt; { getSort &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; forall a&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Ord&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; [a] &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; [a] }
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now we can try to load values of type &lt;code&gt;Sort&lt;/code&gt; instead of type &lt;code&gt;Ord a =&amp;gt;
+[a] -&amp;gt; [a]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-to-load:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;How to load?&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s create an API called &lt;code&gt;loadSort&lt;/code&gt; that enables loading a
+particular &lt;code&gt;Sort&lt;/code&gt; by looking for it by module and name. Here&amp;rsquo;s an
+HSpec test that illustrates that we want to be able to load a &lt;code&gt;Sort&lt;/code&gt;
+and use it on different types of lists. We&amp;rsquo;re using
+&lt;code&gt;Language.Haskell.Interpreter&lt;/code&gt; to do the work:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;HintExampleSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SortWrapper&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;HintExample&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;loadSort&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Language.Haskell.Interpreter&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; I
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;hint&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;dynamically loads a correct polymorphic sort function&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;Right&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt; ourSort) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt;
+        &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;runInterpreter (loadSort &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;OurSorter&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;ourSort&amp;quot;&lt;/span&gt;)
+      ourSort &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;ebcad&amp;quot;&lt;/span&gt; `shouldBe` &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;abcde&amp;quot;&lt;/span&gt;
+      ourSort [&lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;7&lt;/span&gt;] `shouldBe` [&lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;7&lt;/span&gt;]
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;dynamically loads a wrong (only head) sort function&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;Right&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt; onlyHead) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt;
+        &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;runInterpreter (loadSort &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;OurSorter&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;onlyHead&amp;quot;&lt;/span&gt;)
+      onlyHead &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;ebcad&amp;quot;&lt;/span&gt; `shouldBe` &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;e&amp;quot;&lt;/span&gt;
+      onlyHead [&lt;span style=&#34;color: #B00040&#34;&gt;True&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;False&lt;/span&gt;] `shouldBe` [&lt;span style=&#34;color: #B00040&#34;&gt;True&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;a-sample-plugin:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;A sample &amp;ldquo;plugin&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;We created a sample &amp;ldquo;plugin&amp;rdquo; in a directory whose source code is &lt;em&gt;not&lt;/em&gt; compiled
+into our main program. Imagine that the user has a separate plugins directory.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-loader:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;The loader&lt;/h2&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;HintExample&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SortWrapper&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Language.Haskell.Interpreter&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; I
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Language.Haskell.Interpreter&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;OptionVal&lt;/span&gt;((&lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt;)))
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Dynamically load a &amp;#39;Sort&amp;#39; implementation from a file.&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- src is needed to pick up our SortWrapper.&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- sort-plugins is a sample user plugins directory&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;loadSort&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;MonadInterpreter&lt;/span&gt; m &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ module name&lt;/span&gt;
+         &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- ^ function name&lt;/span&gt;
+         &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; m &lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;loadSort&lt;/span&gt; moduleName functionName &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+  &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;set [&lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;searchPath &lt;span style=&#34;color: #B00040&#34;&gt;:=&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;src&amp;quot;&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sort-plugins&amp;quot;&lt;/span&gt;]]
+  &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;loadModules [moduleName]
+  &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;setImports [moduleName, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;SortWrapper&amp;quot;&lt;/span&gt;]
+  &lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;interpret (moduleName &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;.&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; functionName) (&lt;span style=&#34;color: #B00040&#34;&gt;I&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;as &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Sort&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The most interesting part is the use of the &lt;code&gt;interpret&lt;/code&gt; function that
+has type&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;interpret&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;MonadInterpreter&lt;/span&gt; m, &lt;span style=&#34;color: #B00040&#34;&gt;Typeable&lt;/span&gt; a) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; m a
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;taking a string and a witness for a monomorphic type in order to tell
+&lt;code&gt;interpret&lt;/code&gt; what runtime dictionary for &lt;code&gt;Typeable&lt;/code&gt; to use.&lt;/p&gt;
+
+&lt;p&gt;So there we have it: runtime eval in GHC Haskell. What &lt;code&gt;hint&lt;/code&gt; provides
+is fairly primitive, but I found it useful.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;d like to see more official support for dynamism in environments for
+languages such as Haskell. This does require access to compiler
+internals or official APIs, but I think this is the way to
+go. Principled phase separations are important but so is
+integration. I like that &lt;code&gt;hint&lt;/code&gt; exists to allow me to dynamically load
+GHC Haskell code.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 12: json-autotype: inferring types from data</title>
@@ -4076,7 +4264,7 @@ can rely on the recipient simply installing Stack.&lt;/p&gt;
 add the following two lines and make the file executable:&lt;/p&gt;
 
 &lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #666666&#34;&gt;#!/&lt;/span&gt;usr&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;env stack
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- stack --resolver lts-3.17 --install-ghc runghc --package pcre-heavy&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- stack --resolver lts-3.18 --install-ghc runghc --package pcre-heavy&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -4110,7 +4298,7 @@ one to the other seamlessly.&lt;/p&gt;
 &lt;h3 id=&#34;here-s-our-complete-example-standalone-program:73f9e85177be1c4a1d48f4dbe8d8b6bf&#34;&gt;Here&amp;rsquo;s our complete example standalone program&lt;/h3&gt;
 
 &lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #666666&#34;&gt;#!/&lt;/span&gt;usr&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt;env stack
-&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- stack --resolver lts-3.17 --install-ghc runghc --package pcre-heavy&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- stack --resolver lts-3.18 --install-ghc runghc --package pcre-heavy&lt;/span&gt;
 
 &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE QuasiQuotes #-}&lt;/span&gt;
 
@@ -4246,7 +4434,7 @@ a case study of types and tests&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 10: &lt;a href=&#34;./blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/&#34;&gt;s-cargot: using S-expression syntax&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 11: &lt;a href=&#34;./blog/2015/12/11/24-days-of-hackage-2015-day-11-monad-loops-avoiding-writing-recursive-functions-by-refactoring/&#34;&gt;monad-loops: avoiding writing recursive functions by refactoring&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 12: &lt;a href=&#34;./blog/2015/12/12/24-days-of-hackage-2015-day-12-json-autotype-inferring-types-from-data/&#34;&gt;json-autotype: inferring types from data&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Day 13:&lt;/li&gt;
+&lt;li&gt;Day 13: &lt;a href=&#34;./blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell&#34;&gt;hint: runtime eval for Haskell&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Day 14:&lt;/li&gt;
 &lt;li&gt;Day 15:&lt;/li&gt;
 &lt;li&gt;Day 16:&lt;/li&gt;
@@ -4834,213 +5022,6 @@ integration for the Rust project, I noticed his
 great that Peter Miller&amp;rsquo;s work inspired others to build systems that
 are used today. One random person&amp;rsquo;s ideas and software made a lasting
 difference in the world!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Why I switched from Octopress 2 to Hugo</title>
-      <link>http://conscientiousprogrammer.com/blog/2015/05/31/why-i-switched-from-octopress-2-to-hugo/</link>
-      <pubDate>Sun, 31 May 2015 12:26:32 -0400</pubDate>
-      
-      <guid>http://conscientiousprogrammer.com/blog/2015/05/31/why-i-switched-from-octopress-2-to-hugo/</guid>
-      <description>
-
-&lt;p&gt;Until now, I haven&amp;rsquo;t been publishing anything on any of my three blogs
-for half a year now. There are many reasons, but one of them was that
-I wanted to migrate away from
-&lt;a href=&#34;http://octopress.org/&#34;&gt;Octopress&lt;/a&gt; 2. Octopress 2 is ancient and slow
-and unmaintained, and I&amp;rsquo;d been waiting for
-&lt;a href=&#34;https://github.com/octopress/octopress&#34;&gt;Octopress 3&lt;/a&gt; for over three
-years
-&lt;a href=&#34;http://octopress.org/2015/01/15/octopress-3.0-is-coming/&#34;&gt;to arrive&lt;/a&gt;,
-so when I heard that Octopress 3 was finally going to be officially
-announced at &lt;a href=&#34;http://jekyllconf.com/&#34;&gt;JekyllConf&lt;/a&gt;, I decided it was
-time to migrate my blogs, to Octopress 3 or
-&lt;a href=&#34;http://jekyllrb.com/&#34;&gt;Jekyll&lt;/a&gt;, or something else entirely.&lt;/p&gt;
-
-&lt;h2 id=&#34;factors-to-consider-when-choosing-a-static-site-generator:26b28caf414f77ef05fac6550ae96388&#34;&gt;Factors to consider when choosing a static site generator&lt;/h2&gt;
-
-&lt;p&gt;Some factors I kept in mind while evaluating a new static site
-generator:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Speed of full generation&lt;/li&gt;
-&lt;li&gt;Speed of incremental generation&lt;/li&gt;
-&lt;li&gt;Active progress in bug fixes, improvements, new features&lt;/li&gt;
-&lt;li&gt;Availability of themes&lt;/li&gt;
-&lt;li&gt;Community sharing, support&lt;/li&gt;
-&lt;li&gt;Languages used for using and writing own templates and plugins&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;speed-is-critical-for-me:26b28caf414f77ef05fac6550ae96388&#34;&gt;Speed is critical for me&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Speed&lt;/strong&gt; was a huge consideration for me when I evaluated alternative
-static site generators, so I was particularly interested in evaluating&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; (written in Go)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://jaspervdj.be/hakyll/&#34;&gt;Hakyll&lt;/a&gt; (written in Haskell)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The advantages of these two are that they are implemented in
-statically typed languages that compile to native
-executables.&lt;/p&gt;
-
-&lt;p&gt;Furthermore, Hakyll is a library, such that your configuration is
-actually merely a Haskell program using the library, without the
-indirection of configuration languages and interpreters of the
-languages, and you can compile your site into a specialized native
-executable. (For example, Hakyll uses Pandoc as a library for Markdown processing.)&lt;/p&gt;
-
-&lt;h2 id=&#34;advantages-of-going-to-jekyll:26b28caf414f77ef05fac6550ae96388&#34;&gt;Advantages of going to Jekyll?&lt;/h2&gt;
-
-&lt;p&gt;Jekyll is the most popular static site generator, so I had to evaluate
-it despite knowing up front that it was not going to be a speed
-winner. It might well be fast &lt;em&gt;enough&lt;/em&gt;. The benefits of using a
-platform with a large and passionate community are &lt;em&gt;tremendous&lt;/em&gt;: bugs
-get fixed, cool features get added, people step in to help you out if
-you have questions, incremental improvements keep happening, themes
-abound that you can just take and use. I never evaluate using a
-technology based only on one consideration (such as speed).&lt;/p&gt;
-
-&lt;p&gt;Note that Octopress 3 is basically a really cool interface over an
-underlying Jekyll setup, so I will only refer to Jekyll below, with
-the understanding that all performance matters that apply to Jekyll
-apply to Octopress 3 as well.&lt;/p&gt;
-
-&lt;h2 id=&#34;speed-comparisons-octopress-2-jekyll-hugo-hakyll:26b28caf414f77ef05fac6550ae96388&#34;&gt;Speed comparisons: Octopress 2, Jekyll, Hugo, Hakyll&lt;/h2&gt;
-
-&lt;h3 id=&#34;full-generation-from-scratch:26b28caf414f77ef05fac6550ae96388&#34;&gt;Full generation from scratch&lt;/h3&gt;
-
-&lt;p&gt;My &lt;a href=&#34;http://franklinchen.com/&#34;&gt;personal blog&lt;/a&gt; has 585 posts. Here are
-the from-scratch full generation times, based on migrations away from
-Octopress 2 that I performed using a bunch of Perl scripts. Note that
-the sites are not completely equivalent, because I only wanted to get
-a rough idea, not compare total equivalence:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Octopress 2: 5:39.28&lt;/li&gt;
-&lt;li&gt;Jekyll: 15.90&lt;/li&gt;
-&lt;li&gt;Hakyll: 14.51&lt;/li&gt;
-&lt;li&gt;Hugo: 4.90&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Jekyll and Hakyll don&amp;rsquo;t do too badly, but Hugo was by far the fastest.&lt;/p&gt;
-
-&lt;p&gt;Although I suspect that as more features
-get added to Hugo, it may slow down some, I also trust that since the
-author and the Go community in general are &lt;em&gt;obsessed&lt;/em&gt; with speed, Hugo
-is a safe bet for anyone concerned about speed.&lt;/p&gt;
-
-&lt;h3 id=&#34;full-generation-but-not-from-scratch:26b28caf414f77ef05fac6550ae96388&#34;&gt;Full generation but not from scratch&lt;/h3&gt;
-
-&lt;p&gt;Hakyll stores a lot of information in a cache directory. If you&amp;rsquo;ve
-done a full generation and change nothing and do a full generation
-again (&lt;code&gt;my-compiled-site-builder build&lt;/code&gt;), it comes back almost
-instantaneously. If you&amp;rsquo;ve modified a file (as in the incremental,
-server mode generation), my result was slightly slower than in server
-mode:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Hakyll: 2.23&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;incremental-generation:26b28caf414f77ef05fac6550ae96388&#34;&gt;Incremental generation&lt;/h3&gt;
-
-&lt;p&gt;I brought each generator up in &amp;ldquo;server&amp;rdquo; &amp;ldquo;watching&amp;rdquo; mode, to see what
-would happen if I changed a single file, resulting in regeneration of
-everything affected. For example, I changed the most recent blog post,
-which affects its generation as well as potentially the main
-page, RSS, sitemap, archive, tags and categories.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Jekyll: 9.95&lt;/li&gt;
-&lt;li&gt;Hugo: 4.11&lt;/li&gt;
-&lt;li&gt;Hakyll: 1.50&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;It&amp;rsquo;s interesting that Hugo&amp;rsquo;s live &amp;ldquo;watch&amp;rdquo; functionality does not really
-improve over regenerating the site from scratch.&lt;/p&gt;
-
-&lt;p&gt;For Hakyll, there is tremendous improvement. I believe this may be
-because of the use of a cache directory but also because a
-Hakyll-compiled generator incurs no &lt;em&gt;interpreter&lt;/em&gt; overhead once you
-have it running in server mode watching for changes.&lt;/p&gt;
-
-&lt;p&gt;9.95 seconds is still kind of slow for me, for making a quick change
-to a file in progress and wanting to see how it displays in the
-browser, so Jekyll is not optimal for me. But Hugo&amp;rsquo;s 4.11 seconds is acceptable.&lt;/p&gt;
-
-&lt;h2 id=&#34;so-why-not-hakyll:26b28caf414f77ef05fac6550ae96388&#34;&gt;So why not Hakyll?&lt;/h2&gt;
-
-&lt;p&gt;So, given that Hakyll looks so promising, and I would far prefer
-writing and debugging Haskell code, to hacking in some mixture of Go
-templating and other configuration languages, why did I not migrate to
-Hakyll?&lt;/p&gt;
-
-&lt;p&gt;There are many considerations that go into what I choose as a
-technology to solve a specific problem. For example, there&amp;rsquo;s a reason
-I wrote all my one-shot little blog migration scripts in Perl, even
-though I no longer write Perl for any other purpose (although Perl was
-one of my main languages I used for nontrivial programs from
-1999-2010).&lt;/p&gt;
-
-&lt;p&gt;Hakyll has a small community. I&amp;rsquo;m not sure I would even call it a
-community. It&amp;rsquo;s basically one guy&amp;rsquo;s project. It is completely
-unopinionated, such that to create any reasonable site you have to
-write your own code or copy and paste from someone else&amp;rsquo;s. There is no
-formal concept of &amp;ldquo;theme&amp;rdquo; or an official theme sharing site.&lt;/p&gt;
-
-&lt;p&gt;Hakyll is pretty confusing to build if you don&amp;rsquo;t use a Cabal sandbox,
-and even then, there have perpetually been build problems of some kind
-or another, for years. Last year, &lt;a href=&#34;https://github.com/jaspervdj/hakyll/issues/302&#34;&gt;I could not get it to build at all&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Meanwhile, the &lt;a href=&#34;https://travis-ci.org/jaspervdj/hakyll&#34;&gt;Travis build&lt;/a&gt;
-is perpetually broken and doesn&amp;rsquo;t even test multiple versions of GHC
-and Cabal. A call to
-&lt;a href=&#34;https://github.com/jaspervdj/hakyll/issues/299&#34;&gt;get Hakyll into Stackage&lt;/a&gt;
-is still open.&lt;/p&gt;
-
-&lt;p&gt;I ran into a
-&lt;a href=&#34;https://github.com/jaspervdj/hakyll/issues/225&#34;&gt;serious YAML-handling bug that still has not been addressed after over a year&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In other words, just because Hakyll seems to perform well on a
-simplistic toy migration of my personal blog (after all the
-workarounds for the bugs mentioned above) doesn&amp;rsquo;t mean that I can
-trust it to work if I do more complicated things, or that bug reports
-will get addressed.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m writing this not to criticize the author of Hakyll, who by the way
-writes a lot of quite high-quality
-&lt;a href=&#34;http://jaspervdj.be/posts.html&#34;&gt;blog posts on Haskell&lt;/a&gt; and has a day
-job developing in Haskell. Open source projects are labors of love
-that just cannot be sustained by one person who has many things to do
-in life.&lt;/p&gt;
-
-&lt;h2 id=&#34;winner-hugo:26b28caf414f77ef05fac6550ae96388&#34;&gt;Winner: Hugo&lt;/h2&gt;
-
-&lt;p&gt;It would be nice if there were a larger Hakyll community, but the
-reality is that there isn&amp;rsquo;t, and therefore as someone who also has
-many things to do and prefers to write for my blogs rather than
-implement features for the blog engine, I chose Hugo as the clear
-winner for my current needs.&lt;/p&gt;
-
-&lt;p&gt;Hugo not only has an entire official
-&lt;a href=&#34;http://discuss.gohugo.io/&#34;&gt;discussion site&lt;/a&gt; but also an active
-&lt;a href=&#34;https://gitter.im/spf13/hugo&#34;&gt;Gitter room&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The official documentation is pretty good and continues to be updated.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:26b28caf414f77ef05fac6550ae96388&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;Choosing a static site generator is like choosing any other software
-to perform a task: you have to evaluate many different factors and
-tradeoffs among the different choices available. For me, speed is very
-important, but also a thriving, growing community of maintainers,
-contributors, and users.&lt;/p&gt;
-
-&lt;p&gt;In the end, I chose Hugo, because it is fast, actively maintained, and
-has a sizable community revolving around it.&lt;/p&gt;
 </description>
     </item>
     
