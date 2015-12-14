@@ -198,6 +198,10 @@ test. `ScopedTypeVariables` is a GHC extension that I wish were just
 part of the standard Haskell language; it was [covered in a 2014 Day of
 GHC Extensions](https://ocharles.org.uk/blog/guest-posts/2014-12-20-scoped-type-variables.html).)
 
+### (Update of 2015-12-14) Using `NonEmpty` for a parser
+
+On [day 14](/blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/), I used `NonEmpty` to represent in a principled way the result from a parser.
+
 ## A few notes on the full `NonEmpty` API
 
 `map` behaves as expected, because it doesn't change the number of

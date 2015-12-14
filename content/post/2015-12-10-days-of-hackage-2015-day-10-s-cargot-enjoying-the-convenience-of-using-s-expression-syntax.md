@@ -197,6 +197,14 @@ So let's assume for the purpose of this article that we have a reason
 to prefer prefix-only S-expressions, just as the Lisp community does
 in order to avoid all the hassles of a custom syntax.
 
+### (Update of 2015-12-14) Providing a custom syntax using `Earley`
+
+On
+[day 14](/blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/),
+I created a custom syntax and a parser using the `Earley` parser library.
+
+### QuickCheck tests
+
 Here are some sample QuickCheck tests to show what it is we want to be
 able to do. (Note that for convenience, we are using string
 interpolation through the
