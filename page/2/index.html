@@ -79,6 +79,53 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/">24 days of Hackage, 2015: day 4: wreq: Web client programming; with notes on lens and operator syntax</a>
+      </h1>
+      <span class="post-date">Dec 4, 2015 &middot; 11 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/wreq">wreq</a><a class="label" href="http://ConscientiousProgrammer.com/categories/json">JSON</a><a class="label" href="http://ConscientiousProgrammer.com/categories/lens">lens</a><a class="label" href="http://ConscientiousProgrammer.com/categories/aeson">aeson</a><a class="label" href="http://ConscientiousProgrammer.com/categories/syntax">syntax</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pittsburgh-code-and-supply">Pittsburgh Code and Supply</a><a class="label" href="http://ConscientiousProgrammer.com/categories/standard-ml">Standard ML</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ocaml">OCaml</a><a class="label" href="http://ConscientiousProgrammer.com/categories/elm">Elm</a><a class="label" href="http://ConscientiousProgrammer.com/categories/elixir">Elixir</a><a class="label" href="http://ConscientiousProgrammer.com/categories/types">types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/domain-specific-languages">domain-specific languages</a>
+      </span>
+      
+      <h2 id="table-of-contents-for-the-whole-series:de6d56fd6945d7d59fdd3a84148a0b85">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-4:de6d56fd6945d7d59fdd3a84148a0b85">Day 4</h2>
+
+<p>In the late 1990s, I eagerly bought the book
+<a href="http://www.oreilly.com/openbook/webclient/">&ldquo;Web Client Programming with Perl&rdquo;</a>
+and used the <a href="http://search.cpan.org/dist/libwww-perl/lib/LWP.pm">LWP</a>
+library to scrape the Web in automated fashion. I continued doing that
+into the 2000s. I am happy that nowadays, I can just use Haskell to do
+this kind of programming, in a succinct way also.</p>
+
+<p>Today&rsquo;s topic is <a href="http://www.serpentine.com/wreq/"><code>wreq</code></a>,
+<a href="http://www.serpentine.com/blog/">Bryan O&rsquo;Sullivan</a>&rsquo;s high-level
+library for doing Web client programming designed specifically for
+usability.</p>
+
+<p><code>wreq</code> makes use of the
+<a href="https://hackage.haskell.org/package/aeson"><code>aeson</code></a> ecosystem for JSON
+and <a href="https://hackage.haskell.org/package/lens"><code>lens</code></a> and ecosystem,
+including
+<a href="https://hackage.haskell.org/package/lens-aeson"><code>lens-aeson</code></a>, so you
+may want to check out Ollie&rsquo;s 2012 Days of Hackage posts on
+<a href="https://ocharles.org.uk/blog/posts/2012-12-07-24-days-of-hackage-aeson.html">aeson</a>
+and <a href="https://ocharles.org.uk/blog/posts/2012-12-09-24-days-of-hackage-lens.html">lens</a>.</p>
+
+<p>Since <code>wreq</code> already has an extensive
+<a href="http://www.serpentine.com/wreq/">tutorial and reference documentation</a>,
+I&rsquo;m not going to repeat its explanations. Instead, I&rsquo;m going to give an
+example of use that should be simple enough to be understood from
+context, then discuss the issue of using operator syntax in Haskell.</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/">24 days of Hackage, 2015: day 3: HSpec; the importance of testing</a>
       </h1>
       <span class="post-date">Dec 3, 2015 &middot; 15 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/03/24-days-of-hackage-2015-day-3-hspec-the-importance-of-testing/#disqus_thread">Comments</a>
@@ -198,8 +245,8 @@ a case study of types and tests</a></li>
 <li>Day 10: <a href="../../blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/">s-cargot: using S-expression syntax</a></li>
 <li>Day 11: <a href="../../blog/2015/12/11/24-days-of-hackage-2015-day-11-monad-loops-avoiding-writing-recursive-functions-by-refactoring/">monad-loops: avoiding writing recursive functions by refactoring</a></li>
 <li>Day 12: <a href="../../blog/2015/12/12/24-days-of-hackage-2015-day-12-json-autotype-inferring-types-from-data/">json-autotype: inferring types from data</a></li>
-<li>Day 13: <a href="../../blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell">hint: runtime eval for Haskell</a></li>
-<li>Day 14:</li>
+<li>Day 13: <a href="../../blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/">hint: runtime eval for Haskell</a></li>
+<li>Day 14: <a href="../../blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/">Earley: a promising newer parser library for Haskell</a></li>
 <li>Day 15:</li>
 <li>Day 16:</li>
 <li>Day 17:</li>
@@ -415,22 +462,6 @@ time to migrate my blogs, to Octopress 3 or
 <p>This report was about mathematicians accidentally discovering a bug in a major computer algebra system, Mathematica.</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2014/11/06/when-a-computer-algebra-program-gives-wrong-answers/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/">Pittsburgh Code and Supply: Making music with Overtone in Clojure; Conveying information through sound</a>
-      </h1>
-      <span class="post-date">Oct 7, 2014 &middot; 3 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/pittsburgh-code-and-supply">Pittsburgh Code and Supply</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pittsburgh">Pittsburgh</a><a class="label" href="http://ConscientiousProgrammer.com/categories/music">music</a><a class="label" href="http://ConscientiousProgrammer.com/categories/clojure">Clojure</a><a class="label" href="http://ConscientiousProgrammer.com/categories/overtone">Overtone</a><a class="label" href="http://ConscientiousProgrammer.com/categories/emacs">Emacs</a><a class="label" href="http://ConscientiousProgrammer.com/categories/sonification">sonification</a>
-      </span>
-      
-      <p>I attended <a href="http://www.meetup.com/Pittsburgh-Code-Supply/events/202086812">a fine meeting</a> of <a href="http://www.codeandsupply.co/">Pittsburgh Code and Supply</a> dedicated to two related topics: <em>music</em> and <em>sonification</em>. I thought it was a great idea to have presentations on both topics in the same session, thereby giving a broad view of what can be done with <em>sound</em> through computation.</p>
-
-      <a href="http://conscientiousprogrammer.com/blog/2014/10/07/pittsburgh-code-and-supply-making-music-with-overtone-in-clojure-conveying-information-through-sound/">Read On &rarr;</a>
       
     </div>
     

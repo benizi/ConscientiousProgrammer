@@ -79,6 +79,48 @@
     
     <div class="post">
       <h1 class="post-title">
+        <a href="http://conscientiousprogrammer.com/blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/">24 days of Hackage, 2015: day 14: Earley: a promising newer parser library for Haskell</a>
+      </h1>
+      <span class="post-date">Dec 14, 2015 &middot; 7 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/#disqus_thread">Comments</a>
+      
+      <br/>
+      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/earley">Earley</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parsec">parsec</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parsers">parsers</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ambiguity">ambiguity</a><a class="label" href="http://ConscientiousProgrammer.com/categories/nonempty-lists">nonempty lists</a>
+      </span>
+      
+      <h2 id="table-of-contents-for-the-whole-series:dae604091e12646a898f25ca468336e8">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-14:dae604091e12646a898f25ca468336e8">Day 14</h2>
+
+<p>On
+<a href="./blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/">day 10</a>,
+I showed how to use S-expressions to avoid having to write a custom
+parser. But writing parsers isn&rsquo;t too bad in Haskell, or is it? The
+popular <code>parsec</code> library
+<a href="http://blog.ezyang.com/2014/05/parsec-try-a-or-b-considered-harmful/">has many problems</a>,
+because it requires hand-hacked backtracking that causes weird error
+messages and difficulty in reasoning about your grammar. There&rsquo;s an
+improved fork of <code>parsec</code> called
+<a href="https://hackage.haskell.org/package/megaparsec"><code>megaparsec</code></a>, but
+it&rsquo;s still the same kind of technology. How about something completely
+different.</p>
+
+<p>The recent <a href="https://hackage.haskell.org/package/Earley"><code>Earley</code></a> is
+intriguing and I&rsquo;ve begun using it for new projects where I don&rsquo;t need
+the monadic power of something like <code>parsec</code> but are OK with an
+applicative API instead and don&rsquo;t need the performance of something
+like <code>attoparsec</code>. Apart from good error messages, it allows handles
+online parsing and ambiguity.</p>
+
+<p>Today I&rsquo;ll give two small examples of using <code>Earley</code>.</p>
+
+      <a href="http://conscientiousprogrammer.com/blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/">Read On &rarr;</a>
+      
+    </div>
+    
+    <div class="post">
+      <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/">24 days of Hackage, 2015: day 13: hint: runtime eval for Haskell</a>
       </h1>
       <span class="post-date">Dec 13, 2015 &middot; 6 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/13/24-days-of-hackage-2015-day-13-hint-runtime-eval-for-haskell/#disqus_thread">Comments</a>
@@ -217,7 +259,7 @@ you can use in order to avoid reinventing the wheel.</p>
       <h1 class="post-title">
         <a href="http://conscientiousprogrammer.com/blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/">24 days of Hackage, 2015: day 10: s-cargot: using S-expression syntax</a>
       </h1>
-      <span class="post-date">Dec 10, 2015 &middot; 14 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/#disqus_thread">Comments</a>
+      <span class="post-date">Dec 10, 2015 &middot; 15 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/#disqus_thread">Comments</a>
       
       <br/>
       <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/lisp">Lisp</a><a class="label" href="http://ConscientiousProgrammer.com/categories/scheme">Scheme</a><a class="label" href="http://ConscientiousProgrammer.com/categories/s-cargot">s-cargot</a><a class="label" href="http://ConscientiousProgrammer.com/categories/s-expressions">S-expressions</a><a class="label" href="http://ConscientiousProgrammer.com/categories/domain-specific-language">domain-specific language</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parsers">parsers</a><a class="label" href="http://ConscientiousProgrammer.com/categories/parsec">parsec</a>
@@ -498,53 +540,6 @@ that hooks up with HSpec to make assertions that something won&rsquo;t
 typecheck.</p>
 
       <a href="http://conscientiousprogrammer.com/blog/2015/12/05/24-days-of-hackage-2015-day-5-should-not-typecheck-making-haskell-sort-of-dynamically-typed-with-deferred-type-errors/">Read On &rarr;</a>
-      
-    </div>
-    
-    <div class="post">
-      <h1 class="post-title">
-        <a href="http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/">24 days of Hackage, 2015: day 4: wreq: Web client programming; with notes on lens and operator syntax</a>
-      </h1>
-      <span class="post-date">Dec 4, 2015 &middot; 11 minute read &middot; <a href="http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/#disqus_thread">Comments</a>
-      
-      <br/>
-      <a class="label" href="http://ConscientiousProgrammer.com/categories/haskell">Haskell</a><a class="label" href="http://ConscientiousProgrammer.com/categories/hackage">Hackage</a><a class="label" href="http://ConscientiousProgrammer.com/categories/wreq">wreq</a><a class="label" href="http://ConscientiousProgrammer.com/categories/json">JSON</a><a class="label" href="http://ConscientiousProgrammer.com/categories/lens">lens</a><a class="label" href="http://ConscientiousProgrammer.com/categories/aeson">aeson</a><a class="label" href="http://ConscientiousProgrammer.com/categories/syntax">syntax</a><a class="label" href="http://ConscientiousProgrammer.com/categories/pittsburgh-code-and-supply">Pittsburgh Code and Supply</a><a class="label" href="http://ConscientiousProgrammer.com/categories/standard-ml">Standard ML</a><a class="label" href="http://ConscientiousProgrammer.com/categories/ocaml">OCaml</a><a class="label" href="http://ConscientiousProgrammer.com/categories/elm">Elm</a><a class="label" href="http://ConscientiousProgrammer.com/categories/elixir">Elixir</a><a class="label" href="http://ConscientiousProgrammer.com/categories/types">types</a><a class="label" href="http://ConscientiousProgrammer.com/categories/domain-specific-languages">domain-specific languages</a>
-      </span>
-      
-      <h2 id="table-of-contents-for-the-whole-series:de6d56fd6945d7d59fdd3a84148a0b85">Table of contents for the whole series</h2>
-
-<p>A table of contents is at the top of the article for <a href="./blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
-
-<h2 id="day-4:de6d56fd6945d7d59fdd3a84148a0b85">Day 4</h2>
-
-<p>In the late 1990s, I eagerly bought the book
-<a href="http://www.oreilly.com/openbook/webclient/">&ldquo;Web Client Programming with Perl&rdquo;</a>
-and used the <a href="http://search.cpan.org/dist/libwww-perl/lib/LWP.pm">LWP</a>
-library to scrape the Web in automated fashion. I continued doing that
-into the 2000s. I am happy that nowadays, I can just use Haskell to do
-this kind of programming, in a succinct way also.</p>
-
-<p>Today&rsquo;s topic is <a href="http://www.serpentine.com/wreq/"><code>wreq</code></a>,
-<a href="http://www.serpentine.com/blog/">Bryan O&rsquo;Sullivan</a>&rsquo;s high-level
-library for doing Web client programming designed specifically for
-usability.</p>
-
-<p><code>wreq</code> makes use of the
-<a href="https://hackage.haskell.org/package/aeson"><code>aeson</code></a> ecosystem for JSON
-and <a href="https://hackage.haskell.org/package/lens"><code>lens</code></a> and ecosystem,
-including
-<a href="https://hackage.haskell.org/package/lens-aeson"><code>lens-aeson</code></a>, so you
-may want to check out Ollie&rsquo;s 2012 Days of Hackage posts on
-<a href="https://ocharles.org.uk/blog/posts/2012-12-07-24-days-of-hackage-aeson.html">aeson</a>
-and <a href="https://ocharles.org.uk/blog/posts/2012-12-09-24-days-of-hackage-lens.html">lens</a>.</p>
-
-<p>Since <code>wreq</code> already has an extensive
-<a href="http://www.serpentine.com/wreq/">tutorial and reference documentation</a>,
-I&rsquo;m not going to repeat its explanations. Instead, I&rsquo;m going to give an
-example of use that should be simple enough to be understood from
-context, then discuss the issue of using operator syntax in Haskell.</p>
-
-      <a href="http://conscientiousprogrammer.com/blog/2015/12/04/24-days-of-hackage-2015-day-4-wreq-web-client-programming-with-notes-on-lens-and-operator-syntax/">Read On &rarr;</a>
       
     </div>
     

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>24 days of Hackage, 2015: day 14: Earley: a promising newer parser library for Haskell &middot; Franklin Chen</title>
+
+  
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/poole-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-overrides.css">
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/hyde-x.css">
+
+  <link rel="stylesheet" href="http://ConscientiousProgrammer.com/css/franklin.css">
+
+  
+  <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://ConscientiousProgrammer.com/touch-icon-144-precomposed.png">
+  <link href="http://ConscientiousProgrammer.com/favicon.png" rel="icon">
+
+  
+  
+  
+  
+
+  <meta name="description" content="Franklin Chen&#39;s thoughts about computer programming">
+  <meta name="keywords" content="Franklin Chen, programming, blog">
+  <link rel="author" href="http://plus.google.com/100967806642012078047">
+</head>
+<body class="theme-base-0e">
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+        
+        <h1>The Conscientious Programmer</h1>
+        <p class="lead">Humbly exploring what it means to do the right thing.</p>
+    </div>
+
+    <ul class="sidebar-nav">
+        
+        <li class="sidebar-nav-item"><a href="http://ConscientiousProgrammer.com/about/">About</a></li>
+        
+        <li class="sidebar-nav-item"><a href="http://franklinchen.com/">Non-programming blog</a></li>
+    </ul>
+
+    <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+            <a href="https://github.com/FranklinChen"><i class="fa fa-github-square fa-3x"></i></a>
+            
+            
+            <a href="http://www.linkedin.com/in/franklinchen"><i class="fa fa-linkedin-square fa-3x"></i></a>
+            <a href="http://google.com/&#43;FranklinChen"><i class="fa fa-google-plus-square fa-3x"></i></a>
+            <a href="http://www.facebook.com/franklin.chen"><i class="fa fa-facebook-square fa-3x"></i></a>
+            <a href="http://twitter.com/franklinchen"><i class="fa fa-twitter-square fa-3x"></i></a>
+            <a href="http://www.youtube.com/user/FranklinChen"><i class="fa fa-youtube-square fa-3x"></i></a>
+            <a href="http://ConscientiousProgrammer.com/atom.xml" type="application/rss+xml"><i class="fa fa-rss-square fa-3x"></i></a>
+        </li>
+    </ul>
+
+    
+
+    <p>Copyright &copy; 2015 Franklin Chen<br/>
+       Powered by <a href="http://gohugo.io">Hugo</a> and <a href="https://github.com/zyro/hyde-x">Hyde-X</a></p>
+  </div>
+</div>
+
+
+<div class="content container">
+  <div class="post">
+    <h1>24 days of Hackage, 2015: day 14: Earley: a promising newer parser library for Haskell</h1>
+    
+
+<h2 id="table-of-contents-for-the-whole-series:dae604091e12646a898f25ca468336e8">Table of contents for the whole series</h2>
+
+<p>A table of contents is at the top of the article for <a href="../../../../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/">day 1</a>.</p>
+
+<h2 id="day-14:dae604091e12646a898f25ca468336e8">Day 14</h2>
+
+<p>On
+<a href="../../../../../blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/">day 10</a>,
+I showed how to use S-expressions to avoid having to write a custom
+parser. But writing parsers isn&rsquo;t too bad in Haskell, or is it? The
+popular <code>parsec</code> library
+<a href="http://blog.ezyang.com/2014/05/parsec-try-a-or-b-considered-harmful/">has many problems</a>,
+because it requires hand-hacked backtracking that causes weird error
+messages and difficulty in reasoning about your grammar. There&rsquo;s an
+improved fork of <code>parsec</code> called
+<a href="https://hackage.haskell.org/package/megaparsec"><code>megaparsec</code></a>, but
+it&rsquo;s still the same kind of technology. How about something completely
+different.</p>
+
+<p>The recent <a href="https://hackage.haskell.org/package/Earley"><code>Earley</code></a> is
+intriguing and I&rsquo;ve begun using it for new projects where I don&rsquo;t need
+the monadic power of something like <code>parsec</code> but are OK with an
+applicative API instead and don&rsquo;t need the performance of something
+like <code>attoparsec</code>. Apart from good error messages, it allows handles
+online parsing and ambiguity.</p>
+
+<p>Today I&rsquo;ll give two small examples of using <code>Earley</code>.</p>
+
+<h2 id="installation:dae604091e12646a898f25ca468336e8">Installation</h2>
+
+<p>Since Stackage LTS is behind right now, and <code>Earley</code> keeps moving,
+I decided to use the latest version of <code>Earley</code> by modifying our
+<code>stack.yaml</code>:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">- Earley-0.10.1.0
+</pre></div>
+
+
+<h2 id="parsing-into-day-10-s-ast:dae604091e12646a898f25ca468336e8">Parsing into day 10&rsquo;s AST</h2>
+
+<p>Let&rsquo;s go back to the symbolic differentiation problem on day 10, and
+create a math-like infix syntax to parse.</p>
+
+<h3 id="tests:dae604091e12646a898f25ca468336e8">Tests</h3>
+
+<p>Here are some HSpec/QuickCheck tests to illustrate what we want when
+parsing a string into an <code>Exp</code>.</p>
+
+<h4 id="imports:dae604091e12646a898f25ca468336e8">Imports</h4>
+
+<p><code>Text.Earley</code> is the main module of the <code>Earley</code> package; <code>Report</code> is
+used for return a report on the progress of the parse.</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE QuasiQuotes #-}</span>
+<span style="color: #408080; font-style: italic">{-# LANGUAGE ScopedTypeVariables #-}</span>
+<span style="color: #408080; font-style: italic">{-# LANGUAGE LambdaCase #-}</span>
+
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.EarleySpec</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.AlphaSyntax</span> (<span style="color: #B00040">Exp</span>(<span style="color: #B00040">N</span>, <span style="color: #B00040">V</span>, <span style="color: #B00040">Plus</span>, <span style="color: #B00040">Times</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.Earley</span> <span style="color: #008000; font-weight: bold">as</span> Earley
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Text.Earley</span> (<span style="color: #B00040">Report</span>(<span style="color: #666666">..</span>))
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> (<span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>, <span style="color: #0000FF">shouldBe</span>, <span style="color: #0000FF">shouldSatisfy</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec.QuickCheck</span> (<span style="color: #0000FF">prop</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.QuickCheck</span> (<span style="color: #B00040">NonNegative</span>(<span style="color: #666666">..</span>))
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.String.Here</span> (<span style="color: #0000FF">i</span>)
+</pre></div>
+
+
+<h4 id="quickcheck-tests:dae604091e12646a898f25ca468336e8">QuickCheck tests</h4>
+
+<p>Some QuickCheck tests that show that some sample expressions such as
+<code>x*a + y*b * (z+c)</code> parse into the expected ASTs:</p>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;Custom syntax for expression parsed by Earley&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    <span style="color: #408080; font-style: italic">-- For simplicity, don&#39;t support negative numeric literals now.</span>
+    prop <span style="color: #BA2121">&quot;x + a&quot;</span> <span style="color: #666666">$</span> <span style="color: #0000FF">\</span>(<span style="color: #B00040">NonNegative</span> (a <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>)) <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      <span style="color: #B00040">Earley</span><span style="color: #666666">.</span>parses [i<span style="color: #666666">|</span>x <span style="color: #666666">+</span> <span style="color: #666666">$</span>{a}<span style="color: #666666">|</span>] `shouldSatisfy`
+        <span style="color: #0000FF">\</span><span style="color: #008000; font-weight: bold">case</span>
+          ([<span style="color: #B00040">Plus</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>) (<span style="color: #B00040">N</span> a)], <span style="color: #008000; font-weight: bold">_</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">True</span>
+          <span style="color: #008000; font-weight: bold">_</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">False</span>
+
+    prop <span style="color: #BA2121">&quot;x*a + y*b * (z+c)&quot;</span> <span style="color: #666666">$</span>
+      <span style="color: #0000FF">\</span>(<span style="color: #B00040">NonNegative</span> (a <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>))
+       (<span style="color: #B00040">NonNegative</span> (b <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>))
+       (<span style="color: #B00040">NonNegative</span> (c <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Int</span>)) <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+      <span style="color: #B00040">Earley</span><span style="color: #666666">.</span>parses [i<span style="color: #666666">|</span>x<span style="color: #666666">*$</span>{a} <span style="color: #666666">+</span> y<span style="color: #666666">*$</span>{b} <span style="color: #666666">*</span> (z<span style="color: #666666">+$</span>{c})<span style="color: #666666">|</span>] `shouldSatisfy`
+        <span style="color: #0000FF">\</span><span style="color: #008000; font-weight: bold">case</span>
+          ([<span style="color: #B00040">Plus</span> (<span style="color: #B00040">Times</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;x&quot;</span>) (<span style="color: #B00040">N</span> a))
+                 (<span style="color: #B00040">Times</span> (<span style="color: #B00040">Times</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;y&quot;</span>) (<span style="color: #B00040">N</span> b))
+                        (<span style="color: #B00040">Plus</span> (<span style="color: #B00040">V</span> <span style="color: #BA2121">&quot;z&quot;</span>) (<span style="color: #B00040">N</span> c)))], <span style="color: #008000; font-weight: bold">_</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">True</span>
+          <span style="color: #008000; font-weight: bold">_</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">False</span>
+</pre></div>
+
+
+<h4 id="expected-parse-errors:dae604091e12646a898f25ca468336e8">Expected parse errors</h4>
+
+<p>Finally, one example of how to check for expected parse errors. The
+error tokens are user-defined and attached to grammar productions, as
+we will see.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">    it <span style="color: #BA2121">&quot;x + y * + 5&quot;</span> <span style="color: #666666">$</span>
+      <span style="color: #B00040">Earley</span><span style="color: #666666">.</span>parses <span style="color: #BA2121">&quot;x + y * + 5&quot;</span> `shouldSatisfy`
+        <span style="color: #0000FF">\</span><span style="color: #008000; font-weight: bold">case</span>
+          (<span style="color: #B00040">[]</span>, <span style="color: #B00040">Report</span> { position <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #666666">8</span>
+                      , expected <span style="color: #AA22FF; font-weight: bold">=</span> [<span style="color: #BA2121">&quot;number&quot;</span>, <span style="color: #BA2121">&quot;identifier&quot;</span>, <span style="color: #BA2121">&quot;(&quot;</span>]
+                      , unconsumed <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #BA2121">&quot;+ 5&quot;</span>
+                      }) <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">True</span>
+          <span style="color: #008000; font-weight: bold">_</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">False</span>
+</pre></div>
+</p>
+
+<h3 id="implementation:dae604091e12646a898f25ca468336e8">Implementation</h3>
+
+<p>The implementation involves <code>Applicative</code> idioms that will be familiar
+to you if you have used <code>parsec</code>.</p>
+
+<h4 id="imports-1:dae604091e12646a898f25ca468336e8">Imports</h4>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE ScopedTypeVariables #-}</span>
+<span style="color: #408080; font-style: italic">{-# LANGUAGE RecursiveDo #-}</span>
+<span style="color: #408080; font-style: italic">{-# LANGUAGE FlexibleContexts #-}</span>
+
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.Earley</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">SymbolicDifferentiation.AlphaSyntax</span> (<span style="color: #B00040">Exp</span>(<span style="color: #B00040">N</span>, <span style="color: #B00040">V</span>, <span style="color: #B00040">Plus</span>, <span style="color: #B00040">Times</span>))
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Text.Earley</span> <span style="color: #008000; font-weight: bold">as</span> E
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Text.Earley</span> ((<span style="color: #666666">&lt;?&gt;</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Applicative</span> (<span style="color: #0000FF">many</span>, <span style="color: #0000FF">some</span>, (<span style="color: #666666">&lt;|&gt;</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.Char</span> <span style="color: #008000; font-weight: bold">as</span> Char
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Monad.ST</span> (<span style="color: #B00040">ST</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.ListLike</span> (<span style="color: #B00040">ListLike</span>)
+
+<span style="color: #408080; font-style: italic">-- | What to report for something expected.</span>
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Expected</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">String</span>
+</pre></div>
+</p>
+
+<p>The <code>&lt;?&gt;</code> operator is used to attach an expectation (which we have
+decided to specify as a string, with type synonym <code>Expected</code>) to a
+production.</p>
+
+<h4 id="drivers:dae604091e12646a898f25ca468336e8">Drivers</h4>
+
+<p>What we want for our particular problem is a parser that takes a
+string as input and expects to fully parse it. We construct it from a
+more generic parser that comes from processing our grammar.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | Return a list of all possible `Exp` parses, and also a status report</span>
+<span style="color: #408080; font-style: italic">-- regardless of how many successes.</span>
+<span style="color: #0000FF">parses</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">String</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> ([<span style="color: #B00040">Exp</span>], <span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Report</span> <span style="color: #B00040">Expected</span> <span style="color: #B00040">String</span>)
+<span style="color: #0000FF">parses</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>fullParses expParser
+
+<span style="color: #408080; font-style: italic">-- | Parser created from the grammar.</span>
+<span style="color: #0000FF">expParser</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">ListLike</span> input <span style="color: #B00040">Char</span> <span style="color: #AA22FF; font-weight: bold">=&gt;</span>
+             <span style="color: #B00040">ST</span> state (input <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">ST</span> state (<span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Result</span> state <span style="color: #B00040">Expected</span> input <span style="color: #B00040">Exp</span>))
+<span style="color: #0000FF">expParser</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>parser grammar
+</pre></div>
+</p>
+
+<h4 id="grammar:dae604091e12646a898f25ca468336e8">Grammar</h4>
+
+<p>Our grammar is straightforward. <code>Earley</code> uses a monad to maintain its
+internal state, and we use the <code>RecursiveDo</code> GHC extension (covered in
+a
+<a href="https://ocharles.org.uk/blog/posts/2014-12-09-recursive-do.html">2014 Day of GHC Extensions</a>)
+in order to be able to refer to a rule within the grammar
+recursively. Note that left recursion in the grammar is just fine for
+<code>Earley</code>.</p>
+
+<p><code>Prod</code> is the <a href="https://hackage.haskell.org/package/Earley-0.10.1.0/docs/Text-Earley.html#t:Prod">type constructor for a production</a>, and you build up
+productions using combinators such as <code>satisfy</code> and <code>symbol</code>.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">-- | Basically taken from &lt;https://github.com/ollef/Earley/blob/master/examples/Expr2.hs Earley example expression parser&gt;</span>
+<span style="color: #0000FF">grammar</span> <span style="color: #AA22FF; font-weight: bold">::</span> forall r<span style="color: #666666">.</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Grammar</span> r (<span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Prod</span> r <span style="color: #B00040">Expected</span> <span style="color: #B00040">Char</span> <span style="color: #B00040">Exp</span>)
+<span style="color: #0000FF">grammar</span> <span style="color: #AA22FF; font-weight: bold">=</span> mdo
+  whitespace <span style="color: #AA22FF; font-weight: bold">&lt;-</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>rule <span style="color: #666666">$</span>
+    many <span style="color: #666666">$</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>satisfy <span style="color: #B00040">Char</span><span style="color: #666666">.</span>isSpace
+
+  <span style="color: #008000; font-weight: bold">let</span> token <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Prod</span> r <span style="color: #B00040">Expected</span> <span style="color: #B00040">Char</span> a <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Prod</span> r <span style="color: #B00040">Expected</span> <span style="color: #B00040">Char</span> a
+      token p <span style="color: #AA22FF; font-weight: bold">=</span> whitespace <span style="color: #666666">*&gt;</span> p
+
+      sym x   <span style="color: #AA22FF; font-weight: bold">=</span> token <span style="color: #666666">$</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>symbol x <span style="color: #666666">&lt;?&gt;</span> [x]
+
+      ident   <span style="color: #AA22FF; font-weight: bold">=</span> token <span style="color: #666666">$</span> (<span style="color: #B00040">:</span>) <span style="color: #666666">&lt;$&gt;</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>satisfy <span style="color: #B00040">Char</span><span style="color: #666666">.</span>isAlpha
+                            <span style="color: #666666">&lt;*&gt;</span> many (<span style="color: #B00040">E</span><span style="color: #666666">.</span>satisfy <span style="color: #B00040">Char</span><span style="color: #666666">.</span>isAlphaNum)
+                            <span style="color: #666666">&lt;?&gt;</span> <span style="color: #BA2121">&quot;identifier&quot;</span>
+      num     <span style="color: #AA22FF; font-weight: bold">=</span> token <span style="color: #666666">$</span> some (<span style="color: #B00040">E</span><span style="color: #666666">.</span>satisfy <span style="color: #B00040">Char</span><span style="color: #666666">.</span>isDigit) <span style="color: #666666">&lt;?&gt;</span> <span style="color: #BA2121">&quot;number&quot;</span>
+      <span style="color: #408080; font-style: italic">-- For now, just handle unsigned numeric literals.</span>
+
+  atom <span style="color: #AA22FF; font-weight: bold">&lt;-</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>rule <span style="color: #666666">$</span>
+    (<span style="color: #B00040">N</span> <span style="color: #666666">.</span> read) <span style="color: #666666">&lt;$&gt;</span> num
+    <span style="color: #666666">&lt;|&gt;</span> <span style="color: #B00040">V</span> <span style="color: #666666">&lt;$&gt;</span> ident
+    <span style="color: #666666">&lt;|&gt;</span> sym <span style="color: #BA2121">&#39;(&#39;</span> <span style="color: #666666">*&gt;</span> term <span style="color: #666666">&lt;*</span> sym <span style="color: #BA2121">&#39;)&#39;</span>
+
+  factor <span style="color: #AA22FF; font-weight: bold">&lt;-</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>rule <span style="color: #666666">$</span>
+    <span style="color: #B00040">Times</span> <span style="color: #666666">&lt;$&gt;</span> factor <span style="color: #666666">&lt;*</span> sym <span style="color: #BA2121">&#39;*&#39;</span> <span style="color: #666666">&lt;*&gt;</span> atom
+    <span style="color: #666666">&lt;|&gt;</span> atom
+
+  term <span style="color: #AA22FF; font-weight: bold">&lt;-</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>rule <span style="color: #666666">$</span>
+    <span style="color: #B00040">Plus</span> <span style="color: #666666">&lt;$&gt;</span> term <span style="color: #666666">&lt;*</span> sym <span style="color: #BA2121">&#39;+&#39;</span> <span style="color: #666666">&lt;*&gt;</span> factor
+    <span style="color: #666666">&lt;|&gt;</span> factor
+
+  return <span style="color: #666666">$</span> term <span style="color: #666666">&lt;*</span> whitespace
+</pre></div>
+</p>
+
+<p>For more examples of grammars, see the
+<a href="https://github.com/ollef/Earley/tree/master/examples">examples directory in the <code>Earley</code> GitHub repo</a>.</p>
+
+<h2 id="for-fun-solving-the-number-word-problem:dae604091e12646a898f25ca468336e8">For fun: solving the &ldquo;number word&rdquo; problem</h2>
+
+<p>The ability to handle ambiguity and return all possible parses is a
+useful one in many situations. Here I show a solution to the
+<a href="http://programmingpraxis.com/2014/07/25/number-words/">&ldquo;number word&rdquo;</a>
+problem. In the past, I have managed ambiguity using
+<a href="https://www.haskell.org/happy/doc/html/sec-glr.html">Happy&rsquo;s GLR support</a>,
+but I don&rsquo;t like writing parsers using Happy.</p>
+
+<p>The &ldquo;number word&rdquo; problem:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">Given a positive integer, return all the ways that the integer can be
+represented by letters using the mapping 1 -&gt; A, 2 -&gt; B, ..., 26 -&gt;
+Z. For instance, the number 1234 can be represented by the words ABCD,
+AWD and LCD.
+</pre></div>
+</p>
+
+<p>This is a toy version of an actually serious problem, that of
+<a href="https://en.wikipedia.org/wiki/Text_segmentation">segmentation in natural language</a>.</p>
+
+<h3 id="test:dae604091e12646a898f25ca468336e8">Test</h3>
+
+<p>The test reflects the problem statement:</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">EarleyExampleSpec</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">EarleyExample</span> (<span style="color: #0000FF">grammar</span>, <span style="color: #B00040">NumberWord</span>, <span style="color: #B00040">Expected</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Text.Earley</span> <span style="color: #008000; font-weight: bold">as</span> E
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.List.NonEmpty</span> <span style="color: #008000; font-weight: bold">as</span> NonEmpty
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.List</span> <span style="color: #008000; font-weight: bold">as</span> List
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec</span> (<span style="color: #B00040">Spec</span>, <span style="color: #0000FF">hspec</span>, <span style="color: #0000FF">describe</span>, <span style="color: #0000FF">it</span>, <span style="color: #0000FF">shouldBe</span>, <span style="color: #0000FF">shouldSatisfy</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.Hspec.QuickCheck</span> (<span style="color: #0000FF">prop</span>)
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Test.QuickCheck</span> ((<span style="color: #666666">==&gt;</span>))
+
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Spec</span>
+<span style="color: #0000FF">spec</span> <span style="color: #AA22FF; font-weight: bold">=</span>
+  describe <span style="color: #BA2121">&quot;EarleyExample&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+    it <span style="color: #BA2121">&quot;returns all possible parses of number words&quot;</span> <span style="color: #666666">$</span> <span style="color: #008000; font-weight: bold">do</span>
+      parseNumberWord <span style="color: #666666">1234</span> `shouldSatisfy` <span style="color: #0000FF">\</span>(result, <span style="color: #008000; font-weight: bold">_</span>) <span style="color: #AA22FF; font-weight: bold">-&gt;</span>
+        <span style="color: #B00040">List</span><span style="color: #666666">.</span>sort result <span style="color: #666666">==</span>
+        <span style="color: #B00040">List</span><span style="color: #666666">.</span>sort [ <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>fromList <span style="color: #BA2121">&quot;ABCD&quot;</span>
+                  , <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>fromList <span style="color: #BA2121">&quot;AWD&quot;</span>
+                  , <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>fromList <span style="color: #BA2121">&quot;LCD&quot;</span>
+                  ]
+
+<span style="color: #0000FF">parseNumberWord</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">Integer</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> ([<span style="color: #B00040">NumberWord</span>], <span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Report</span> <span style="color: #B00040">Expected</span> <span style="color: #B00040">String</span>)
+<span style="color: #0000FF">parseNumberWord</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>fullParses (<span style="color: #B00040">E</span><span style="color: #666666">.</span>parser grammar) <span style="color: #666666">.</span> show
+</pre></div>
+</p>
+
+<p>Note that I am using a <code>NonEmpty</code> list of <code>Char</code> because an empty
+string is not a valid solution to the &ldquo;number word&rdquo; problem. (I
+covered [<code>NonEmpty</code>] on <a href="../../../../../blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/">day 7</a>.)</p>
+
+<h3 id="solution:dae604091e12646a898f25ca468336e8">Solution</h3>
+
+<p>The solution is just to write a grammar that tries to pick off valid
+consecutive digits to make a letter. We create a production for each
+possible letter that we care about, using <code>numberLetterFor</code>, combine
+those productions with alternation using <code>asum</code> to get a composite
+production <code>numberLetter</code>, then use that for <code>numberWord</code> which is the
+grammar.</p>
+
+<p><div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE RecursiveDo #-}</span>
+
+<span style="color: #008000; font-weight: bold">module</span> <span style="color: #0000FF; font-weight: bold">EarleyExample</span> <span style="color: #008000; font-weight: bold">where</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Text.Earley</span> <span style="color: #008000; font-weight: bold">as</span> E
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Text.Earley</span> ((<span style="color: #666666">&lt;?&gt;</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Control.Applicative</span> ((<span style="color: #666666">&lt;|&gt;</span>))
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.Foldable</span> <span style="color: #008000; font-weight: bold">as</span> Foldable
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.Char</span> <span style="color: #008000; font-weight: bold">as</span> Char
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #008000; font-weight: bold">qualified</span> <span style="color: #0000FF; font-weight: bold">Data.List.NonEmpty</span> <span style="color: #008000; font-weight: bold">as</span> NonEmpty
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Data.List.NonEmpty</span> (<span style="color: #B00040">NonEmpty</span>((<span style="color: #666666">:|</span>)))
+
+<span style="color: #408080; font-style: italic">-- | Result wanted.</span>
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">NumberWord</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">NonEmpty</span> <span style="color: #B00040">NumberLetter</span>
+
+<span style="color: #408080; font-style: italic">-- | &#39;A&#39; to &#39;Z&#39;.</span>
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">NumberLetter</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">Char</span>
+
+<span style="color: #408080; font-style: italic">-- | What to report for something expected.</span>
+<span style="color: #008000; font-weight: bold">type</span> <span style="color: #B00040">Expected</span> <span style="color: #AA22FF; font-weight: bold">=</span> <span style="color: #B00040">String</span>
+
+<span style="color: #0000FF">grammar</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Grammar</span> r (<span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Prod</span> r <span style="color: #B00040">Expected</span> <span style="color: #B00040">Char</span> <span style="color: #B00040">NumberWord</span>)
+<span style="color: #0000FF">grammar</span> <span style="color: #AA22FF; font-weight: bold">=</span> mdo
+  numberWord <span style="color: #AA22FF; font-weight: bold">&lt;-</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>rule <span style="color: #666666">$</span>
+    <span style="color: #B00040">NonEmpty</span><span style="color: #666666">.</span>cons <span style="color: #666666">&lt;$&gt;</span> numberLetter <span style="color: #666666">&lt;*&gt;</span> numberWord
+    <span style="color: #666666">&lt;|&gt;</span> (<span style="color: #B00040">:|</span> <span style="color: #B00040">[]</span>) <span style="color: #666666">&lt;$&gt;</span> numberLetter
+  return numberWord
+
+<span style="color: #0000FF">numberLetter</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Prod</span> r <span style="color: #B00040">Expected</span> <span style="color: #B00040">Char</span> <span style="color: #B00040">NumberLetter</span>
+<span style="color: #0000FF">numberLetter</span> <span style="color: #AA22FF; font-weight: bold">=</span> (<span style="color: #B00040">Foldable</span><span style="color: #666666">.</span>asum <span style="color: #666666">.</span> map numberLetterFor) [<span style="color: #BA2121">&#39;A&#39;</span><span style="color: #666666">..</span><span style="color: #BA2121">&#39;Z&#39;</span>] <span style="color: #666666">&lt;?&gt;</span> <span style="color: #BA2121">&quot;number&quot;</span>
+
+<span style="color: #408080; font-style: italic">-- | Return a production for a given letter.</span>
+<span style="color: #408080; font-style: italic">--</span>
+<span style="color: #408080; font-style: italic">-- 1 is &#39;A&#39;, 2 is &#39;B&#39;, .. 26 is &#39;Z&#39;.</span>
+<span style="color: #0000FF">numberLetterFor</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">NumberLetter</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span><span style="color: #B00040">Prod</span> r <span style="color: #B00040">Expected</span> <span style="color: #B00040">Char</span> <span style="color: #B00040">NumberLetter</span>
+<span style="color: #0000FF">numberLetterFor</span> c <span style="color: #AA22FF; font-weight: bold">=</span> c <span style="color: #666666">&lt;$</span> <span style="color: #B00040">E</span><span style="color: #666666">.</span>word (show (toNumber c)) <span style="color: #666666">&lt;?&gt;</span> [c]
+
+<span style="color: #408080; font-style: italic">-- | &#39;A&#39; is 1, ... &#39;Z&#39; is 26</span>
+<span style="color: #0000FF">toNumber</span> <span style="color: #AA22FF; font-weight: bold">::</span> <span style="color: #B00040">NumberLetter</span> <span style="color: #AA22FF; font-weight: bold">-&gt;</span> <span style="color: #B00040">Int</span>
+<span style="color: #0000FF">toNumber</span> c <span style="color: #AA22FF; font-weight: bold">=</span> (<span style="color: #B00040">Char</span><span style="color: #666666">.</span>ord c <span style="color: #666666">-</span> <span style="color: #B00040">Char</span><span style="color: #666666">.</span>ord <span style="color: #BA2121">&#39;A&#39;</span>) <span style="color: #666666">+</span> <span style="color: #666666">1</span>
+</pre></div>
+</p>
+
+<h2 id="conclusion:dae604091e12646a898f25ca468336e8">Conclusion</h2>
+
+<p>I only recently discovered the <code>Earley</code> parser library and started
+using it. I&rsquo;m pretty excited by its friendliness.</p>
+
+<h2 id="all-the-code:dae604091e12646a898f25ca468336e8">All the code</h2>
+
+<p>All my code for my article series are at
+<a href="https://github.com/FranklinChen/twenty-four-days2015-of-hackage">this GitHub repo</a>.</p>
+
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'conscientiousprogrammer';
+    var disqus_identifier = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/14\/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell\/';
+    var disqus_title = '24 days of Hackage, 2015: day 14: Earley: a promising newer parser library for Haskell';
+    var disqus_url = 'http:\/\/conscientiousprogrammer.com\/blog\/2015\/12\/14\/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-41982602-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+</body>
+</html>
+

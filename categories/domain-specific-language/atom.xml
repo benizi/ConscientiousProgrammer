@@ -198,6 +198,14 @@ braces, etc.) and also make users learn it.&lt;/p&gt;
 to prefer prefix-only S-expressions, just as the Lisp community does
 in order to avoid all the hassles of a custom syntax.&lt;/p&gt;
 
+&lt;h3 id=&#34;update-of-2015-12-14-providing-a-custom-syntax-using-earley:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;(Update of 2015-12-14) Providing a custom syntax using &lt;code&gt;Earley&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;On
+&lt;a href=&#34;../../blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/&#34;&gt;day 14&lt;/a&gt;,
+I created a custom syntax and a parser using the &lt;code&gt;Earley&lt;/code&gt; parser library.&lt;/p&gt;
+
+&lt;h3 id=&#34;quickcheck-tests:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;QuickCheck tests&lt;/h3&gt;
+
 &lt;p&gt;Here are some sample QuickCheck tests to show what it is we want to be
 able to do. (Note that for convenience, we are using string
 interpolation through the

@@ -6,8 +6,351 @@
     <description>Recent content in Parsers on The Conscientious Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Dec 2015 08:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Mon, 14 Dec 2015 08:00:00 -0500</lastBuildDate>
     <atom:link href="http://ConscientiousProgrammer.com/categories/parsers/atom/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>24 days of Hackage, 2015: day 14: Earley: a promising newer parser library for Haskell</title>
+      <link>http://conscientiousprogrammer.com/blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/</link>
+      <pubDate>Mon, 14 Dec 2015 08:00:00 -0500</pubDate>
+      
+      <guid>http://conscientiousprogrammer.com/blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/</guid>
+      <description>
+
+&lt;h2 id=&#34;table-of-contents-for-the-whole-series:dae604091e12646a898f25ca468336e8&#34;&gt;Table of contents for the whole series&lt;/h2&gt;
+
+&lt;p&gt;A table of contents is at the top of the article for &lt;a href=&#34;../../blog/2015/11/30/haskell-tidbits-24-days-of-hackage-2015-day-1-introduction-and-stack/&#34;&gt;day 1&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;day-14:dae604091e12646a898f25ca468336e8&#34;&gt;Day 14&lt;/h2&gt;
+
+&lt;p&gt;On
+&lt;a href=&#34;../../blog/2015/12/10/24-days-of-hackage-2015-day-10-s-cargot-using-s-expression-syntax/&#34;&gt;day 10&lt;/a&gt;,
+I showed how to use S-expressions to avoid having to write a custom
+parser. But writing parsers isn&amp;rsquo;t too bad in Haskell, or is it? The
+popular &lt;code&gt;parsec&lt;/code&gt; library
+&lt;a href=&#34;http://blog.ezyang.com/2014/05/parsec-try-a-or-b-considered-harmful/&#34;&gt;has many problems&lt;/a&gt;,
+because it requires hand-hacked backtracking that causes weird error
+messages and difficulty in reasoning about your grammar. There&amp;rsquo;s an
+improved fork of &lt;code&gt;parsec&lt;/code&gt; called
+&lt;a href=&#34;https://hackage.haskell.org/package/megaparsec&#34;&gt;&lt;code&gt;megaparsec&lt;/code&gt;&lt;/a&gt;, but
+it&amp;rsquo;s still the same kind of technology. How about something completely
+different.&lt;/p&gt;
+
+&lt;p&gt;The recent &lt;a href=&#34;https://hackage.haskell.org/package/Earley&#34;&gt;&lt;code&gt;Earley&lt;/code&gt;&lt;/a&gt; is
+intriguing and I&amp;rsquo;ve begun using it for new projects where I don&amp;rsquo;t need
+the monadic power of something like &lt;code&gt;parsec&lt;/code&gt; but are OK with an
+applicative API instead and don&amp;rsquo;t need the performance of something
+like &lt;code&gt;attoparsec&lt;/code&gt;. Apart from good error messages, it allows handles
+online parsing and ambiguity.&lt;/p&gt;
+
+&lt;p&gt;Today I&amp;rsquo;ll give two small examples of using &lt;code&gt;Earley&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;installation:dae604091e12646a898f25ca468336e8&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;Since Stackage LTS is behind right now, and &lt;code&gt;Earley&lt;/code&gt; keeps moving,
+I decided to use the latest version of &lt;code&gt;Earley&lt;/code&gt; by modifying our
+&lt;code&gt;stack.yaml&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;- Earley-0.10.1.0
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;parsing-into-day-10-s-ast:dae604091e12646a898f25ca468336e8&#34;&gt;Parsing into day 10&amp;rsquo;s AST&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s go back to the symbolic differentiation problem on day 10, and
+create a math-like infix syntax to parse.&lt;/p&gt;
+
+&lt;h3 id=&#34;tests:dae604091e12646a898f25ca468336e8&#34;&gt;Tests&lt;/h3&gt;
+
+&lt;p&gt;Here are some HSpec/QuickCheck tests to illustrate what we want when
+parsing a string into an &lt;code&gt;Exp&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;imports:dae604091e12646a898f25ca468336e8&#34;&gt;Imports&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;Text.Earley&lt;/code&gt; is the main module of the &lt;code&gt;Earley&lt;/code&gt; package; &lt;code&gt;Report&lt;/code&gt; is
+used for return a report on the progress of the parse.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE QuasiQuotes #-}&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE ScopedTypeVariables #-}&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE LambdaCase #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.EarleySpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.AlphaSyntax&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.Earley&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Earley
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Earley&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Report&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt;))
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldSatisfy&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;NonNegative&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt;))
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.String.Here&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;i&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4 id=&#34;quickcheck-tests:dae604091e12646a898f25ca468336e8&#34;&gt;QuickCheck tests&lt;/h4&gt;
+
+&lt;p&gt;Some QuickCheck tests that show that some sample expressions such as
+&lt;code&gt;x*a + y*b * (z+c)&lt;/code&gt; parse into the expected ASTs:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Custom syntax for expression parsed by Earley&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- For simplicity, don&amp;#39;t support negative numeric literals now.&lt;/span&gt;
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x + a&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;NonNegative&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;Earley&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parses [i&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;x &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;{a}&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;] `shouldSatisfy`
+        &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt;
+          ([&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a)], &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;True&lt;/span&gt;
+          &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;False&lt;/span&gt;
+
+    prop &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x*a + y*b * (z+c)&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;
+      &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;NonNegative&lt;/span&gt; (a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;))
+       (&lt;span style=&#34;color: #B00040&#34;&gt;NonNegative&lt;/span&gt; (b &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;))
+       (&lt;span style=&#34;color: #B00040&#34;&gt;NonNegative&lt;/span&gt; (c &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;Earley&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parses [i&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;x&lt;span style=&#34;color: #666666&#34;&gt;*$&lt;/span&gt;{a} &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; y&lt;span style=&#34;color: #666666&#34;&gt;*$&lt;/span&gt;{b} &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (z&lt;span style=&#34;color: #666666&#34;&gt;+$&lt;/span&gt;{c})&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;] `shouldSatisfy`
+        &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt;
+          ([&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; a))
+                 (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;y&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; b))
+                        (&lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;z&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; c)))], &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;True&lt;/span&gt;
+          &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;False&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4 id=&#34;expected-parse-errors:dae604091e12646a898f25ca468336e8&#34;&gt;Expected parse errors&lt;/h4&gt;
+
+&lt;p&gt;Finally, one example of how to check for expected parse errors. The
+error tokens are user-defined and attached to grammar productions, as
+we will see.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x + y * + 5&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;Earley&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parses &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;x + y * + 5&amp;quot;&lt;/span&gt; `shouldSatisfy`
+        &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;case&lt;/span&gt;
+          (&lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Report&lt;/span&gt; { position &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;8&lt;/span&gt;
+                      , expected &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;number&amp;quot;&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;identifier&amp;quot;&lt;/span&gt;, &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;(&amp;quot;&lt;/span&gt;]
+                      , unconsumed &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;+ 5&amp;quot;&lt;/span&gt;
+                      }) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;True&lt;/span&gt;
+          &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;False&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;implementation:dae604091e12646a898f25ca468336e8&#34;&gt;Implementation&lt;/h3&gt;
+
+&lt;p&gt;The implementation involves &lt;code&gt;Applicative&lt;/code&gt; idioms that will be familiar
+to you if you have used &lt;code&gt;parsec&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;imports-1:dae604091e12646a898f25ca468336e8&#34;&gt;Imports&lt;/h4&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE ScopedTypeVariables #-}&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE RecursiveDo #-}&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE FlexibleContexts #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.Earley&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;SymbolicDifferentiation.AlphaSyntax&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;(&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt;))
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Earley&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; E
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Earley&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Applicative&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;many&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;some&lt;/span&gt;, (&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;|&amp;gt;&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Char&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Char
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Monad.ST&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;ST&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.ListLike&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;ListLike&lt;/span&gt;)
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | What to report for something expected.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;&amp;lt;?&amp;gt;&lt;/code&gt; operator is used to attach an expectation (which we have
+decided to specify as a string, with type synonym &lt;code&gt;Expected&lt;/code&gt;) to a
+production.&lt;/p&gt;
+
+&lt;h4 id=&#34;drivers:dae604091e12646a898f25ca468336e8&#34;&gt;Drivers&lt;/h4&gt;
+
+&lt;p&gt;What we want for our particular problem is a parser that takes a
+string as input and expects to fully parse it. We construct it from a
+more generic parser that comes from processing our grammar.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Return a list of all possible `Exp` parses, and also a status report&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- regardless of how many successes.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;parses&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; ([&lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;], &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Report&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;parses&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fullParses expParser
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Parser created from the grammar.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;expParser&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ListLike&lt;/span&gt; input &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&amp;gt;&lt;/span&gt;
+             &lt;span style=&#34;color: #B00040&#34;&gt;ST&lt;/span&gt; state (input &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;ST&lt;/span&gt; state (&lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Result&lt;/span&gt; state &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; input &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;))
+&lt;span style=&#34;color: #0000FF&#34;&gt;expParser&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parser grammar
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;grammar:dae604091e12646a898f25ca468336e8&#34;&gt;Grammar&lt;/h4&gt;
+
+&lt;p&gt;Our grammar is straightforward. &lt;code&gt;Earley&lt;/code&gt; uses a monad to maintain its
+internal state, and we use the &lt;code&gt;RecursiveDo&lt;/code&gt; GHC extension (covered in
+a
+&lt;a href=&#34;https://ocharles.org.uk/blog/posts/2014-12-09-recursive-do.html&#34;&gt;2014 Day of GHC Extensions&lt;/a&gt;)
+in order to be able to refer to a rule within the grammar
+recursively. Note that left recursion in the grammar is just fine for
+&lt;code&gt;Earley&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Prod&lt;/code&gt; is the &lt;a href=&#34;https://hackage.haskell.org/package/Earley-0.10.1.0/docs/Text-Earley.html#t:Prod&#34;&gt;type constructor for a production&lt;/a&gt;, and you build up
+productions using combinators such as &lt;code&gt;satisfy&lt;/code&gt; and &lt;code&gt;symbol&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Basically taken from &amp;lt;https://github.com/ollef/Earley/blob/master/examples/Expr2.hs Earley example expression parser&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;grammar&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; forall r&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Grammar&lt;/span&gt; r (&lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Prod&lt;/span&gt; r &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Exp&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;grammar&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; mdo
+  whitespace &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;rule &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;
+    many &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;satisfy &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;isSpace
+
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;let&lt;/span&gt; token &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Prod&lt;/span&gt; r &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; a &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Prod&lt;/span&gt; r &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; a
+      token p &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; whitespace &lt;span style=&#34;color: #666666&#34;&gt;*&amp;gt;&lt;/span&gt; p
+
+      sym x   &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; token &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;symbol x &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; [x]
+
+      ident   &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; token &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;:&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;satisfy &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;isAlpha
+                            &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; many (&lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;satisfy &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;isAlphaNum)
+                            &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;identifier&amp;quot;&lt;/span&gt;
+      num     &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; token &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; some (&lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;satisfy &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;isDigit) &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;number&amp;quot;&lt;/span&gt;
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- For now, just handle unsigned numeric literals.&lt;/span&gt;
+
+  atom &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;rule &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;
+    (&lt;span style=&#34;color: #B00040&#34;&gt;N&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; read) &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; num
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;|&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;V&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; ident
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;|&amp;gt;&lt;/span&gt; sym &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;(&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&amp;gt;&lt;/span&gt; term &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&lt;/span&gt; sym &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;)&amp;#39;&lt;/span&gt;
+
+  factor &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;rule &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;
+    &lt;span style=&#34;color: #B00040&#34;&gt;Times&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; factor &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&lt;/span&gt; sym &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;*&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; atom
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;|&amp;gt;&lt;/span&gt; atom
+
+  term &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;rule &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;
+    &lt;span style=&#34;color: #B00040&#34;&gt;Plus&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; term &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&lt;/span&gt; sym &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;+&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; factor
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;|&amp;gt;&lt;/span&gt; factor
+
+  return &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; term &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&lt;/span&gt; whitespace
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;For more examples of grammars, see the
+&lt;a href=&#34;https://github.com/ollef/Earley/tree/master/examples&#34;&gt;examples directory in the &lt;code&gt;Earley&lt;/code&gt; GitHub repo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;for-fun-solving-the-number-word-problem:dae604091e12646a898f25ca468336e8&#34;&gt;For fun: solving the &amp;ldquo;number word&amp;rdquo; problem&lt;/h2&gt;
+
+&lt;p&gt;The ability to handle ambiguity and return all possible parses is a
+useful one in many situations. Here I show a solution to the
+&lt;a href=&#34;http://programmingpraxis.com/2014/07/25/number-words/&#34;&gt;&amp;ldquo;number word&amp;rdquo;&lt;/a&gt;
+problem. In the past, I have managed ambiguity using
+&lt;a href=&#34;https://www.haskell.org/happy/doc/html/sec-glr.html&#34;&gt;Happy&amp;rsquo;s GLR support&lt;/a&gt;,
+but I don&amp;rsquo;t like writing parsers using Happy.&lt;/p&gt;
+
+&lt;p&gt;The &amp;ldquo;number word&amp;rdquo; problem:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;Given a positive integer, return all the ways that the integer can be
+represented by letters using the mapping 1 -&amp;gt; A, 2 -&amp;gt; B, ..., 26 -&amp;gt;
+Z. For instance, the number 1234 can be represented by the words ABCD,
+AWD and LCD.
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This is a toy version of an actually serious problem, that of
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Text_segmentation&#34;&gt;segmentation in natural language&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;test:dae604091e12646a898f25ca468336e8&#34;&gt;Test&lt;/h3&gt;
+
+&lt;p&gt;The test reflects the problem statement:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;EarleyExampleSpec&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;EarleyExample&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;grammar&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;NumberWord&lt;/span&gt;, &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Earley&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; E
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List.NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; NonEmpty
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; List
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;hspec&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;describe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;it&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldBe&lt;/span&gt;, &lt;span style=&#34;color: #0000FF&#34;&gt;shouldSatisfy&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.Hspec.QuickCheck&lt;/span&gt; (&lt;span style=&#34;color: #0000FF&#34;&gt;prop&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Test.QuickCheck&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;==&amp;gt;&lt;/span&gt;))
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Spec&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;spec&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt;
+  describe &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;EarleyExample&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+    it &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;returns all possible parses of number words&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;do&lt;/span&gt;
+      parseNumberWord &lt;span style=&#34;color: #666666&#34;&gt;1234&lt;/span&gt; `shouldSatisfy` &lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt;(result, &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color: #B00040&#34;&gt;List&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;sort result &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt;
+        &lt;span style=&#34;color: #B00040&#34;&gt;List&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;sort [ &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;ABCD&amp;quot;&lt;/span&gt;
+                  , &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;AWD&amp;quot;&lt;/span&gt;
+                  , &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fromList &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;LCD&amp;quot;&lt;/span&gt;
+                  ]
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;parseNumberWord&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Integer&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; ([&lt;span style=&#34;color: #B00040&#34;&gt;NumberWord&lt;/span&gt;], &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Report&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;parseNumberWord&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fullParses (&lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parser grammar) &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; show
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Note that I am using a &lt;code&gt;NonEmpty&lt;/code&gt; list of &lt;code&gt;Char&lt;/code&gt; because an empty
+string is not a valid solution to the &amp;ldquo;number word&amp;rdquo; problem. (I
+covered [&lt;code&gt;NonEmpty&lt;/code&gt;] on &lt;a href=&#34;../../blog/2015/12/07/24-days-of-hackage-2015-day-7-semigroups-nonempty-list-and-a-case-study-of-types-and-tests/&#34;&gt;day 7&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;h3 id=&#34;solution:dae604091e12646a898f25ca468336e8&#34;&gt;Solution&lt;/h3&gt;
+
+&lt;p&gt;The solution is just to write a grammar that tries to pick off valid
+consecutive digits to make a letter. We create a production for each
+possible letter that we care about, using &lt;code&gt;numberLetterFor&lt;/code&gt;, combine
+those productions with alternation using &lt;code&gt;asum&lt;/code&gt; to get a composite
+production &lt;code&gt;numberLetter&lt;/code&gt;, then use that for &lt;code&gt;numberWord&lt;/code&gt; which is the
+grammar.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE RecursiveDo #-}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;EarleyExample&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;where&lt;/span&gt;
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Earley&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; E
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Text.Earley&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Control.Applicative&lt;/span&gt; ((&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;|&amp;gt;&lt;/span&gt;))
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Foldable&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Foldable
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.Char&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; Char
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;qualified&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List.NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;as&lt;/span&gt; NonEmpty
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0000FF; font-weight: bold&#34;&gt;Data.List.NonEmpty&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;((&lt;span style=&#34;color: #666666&#34;&gt;:|&lt;/span&gt;)))
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Result wanted.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NumberWord&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NumberLetter&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | &amp;#39;A&amp;#39; to &amp;#39;Z&amp;#39;.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NumberLetter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | What to report for something expected.&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;String&lt;/span&gt;
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;grammar&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Grammar&lt;/span&gt; r (&lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Prod&lt;/span&gt; r &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NumberWord&lt;/span&gt;)
+&lt;span style=&#34;color: #0000FF&#34;&gt;grammar&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; mdo
+  numberWord &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;rule &lt;span style=&#34;color: #666666&#34;&gt;$&lt;/span&gt;
+    &lt;span style=&#34;color: #B00040&#34;&gt;NonEmpty&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;cons &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; numberLetter &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; numberWord
+    &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;|&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;:|&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;[]&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; numberLetter
+  return numberWord
+
+&lt;span style=&#34;color: #0000FF&#34;&gt;numberLetter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Prod&lt;/span&gt; r &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NumberLetter&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;numberLetter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Foldable&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;asum &lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt; map numberLetterFor) [&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;A&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;..&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;Z&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;number&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Return a production for a given letter.&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;--&lt;/span&gt;
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- 1 is &amp;#39;A&amp;#39;, 2 is &amp;#39;B&amp;#39;, .. 26 is &amp;#39;Z&amp;#39;.&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;numberLetterFor&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NumberLetter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Prod&lt;/span&gt; r &lt;span style=&#34;color: #B00040&#34;&gt;Expected&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NumberLetter&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;numberLetterFor&lt;/span&gt; c &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; c &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;$&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;E&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;word (show (toNumber c)) &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; [c]
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | &amp;#39;A&amp;#39; is 1, ... &amp;#39;Z&amp;#39; is 26&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;toNumber&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;NumberLetter&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;toNumber&lt;/span&gt; c &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;ord c &lt;span style=&#34;color: #666666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Char&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;ord &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;#39;A&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:dae604091e12646a898f25ca468336e8&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I only recently discovered the &lt;code&gt;Earley&lt;/code&gt; parser library and started
+using it. I&amp;rsquo;m pretty excited by its friendliness.&lt;/p&gt;
+
+&lt;h2 id=&#34;all-the-code:dae604091e12646a898f25ca468336e8&#34;&gt;All the code&lt;/h2&gt;
+
+&lt;p&gt;All my code for my article series are at
+&lt;a href=&#34;https://github.com/FranklinChen/twenty-four-days2015-of-hackage&#34;&gt;this GitHub repo&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>24 days of Hackage, 2015: day 10: s-cargot: using S-expression syntax</title>
@@ -197,6 +540,14 @@ braces, etc.) and also make users learn it.&lt;/p&gt;
 &lt;p&gt;So let&amp;rsquo;s assume for the purpose of this article that we have a reason
 to prefer prefix-only S-expressions, just as the Lisp community does
 in order to avoid all the hassles of a custom syntax.&lt;/p&gt;
+
+&lt;h3 id=&#34;update-of-2015-12-14-providing-a-custom-syntax-using-earley:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;(Update of 2015-12-14) Providing a custom syntax using &lt;code&gt;Earley&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;On
+&lt;a href=&#34;../../blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/&#34;&gt;day 14&lt;/a&gt;,
+I created a custom syntax and a parser using the &lt;code&gt;Earley&lt;/code&gt; parser library.&lt;/p&gt;
+
+&lt;h3 id=&#34;quickcheck-tests:6004f4e5d78ba4d157aa1a919a6f7cf7&#34;&gt;QuickCheck tests&lt;/h3&gt;
 
 &lt;p&gt;Here are some sample QuickCheck tests to show what it is we want to be
 able to do. (Note that for convenience, we are using string
@@ -711,6 +1062,10 @@ compile-time error rather than a runtime error.&lt;/p&gt;
 
 &lt;p&gt;Example of a compile-time error:&lt;/p&gt;
 
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- This Haskell code fails to compile!&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Regex&lt;/span&gt;
+&lt;span style=&#34;color: #0000FF&#34;&gt;mediaRegex&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; [re&lt;span style=&#34;color: #666666&#34;&gt;|^@&lt;/span&gt;&lt;span style=&#34;color: #B00040&#34;&gt;Media:\&lt;/span&gt;t([&lt;span style=&#34;color: #666666&#34;&gt;^&lt;/span&gt; ,]&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt;)&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(audio&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;video)(&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;,&lt;span style=&#34;color: #0000FF&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;?:&lt;/span&gt;missing&lt;span style=&#34;color: #666666&#34;&gt;|&lt;/span&gt;unlinked)&lt;span style=&#34;color: #666666&#34;&gt;?|&lt;/span&gt;]
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Loading this in GHCi or compiling with GHC results in&lt;/p&gt;
@@ -797,14 +1152,14 @@ command-line program.&lt;/p&gt;
 
 &lt;p&gt;We have all the information needed to print out a report for each line.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Output a report.&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;-- | Output a report.&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Maybe&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Info&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;()&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Nothing&lt;/span&gt; &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;no match&amp;quot;&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; &lt;span style=&#34;color: #B00040&#34;&gt;Skip&lt;/span&gt;) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; putStrLn &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;match, but missing or unlinked&amp;quot;&lt;/span&gt;
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Audio&lt;/span&gt; path)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;audio at %s&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; path
 &lt;span style=&#34;color: #0000FF&#34;&gt;reportOnInfo&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Just&lt;/span&gt; (&lt;span style=&#34;color: #B00040&#34;&gt;Video&lt;/span&gt; path)) &lt;span style=&#34;color: #AA22FF; font-weight: bold&#34;&gt;=&lt;/span&gt; printf &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;video at %s&lt;/span&gt;&lt;span style=&#34;color: #BB6622; font-weight: bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;&lt;/span&gt; path
 &lt;/pre&gt;&lt;/div&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;And the final driver, piping everything through from standard input:&lt;/p&gt;
 

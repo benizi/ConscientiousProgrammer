@@ -198,6 +198,10 @@ test. &lt;code&gt;ScopedTypeVariables&lt;/code&gt; is a GHC extension that I wis
 part of the standard Haskell language; it was &lt;a href=&#34;https://ocharles.org.uk/blog/guest-posts/2014-12-20-scoped-type-variables.html&#34;&gt;covered in a 2014 Day of
 GHC Extensions&lt;/a&gt;.)&lt;/p&gt;
 
+&lt;h3 id=&#34;update-of-2015-12-14-using-nonempty-for-a-parser:958db8f82ca76230f48a5dece0db5e88&#34;&gt;(Update of 2015-12-14) Using &lt;code&gt;NonEmpty&lt;/code&gt; for a parser&lt;/h3&gt;
+
+&lt;p&gt;On &lt;a href=&#34;../../blog/2015/12/14/24-days-of-hackage-2015-day-14-earley-a-promising-newer-parser-library-for-haskell/&#34;&gt;day 14&lt;/a&gt;, I used &lt;code&gt;NonEmpty&lt;/code&gt; to represent in a principled way the result from a parser.&lt;/p&gt;
+
 &lt;h2 id=&#34;a-few-notes-on-the-full-nonempty-api:958db8f82ca76230f48a5dece0db5e88&#34;&gt;A few notes on the full &lt;code&gt;NonEmpty&lt;/code&gt; API&lt;/h2&gt;
 
 &lt;p&gt;&lt;code&gt;map&lt;/code&gt; behaves as expected, because it doesn&amp;rsquo;t change the number of
