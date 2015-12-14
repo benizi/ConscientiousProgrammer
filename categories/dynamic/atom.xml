@@ -88,11 +88,15 @@ require comparison:&lt;/p&gt;
 
 &lt;p&gt;How do we load this type of function at runtime?&lt;/p&gt;
 
-&lt;h2 id=&#34;a-necessary-wrapper:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;A necessary wrapper&lt;/h2&gt;
+&lt;h2 id=&#34;a-necessary-type-wrapper:4ffc4d1fd7325e3ed1c68dabc85f2632&#34;&gt;A necessary type wrapper&lt;/h2&gt;
 
 &lt;p&gt;The first thing to get out of the way is that we cannot load a
-function of type &lt;code&gt;Ord a =&amp;gt; [a] -&amp;gt; [a]&lt;/code&gt; directly. We have to wrap it in
-a &lt;code&gt;newtype&lt;/code&gt; to hide the higher-rank type and go monomorphic:&lt;/p&gt;
+function of type &lt;code&gt;Ord a =&amp;gt; [a] -&amp;gt; [a]&lt;/code&gt; directly, because of lack of
+current GHC support for
+&lt;a href=&#34;http://jozefg.bitbucket.org/posts/2014-12-23-impredicative.html&#34;&gt;impredicate types&lt;/a&gt;. However,
+there is a trick we can play, which is to wrap such a type in a
+&lt;code&gt;newtype&lt;/code&gt;, along with using the higher-rank type language feature. I
+learned this trick from this &lt;a href=&#34;http://jozefg.bitbucket.org/posts/2014-12-23-impredicative.html&#34;&gt;article on impredicative types&lt;/a&gt;.&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;{-# LANGUAGE RankNTypes #-}&lt;/span&gt;
 
@@ -176,7 +180,10 @@ has type&lt;/p&gt;
 &lt;/p&gt;
 
 &lt;p&gt;taking a string and a witness for a monomorphic type in order to tell
-&lt;code&gt;interpret&lt;/code&gt; what runtime dictionary for &lt;code&gt;Typeable&lt;/code&gt; to use.&lt;/p&gt;
+&lt;code&gt;interpret&lt;/code&gt; what runtime dictionary for &lt;code&gt;Typeable&lt;/code&gt; to use (the modern
+standard way for the library to have done this would have been to use
+a
+&lt;a href=&#34;https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Proxy.html&#34;&gt;&lt;code&gt;Proxy&lt;/code&gt;&lt;/a&gt;).&lt;/p&gt;
 
 &lt;p&gt;So there we have it: runtime eval in GHC Haskell. What &lt;code&gt;hint&lt;/code&gt; provides
 is fairly primitive, but I found it useful.&lt;/p&gt;

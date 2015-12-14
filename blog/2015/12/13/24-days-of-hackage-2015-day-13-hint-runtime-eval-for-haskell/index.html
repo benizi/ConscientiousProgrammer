@@ -149,11 +149,15 @@ require comparison:</p>
 
 <p>How do we load this type of function at runtime?</p>
 
-<h2 id="a-necessary-wrapper:4ffc4d1fd7325e3ed1c68dabc85f2632">A necessary wrapper</h2>
+<h2 id="a-necessary-type-wrapper:4ffc4d1fd7325e3ed1c68dabc85f2632">A necessary type wrapper</h2>
 
 <p>The first thing to get out of the way is that we cannot load a
-function of type <code>Ord a =&gt; [a] -&gt; [a]</code> directly. We have to wrap it in
-a <code>newtype</code> to hide the higher-rank type and go monomorphic:</p>
+function of type <code>Ord a =&gt; [a] -&gt; [a]</code> directly, because of lack of
+current GHC support for
+<a href="http://jozefg.bitbucket.org/posts/2014-12-23-impredicative.html">impredicate types</a>. However,
+there is a trick we can play, which is to wrap such a type in a
+<code>newtype</code>, along with using the higher-rank type language feature. I
+learned this trick from this <a href="http://jozefg.bitbucket.org/posts/2014-12-23-impredicative.html">article on impredicative types</a>.</p>
 
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">{-# LANGUAGE RankNTypes #-}</span>
 
@@ -237,7 +241,10 @@ has type</p>
 </p>
 
 <p>taking a string and a witness for a monomorphic type in order to tell
-<code>interpret</code> what runtime dictionary for <code>Typeable</code> to use.</p>
+<code>interpret</code> what runtime dictionary for <code>Typeable</code> to use (the modern
+standard way for the library to have done this would have been to use
+a
+<a href="https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Proxy.html"><code>Proxy</code></a>).</p>
 
 <p>So there we have it: runtime eval in GHC Haskell. What <code>hint</code> provides
 is fairly primitive, but I found it useful.</p>
