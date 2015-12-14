@@ -87,11 +87,15 @@ userDefinedSort :: Ord a => [a] -> [a]
 
 How do we load this type of function at runtime?
 
-## A necessary wrapper
+## A necessary type wrapper
 
 The first thing to get out of the way is that we cannot load a
-function of type `Ord a => [a] -> [a]` directly. We have to wrap it in
-a `newtype` to hide the higher-rank type and go monomorphic:
+function of type `Ord a => [a] -> [a]` directly, because of lack of
+current GHC support for
+[impredicate types](http://jozefg.bitbucket.org/posts/2014-12-23-impredicative.html). However,
+there is a trick we can play, which is to wrap such a type in a
+`newtype`, along with using the higher-rank type language feature. I
+learned this trick from this [article on impredicative types](http://jozefg.bitbucket.org/posts/2014-12-23-impredicative.html).
 
 {{< highlight haskell >}}
 {-# LANGUAGE RankNTypes #-}
@@ -176,7 +180,10 @@ interpret :: (MonadInterpreter m, Typeable a) => String -> a -> m a
 {{< /highlight >}}
 
 taking a string and a witness for a monomorphic type in order to tell
-`interpret` what runtime dictionary for `Typeable` to use.
+`interpret` what runtime dictionary for `Typeable` to use (the modern
+standard way for the library to have done this would have been to use
+a
+[`Proxy`](https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Proxy.html)).
 
 So there we have it: runtime eval in GHC Haskell. What `hint` provides
 is fairly primitive, but I found it useful.
