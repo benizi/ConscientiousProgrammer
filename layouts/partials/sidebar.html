@@ -5,7 +5,11 @@
         <img src="https://www.gravatar.com/avatar/{{ .Site.Params.gravatarHash }}?s=200"
              alt="gravatar" title="{{ .Site.Author.name }}">
         {{ end }}
-        <h1>The Conscientious Programmer</h1>
+        {{ if .IsHome }}
+        <h1>{{ .Site.Title }}</h1>
+        {{ else }}
+        <h1><a href="/">{{ .Site.Title }}</a></h1>
+        {{ end }}
         {{ with .Site.Params.tagline }}<p class="lead">{{ . | markdownify }}</p>{{ end }}
     </div>
 
